@@ -2,9 +2,27 @@
 # Author: Andy Bettisworth
 # Description: Canvas Queue Classic gem
 
+require 'queue_classic'
+
 # There are 2 ways to use queue_classic.
 #   Producing Jobs
 #   Working Jobs
+
+## ALTERNATE SETUP
+# [db/migrations/add_queue_classic.rb]
+# require 'queue_classic'
+# class AddQueueClassic < ActiveRecord::Migration
+#   def self.up
+#     QC::Setup.create
+#   end
+#   def self.down
+#     QC::Setup.drop
+#   end
+# end
+
+## QUICK START
+# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'Testing 1 2 3')"
+# ruby -r queue_classic -e "QC::Worker.new.work"
 
 ## PRODUCING JOBS
 # # This method has no arguments.

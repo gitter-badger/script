@@ -186,7 +186,7 @@
 #   state
 #   valid_utf8?
 
-# # Instance Methods
+## Instance Methods
 #   []
 #   dump
 #   fast_generate
@@ -199,7 +199,7 @@
 #   restore
 #   valid_utf8?
 
-# # Attributes:
+## Attributes:
 #   attr_accessor create_id
 #   attr_accessor dump_default_options
 #   attr_accessor load_default_options
