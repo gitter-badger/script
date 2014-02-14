@@ -40,12 +40,16 @@ class CreatePlot < ActiveRecord::Migration
   end
 end
 
+# puts CreatePlot.instance_methods
+plot = CreatePlot.new
+plot.write
+
 ## Simple Example ##
 ####################
 
-## SETUP database connection
-## NOTE we move the connection outside the migration file per Rails convention
+## SET database connection
 ## [config/database.yml]
+#
 # development:
 #   adapter:  'postgresql'
 #   host:     'localhost'
@@ -53,13 +57,16 @@ end
 #   username: 'codebit'
 #   password: 'trichoderma'
 #
-# []
-# > Q: need really a: probably not! # require 'rubygems'
+## CREATE database migrations
+## [db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}]
+#
+## > Q: make connection
 # require 'active_record'
 # require 'yaml'
+#
 # db_config = YAML::load(File.open('database.yml'))
 # ActiveRecord::Base.establish_connection(db_config)
-
+#
 ## DEBUG by logging SQL logic (output to CONSOLE)
 # > Q: need really a: probably not! # require 'rubygems'
 # require 'active_record'

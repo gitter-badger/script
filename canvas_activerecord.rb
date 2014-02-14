@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 # canvas_activerecord.rb
+# Author: Andy Bettisworth
 # Description: ActiveRecord, object-relational mapping put on rails
 
 ## GOALS
@@ -25,34 +26,63 @@
 ####################
 ## Simple Example ##
 
-require 'pg' # or 'mysql2' or 'sqlite3'
-require 'active_record'
+# require 'pg'
+# require 'active_record'
 
-ActiveRecord::Base.establish_connection(
-  adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
-  host:     'localhost',
-  database: 'accreu_development',
-  username: 'wurde',
-  password: 'trichoderma'
-)
+# ActiveRecord::Base.establish_connection(
+#   adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
+#   host:     'localhost',
+#   database: 'accreu_development',
+#   username: 'wurde',
+#   password: 'trichoderma'
+# )
 
-class Orbit < ActiveRecord::Base
-end
+# class Orbit < ActiveRecord::Base
+# end
 
-## READ all
-puts Orbit.all
-#=> #<Orbit:0xb96582cc>
-#=> ...
+# ## READ all
+# puts Orbit.all
+# #=> #<Orbit:0xb96582cc>
+# #=> ...
 
-## CREATE one new orbit
-my_post = Orbit.new
+# ## CREATE one new orbit
+# my_post = Orbit.new
 
 ## Simple Example ##
 ####################
 
-## > Q: update connections (e.g. '.establish_connection()')
-## > Q: get specific columns from records
-## > Q: conditions on selection
+
+################################
+## ActiveRecord for ~/.script ##
+
+# [log/database.log]
+# [config/database.yml]
+  # adapter:    postgresql
+  # host:       localhost
+  # database:   my_database
+  # username:   codebit
+  # password:   trichoderma
+
+# [db/schema.rb]
+# require 'active_record'
+# require 'pg'
+# require 'yaml'
+# require 'logger'
+
+# ActiveRecord::Base.logger = Logger.new('log/database.log')
+# ActiveRecord::Base.establish_connection(YAML.load_file('config/database.yml'))
+
+# ActiveRecord::Schema.define do
+#   create_table :my_table do |t|
+#     t.integer :col_int, null: false
+#     t.text    :col_text
+#   end
+# end
+
+## ActiveRecord for ~/.script ##
+################################
+
+
 ## > Q: how to validate data in/out
 ## > Q: how to reverse engineer the schema of a database
 
@@ -236,12 +266,13 @@ my_post = Orbit.new
 # Active Records accept constructor parameters either in a hash or as a block.
 # The hash method is especially useful when you're receiving the data from
 # somewhere else, like an HTTP request. It works like this:
-
+#
+# [1]
 #   user = User.new(name: "David", occupation: "Code Artist")
 #   user.name # => "David"
 
 # You can also use block initialization:
-
+# [2]
 #   user = User.new do |u|
 #     u.name = "David"
 #     u.occupation = "Code Artist"
@@ -249,7 +280,7 @@ my_post = Orbit.new
 
 # And of course you can just create a bare object and specify the attributes
 # after the fact:
-
+# [3]
 #   user = User.new
 #   user.name = "David"
 #   user.occupation = "Code Artist"
