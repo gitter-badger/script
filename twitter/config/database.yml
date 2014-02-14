@@ -1,0 +1,5 @@
+adapter:    postgresql
+host:       localhost
+database:   twitter
+username:   codebit
+password:   trichoderma
