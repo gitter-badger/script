@@ -1,0 +1,5 @@
+adapter:  postgresql
+host:     localhost
+database: instagram
+username: codebit
+password: trichoderma

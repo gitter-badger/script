@@ -180,4 +180,56 @@ ActiveRecord::Schema.define do
     t.integer :reccomendation_text
     t.integer :recommender
   end
+
+  create_table :tweets do |t|
+    t.integer :id
+  end
+
+  create_table :timelines do |t|
+    t.integer :id
+  end
+
+  create_table :searches do |t|
+    t.integer :id
+  end
+
+  create_table :users do |t|
+    t.integer :id
+  end
+
+  create_table :direct_messages do |t|
+    t.integer :id
+  end
+
+  create_table :friendships do |t|
+    t.integer :id
+  end
+
+  create_table :followers do |t|
+    t.integer :id
+  end
+
+  create_table :blocks do |t|
+    t.integer :id
+  end
+
+  create_table :favorites do |t|
+    t.integer :id
+  end
+
+  create_table :lists do |t|
+    t.integer :id
+  end
+
+  create_table :places do |t|
+    t.integer :id
+  end
+
+  create_table :trends do |t|
+    t.integer :id
+  end
+
+  create_table :spam_reports do |t|
+    t.integer :id
+  end
 end
