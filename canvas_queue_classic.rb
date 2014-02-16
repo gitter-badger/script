@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # canvas_queue_classic.rb
 # Author: Andy Bettisworth
-# Description: Canvas Queue Classic gem
+# Description: Canvas Queue Classic gem; a job queueing system
 
 require 'queue_classic'
 
@@ -16,6 +16,9 @@ require 'queue_classic'
 # rotate background
 # clean /Desktop, /tmp, /Downloads
 # source .bashrc
+# refreshing feeds on an hourly basis
+# send reminder emails on a nightly basis
+# generating invoices once a month on the 1st
 
 ## Methods
 #  Producing Jobs
@@ -62,9 +65,9 @@ require 'queue_classic'
 
 ## Q: How to execute a custom queue
 ## a: set target queue on QC::Worker instance
-worker = QC::Worker.new
-worker.queue = 'priority_queue'
-worker.work
+# worker = QC::Worker.new
+# worker.queue = 'priority_queue'
+# worker.work
 
 #####################
 ### CUSTOM WORKER ###
@@ -90,7 +93,6 @@ worker.work
 # end
 ### CUSTOM WORKER ###
 #####################
-
 
 #######################
 ### BOOTSTRAP SETUP ###
@@ -133,12 +135,15 @@ worker.work
 ### SETUP RAILS ###
 ## [Gemfile]
 # gem "queue_classic", "3.0.0beta"
+
 ## EXEC
 # rails generate queue_classic:install
 # rake db:migrate
+
 ## SET URL
 # By default, queue_classic will use the QC_DATABASE_URL falling back on DATABASE_URL
 # postgres://username:password@localhost/database_name
+
 ## SET config
 # [config/application.rb]
 # config.active_record.schema_format = :sql

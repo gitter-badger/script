@@ -82,7 +82,6 @@
 ## ActiveRecord for ~/.script ##
 ################################
 
-
 ## > Q: how to validate data in/out
 ## > Q: how to reverse engineer the schema of a database
 
