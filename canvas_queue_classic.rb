@@ -1,30 +1,49 @@
+#!/usr/bin/ruby -w
 # canvas_queue_classic.rb
 # Author: Andy Bettisworth
 # Description: Canvas Queue Classic gem
 
 require 'queue_classic'
 
-# There are 2 ways to use queue_classic.
-#   Producing Jobs
-#   Working Jobs
+## Applications
+# sending massive newsletters
+# image resizing
+# http downloads
+# updating smart collections
+# updating solr, our search server, after product changes
+# batch imports
+# spam checks
+# rotate background
+# clean /Desktop, /tmp, /Downloads
+# source .bashrc
 
-## ALTERNATE SETUP
-# [db/migrations/add_queue_classic.rb]
-# require 'queue_classic'
-# class AddQueueClassic < ActiveRecord::Migration
-#   def self.up
-#     QC::Setup.create
-#   end
-#   def self.down
-#     QC::Setup.drop
-#   end
-# end
+## Methods
+#  Producing Jobs
+#  Working Jobs
 
-## QUICK START
-# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'Testing 1 2 3')"
+##########################
+### COMMAND-LINE USAGE ###
+## CREATE job
+# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'hello world')"
+
+## EXEC one job
 # ruby -r queue_classic -e "QC::Worker.new.work"
 
-## PRODUCING JOBS
+## EXEC all jobs
+# ruby -r queue_classic -e "QC::Worker.new.start"
+### COMMAND-LINE USAGE ###
+##########################
+
+## QC::Worker.new(args={}) arguments
+# fork_worker:: Worker forks each job execution.
+# wait_interval:: Time to wait between failed lock attempts
+# connection:: PGConn object.
+# q_name:: Name of a single queue to process.
+# q_names:: Names of queues to process. Will process left to right.
+# top_bound:: Offset to the head of the queue. 1 == strict FIFO.
+
+######################
+### PRODUCING JOBS ###
 # # This method has no arguments.
 # QC.enqueue("Time.now")
 # # This method has 1 argument.
@@ -38,55 +57,115 @@ require 'queue_classic'
 # # This method uses a non-default queue.
 # p_queue = QC::Queue.new("priority_queue")
 # p_queue.enqueue("Kernel.puts", ["hello", "world"])
+### PRODUCING JOBS ###
+######################
 
-## WORKING JOBS
+## Q: How to execute a custom queue
+## a: set target queue on QC::Worker instance
+worker = QC::Worker.new
+worker.queue = 'priority_queue'
+worker.work
+
+#####################
+### CUSTOM WORKER ###
+# require 'timeout'
+# require 'queue_classic'
+
+# FailedQueue = QC::Queue.new("failed_jobs")
+
+# class MyWorker < QC::Worker
+#   def handle_failure(job, e)
+#     FailedQueue.enqueue(job[:method], *job[:args])
+#   end
+# end
+
+# worker = MyWorker.new
+
+# trap('INT') { exit }
+# trap('TERM') { worker.stop }
+
+# loop do
+#   job = worker.lock_job
+#   Timeout::timeout(5) { worker.process(job) }
+# end
+### CUSTOM WORKER ###
+#####################
+
+
+#######################
+### BOOTSTRAP SETUP ###
+# require 'active_record'
+# require 'pg'
+# require 'queue_classic'
+
+# ActiveRecord::Base.establish_connection(
+#   adapter: 'postgresql',
+#   host: 'localhost',
+#   database: 'queue_classic',
+#   username: 'codebit',
+#   password: 'trichoderma')
+
+# class AddQueueClassic < ActiveRecord::Migration
+#   def self.up
+#     QC::Setup.create
+#   end
+#   def self.down
+#     QC::Setup.drop
+#   end
+# end
+
+# AddQueueClassic.up
+### BOOTSTRAP SETUP ###
+#######################
+
+###################
+### QUICK START ###
+# gem install queue_classic
+# createdb queue_classic_test
+# export QC_DATABASE_URL="postgres://codebit:trichoderma@localhost/queue_classic_test"
+# ruby -r queue_classic -e "QC::Setup.create"
+# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'hello world')"
+# ruby -r queue_classic -e "QC::Worker.new.work"
+### QUICK START ###
+###################
+
+###################
+### SETUP RAILS ###
+## [Gemfile]
+# gem "queue_classic", "3.0.0beta"
+## EXEC
+# rails generate queue_classic:install
+# rake db:migrate
+## SET URL
+# By default, queue_classic will use the QC_DATABASE_URL falling back on DATABASE_URL
+# postgres://username:password@localhost/database_name
+## SET config
+# [config/application.rb]
+# config.active_record.schema_format = :sql
+### SETUP RAILS ###
+###################
+
+####################
+### Working jobs ###
+
+## NOTE
 # There are two ways to work jobs; rake task & custom executable.
+
   ## Rake task:
   # Require queue_classic in your Rakefile.
     # require 'queue_classic'
     # require 'queue_classic/tasks'
-
   # Start the worker via the Rakefile.
     # $ bundle exec rake qc:work
-
   # Setup a worker to work a non-default queue.
     # $ QUEUE="priority_queue" bundle exec rake qc:work
-
   # Setup a worker to work multiple queues.
     # $ QUEUES="priority_queue, secondary_queue" bundle exec rake qc:work
-
   # In this scenario, on each iteration of the worker's loop,
   # it will look for jobs in the first queue prior to looking
   # at the second queue. This means that the first queue must be
   # empty before the worker will look at the second queue.
-
   ## Custom executable:
-###############
-### EXAMPLE ###
-
-require 'timeout'
-require 'queue_classic'
-
-FailedQueue = QC::Queue.new("failed_jobs")
-
-class MyWorker < QC::Worker
-  def handle_failure(job, e)
-    FailedQueue.enqueue(job[:method], *job[:args])
-  end
-end
-
-worker = MyWorker.new
-
-trap('INT') { exit }
-trap('TERM') { worker.stop }
-
-loop do
-  job = worker.lock_job
-  Timeout::timeout(5) { worker.process(job) }
-end
-
-### EXAMPLE ###
-###############
 
 ## Class: QC
 # (from gem queue_classic-2.2.3)
@@ -98,18 +177,15 @@ end
 #   in the pg_stat_activity table.
 
 # FORK_WORKER:
-#   Set this variable if you wish for the worker to fork a UNIX process for each
-#   locked job. Remember to re-establish any database connections. See the
-#   worker for more details.
+#   Set this variable if you wish for the worker to fork a UNIX process for each locked job.
+#   Remember to re-establish any database connections. See the worker for more details.
 
 # QUEUE:
-#   Each row in the table will have a column that notes the queue. You can point
-#   your workers at different queues but only one at a time.
+#   Each row in the table will have a column that notes the queue. You can point your workers at different queues but only one at a time.
 
 # TABLE_NAME:
 #   Why do you want to change the table name? Just deal with the default OK? If
-#   you do want to change this, you will need to update the PL/pgSQL lock_head()
-#   function. Come on. Don't do it.... Just stick with the default.
+#   you do want to change this, you will need to update the PL/pgSQL lock_head() function. Come on. Don't do it.... Just stick with the default.
 
 # TOP_BOUND:
 #   Set this to 1 for strict FIFO. There is nothing special about 9....
@@ -124,7 +200,6 @@ end
   # log_yield
   # method_missing
   # respond_to_missing?
-
 
 # ## QC::Worker < Object
 # (from gem queue_classic-2.2.3)
@@ -218,8 +293,7 @@ end
 # ------------------------------------------------------------------------------
 #   start()
 # ------------------------------------------------------------------------------
-# Start a loop and work jobs indefinitely. Call this method to start the worker.
-# This is the easiest way to start working jobs.
+# Start a loop and work jobs indefinitely. Call this method to start the worker. This is the easiest way to start working jobs.
 
 
 # = QC::Worker.stop
