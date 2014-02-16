@@ -15,14 +15,14 @@ require 'clockwork'
 require 'clockwork'
 require 'queue_classic'
 module Clockwork
-  handler do |method|
-    QC.enqueue(method)
+  handler do |job|
+    method = /<method>(.*)<\/method>/.match(job)
+    args = /<args>(.*)<\/args>/.match(job)
+    QC.enqueue(method, args)
   end
 
-  every(10.seconds, "Kernel.puts")
-  # every(10.seconds, "Kernel.puts", "hello world")
-  # every(1.hour, "Kernel.puts", "hello world")
-  # every(1.day, "Kernel.puts", "hello world", at: '01:30')
+  every(10.seconds, "<method>system</method><args>'background.rb'</args>")
+  # every(10.seconds, "<method>Kernel.puts</method><args>Testing 1 2 3</args>")
 end
 ### w/ QueueClassic ###
 #######################

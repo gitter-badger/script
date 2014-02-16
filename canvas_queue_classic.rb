@@ -27,7 +27,7 @@ require 'queue_classic'
 ##########################
 ### COMMAND-LINE USAGE ###
 ## CREATE job
-# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'hello world')"
+# ruby -r queue_classic -e "QC.enqueue('system', 'background')"
 
 ## EXEC one job
 # ruby -r queue_classic -e "QC::Worker.new.work"
