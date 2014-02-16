@@ -6,31 +6,35 @@
 require 'optparse'
 
 class AnnexSync
-  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
-  REMOTE_SYNC = "/media/Annex/preseed/seed/.sync"
-  GITHUB_SYNC = "https://github.com/wurde"
+  HOME = ENV['HOME']
+  SYNC = "#{ENV['HOME']}/.sync"
+  ANNEX = "/media/Annex/preseed/seed/.sync"
 
   def remote
-    raise 'USB Annex not found.' unless File.exist?(REMOTE_SYNC)
+    raise 'USB Annex not found.' unless File.exist?(ANNEX)
     system <<-EOF
-cd #{LOCAL_SYNC}/.canvas;
+cd #{SYNC}/.canvas;
 git push origin master;
-cd #{LOCAL_SYNC}/.script;
+cd #{SYNC}/.script;
 git push origin master;
-cd #{LOCAL_SYNC}/.template;
+cd #{SYNC}/.template;
 git push origin master;
+cd #{HOME}/.rbenv;
+git push annex master;
     EOF
   end
 
   def local
-    raise 'USB Annex not found.' unless File.exist?(REMOTE_SYNC)
+    raise 'USB Annex not found.' unless File.exist?(ANNEX)
     system <<-EOF
-cd #{LOCAL_SYNC}/.canvas;
+cd #{SYNC}/.canvas;
 git pull --rebase origin master;
-cd #{LOCAL_SYNC}/.script;
+cd #{SYNC}/.script;
 git pull --rebase origin master;
-cd #{LOCAL_SYNC}/.template;
+cd #{SYNC}/.template;
 git pull --rebase origin master;
+cd #{HOME}/.rbenv;
+git pull --rebase annex master;
     EOF
   end
 end
