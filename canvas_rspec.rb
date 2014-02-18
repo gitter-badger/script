@@ -354,10 +354,10 @@
 # 1. spec requires spec_helper.rb
 # 2. spec_helper.rb requires code
 
-# ## [spec/spec_helper.rb]
-# require 'codebreaker'
-# ## [spec/codebreaker/game_spec.rb]
+## [spec/codebreaker/game_spec.rb]
 # require 'spec_helper'
+## [spec/spec_helper.rb]
+# require 'codebreaker'
 
 # module Codebreaker
 #   describe Game do ## hooks into RSpec API, returns RSpec::Core::ExampleGroup
@@ -369,8 +369,8 @@
 
 # rspec spec/codebreaker/game_spec.rb --format doc
 
-
-
+###########################
+### Single-file EXAMPLE ###
 ## Hello World Application
 # class RSpecGreeter
 #   def greet
@@ -378,17 +378,15 @@
 #   end
 # end
 
-# ## CREATE RSpec 'Hello world!' example
-# describe "RSpec Greeter" do ## CREATE example group
-#   it "should say 'Hello RSpec!' when it receives the greet() message" do ## CREATE an example
-#     greeter = RSpecGreeter.new ## BDD: [given]
-#     greeting = greeter.greet ## BDD: [when]
-#     greeting.should == "Hello RSpec!" ## BDD: [then]
+## CREATE RSpec 'Hello world!' example
+# describe RSpecGreeter do ## CREATE example group
+#   describe '#greet' do
+#     it "should say 'Hello RSpec!' when it receives the greet() message" do ## CREATE example
+#       greeter = RSpecGreeter.new        ## BDD: [given]
+#       greeting = greeter.greet          ## BDD: [when]
+#       greeting.should == "Hello RSpec!" ## BDD: [then]
+#     end
 #   end
 # end
-
-## NOTE Testing
-## TDD Test Driven Development: fail, pass, refactor
-## BDD Behaviour Driven Development: given, when, then
-## user stories = role + action
-## One-to-one mappings are only good for easy reference by file, NOT by object.
+### Single-file EXAMPLE ###
+###########################

@@ -7,8 +7,6 @@
 ##  CRUD actions on our databases
 ##  Build associations (models connected to other models)
 
-## HOW - Subclass the activerecord library (map db table to class/model)
-
 ## FEATURES
 ## [0] Automated mapping between classes and tables, attributes and columns.
 ## [1] Associations between objects defined by simple class methods.
@@ -23,9 +21,8 @@
 ## [9] Logging support for Log4r and Logger.
 ## [10] Database agnostic schema management with Migrations.
 
-####################
-## Simple Example ##
-
+######################
+### Simple Example ###
 # require 'pg'
 # require 'active_record'
 
@@ -47,9 +44,8 @@
 
 # ## CREATE one new orbit
 # my_post = Orbit.new
-
-## Simple Example ##
-####################
+### Simple Example ###
+######################
 
 
 ################################
@@ -260,8 +256,7 @@
 
 # RenameFile.new
 
-# ## CREATION
-
+## CREATION
 # Active Records accept constructor parameters either in a hash or as a block.
 # The hash method is especially useful when you're receiving the data from
 # somewhere else, like an HTTP request. It works like this:
@@ -409,7 +404,7 @@
 # not return any records, like Person.find_by_last_name!.
 
 # It's also possible to use multiple attributes in the same find by separating
-# them with "_a_n_d".
+# them with "_a_n_d".
 
 #   Person.find_by(user_name: user_name, password: password)
 #   Person.find_by_user_name_and_password(user_name, password) # with dynamic finder
@@ -520,7 +515,7 @@
 # * StatementInvalid - The database server rejected the SQL statement. The
 #   precise error is added in the message.
 
-# NNoottee: The attributes listed are class-level attributes (accessible
+# NNoottee: The attributes listed are class-level attributes (accessible
 # from both the class and instance level). So it's possible to assign a logger
 # to the class through Base.logger= which will then be used by all instances in
 # the current object space.
@@ -536,3 +531,178 @@
 # ------------------------------------------------------------------------------
 # Also found in:
 #   gem activerecord-deprecated_finders-1.0.3
+
+
+# = AAccttiivveeRReeccoorrdd::::SScchheemmaa  <<  AAccttiivveeRReeccoorrdd::::MMiiggrraattiioonn
+
+# (from gem activerecord-4.0.2)
+# ------------------------------------------------------------------------------
+# = AAccttiivvee  RReeccoorrdd  SScchheemmaa
+
+# Allows programmers to programmatically define a schema in a portable DSL. This
+# means you can define tables, indexes, etc. without using SQL directly, so your
+# applications can more easily support multiple databases.
+
+# Usage:
+
+#   ActiveRecord::Schema.define do
+#     create_table :authors do |t|
+#       t.string :name, null: false
+#     end
+
+#     add_index :authors, :name, :unique
+
+#     create_table :posts do |t|
+#       t.integer :author_id, null: false
+#       t.string :subject
+#       t.text :body
+#       t.boolean :private, default: false
+#     end
+
+#     add_index :posts, :author_id
+#   end
+
+# ActiveRecord::Schema is only supported by database adapters that also support
+# migrations, the two features being very similar.
+# ------------------------------------------------------------------------------
+# = CCllaassss  mmeetthhooddss::
+#   define
+
+# = IInnssttaannccee  mmeetthhooddss::
+#   migrations_paths
+
+# = AAccttiivveeRReeccoorrdd::::CCoonnnneeccttiioonnAAddaapptteerrss::::TTaabblleeDDeeffiinniittiioonn##ccoolluummnn
+
+# (from gem activerecord-4.0.2)
+# === IImmpplleemmeennttaattiioonn  ffrroomm  TTaabblleeDDeeffiinniittiioonn
+# ------------------------------------------------------------------------------
+#   column(name, type, options = {})
+
+# ------------------------------------------------------------------------------
+
+# Instantiates a new column for the table. The type parameter is normally one of
+# the migrations native types, which is one of the following: :primary_key,
+# :string, :text, :integer, :float, :decimal, :datetime, :timestamp, :time,
+# :date, :binary, :boolean.
+
+# You may use a type not in this list as long as it is supported by your
+# database (for example, "polygon" in MySQL), but this will not be database
+# agnostic and should usually be avoided.
+
+# Available options are (none of these exists by default):
+# * :limit - Requests a maximum column length. This is number of characters for
+#   :string and :text columns and number of bytes for :binary and :integer
+#   columns.
+# * :default - The column's default value. Use nil for NULL.
+# * :null - Allows or disallows NULL values in the column. This option could
+#   have been named :null_allowed.
+# * :precision - Specifies the precision for a :decimal column.
+# * :scale - Specifies the scale for a :decimal column.
+
+# For clarity's sake: the precision is the number of significant digits, while
+# the scale is the number of digits that can be stored following the decimal
+# point. For example, the number 123.45 has a precision of 5 and a scale of 2. A
+# decimal with a precision of 5 and a scale of 2 can range from -999.99 to
+# 999.99.
+
+# Please be aware of different RDBMS implementations behavior with :decimal
+# columns:
+# * The SQL standard says the default scale should be 0, :scale <= :precision,
+#   and makes no comments about the requirements of :precision.
+# * MySQL: :precision [1..63], :scale [0..30]. Default is (10,0).
+# * PostgreSQL: :precision [1..infinity], :scale [0..infinity]. No default.
+# * SQLite2: Any :precision and :scale may be used. Internal storage as strings.
+#   No default.
+# * SQLite3: No restrictions on :precision and :scale, but the maximum supported
+#   :precision is 16. No default.
+# * Oracle: :precision [1..38], :scale [-84..127]. Default is (38,0).
+# * DB2: :precision [1..63], :scale [0..62]. Default unknown.
+# * Firebird: :precision [1..18], :scale [0..18]. Default (9,0). Internal types
+#   NUMERIC and DECIMAL have different storage rules, decimal being better.
+# * FrontBase?: :precision [1..38], :scale [0..38]. Default (38,0). WARNING Max
+#   :precision/:scale for NUMERIC is 19, and DECIMAL is 38.
+# * SqlServer?: :precision [1..38], :scale [0..38]. Default (38,0).
+# * Sybase: :precision [1..38], :scale [0..38]. Default (38,0).
+# * OpenBase?: Documentation unclear. Claims storage in double.
+
+# This method returns self.
+
+# == EExxaammpplleess
+#   # Assuming +td+ is an instance of TableDefinition
+#   td.column(:granted, :boolean)
+#   # granted BOOLEAN
+
+#   td.column(:picture, :binary, limit: 2.megabytes)
+#   # => picture BLOB(2097152)
+
+#   td.column(:sales_stage, :string, limit: 20, default: 'new', null: false)
+#   # => sales_stage VARCHAR(20) DEFAULT 'new' NOT NULL
+
+#   td.column(:bill_gates_money, :decimal, precision: 15, scale: 2)
+#   # => bill_gates_money DECIMAL(15,2)
+
+#   td.column(:sensor_reading, :decimal, precision: 30, scale: 20)
+#   # => sensor_reading DECIMAL(30,20)
+
+#   # While <tt>:scale</tt> defaults to zero on most databases, it
+#   # probably wouldn't hurt to include it.
+#   td.column(:huge_integer, :decimal, precision: 30)
+#   # => huge_integer DECIMAL(30)
+
+#   # Defines a column with a database-specific type.
+#   td.column(:foo, 'polygon')
+#   # => foo polygon
+
+# == SShhoorrtt--hhaanndd  eexxaammpplleess
+
+# Instead of calling column directly, you can also work with the short-hand
+# definitions for the default types. They use the type as the method name
+# instead of as a parameter and allow for multiple columns to be defined in a
+# single statement.
+
+# What can be written like this with the regular calls to column:
+
+#   create_table :products do |t|
+#     t.column :shop_id,    :integer
+#     t.column :creator_id, :integer
+#     t.column :name,       :string, default: "Untitled"
+#     t.column :value,      :string, default: "Untitled"
+#     t.column :created_at, :datetime
+#     t.column :updated_at, :datetime
+#   end
+
+# can also be written as follows using the short-hand:
+
+#   create_table :products do |t|
+#     t.integer :shop_id, :creator_id
+#     t.string  :name, :value, default: "Untitled"
+#     t.timestamps
+#   end
+
+# There's a short-hand method for each of the type values declared at the top.
+# And then there's TableDefinition#timestamps that'll add created_at and
+# updated_at as datetimes.
+
+# TableDefinition#references will add an appropriately-named _id column, plus a
+# corresponding _type column if the :polymorphic option is supplied. If
+# :polymorphic is a hash of options, these will be used when creating the _type
+# column. The :index option will also create an index, similar to calling
+# add_index. So what can be written like this:
+
+#   create_table :taggings do |t|
+#     t.integer :tag_id, :tagger_id, :taggable_id
+#     t.string  :tagger_type
+#     t.string  :taggable_type, default: 'Photo'
+#   end
+#   add_index :taggings, :tag_id, name: 'index_taggings_on_tag_id'
+#   add_index :taggings, [:tagger_id, :tagger_type]
+
+# Can also be written as follows using references:
+
+#   create_table :taggings do |t|
+#     t.references :tag, index: { name: 'index_taggings_on_tag_id' }
+#     t.references :tagger, polymorphic: true, index: true
+#     t.references :taggable, polymorphic: { default: 'Photo' }
+#   end
+
+
