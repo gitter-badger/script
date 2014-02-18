@@ -1,5 +1,6 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/ruby -w
 # package_psql.sh
+# Author: Andy Bettisworth
 # Description: Command-line interface to PostgreSQL
 
 ## > Backup target database

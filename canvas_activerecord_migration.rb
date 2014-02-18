@@ -23,7 +23,7 @@
 require 'pg' # or 'mysql2' or 'sqlite3'
 require 'active_record'
 
-conn = ActiveRecord::Base.establish_connection(
+ActiveRecord::Base.establish_connection(
   adapter:  'postgresql',
   host:     'localhost',
   database: 'graph_development',
@@ -49,7 +49,6 @@ plot.write
 
 ## SET database connection
 ## [config/database.yml]
-#
 # development:
 #   adapter:  'postgresql'
 #   host:     'localhost'
