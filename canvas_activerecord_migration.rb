@@ -221,7 +221,6 @@ plot.write
 # complete table schema in one block call.
 
 ## Available Transformations
-
 # * create_table(name, options): Creates a table called name and makes the table
 #   object available to a block that can then add columns to it, following the
 #   same format as add_column. See example above. The options hash is for
