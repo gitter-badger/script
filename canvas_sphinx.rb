@@ -47,17 +47,6 @@
 ### SPHINX.CONF ###
 ####################
 
-## ADVANCED USAGE
-#  Advanced Sphinx Configuration
-#  Common Questions and Issues
-#  Delta Indexes
-#  Facets
-#  Excerpts
-#  Geo-Searching
-#  Sphinx Scopes
-#  Deployment
-#  Contributing to Thinking Sphinx
-
 ## INDEXING PROCESS
 # connection to the database is established;
 # pre-query  is executed to perform any necessary initial setup;
@@ -137,3 +126,44 @@
 
 ## CREDIBILITY
 # Craigslist uses it.
+
+## Command-line (indexer)
+# Sphinx 2.1.6-id64-dev (rel21-r4564)
+# Copyright (c) 2001-2014, Andrew Aksyonoff
+# Copyright (c) 2008-2014, Sphinx Technologies Inc (http://sphinxsearch.com)
+#
+## Usage: indexer [OPTIONS] [indexname1 [indexname2 [...]]]
+#
+## Options are:
+# --config <file>		read configuration from specified file
+# 			(default is sphinx.conf)
+# --all			reindex all configured indexes
+# --quiet			be quiet, only print errors
+# --verbose		verbose indexing issues report
+# --noprogress		do not display progress
+# 			(automatically on if output is not to a tty)
+# --rotate		send SIGHUP to searchd when indexing is over
+# 			to rotate updated indexes automatically
+# --sighup-each		send SIGHUP to searchd after each index
+# 			(used with --rotate only)
+# --buildstops <output.txt> <N>
+# 			build top N stopwords and write them to given file
+# --buildfreqs		store words frequencies to output.txt
+# 			(used with --buildstops only)
+# --merge <dst-index> <src-index>
+# 			merge 'src-index' into 'dst-index'
+# 			'dst-index' will receive merge result
+# 			'src-index' will not be modified
+# --merge-dst-range <attr> <min> <max>
+# 			filter 'dst-index' on merge, keep only those documents
+# 			where 'attr' is between 'min' and 'max' (inclusive)
+# --merge-klists
+# --merge-killlists	  merge src and dst k-lists (default is to discard them
+# 			after merge; note that src k-list applies anyway)
+# --dump-rows <FILE>	dump indexed rows into FILE
+# --print-queries		  print SQL queries (for debugging)
+# --keep-attrs		    retain attributes from the old index
+#
+## Examples:
+# indexer --quiet myidx1	reindex 'myidx1' defined in 'sphinx.conf'
+# indexer --all		reindex all indexes defined in 'sphinx.conf'

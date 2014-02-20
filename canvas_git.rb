@@ -1,17 +1,16 @@
 #!/usr/bin/ruby -w
 # canvas_git.rb
+# Author: Andy Bettisworth
 # Description: Canvas git package
 
-## > UPDATE current branch with target git commit
+## DELETE remote branch
+# git push origin --delete <branch>
 
-<<<<<<< HEAD
-=======
 ## READ current branch
 # project = "#{ENV['HOME']}/Desktop/test_project"
 # checkout_branch = `cd #{project}; git rev-parse --abbrev-ref HEAD`
 # puts 'branch: ' + checkout_branch
 
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 ## USAGE branch feature and commit init
 # git checkout -b feature/blah
 # git commit -am "init feature/blah"
