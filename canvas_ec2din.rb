@@ -3,43 +3,154 @@
 # Author: Andy Bettisworth
 # Description: Canvas ec2-api-tools package
 
+## SET credentials [~/.bashrc]
+## Set \$EC2_HOME for ec2-api-tools
+# export EC2_HOME=/usr/bin
+# export EC2_PRIVATE_KEY=/media/Annex/preseed/seed/.sync/.app/.keypair/ec2-wurde-private-key.pem
+# export EC2_CERT=/media/Annex/preseed/seed/.sync/.app/.keypair/ec2-wurde-cert.pem
+
 #############################
 ### LAUNCHING AN INSTANCE ###
 ## CREATE a keypair
 # ec2-create-keypair --region us-west-2 bookworm-keypair > bookworm-keypair.pem
 # chmod 400 bookworm-keypair.pem
 
-## CREATE a security-group
-# ec2-create-group bookworm --region us-west-2 -d "My Bookworm security group"
-# GET IP Address at LINK http://checkip.amazonaws.com/
-# ec2-authorize --region us-west-2 bookworm -p 22 -s 98.200.189.208/32
+  ## READ an old security-group
+  # ec2-describe-group --region us-west-2
+## ~OR~
+  ## CREATE a security-group
+  # ec2-create-group bookworm --region us-west-2 -d "My Bookworm security group"
+  ## CREATE permissions
+  # GET IP Address at LINK http://checkip.amazonaws.com/
+  # ec2-authorize --region us-west-2 -p 22 -s 98.200.189.208/32 bookworm
 
 ## CREATE an instance
-# ec2-run-instances --region us-west-2 ami-6aad335a -t t1.micro -g bookworm
-# NOTE Ubuntu Server 12.04.3 LTS - ami-6aad335a (64-bit) / ami-68ad3358 (32-bit)
-# NOTE Ubuntu Server 13.10 - ami-ace67f9c (64-bit) / ami-aae67f9a (32-bit)
+# ec2-run-instances --region us-west-2 ami-6aad335a -t t1.micro -g open_gates -k bookworm-keypair
+#=> RESERVATION r-2177f128  280638226111  open_gates
+#=> INSTANCE  i-060c860f  ami-6aad335a      pending   0   t1.micro  2014-02-21T16:48:16+0000  us-west-2b  aki-fc37bacc      monitoring-disabled ebs         paravirtual xen   sg-c84940f8 default
+## NOTE Ubuntu Server 12.04.3 LTS - ami-6aad335a (64-bit) / ami-68ad3358 (32-bit)
+## NOTE Ubuntu Server 13.10       - ami-ace67f9c (64-bit) / ami-aae67f9a (32-bit)
 ### LAUNCHING AN INSTANCE ###
 #############################
 
 ## READ instance(s) details
 # ec2-describe-instances --region us-west-2 i-002aa109
-# LINK http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ApiReference-cmd-DescribeInstances.html
 
 ## READ instance output
 # ec2-get-console-output --region us-west-2 i-002aa109
-# NOTE most recent 64 KB output which will be available for at least one hour after the most recent post.
-# LINK http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ApiReference-cmd-GetConsoleOutput.html
 
 ## CONNECT to an instance
-# ssh -i /media/Annex/preseed/seed/.sync/.app/.keypair/bookworm-keypair.pem ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
+# ssh -i bookworm-keypair.pem ubuntu@ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
+#=> The authenticity of host 'ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com (54.184.70.22)' can't be established.
+#=> ECDSA key fingerprint is 64:2e:d6:58:57:5c:6e:5a:7c:25:e1:ad:e8:aa:8c:e3.
+#=> Are you sure you want to continue connecting (yes/no)? yes
+#=> Warning: Permanently added 'ec2-54-184-70-22.us-west-2.compute.amazonaws.com,54.184.70.22' (ECDSA) to the list of known hosts.
+#=> Welcome to Ubuntu 12.04.3 LTS (GNU/Linux 3.2.0-54-virtual x86_64)
 
 ########################
 ### MANAGE INSTANCES ###
-## EXEC
-# start, reboot, stop, terminate, associate-address, allocate-address
-# ec2-run-instances, ec2-start-instances, ec2-stop-instances, ec2-terminate-instances
+
+## EXEC start
+# ec2-start-instances --region us-west-2 i-5b38b352
+
+## EXEC stop
+# ec2-stop-instances --region us-west-2 i-5b38b352
+
+## EXEC reboot
+# ec2-reboot-instances --region us-west-2 i-5b38b352
+
+## EXEC terminate
+# ec2-terminate-instances --region us-west-2 i-5b38b352
+
+# associate-address, allocate-address
+
+## NOTE you can string instances as an array (e.g. [i-7b38ae52, i-5b38b352, i-cb36b352,...])
+
 ### MANAGE INSTANCES ###
 ########################
+
+##############################
+### MANAGE SECURITY GROUPS ###
+
+## CREATE a security-group
+# ec2-create-group --region us-west-2 -d "No one enters, no one exits." ice
+#=> GROUP sg-784a4348 ice No one enters, no one exits.
+
+## CREATE permissions
+# ec2-authorize group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
+# ec2-authorize --region us-west-2 -p 22 open_gates
+# ec2-authorize --region us-west-2 bookworm -p 22 -s 98.200.189.208/32
+  # GET your IP Address at LINK http://checkip.amazonaws.com/
+# ec2-authorise --region us-west-2 ice -p 22 ice
+#=> GROUP     ice
+#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+
+## READ all security groups
+# ec2-describe-group --region us-west-2
+#=> GROUP sg-784a4348 280638226111  ice My Bookworm security group
+#=> PERMISSION  280638226111  ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+#=> GROUP sg-b3b4f583 280638226111  default default group
+#=> PERMISSION  280638226111  default ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+
+## READ target security group
+# ec2-describe-group --region us-west-2 open_gates
+#=> GROUP sg-c84940f8 280638226111  open_gates  Login to EC2
+#=> PERMISSION  280638226111  open_gates  ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+
+## DELETE permissions
+# ec2-revoke group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
+# ec2-revoke group --region us-west-2 -p 22 ice
+#=> GROUP     ice
+#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+
+## DELETE a security group
+# ec2-delete-group --region us-west-2 ice
+#=> RETURN  true
+
+### MANAGE SECURITY GROUPS ###
+##############################
+
+#######################
+### MANAGE KEYPAIRS ###
+
+## CREATE keypair
+# ec2-create-keypair blah-keypair > blah-keypair.pem
+## NOTE to place these within Annex
+
+## READ all keypairs
+# ec2-describe-keypairs --region us-west-2
+#=> KEYPAIR bookworm-keypair  f4:b1:23:ac:a7:7e:96:b3:cf:bf:aa:4a:4b:1a:a2:27:bc:ef:f1:ab
+#=> KEYPAIR accreu-keypair  d7:d7:25:68:47:41:6d:b2:18:17:32:b8:32:69:ca:1b:ff:f3:b4:99
+
+## READ local key fingerprint
+# ec2-fingerprint-key blah-keypair.pem
+#=> 63:3b:b8:e8:65:da:24:04:6b:6d:7c:ac:41:5e:09:42:2f:a0:12:17
+
+## DELETE keypair
+# ec2-delete-keypair --region us-west-2 blah-keypair
+#=> KEYPAIR blah-keypair
+
+### MANAGE KEYPAIRS ###
+#######################
+
+
+##########################
+### MANAGE Elastic IPs ###
+## GET address
+# ec2-allocate-address [-d domain]
+# ec2-allocate-address --region us-west-2 -d accreu.com
+
+## READ addresses
+# ec2-describe-addresses [public_ip ... | allocation_id ...] [[--filter "name=value"] ...]
+# ec2-describe-addresses --region us-west-2
+#=> ADDRESS 54.214.10.153 i-fc13b6ca  standard
+
+## SET address
+# ec2-associate-address [-i instance_id | -n interface_id] [ip_address | -a allocation_id] [--private-ip-address private_ip_address] [--allow-reassociation]
+
+
+### MANAGE Elastic IPs ###
+##########################
 
 ## AMI Management
 # create, publish, register
