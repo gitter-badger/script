@@ -1,7 +1,48 @@
 #!/usr/bin/ruby -w
-# capistrano_canvas.rb
+# canvas_ec2din.rb
 # Author: Andy Bettisworth
-# Description: Canvas ec2-describe-instance package
+# Description: Canvas ec2-api-tools package
+
+#############################
+### LAUNCHING AN INSTANCE ###
+## CREATE a keypair
+# ec2-create-keypair --region us-west-2 bookworm-keypair > bookworm-keypair.pem
+# chmod 400 bookworm-keypair.pem
+
+## CREATE a security-group
+# ec2-create-group bookworm --region us-west-2 -d "My Bookworm security group"
+# GET IP Address at LINK http://checkip.amazonaws.com/
+# ec2-authorize --region us-west-2 bookworm -p 22 -s 98.200.189.208/32
+
+## CREATE an instance
+# ec2-run-instances --region us-west-2 ami-6aad335a -t t1.micro -g bookworm
+# NOTE Ubuntu Server 12.04.3 LTS - ami-6aad335a (64-bit) / ami-68ad3358 (32-bit)
+# NOTE Ubuntu Server 13.10 - ami-ace67f9c (64-bit) / ami-aae67f9a (32-bit)
+### LAUNCHING AN INSTANCE ###
+#############################
+
+## READ instance(s) details
+# ec2-describe-instances --region us-west-2 i-002aa109
+# LINK http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ApiReference-cmd-DescribeInstances.html
+
+## READ instance output
+# ec2-get-console-output --region us-west-2 i-002aa109
+# NOTE most recent 64 KB output which will be available for at least one hour after the most recent post.
+# LINK http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ApiReference-cmd-GetConsoleOutput.html
+
+## CONNECT to an instance
+# ssh -i /media/Annex/preseed/seed/.sync/.app/.keypair/bookworm-keypair.pem ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
+
+########################
+### MANAGE INSTANCES ###
+## EXEC
+# start, reboot, stop, terminate, associate-address, allocate-address
+# ec2-run-instances, ec2-start-instances, ec2-stop-instances, ec2-terminate-instances
+### MANAGE INSTANCES ###
+########################
+
+## AMI Management
+# create, publish, register
 
 ## LINK https://console.aws.amazon.com/iam/home?#security_credential
 ## LINK http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html#set-aws-credentials
