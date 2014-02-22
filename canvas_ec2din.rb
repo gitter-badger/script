@@ -12,20 +12,20 @@
 #############################
 ### LAUNCHING AN INSTANCE ###
 ## CREATE a keypair
-# ec2-create-keypair --region us-west-2 bookworm-keypair > bookworm-keypair.pem
-# chmod 400 bookworm-keypair.pem
+# ec2-create-keypair --region us-west-2 accreu-keypair > accreu-keypair.pem
+# chmod 400 accreu-keypair.pem
 
   ## READ an old security-group
   # ec2-describe-group --region us-west-2
 ## ~OR~
   ## CREATE a security-group
-  # ec2-create-group bookworm --region us-west-2 -d "My Bookworm security group"
+  # ec2-create-group accreu --region us-west-2 -d "My accreu security group"
   ## CREATE permissions
   # GET IP Address at LINK http://checkip.amazonaws.com/
-  # ec2-authorize --region us-west-2 -p 22 -s 98.200.189.208/32 bookworm
+  # ec2-authorize --region us-west-2 -p 22 -s 98.200.189.208/32 accreu
 
 ## CREATE an instance
-# ec2-run-instances --region us-west-2 ami-6aad335a -t t1.micro -g open_gates -k bookworm-keypair
+# ec2-run-instances --region us-west-2 ami-6aad335a -t t1.micro -g accreu-security -k accreu-keypair
 #=> RESERVATION r-2177f128  280638226111  open_gates
 #=> INSTANCE  i-060c860f  ami-6aad335a      pending   0   t1.micro  2014-02-21T16:48:16+0000  us-west-2b  aki-fc37bacc      monitoring-disabled ebs         paravirtual xen   sg-c84940f8 default
 ## NOTE Ubuntu Server 12.04.3 LTS - ami-6aad335a (64-bit) / ami-68ad3358 (32-bit)
@@ -40,7 +40,7 @@
 # ec2-get-console-output --region us-west-2 i-002aa109
 
 ## CONNECT to an instance
-# ssh -i bookworm-keypair.pem ubuntu@ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
+# ssh -i accreu-keypair.pem ubuntu@ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com
 #=> The authenticity of host 'ec2-xx-xxx-xx-xxx.us-west-2.compute.amazonaws.com (54.184.70.22)' can't be established.
 #=> ECDSA key fingerprint is 64:2e:d6:58:57:5c:6e:5a:7c:25:e1:ad:e8:aa:8c:e3.
 #=> Are you sure you want to continue connecting (yes/no)? yes
@@ -72,22 +72,9 @@
 ##############################
 ### MANAGE SECURITY GROUPS ###
 
-## CREATE a security-group
-# ec2-create-group --region us-west-2 -d "No one enters, no one exits." ice
-#=> GROUP sg-784a4348 ice No one enters, no one exits.
-
-## CREATE permissions
-# ec2-authorize group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
-# ec2-authorize --region us-west-2 -p 22 open_gates
-# ec2-authorize --region us-west-2 bookworm -p 22 -s 98.200.189.208/32
-  # GET your IP Address at LINK http://checkip.amazonaws.com/
-# ec2-authorise --region us-west-2 ice -p 22 ice
-#=> GROUP     ice
-#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
-
 ## READ all security groups
 # ec2-describe-group --region us-west-2
-#=> GROUP sg-784a4348 280638226111  ice My Bookworm security group
+#=> GROUP sg-784a4348 280638226111  ice My accreu security group
 #=> PERMISSION  280638226111  ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 #=> GROUP sg-b3b4f583 280638226111  default default group
 #=> PERMISSION  280638226111  default ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
@@ -96,6 +83,19 @@
 # ec2-describe-group --region us-west-2 open_gates
 #=> GROUP sg-c84940f8 280638226111  open_gates  Login to EC2
 #=> PERMISSION  280638226111  open_gates  ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+
+## CREATE a security-group
+# ec2-create-group --region us-west-2 -d "No one enters, no one exits." ice
+#=> GROUP sg-784a4348 ice No one enters, no one exits.
+
+## CREATE permissions
+# ec2-authorize group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
+# ec2-authorize --region us-west-2 -p 22 open_gates
+# ec2-authorize --region us-west-2 accreu -p 22 -s 98.200.189.208/32
+  # GET your IP Address at LINK http://checkip.amazonaws.com/
+# ec2-authorise --region us-west-2 ice -p 22 ice
+#=> GROUP     ice
+#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
 ## DELETE permissions
 # ec2-revoke group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
@@ -114,12 +114,12 @@
 ### MANAGE KEYPAIRS ###
 
 ## CREATE keypair
-# ec2-create-keypair blah-keypair > blah-keypair.pem
+# ec2-create-keypair --region us-west-2 blah-keypair > blah-keypair.pem
 ## NOTE to place these within Annex
 
 ## READ all keypairs
 # ec2-describe-keypairs --region us-west-2
-#=> KEYPAIR bookworm-keypair  f4:b1:23:ac:a7:7e:96:b3:cf:bf:aa:4a:4b:1a:a2:27:bc:ef:f1:ab
+#=> KEYPAIR accreu-keypair  f4:b1:23:ac:a7:7e:96:b3:cf:bf:aa:4a:4b:1a:a2:27:bc:ef:f1:ab
 #=> KEYPAIR accreu-keypair  d7:d7:25:68:47:41:6d:b2:18:17:32:b8:32:69:ca:1b:ff:f3:b4:99
 
 ## READ local key fingerprint

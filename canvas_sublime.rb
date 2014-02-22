@@ -2,6 +2,17 @@
 # canvas_sublime.rb
 # Description: Exploring Sublime Text Editor
 
+## > fullscreen toggle
+
+## Shortcuts
+CTRL + 0 ## open terminal
+CTRL + ENTER ## open sublime
+CTRL + PLUS ## open firefox
+CTRL + MINUS ## open thunderbird
+CTRL + MULTIPLY ## open calculator
+CTRL + DIVIDE ## open folder
+CTRL + DELETE ## close window
+
 ## Editing
 Ctrl + Shift + D ## duplicates line/selection
 Shift + Alt + Up/Down ## enlarge cursor
