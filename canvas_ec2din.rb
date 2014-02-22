@@ -74,8 +74,8 @@
 
 ## READ all security groups
 # ec2-describe-group --region us-west-2
-#=> GROUP sg-784a4348 280638226111  ice My accreu security group
-#=> PERMISSION  280638226111  ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+#=> GROUP sg-784a4348 280638226111  accreu-security My accreu security group
+#=> PERMISSION  280638226111  accreu-security ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 #=> GROUP sg-b3b4f583 280638226111  default default group
 #=> PERMISSION  280638226111  default ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
@@ -85,26 +85,26 @@
 #=> PERMISSION  280638226111  open_gates  ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
 ## CREATE a security-group
-# ec2-create-group --region us-west-2 -d "No one enters, no one exits." ice
-#=> GROUP sg-784a4348 ice No one enters, no one exits.
+# ec2-create-group --region us-west-2 -d "No one enters, no one exits." accreu-security
+#=> GROUP sg-784a4348 accreu-security No one enters, no one exits.
 
 ## CREATE permissions
 # ec2-authorize group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
 # ec2-authorize --region us-west-2 -p 22 open_gates
 # ec2-authorize --region us-west-2 accreu -p 22 -s 98.200.189.208/32
   # GET your IP Address at LINK http://checkip.amazonaws.com/
-# ec2-authorise --region us-west-2 ice -p 22 ice
-#=> GROUP     ice
-#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+# ec2-authorise --region us-west-2 accreu-security -p 22 accreu-security
+#=> GROUP     accreu-security
+#=> PERMISSION    accreu-security ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
 ## DELETE permissions
 # ec2-revoke group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
-# ec2-revoke group --region us-west-2 -p 22 ice
-#=> GROUP     ice
-#=> PERMISSION    ice ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
+# ec2-revoke group --region us-west-2 -p 22 accreu-security
+#=> GROUP     accreu-security
+#=> PERMISSION    accreu-security ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
 ## DELETE a security group
-# ec2-delete-group --region us-west-2 ice
+# ec2-delete-group --region us-west-2 accreu-security
 #=> RETURN  true
 
 ### MANAGE SECURITY GROUPS ###
