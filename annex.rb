@@ -1,11 +1,11 @@
 #!/usr/bin/ruby -w
-# annex_sync.rb
+# annex.rb
 # Author: Andy Bettisworth
 # Description: Sync [.script, .canvas, .template] with Annex
 
 require 'optparse'
 
-class AnnexSync
+class Annex
   HOME = ENV['HOME']
   SYNC = "#{ENV['HOME']}/.sync"
   ANNEX = "/media/Annex/preseed/seed/.sync"
@@ -20,7 +20,7 @@ git push origin master;
 cd #{SYNC}/.template;
 git push origin master;
 cd #{HOME}/.rbenv;
-git push annex master;
+git push origin master;
     EOF
   end
 
@@ -34,14 +34,14 @@ git pull --rebase origin master;
 cd #{SYNC}/.template;
 git pull --rebase origin master;
 cd #{HOME}/.rbenv;
-git pull --rebase annex master;
+git pull --rebase origin master;
     EOF
   end
 end
 
 ## USAGE
-# annex_sync --push
-# annex_sync --pull
+# annex --push
+# annex --pull
 
 options = {}
 option_parser = OptionParser.new do |opts|
@@ -58,7 +58,7 @@ option_parser = OptionParser.new do |opts|
 end
 option_parser.parse!
 
-update = AnnexSync.new
+update = Annex.new
 if options[:push] == true
   update.remote
 elsif options[:pull] == true
