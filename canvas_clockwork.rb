@@ -1,27 +1,23 @@
 #!/usr/bin/ruby -w
 # canvas_clockwork.rb
 # Author: Andy Bettisworth
-# Description: Canvas Clockwork gem; a scheduling process
-
-require 'clockwork'
-
-## NOTE
-## For convenience, create a link to clockwork binary
-# ln ~/.rbenv/versions/2.1.0/bin/clockwork
-# sudo ln -fs $HOME/.rbenv/versions/$RUBY_VERSION/bin/clockwork /usr/bin/clockwork;
+# Description: Canvas Clockwork gem; a ruby scheduling process
+# require 'clockwork'
 
 #######################
 ### w/ gem Queue_Classic ###
 require 'clockwork'
-require 'queue_classic'
+#require 'queue_classic'
 module Clockwork
   handler do |job|
-    method = /<method>(.*)<\/method>/.match(job)
-    args = /<args>(.*)<\/args>/.match(job)
-    QC.enqueue(method, args)
+    method = /method:(.*)args:/.match(job)[1]
+    args = /method:(.*)args:(.*)/.match(job)[2]
+    puts "method #{method}"
+    puts "args: #{args}"
+    # QC.enqueue(method, args)
   end
 
-  every(10.seconds, "<method>system</method><args>'background.rb'</args>")
+  every(10.seconds, "method:puts args:'Testing 1 2 3'")
   # every(10.seconds, "<method>Kernel.puts</method><args>Testing 1 2 3</args>")
 end
 ### w/ QueueClassic ###
@@ -418,3 +414,7 @@ end
 # end
 ### Database Clockwork 2 ###
 ############################
+
+## NOTE for convenience, create a link to clockwork binary
+# ln ~/.rbenv/versions/2.1.0/bin/clockwork
+# sudo ln -fs $HOME/.rbenv/versions/$RUBY_VERSION/bin/clockwork /usr/bin/clockwork;
