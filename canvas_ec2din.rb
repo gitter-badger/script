@@ -91,7 +91,7 @@
 ## CREATE permissions
 # ec2-authorize group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
 # ec2-authorize --region us-west-2 -p 22 open_gates
-# ec2-authorize --region us-west-2 accreu -p 22 -s 98.200.189.208/32
+# ec2-authorize --region us-west-2 accreu -p 22 -s 98.XXX.XXX.XXX/XX
   # GET your IP Address at LINK http://checkip.amazonaws.com/
 # ec2-authorise --region us-west-2 accreu-security -p 22 accreu-security
 #=> GROUP     accreu-security
@@ -99,7 +99,7 @@
 
 ## DELETE permissions
 # ec2-revoke group [--egress] [-P protocol] (-p port_range | -t icmp_type_code) [-u source_or_dest_group_owner ...] [-o source_or_dest_group ...] [-s source_or_dest_cidr ...]
-# ec2-revoke group --region us-west-2 -p 22 accreu-security
+# ec2-revoke --region us-west-2 -p 22 accreu-security
 #=> GROUP     accreu-security
 #=> PERMISSION    accreu-security ALLOWS  tcp 22  22  FROM  CIDR  0.0.0.0/0 ingress
 
