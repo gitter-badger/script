@@ -5,6 +5,12 @@
 
 require 'queue_classic'
 
+## Q: can we schedule a lengthy expression
+
+## CREATE a Queue
+# @queue = QC::Queue.new("clockwork_tasks")
+# @queue.enqueue("Class.method", "arg1")
+
 ## Applications
 # sending massive newsletters
 # image resizing
@@ -20,14 +26,23 @@ require 'queue_classic'
 # send reminder emails on a nightly basis
 # generating invoices once a month on the 1st
 
+## FEATURES
+# Leverage of PostgreSQL's listen/notify & row locking.
+# SUpport for multiple queues with heterogeneous workers.
+# JSON data schema_formatForking workers.
+# Workers can work multiple queues.
+# Forking workers.
+# Workers can work multiple queues.
+# Reduced row contention using a relaxed FIFO technique.
+
 ## Methods
 #  Producing Jobs
 #  Working Jobs
 
 ##########################
 ### COMMAND-LINE USAGE ###
-## CREATE job
-# ruby -r queue_classic -e "QC.enqueue('system', 'background')"
+## CREATE a job
+# ruby -r queue_classic -e "QC.enqueue('puts', 'Testing 1 2 3')"
 
 ## EXEC one job
 # ruby -r queue_classic -e "QC::Worker.new.work"
@@ -78,7 +93,7 @@ require 'queue_classic'
 
 # class MyWorker < QC::Worker
 #   def handle_failure(job, e)
-#     FailedQueue.enqueue(job[:method], *job[:args])
+#    FailedQueue.enqueue(job[:method], *job[:args])
 #   end
 # end
 
