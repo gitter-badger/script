@@ -3,11 +3,21 @@
 # Author: Andy Bettisworth
 # Description: Canvas ec2-api-tools package
 
+## LINK http://joemaller.com/990/a-web-focused-git-workflow/
+## LINK http://danbarber.me/using-git-for-deployment/
+
 ## SET credentials [~/.bashrc]
 ## Set \$EC2_HOME for ec2-api-tools
 # export EC2_HOME=/usr/bin
 # export EC2_PRIVATE_KEY=/media/Annex/preseed/seed/.sync/.app/.keypair/ec2-wurde-private-key.pem
 # export EC2_CERT=/media/Annex/preseed/seed/.sync/.app/.keypair/ec2-wurde-cert.pem
+
+## SET ec2 instance credentials
+# ssh-add /media/Annex/preseed/seed/.sync/.app/keypair/accreu-keypair
+
+## RESOLVE conflicts
+## NOTE create branch on hub with conflict, use clones to pull fixme branch
+# git push hub master:refs/heads/fixme
 
 #############################
 ### LAUNCHING AN INSTANCE ###
