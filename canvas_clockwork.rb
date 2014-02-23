@@ -23,6 +23,15 @@ end
 ### w/ QueueClassic ###
 #######################
 
+## > Convert these cron tasks
+# echo "50 22 * * * wurde notify-send 'Clean-up script in 10 minutes.'" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -f #{HOME}/Desktop/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf #{HOME}/Downloads/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf /tmp/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf #{HOME}/.local/share/Trash/*" >> /tmp/my_cron;
+# echo "0 23 * * 0 wurde sudo apt-get -y autoremove" >> /tmp/my_cron;
+# echo "*/20 * * * * wurde ruby #{HOME}/.sync/.script/background.rb"  >> /tmp/my_cron;
+
 ##################
 ### QUICKSTART ###
 ## CREATE [clock.rb]
