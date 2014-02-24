@@ -124,39 +124,27 @@
 
 # To read more about JSON visit: http://json.org
 
-# # Parsing JSON
-# To parse a JSON string received by another application or generated within
-# your existing application:
+####################
+### Parsing JSON ###
+## To parse a JSON string
 
-#   require 'json'
+  # require 'json'
 
-#   my_hash = JSON.parse('{"hello": "goodbye"}')
-#   puts my_hash["hello"] => "goodbye"
+  # my_hash = JSON.parse('{"hello": "goodbye"}')
+  # puts my_hash["hello"]
+  #=> "goodbye"
 
-# Notice the extra quotes '' around the hash notation. Ruby expects the argument
-# to be a string and can't convert objects like a hash or array.
+## Notice the extra quotes '' around the hash notation.
+## Ruby expects the argument to be a string
 
-# Ruby converts your string into a hash
-
-# # Generating JSON
-# Creating a JSON string for communication or serialization is just as simple.
-
-#   require 'json'
-
-#   my_hash = {:hello => "goodbye"}
-#   puts JSON.generate(my_hash) => "{\"hello\":\"goodbye\"}"
-
-# Or an alternative way:
-
-#   require 'json'
-#   puts {:hello => "goodbye"}.to_json => "{\"hello\":\"goodbye\"}"
+### Parsing JSON ###
+####################
 
 # JSON.generate only allows objects or arrays to be converted to JSON syntax.
 # to_json, however, accepts many Ruby classes even though it acts only as a
 # method for serialization:
 
 #   require 'json'
-
 #   1.to_json => "1"
 
 # ------------------------------------------------------------------------------
