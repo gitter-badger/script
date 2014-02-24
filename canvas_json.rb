@@ -1,19 +1,17 @@
+#!/usr/bin/ruby -w
 # json_canvas.rb
 # Author: Andy Bettisworth
 # Description: Canvas JSON class
 
-# # JSON
-# (from ruby core)
-# ------------------------------------------------------------------------------
-# # JavaScript Object Notation
+## JavaScript Object Notation
 
 # JSON is a lightweight data-interchange format. It is easy for us humans to
 # read and write. Plus, equally simple for machines to generate or parse. JSON
 # is completely language agnostic, making it the ideal interchange format.
 
 # Built on two universally available structures:
-#   1. A collection of name/value pairs. Often referred to as an _object_, hash table, record, struct, keyed list, or associative array.
-#   2. An ordered list of values. More commonly called an _array_, vector, sequence or list.
+#   1. HASH - a collection of name/value pairs.
+#   2. ARRAY - an ordered list of values.
 
 # To read more about JSON visit: http://json.org
 
@@ -31,19 +29,26 @@
 
 # Ruby converts your string into a hash
 
-# == GGeenneerraattiinngg  JJSSOONN
+###################
+### CREATE JSON ###
+  # require 'json'
 
-# Creating a JSON string for communication or serialization is just as simple.
+  # my_hash = {hello: "goodbye"}
+  # puts JSON.generate(my_hash)
+  #=> {"hello":"goodbye"}
 
-#   require 'json'
+## Or an alternative way:
+  # result = {hello: "goodbye"}.to_json
+  # puts result
+  #=> "{\"hello\":\"goodbye\"}"
 
-#   my_hash = {:hello => "goodbye"}
-#   puts JSON.generate(my_hash) => "{\"hello\":\"goodbye\"}"
+## Error
+  # puts {hello: "goodbye"}.to_json
+#=> canvas_json.rb:46: syntax error, unexpected ':', expecting '}'
+#=>   puts {hello: "goodbye"}.to_json
 
-# Or an alternative way:
-
-#   require 'json'
-#   puts {:hello => "goodbye"}.to_json => "{\"hello\":\"goodbye\"}"
+### CREATE JSON ###
+###################
 
 # JSON.generate only allows objects or arrays to be converted to JSON syntax.
 # to_json, however, accepts many Ruby classes even though it acts only as a
@@ -85,7 +90,7 @@
 #   restore
 #   state
 
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   []
 #   dump
