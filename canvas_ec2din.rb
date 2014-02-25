@@ -258,3 +258,52 @@
 #   API: DeleteAccessKey
 ### MANAGE USERS ###
 ####################
+
+
+###########
+### AMI ###
+
+## Q: what is an ami
+# a: Amazon Machine Image
+# a: LINK http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
+# a: includes
+    # A template for the root volume for the instance
+    # Launch permissions that control which AWS accounts can use the AMI to launch instances
+    # A block device mapping that specifies the volumes to attach to the instance when it's launched
+
+## AMI lifecycle
+# create (template for root volume)
+# register
+# deregister
+# launch
+# copy
+
+## AMI Types
+# LINK http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html
+
+## Search AMIs
+# LINK http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html
+
+## AMIs
+#     ec2-copy-image
+#     ec2-create-image
+#     ec2-deregister
+#     ec2-describe-image-attribute
+#     ec2-describe-images
+#     ec2-migrate-image
+#     ec2-modify-image-attribute
+#     ec2-register
+#     ec2-reset-image-attribute
+
+## AMI Bundling (API Tools)
+#     ec2-bundle-image
+#     ec2-bundle-vol
+#     ec2-delete-bundle
+#     ec2-download-bundle
+#     ec2-migrate-bundle
+#     ec2-migrate-manifest
+#     ec2-unbundle
+#     ec2-upload-bundle
+
+### AMI ###
+###########
