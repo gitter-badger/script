@@ -1,25 +1,26 @@
 #!/usr/bin/ruby -w
 # canvas_timers.rb
+# Author: Andy Bettisworth
 # Description: Canvas Timers gem
 
 require 'timers'
 
 ## SUCCESSFUL: stupid iterator... just use 6.times{}
-timer1 = Timers.new
-three_second_timer = timer1.every(3) { puts "Take 3" }
-token = 0
-while token < 6 do
-  if token % 2 == 1
-    puts 'Let the odds be ever in your favor.'
-  end
-  timer1.wait
-  token += 1
-end
-
-## SUCCESSFUL: repeat timer proc
 # timer1 = Timers.new
 # three_second_timer = timer1.every(3) { puts "Take 3" }
-# 3.times { timer1.wait }
+# token = 0
+# while token < 6 do
+#   if token % 2 == 1
+#     puts 'Let the odds be ever in your favor.'
+#   end
+#   timer1.wait
+#   token += 1
+# end
+
+## SUCCESSFUL: repeat timer proc
+timer1 = Timers.new
+three_second_timer = timer1.every(3) { puts "Take 3" }
+4.times { timer1.wait }
 
 ## TEST failed: repeat timer proc
 ## NOTE failed because we used after() and not every()
@@ -67,3 +68,33 @@ end
 # timers = Timers.new
 # five_second_timer = timers.every(5) { puts "Take 5" }
 # loop { timers.wait }
+
+# = TTiimmeerrss  <<  OObbjjeecctt
+# ------------------------------------------------------------------------------
+# = IInncclluuddeess::
+# Enumerable (from gem timers-1.1.0)
+# ------------------------------------------------------------------------------
+# = EExxtteennddeedd  bbyy::
+# Forwardable (from gem timers-1.1.0)
+
+# (from gem timers-1.1.0)
+# ------------------------------------------------------------------------------
+# Low precision timers implemented in pure Ruby
+
+# ------------------------------------------------------------------------------
+# = CCoonnssttaannttss::
+# VERSION:
+#   [not documented]
+
+# = CCllaassss  mmeetthhooddss::
+#   new
+
+# = IInnssttaannccee  mmeetthhooddss::
+#   add
+#   after
+#   after_milliseconds
+#   after_ms
+#   every
+#   fire
+#   wait
+#   wait_interval

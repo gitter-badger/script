@@ -1,8 +1,20 @@
 #!/usr/bin/ruby -w
 # canvas_clockwork.rb
 # Author: Andy Bettisworth
+<<<<<<< HEAD
 # Description: Canvas Clockwork gem; a ruby scheduling process
 # require 'clockwork'
+=======
+# Description: Canvas Clockwork gem; a scheduling process
+# require 'clockwork'
+
+## CREATE a link to clockwork binary
+# ln ~/.rbenv/versions/2.1.0/bin/clockwork
+# sudo ln -fs $HOME/.rbenv/versions/$RUBY_VERSION/bin/clockwork /usr/bin/clockwork;
+>>>>>>> work on schedule script
+
+## SET as a background process
+# clockwork script &
 
 #######################
 ### w/ gem Queue_Classic ###
@@ -10,6 +22,7 @@ require 'clockwork'
 #require 'queue_classic'
 module Clockwork
   handler do |job|
+<<<<<<< HEAD
     method = /method:(.*)args:/.match(job)[1]
     args = /method:(.*)args:(.*)/.match(job)[2]
     puts "method #{method}"
@@ -19,6 +32,17 @@ module Clockwork
 
   every(10.seconds, "method:puts args:'Testing 1 2 3'")
   # every(10.seconds, "<method>Kernel.puts</method><args>Testing 1 2 3</args>")
+=======
+    method = job[0]
+    args = job[1]
+    QC.enqueue(method, args)
+    QC::Worker.new.work
+  end
+
+  every(10.seconds, ["puts", "Testing 1 2 3"])
+  # every(1.hour, "Kernel.puts", "hello world")
+  # every(1.day, "Kernel.puts", "hello world", at: '01:30')
+>>>>>>> work on schedule script
 end
 ### w/ QueueClassic ###
 #######################
@@ -49,7 +73,6 @@ end
 #   every(10.seconds, 'frequent.job')
 #   every(3.minutes, 'less.frequent.job')
 #   every(1.hour, 'hourly.job')
-
 #   every(1.day, 'midnight.job', :at => '00:00')
 # end
 
@@ -143,7 +166,8 @@ end
 # :if parameter is invoked every time the task is ready to run, and run if the return value is true.
 # Run on every first day of month.
 #   Clockwork.every(1.day, 'myjob', :if => lambda { |t| t.day == 1 })
-# The argument is an instance of ActiveSupport::TimeWithZone if the :tz option is set. Otherwise, it's an instance of Time.
+# The argument is an instance of ActiveSupport::TimeWithZone if the :tz option is set.
+# Otherwise, it's an instance of Time.
 # This argument cannot be omitted. Please use _ as placeholder if not needed.
 #   Clockwork.every(1.second, 'myjob', :if => lambda { |_| true })
 
@@ -261,8 +285,8 @@ end
 # module DBBackedClockwork
 #   extend Clockwork
 
-#   # add a periodic job to update @@events
-#   # I think a thread is too complex
+    ## add a periodic job to update @@events
+    ## I think a thread is too complex
 
 #   configure do |config|
 #     config[:sleep_timeout] = 1
