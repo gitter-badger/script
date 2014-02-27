@@ -2,10 +2,9 @@
 # canvas_queue_classic.rb
 # Author: Andy Bettisworth
 # Description: Canvas Queue Classic gem; a job queueing system
-
 require 'queue_classic'
 
-## Applications
+## QUEUE 'default'
 # sending massive newsletters
 # image resizing
 # http downloads
@@ -13,12 +12,15 @@ require 'queue_classic'
 # updating solr, our search server, after product changes
 # batch imports
 # spam checks
-# rotate background
-# clean /Desktop, /tmp, /Downloads
-# source .bashrc
-# refreshing feeds on an hourly basis
-# send reminder emails on a nightly basis
 # generating invoices once a month on the 1st
+# send reminder emails on a nightly basis
+# refreshing feeds on an hourly basis
+
+## QUEUE 'routine'
+# sync Annex
+# rotate background
+# source .bashrc
+# clean /Desktop, /tmp, /Downloads
 
 ## Methods
 #  Producing Jobs
@@ -38,16 +40,16 @@ require 'queue_classic'
 ##########################
 
 ## QC::Worker.new(args={}) arguments
-# fork_worker:: Worker forks each job execution.
-# wait_interval:: Time to wait between failed lock attempts
-# connection:: PGConn object.
-# q_name:: Name of a single queue to process.
-# q_names:: Names of queues to process. Will process left to right.
-# top_bound:: Offset to the head of the queue. 1 == strict FIFO.
+  # fork_worker::   Worker forks each job execution.
+  # wait_interval:: Time to wait between failed lock attempts
+  # connection::    PGConn object.
+  # q_name::        Name of a single queue to process.
+  # q_names::       Names of queues to process. Will process left to right.
+  # top_bound::     Offset to the head of the queue. 1 == strict FIFO.
 
 ######################
 ### PRODUCING JOBS ###
-# # This method has no arguments.
+# This method has no arguments.
 # QC.enqueue("Time.now")
 # # This method has 1 argument.
 # QC.enqueue("Kernel.puts", "hello world")
@@ -57,17 +59,21 @@ require 'queue_classic'
 # QC.enqueue("Kernel.puts", {"hello" => "world"})
 # # This method has an array argument.
 # QC.enqueue("Kernel.puts", ["hello", "world"])
+# QC::Worker.new.start
+#
 # # This method uses a non-default queue.
-# p_queue = QC::Queue.new("priority_queue")
-# p_queue.enqueue("Kernel.puts", ["hello", "world"])
+p_queue = QC::Queue.new("priority_queue")
+p_queue.enqueue("Kernel.puts", ["hello", "world"])
 ### PRODUCING JOBS ###
 ######################
 
 ## Q: How to execute a custom queue
 ## a: set target queue on QC::Worker instance
-# worker = QC::Worker.new
-# worker.queue = 'priority_queue'
-# worker.work
+worker = QC::Worker.new
+worker.queue = 'priority_queue'
+worker.work
+## ~OR~
+# QC::Worker.new(q_name: 'priority_queue').start
 
 #####################
 ### CUSTOM WORKER ###
@@ -104,7 +110,7 @@ require 'queue_classic'
 #   adapter: 'postgresql',
 #   host: 'localhost',
 #   database: 'queue_classic',
-#   username: 'codebit',
+#   username: 'wurde',
 #   password: 'trichoderma')
 
 # class AddQueueClassic < ActiveRecord::Migration
@@ -115,7 +121,6 @@ require 'queue_classic'
 #     QC::Setup.drop
 #   end
 # end
-
 # AddQueueClassic.up
 ### BOOTSTRAP SETUP ###
 #######################
@@ -124,9 +129,9 @@ require 'queue_classic'
 ### QUICK START ###
 # gem install queue_classic
 # createdb queue_classic_test
-# export QC_DATABASE_URL="postgres://codebit:trichoderma@localhost/queue_classic_test"
+# export QC_DATABASE_URL="postgres://wurde:trichoderma@localhost/queue_classic_test"
 # ruby -r queue_classic -e "QC::Setup.create"
-# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'hello world')"
+# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'Testing 1 2 3')"
 # ruby -r queue_classic -e "QC::Worker.new.work"
 ### QUICK START ###
 ###################
@@ -206,13 +211,13 @@ require 'queue_classic'
   # method_missing
   # respond_to_missing?
 
-# ## QC::Worker < Object
+## QC::Worker < Object
 # (from gem queue_classic-2.2.3)
 # ------------------------------------------------------------------------------
-# ## Class methods
+## Class methods
 #   new
 
-# ## Instance methods
+## Instance methods
 #   call
 #   fork_and_work
 #   handle_failure
@@ -226,7 +231,7 @@ require 'queue_classic'
 #   stop
 #   work
 
-# ## Attributes
+## Attributes
 #   attr_accessor queue
 #   attr_accessor running
 
@@ -239,7 +244,6 @@ require 'queue_classic'
 # Each job includes a method column. We will use ruby's eval to grab the ruby
 # object from memory. We send the method to the object and pass the args.
 
-
 # = QC::Worker.fork_and_work
 # (from gem queue_classic-2.2.3)
 # === Implementation from Worker
@@ -249,7 +253,6 @@ require 'queue_classic'
 # This method will tell the ruby process to FORK. Define setup_child to hook
 # into the forking process. Using setup_child is good for re-establishing
 # database connections.
-
 
 # = QC::Worker.handle_failure
 # (from gem queue_classic-2.2.3)
@@ -298,7 +301,8 @@ require 'queue_classic'
 # ------------------------------------------------------------------------------
 #   start()
 # ------------------------------------------------------------------------------
-# Start a loop and work jobs indefinitely. Call this method to start the worker. This is the easiest way to start working jobs.
+# Start a loop and work jobs indefinitely. Call this method to start the worker.
+# This is the easiest way to start working jobs.
 
 
 # = QC::Worker.stop
