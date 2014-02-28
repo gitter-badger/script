@@ -23,25 +23,42 @@ class Schedule
     @args   = params[:args]
     @delay  = params[:delay]
     @interval = params[:interval]
+    @repeat   = params[:repeat]
+    @script   = params[:script]
     execute
   end
 
   private
 
-  def execute(delay = 0)
+  def execute
     timer = Timers.new
-    if @delay
+    if @script
+      @method = 'Kernel.load'
+      @args = ENV['HOME'] + '/.sync/.script/routine/' + @script
+      enqueue_task(@method, @args)
+      QC::Worker.new(q_name: @queue).work
+    elsif @delay
       timer.after(@delay) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
       timer.wait
+    elsif @repeat > 1
+      @delay ||= 1;
+      timer.every(@delay) do
+        enqueue_task(@method, @args)
+        QC::Worker.new(q_name: @queue).work
+      end
+      @repeat.times { timer.wait }
     elsif @interval
       timer.every(@interval) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
       loop { timer.wait }
+    else
+      enqueue_task(@method, @args)
+      QC::Worker.new(q_name: @queue).work
     end
   end
 
@@ -58,6 +75,10 @@ end
 # tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
 # tactical = Schedule.new
 # tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 10.seconds)
+# tactical = Schedule.new
+# tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
+tactical = Schedule.new
+tactical.task(script: 'test.rb')
 
 # describe Schedule do
 #   describe "#schedule" do
@@ -76,11 +97,6 @@ end
 #       tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
 #     end
 
-#     it "should accept a at a specific_time: '01:30'" do
-#       tactical = Schedule.new
-#       tactical.task(method: 'puts', args: 'Testing 1 2 3', specific_time: '01:30')
-#     end
-
 #     it "should accept routine: 'true' with interval: '1.day'" do
 #       tactical = Schedule.new
 #       tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 1.day)
@@ -91,13 +107,21 @@ end
 #       tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
 #     end
 
-#     it "should accept script_path: 'background.rb'" do
+#     it "should accept script_path: 'test.rb'" do
 #       tactical = Schedule.new
-#       tactical.task(method: 'puts', args: 'Testing 1 2 3', script_path: 'background.rb')
+#       tactical.task(script: 'test.rb')
+#     end
+
+#     it "should accept a at a at: '01:30'", wip: true do
+#       tactical = Schedule.new
+#       tactical.task(method: 'puts', args: 'Testing 1 2 3', at: '01:30')
 #     end
 #   end
 # end
 
+## EXEC ruby file
+# QC::Queue.new('routine').enqueue("Kernel.load", "/home/wurde/test.rb")
+# QC::Worker.new(q_name: 'routine').start
 
 ## IDEAS
 ## == Timeout gem
@@ -105,14 +129,6 @@ end
 #   status = Timeout::timeout(5) {
 #     # Something that should be interrupted if it takes more than 5 seconds...
 #   }
-
-## == Timers gem
-# timer = Timers.new
-# five_second_timer = timer.every(5) { puts "Take 5" }
-# loop { timers.wait }
-## ~OR~
-# three_second_timer = timer.after(3) { puts "Take 3" }
-# 3.times { timer.wait }
 
 ## == Clockwork gem
 # :at parameter specifies when to trigger the event:
