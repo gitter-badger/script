@@ -4,17 +4,7 @@
 # Description: Canvas Queue Classic gem; a job queueing system
 require 'queue_classic'
 
-<<<<<<< HEAD
-## Q: can we schedule a lengthy expression
-
-## CREATE a Queue
-# @queue = QC::Queue.new("clockwork_tasks")
-# @queue.enqueue("Class.method", "arg1")
-
-## Applications
-=======
 ## QUEUE 'default'
->>>>>>> work on schedule script
 # sending massive newsletters
 # image resizing
 # http downloads
@@ -44,6 +34,10 @@ require 'queue_classic'
 ## Methods
 #  Producing Jobs
 #  Working Jobs
+
+## > EXEC ruby script file
+QC::Queue.new('routine').enqueue("Kernel.load", "/home/wurde/test.rb")
+QC::Worker.new(q_name: 'routine').start
 
 ##########################
 ### COMMAND-LINE USAGE ###
@@ -81,16 +75,16 @@ require 'queue_classic'
 # QC::Worker.new.start
 #
 # # This method uses a non-default queue.
-p_queue = QC::Queue.new("priority_queue")
-p_queue.enqueue("Kernel.puts", ["hello", "world"])
+# p_queue = QC::Queue.new("priority_queue")
+# p_queue.enqueue("Kernel.puts", ["hello", "world"])
 ### PRODUCING JOBS ###
 ######################
 
 ## Q: How to execute a custom queue
 ## a: set target queue on QC::Worker instance
-worker = QC::Worker.new
-worker.queue = 'priority_queue'
-worker.work
+# worker = QC::Worker.new
+# worker.queue = 'priority_queue'
+# worker.work
 ## ~OR~
 # QC::Worker.new(q_name: 'priority_queue').start
 
