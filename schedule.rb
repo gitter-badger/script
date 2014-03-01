@@ -27,7 +27,7 @@ class Schedule
     end
     @delay    = params[:delay]
     @interval = params[:interval]
-    fail "Cannot have @interval and @delay" if @delay && @interval
+    fail "Cannot have --interval #{@interval} and --delay #{@delay}" if @delay && @interval
     @repeat = params[:repeat]
     @repeat ||= 1
     execute
@@ -63,58 +63,54 @@ option_parser = OptionParser.new do |opts|
   executable_name = File.basename($PROGRAM_NAME, ".rb")
   opts.banner = "Usage: #{executable_name} -m METHOD -a ARGS [OPTIONS]..."
 
-  opts.on('-m',' --method', 'method') do |method|
+  opts.on('-m METHOD','--method METHOD', 'task to execute') do |method|
     options[:method] = method
   end
 
-  opts.on('-a','--args', 'arguments') do |args|
+  opts.on('-a ARGS','--args ARGS', 'task arguments') do |args|
     options[:args] = args
   end
 
-  opts.on('-q','--queue', 'custom queue') do |queue|
+  opts.on('-q QUEUE','--queue QUEUE', 'custom queue') do |queue|
     options[:queue] = queue
   end
 
-  opts.on('-d','--delay', 'time inbetween each job') do |delay|
-    options[:delay] = delay
+  opts.on('-d DELAY','--delay DELAY', 'time inbetween each job') do |delay|
+    options[:delay] = delay.to_i
   end
 
-  opts.on('-i','--interval', 'loop jobs indefinitely') do |interval|
-    options[:interval] = interval
+  opts.on('-i INTERVAL','--interval INTERVAL', 'loop jobs indefinitely') do |interval|
+    options[:interval] = interval.to_i
   end
 
-  opts.on('-r','--repeat', 'repeat job X times') do |repeat|
-    options[:repeat] = repeat
+  opts.on('-r REPEAT','--repeat REPEAT', 'repeat job X times') do |repeat|
+    options[:repeat] = repeat.to_i
   end
 
-  opts.on('-s','--script', 'script path') do |script|
+  opts.on('-s SCRIPT','--script SCRIPT', 'script path') do |script|
     options[:script] = script
   end
 end
 option_parser.parse!
 
-if options[:method]  && options[:args]
-  tactical = Schedule.new
+tactical = Schedule.new
+if options[:script]
+  tactical.task(queue:    options[:queue],
+                delay: options[:delay],
+                interval: options[:interval],
+                repeat: options[:repeat],
+                script: options[:script])
+
+elsif options[:method]  && options[:args]
   tactical.task(method:   options[:method],
                 args:     options[:args],
                 queue:    options[:queue],
                 delay: options[:delay],
                 interval: options[:interval],
-                repeat: options[:repeat],
-                script: options[:script])
+                repeat: options[:repeat])
 else
   puts option_parser.help
 end
-
-# tactical.task(method: 'puts', args: 'Testing 1 2 3')
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 10.seconds)
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
-# tactical = Schedule.new
-# tactical.task(script: 'test.rb')
 
 # describe Schedule do
 #   describe "#schedule" do
