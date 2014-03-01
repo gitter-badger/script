@@ -21,10 +21,15 @@ class Schedule
   def task(params)
     @method = params[:method]
     @args   = params[:args]
-    @delay  = params[:delay]
+    if params[:script]
+      @method = 'Kernel.load'
+      @args   = ENV['HOME'] + '/.sync/.script/routine/' + params[:script]
+    end
+    @delay    = params[:delay]
     @interval = params[:interval]
-    @repeat   = params[:repeat]
-    @script   = params[:script]
+    fail "Cannot have @interval and @delay" if @delay && @interval
+    @repeat = params[:repeat]
+    @repeat ||= 1
     execute
   end
 
@@ -32,33 +37,19 @@ class Schedule
 
   def execute
     timer = Timers.new
-    if @script
-      @method = 'Kernel.load'
-      @args = ENV['HOME'] + '/.sync/.script/routine/' + @script
-      enqueue_task(@method, @args)
-      QC::Worker.new(q_name: @queue).work
-    elsif @delay
-      timer.after(@delay) do
-        enqueue_task(@method, @args)
-        QC::Worker.new(q_name: @queue).work
-      end
-      timer.wait
-    elsif @repeat > 1
+    unless @interval
       @delay ||= 1;
       timer.every(@delay) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
       @repeat.times { timer.wait }
-    elsif @interval
+    else
       timer.every(@interval) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
       loop { timer.wait }
-    else
-      enqueue_task(@method, @args)
-      QC::Worker.new(q_name: @queue).work
     end
   end
 
@@ -77,8 +68,8 @@ end
 # tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 10.seconds)
 # tactical = Schedule.new
 # tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
-tactical = Schedule.new
-tactical.task(script: 'test.rb')
+# tactical = Schedule.new
+# tactical.task(script: 'test.rb')
 
 # describe Schedule do
 #   describe "#schedule" do
