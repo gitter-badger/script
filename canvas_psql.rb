@@ -1,5 +1,6 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/ruby -w
 # package_psql.sh
+# Author: Andy Bettisworth
 # Description: Command-line interface to PostgreSQL
 
 ## > Backup target database
@@ -14,6 +15,14 @@
 ## > CONNECT database to monitoring tools
 ## > simple replication 1 to 1 WARM
 ## > complex replication 1 to many HOT
+
+
+## READ running postgresql server PORT (default is 5432)
+# wurde@imac:~/Desktop$ netstat -na | grep postgresql
+#=> unix  2      [ ACC ]     STREAM     LISTENING     10150    /var/run/postgresql/.s.PGSQL.5432
+
+## EXEC sql on db
+# psql --file=example.sql --dbname=sphinx_test
 
 ####################################
 ### Postgresql Command-Line Help ###

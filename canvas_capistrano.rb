@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 # capistrano_canvas.rb
+# Author: Andy Bettisworth
 # Description: Canvas capistrano for app deployment automation
 
 # > reverse engineer methods in

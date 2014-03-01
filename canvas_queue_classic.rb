@@ -21,15 +21,31 @@ require 'queue_classic'
 # rotate background
 # source .bashrc
 # clean /Desktop, /tmp, /Downloads
+<<<<<<< .merge_file_T8TQtz
+=======
+
+## FEATURES
+# Leverage of PostgreSQL's listen/notify & row locking.
+# SUpport for multiple queues with heterogeneous workers.
+# JSON data schema_formatForking workers.
+# Workers can work multiple queues.
+# Forking workers.
+# Workers can work multiple queues.
+# Reduced row contention using a relaxed FIFO technique.
+>>>>>>> .merge_file_3wmVZA
 
 ## Methods
 #  Producing Jobs
 #  Working Jobs
 
+## EXEC ruby script file
+# QC::Queue.new('routine').enqueue("Kernel.load", "/home/wurde/test.rb")
+# QC::Worker.new(q_name: 'routine').start
+
 ##########################
 ### COMMAND-LINE USAGE ###
-## CREATE job
-# ruby -r queue_classic -e "QC.enqueue('Kernel.puts', 'hello world')"
+## CREATE a job
+# ruby -r queue_classic -e "QC.enqueue('puts', 'Testing 1 2 3')"
 
 ## EXEC one job
 # ruby -r queue_classic -e "QC::Worker.new.work"
@@ -69,9 +85,15 @@ p_queue.enqueue("Kernel.puts", ["hello", "world"])
 
 ## Q: How to execute a custom queue
 ## a: set target queue on QC::Worker instance
+<<<<<<< .merge_file_T8TQtz
 worker = QC::Worker.new
 worker.queue = 'priority_queue'
 worker.work
+=======
+# worker = QC::Worker.new
+# worker.queue = 'priority_queue'
+# worker.work
+>>>>>>> .merge_file_3wmVZA
 ## ~OR~
 # QC::Worker.new(q_name: 'priority_queue').start
 
@@ -84,7 +106,7 @@ worker.work
 
 # class MyWorker < QC::Worker
 #   def handle_failure(job, e)
-#     FailedQueue.enqueue(job[:method], *job[:args])
+#    FailedQueue.enqueue(job[:method], *job[:args])
 #   end
 # end
 

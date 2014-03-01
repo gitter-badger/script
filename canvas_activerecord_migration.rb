@@ -19,11 +19,10 @@
 
 ####################
 ## Simple Example ##
-
 require 'pg' # or 'mysql2' or 'sqlite3'
 require 'active_record'
 
-conn = ActiveRecord::Base.establish_connection(
+ActiveRecord::Base.establish_connection(
   adapter:  'postgresql',
   host:     'localhost',
   database: 'graph_development',
@@ -40,16 +39,13 @@ class CreatePlot < ActiveRecord::Migration
   end
 end
 
-# puts CreatePlot.instance_methods
 plot = CreatePlot.new
 plot.write
-
 ## Simple Example ##
 ####################
 
 ## SET database connection
 ## [config/database.yml]
-#
 # development:
 #   adapter:  'postgresql'
 #   host:     'localhost'
@@ -175,13 +171,12 @@ plot.write
 # into version control systems and executed against another database that might
 # be one, two, or five versions behind.
 
-# Example of a simple migration:
-
+## SIMPLE Migration
 #   class AddSsl < ActiveRecord::Migration
 #     def up
 #       add_column :accounts, :ssl_enabled, :boolean, default: true
 #     end
-
+#
 #     def down
 #       remove_column :accounts, :ssl_enabled
 #     end
@@ -194,8 +189,7 @@ plot.write
 # specific methods like add_column and remove_column, but may also contain
 # regular Ruby code for generating data needed for the transformations.
 
-# Example of a more complex migration that also needs to initialize data:
-
+## INTEGRATE Model creation within Migration
 #   class AddSystemSettings < ActiveRecord::Migration
 #     def up
 #       create_table :system_settings do |t|
@@ -205,24 +199,18 @@ plot.write
 #         t.string  :type
 #         t.integer :position
 #       end
-
+#
 #       SystemSetting.create  name:  'notice',
 #                             label: 'Use notice?',
 #                             value: 1
 #     end
-
+#
 #     def down
 #       drop_table :system_settings
 #     end
 #   end
 
-# This migration first adds the system_settings table, then creates the very
-# first row in it using the Active Record model that relies on the table. It
-# also uses the more advanced create_table syntax where you can specify a
-# complete table schema in one block call.
-
 ## Available Transformations
-
 # * create_table(name, options): Creates a table called name and makes the table
 #   object available to a block that can then add columns to it, following the
 #   same format as add_column. See example above. The options hash is for
@@ -266,8 +254,7 @@ plot.write
 #
 # * drop_table(name): Drops the table called name.
 
-# == IIrrrreevveerrssiibbllee  ttrraannssffoorrmmaattiioonnss
-
+## == IIrrrreevveerrssiibbllee  ttrraannssffoorrmmaattiioonnss
 # Some transformations are destructive in a manner that cannot be reversed.
 # Migrations of that kind should raise an ActiveRecord::IrreversibleMigration
 # exception in their down method.

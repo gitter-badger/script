@@ -1,12 +1,20 @@
 #!/usr/bin/ruby -w
 # canvas_clockwork.rb
 # Author: Andy Bettisworth
+<<<<<<< HEAD
+# Description: Canvas Clockwork gem; a ruby scheduling process
+# require 'clockwork'
+=======
 # Description: Canvas Clockwork gem; a scheduling process
 # require 'clockwork'
 
 ## CREATE a link to clockwork binary
 # ln ~/.rbenv/versions/2.1.0/bin/clockwork
 # sudo ln -fs $HOME/.rbenv/versions/$RUBY_VERSION/bin/clockwork /usr/bin/clockwork;
+>>>>>>> work on schedule script
+
+## SET as a background process
+# clockwork script &
 
 ## SET as a background process
 # clockwork script &
@@ -14,21 +22,51 @@
 #######################
 ### w/ gem Queue_Classic ###
 require 'clockwork'
-require 'queue_classic'
+#require 'queue_classic'
 module Clockwork
   handler do |job|
+<<<<<<< .merge_file_5qod3r
     method = job[0]
     args = job[1]
     QC.enqueue(method, args)
     QC::Worker.new.work
   end
 
+=======
+<<<<<<< HEAD
+    method = /method:(.*)args:/.match(job)[1]
+    args = /method:(.*)args:(.*)/.match(job)[2]
+    puts "method #{method}"
+    puts "args: #{args}"
+    # QC.enqueue(method, args)
+  end
+
+  every(10.seconds, "method:puts args:'Testing 1 2 3'")
+  # every(10.seconds, "<method>Kernel.puts</method><args>Testing 1 2 3</args>")
+=======
+    method = job[0]
+    args = job[1]
+    QC.enqueue(method, args)
+    QC::Worker.new.work
+  end
+
+>>>>>>> .merge_file_BKYEUs
   every(10.seconds, ["puts", "Testing 1 2 3"])
   # every(1.hour, "Kernel.puts", "hello world")
   # every(1.day, "Kernel.puts", "hello world", at: '01:30')
+>>>>>>> work on schedule script
 end
 ### w/ QueueClassic ###
 #######################
+
+## > Convert these cron tasks
+# echo "50 22 * * * wurde notify-send 'Clean-up script in 10 minutes.'" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -f #{HOME}/Desktop/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf #{HOME}/Downloads/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf /tmp/*" >> /tmp/my_cron;
+# echo "0 23 * * * wurde rm -rf #{HOME}/.local/share/Trash/*" >> /tmp/my_cron;
+# echo "0 23 * * 0 wurde sudo apt-get -y autoremove" >> /tmp/my_cron;
+# echo "*/20 * * * * wurde ruby #{HOME}/.sync/.script/background.rb"  >> /tmp/my_cron;
 
 ##################
 ### QUICKSTART ###
@@ -421,3 +459,7 @@ end
 # end
 ### Database Clockwork 2 ###
 ############################
+
+## NOTE for convenience, create a link to clockwork binary
+# ln ~/.rbenv/versions/2.1.0/bin/clockwork
+# sudo ln -fs $HOME/.rbenv/versions/$RUBY_VERSION/bin/clockwork /usr/bin/clockwork;

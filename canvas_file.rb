@@ -121,7 +121,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # ##=> Thu Nov 29 11:14:18 EST 2007
 # File.atime("temp.txt")
 # ##=> Thu Nov 29 11:14:19 EST 2007
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
 
 ## CREATE file if it does not exist
 # unless File.exist?(list)
@@ -137,18 +137,18 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 ## CREATE file
 # File.new(TEST_FILE,'w+')
-<<<<<<< HEAD
+
 # = FFiillee  <<  IIOO
 
 # ------------------------------------------------------------------------------
 # = IInncclluuddeess::
-=======
+
 
 ## File < IO
 
 # ------------------------------------------------------------------------------
 ## Includes
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
 # FileBinary (from gem tins-0.13.1)
 
 # (from ruby core)
@@ -181,7 +181,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # ------------------------------------------------------------------------------
 # = CCoonnssttaannttss::
 
-<<<<<<< HEAD
+
 # ALT_SEPARATOR:
 #   platform specific alternative separator
 
@@ -196,12 +196,12 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # Separator:
 #   separates directory parts in path
-=======
+
 # ALT_SEPARATOR: platform specific alternative separator
 # PATH_SEPARATOR: path list separator
 # SEPARATOR: separates directory parts in path
 # Separator: separates directory parts in path
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
 
 ## Class Methods
 #   absolute_path
@@ -279,12 +279,11 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # (from gem activesupport-4.0.2)
 # ------------------------------------------------------------------------------
-<<<<<<< HEAD
+
 # = CCllaassss  mmeetthhooddss::
 
-=======
+
 ## Class methods
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 #   atomic_write
 
 # ------------------------------------------------------------------------------
@@ -300,10 +299,10 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 #   File.open(filename [, mode [, perm]] [, opt]) {|file| block } -> obj
 
 # ------------------------------------------------------------------------------
-<<<<<<< HEAD
 
-=======
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
+
+
 # With no associated block, File.open is a synonym for File.new. If the optional
 # code block is given, it will be passed the opened file as an argument and the
 # File object will automatically be closed when the block terminates.  The value
@@ -314,10 +313,10 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # See IO.new for a description of the mode and opt parameters.
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
+
+
 ## File.delete
 # (from ruby core)
 # ------------------------------------------------------------------------------
@@ -326,17 +325,17 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # Deletes the named files, returning the number of names passed as arguments.
 # Raises an exception on any error. See also Dir::rmdir.
 
-<<<<<<< HEAD
+
 
 # File.basename("/home/gumby/work/ruby.rb")          #=> "ruby.rb"
 # File.basename("/home/gumby/work/ruby.rb", ".rb")   #=> "ruby"
 
 
-=======
+
 # File.basename("/home/gumby/work/ruby.rb")          #=> "ruby.rb"
 # File.basename("/home/gumby/work/ruby.rb", ".rb")   #=> "ruby"
 
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+
 # Returns the extension (the portion of file name in path starting from the last
 # period).
 # If path is a dotfile, or starts with a period, then the starting dot is not
@@ -353,8 +352,8 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # Renames the given file to the new name. Raises a SystemCallError if the file
 # cannot be renamed.
 #   File.rename("afile", "afile.bak")   #=> 0
-<<<<<<< HEAD
-=======
+
+
 
 ## File.readline ~OR~ IO.gets
 # (from ruby core)
@@ -422,4 +421,4 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # When _src_offset is specified and _src is an IO,
 # IO.copy_stream doesn't move the current file offset.
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+

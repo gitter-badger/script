@@ -42,14 +42,14 @@ class MessageController < ApplicationController
   end
 end
 
-## Q: What does ActiveModel include?
-## ActiveModel::AttributeMethods
-## ActiveModel::Callbacks
-## ActiveModel::Conversion
-## ActiveModel::Dirty
-## ActiveModel::Errors
-## ActiveModel::Model
-## ActiveModel::Naming
-## ActiveModel::Serializers
-## ActiveModel::Translation
-## ActiveModel::Validations
+## MODULES
+# ActiveModel::AttributeMethods
+# ActiveModel::Callbacks
+# ActiveModel::Conversion
+# ActiveModel::Dirty
+# ActiveModel::Errors
+# ActiveModel::Model
+# ActiveModel::Naming
+# ActiveModel::Serializers
+# ActiveModel::Translation
+# ActiveModel::Validations

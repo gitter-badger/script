@@ -101,7 +101,7 @@ require 'benchmark'
 #     >total:   2.880000   0.000000   2.880000 (  2.883764)
 #     >avg:     0.960000   0.000000   0.960000 (  0.961255)
 # ------------------------------------------------------------------------------
-# = CCoonnssttaannttss::
+# = CCoonnssttaannttss::
 
 # CAPTION:
 #   The default caption string (heading above the output times).
@@ -110,14 +110,14 @@ require 'benchmark'
 #   The default format string used to display times.  See also
 #   Benchmark::Tms#format.
 
-# = CCllaassss  mmeetthhooddss::
+# = CCllaassss  mmeetthhooddss::
 #   benchmark
 #   bm
 #   bmbm
 #   measure
 #   realtime
 
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 #   benchmark
 #   bm
 #   bmbm
@@ -126,6 +126,6 @@ require 'benchmark'
 
 # (from gem activesupport-4.0.2)
 # ------------------------------------------------------------------------------
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   ms
