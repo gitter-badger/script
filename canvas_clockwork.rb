@@ -15,9 +15,12 @@
 
 ## SET as a background process
 # clockwork script &
+<<<<<<< HEAD
 
 ## SET as a background process
 # clockwork script &
+=======
+>>>>>>> new_branch_name
 
 #######################
 ### w/ gem Queue_Classic ###
@@ -25,6 +28,7 @@ require 'clockwork'
 #require 'queue_classic'
 module Clockwork
   handler do |job|
+<<<<<<< HEAD
 <<<<<<< .merge_file_5qod3r
     method = job[0]
     args = job[1]
@@ -33,12 +37,15 @@ module Clockwork
   end
 
 =======
+=======
+>>>>>>> new_branch_name
 <<<<<<< HEAD
     method = /method:(.*)args:/.match(job)[1]
     args = /method:(.*)args:(.*)/.match(job)[2]
     puts "method #{method}"
     puts "args: #{args}"
     # QC.enqueue(method, args)
+<<<<<<< HEAD
   end
 
   every(10.seconds, "method:puts args:'Testing 1 2 3'")
@@ -51,6 +58,19 @@ module Clockwork
   end
 
 >>>>>>> .merge_file_BKYEUs
+=======
+  end
+
+  every(10.seconds, "method:puts args:'Testing 1 2 3'")
+  # every(10.seconds, "<method>Kernel.puts</method><args>Testing 1 2 3</args>")
+=======
+    method = job[0]
+    args = job[1]
+    QC.enqueue(method, args)
+    QC::Worker.new.work
+  end
+
+>>>>>>> new_branch_name
   every(10.seconds, ["puts", "Testing 1 2 3"])
   # every(1.hour, "Kernel.puts", "hello world")
   # every(1.day, "Kernel.puts", "hello world", at: '01:30')

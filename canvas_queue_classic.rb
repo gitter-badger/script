@@ -21,8 +21,11 @@ require 'queue_classic'
 # rotate background
 # source .bashrc
 # clean /Desktop, /tmp, /Downloads
+<<<<<<< HEAD
 <<<<<<< .merge_file_T8TQtz
 =======
+=======
+>>>>>>> new_branch_name
 
 ## FEATURES
 # Leverage of PostgreSQL's listen/notify & row locking.
@@ -32,7 +35,10 @@ require 'queue_classic'
 # Forking workers.
 # Workers can work multiple queues.
 # Reduced row contention using a relaxed FIFO technique.
+<<<<<<< HEAD
 >>>>>>> .merge_file_3wmVZA
+=======
+>>>>>>> new_branch_name
 
 ## Methods
 #  Producing Jobs
@@ -93,7 +99,10 @@ worker.work
 # worker = QC::Worker.new
 # worker.queue = 'priority_queue'
 # worker.work
+<<<<<<< HEAD
 >>>>>>> .merge_file_3wmVZA
+=======
+>>>>>>> new_branch_name
 ## ~OR~
 # QC::Worker.new(q_name: 'priority_queue').start
 
