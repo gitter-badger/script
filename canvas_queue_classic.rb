@@ -35,9 +35,9 @@ require 'queue_classic'
 #  Producing Jobs
 #  Working Jobs
 
-## > EXEC ruby script file
-QC::Queue.new('routine').enqueue("Kernel.load", "/home/wurde/test.rb")
-QC::Worker.new(q_name: 'routine').start
+## EXEC ruby script file
+# QC::Queue.new('routine').enqueue("Kernel.load", "/home/wurde/test.rb")
+# QC::Worker.new(q_name: 'routine').start
 
 ##########################
 ### COMMAND-LINE USAGE ###
