@@ -1,11 +1,20 @@
 #!/usr/bin/ruby -w
 # canvas_rspec.rb
+# Author: Andy Bettisworth
 # Description: Canvas RSpec gem for testing
 
-# Object predicates
-#   Equality and Identity
+###################
+### SETUP RSpec ###
+# rspec --init
+# ~&&~
+# [spec/../blah_spec.rb]
+# require 'spec_helper'
+### SETUP RSpec ###
+###################
+
+## Object predicates
+#   Equality and Identity - object has values that match expectations
 #     eq(expected)
-#     eql(expected)
 #     equal(expected)
 #   True/False/nil
 #     be_true
@@ -44,7 +53,7 @@
 #     respond_to(:foo).with(1).argument
 #     respond_to(:foo).with(2).arguments
 
-# Block predicates
+## Block predicates
 #   Raising
 #     raise_error
 #     raise_error RuntimeError
@@ -68,7 +77,7 @@
 #   Satisfying
 #     expect(20).to satisfy { |x| x % 5 == 0 }
 
-# Mocked Behaviour
+## Mocked Behaviour
 #   Mock a database connection
 #     test_db = double("database")
 #     test_db.should_receive(:connect).once
@@ -116,7 +125,7 @@
 #     .should_receive(:flip).once.ordered
 #     .should_receive(:flop).once.ordered
 
-# Stubs
+## Stubs
 #   Creating a Stub
 #     double.stub(:stub) { "OK" }
 #     double.stub(stub: "OK" )
@@ -136,9 +145,43 @@
 #     and_throw
 #     and_yield
 
-## Tags
-# it "#walk", wip: true do
+################
+### Matchers ###
+# include(item)
+# respond_to(message)
+# raise_error(type)
+### Matchers ###
+################
+
+############
+### Tags ###
+# it "should return 'Testing 1 2 3'", wip: true do
 # rspec --tag wip todo_spec.rb
+### Tags ###
+############
+
+######################
+### Complete Match ###
+# expected = File.open('expected_statement.txt','r') do |f|
+#   f.read
+# end
+# expect(statement).to equal(expected)
+### Complete Match ###
+######################
+
+#####################
+### Partial Match ###
+# expect(statement).to match(/partial/)
+### Partial Match ###
+#####################
+
+#########################
+### Expecting a Throw ###
+# course = Course.new(seats: 20)
+# 20.times { course.register Student.new }
+# expect(lambda { course.register Student.new }).to throw_symbol(:course_full)
+### Expecting a Throw ###
+#########################
 
 ## CHECK File for regex match && use interpolation
 # File.new(default_list,'r').readlines.each_with_index do |line, index|
@@ -217,176 +260,20 @@
 #   end
 # end
 
-## NOTE group things by initial state with before(:each)
+## GROUP things by initial state with before(:each)
 # describe Stack do
 #   before(:each) do
 #     @stack = Stack.new
 #   end
 # end
 
-## NOTE context() is interchangeable with describe()
-## use context() to clarify a
-# context()
-
-## NOTE use this to set an example code pending
-# describe "onion rings" do
-#   it "should not be mixed with french fryer" do
-#     pending "cleaning out the fryer"
-#     fryer_with(:onion_rings).should_not include(:french_fry)
-#   end
-# end
-# pending()
-
+## NOTE
+# context() is interchangeable with describe()
+# 'pending "pair coding"' will place a code example as 'pending'
 # .const_defined?('VERSION').should be_true
+# use 'expect().to' && 'expect().to_not', never use '!='
 
-## REFACTORING
-# module Codebreaker
-#   class Game
-#     def initialize(output)
-#       @output = output
-#     end
-
-#     def start
-#       @output.puts "Welcome to Codebreaker!"
-#       @output.puts "Enter guess:"
-#     end
-#   end
-# end
-# ## [spec/spec_helper.rb]
-# require 'codebreaker'
-# ## [spec/codebreaker/game_spec.rb]
-# require 'spec_helper'
-
-# module Codebreaker
-#   describe Game do
-#     describe "#start" do
-#       it "sends a welcome message" do
 #         output = double('output').as_null_object
 #         game = Game.new(output)
 #         output.should_receive(:puts).with('Welcome to Codebreaker!')
 #         game.start
-#       end
-
-#       it "propmts for the first guess" do
-#         output = double('output').as_null_object
-#         game = Game.new(output)
-#         output.should_receive(:puts).with('Enter guess:')
-#         game.start
-#       end
-#     end
-#   end
-###
-
-
-## NOTE .as_null_object tells double to only listen for expected messages
-# module Codebreaker
-#   class Game
-#     def initialize(output)
-#       @output = output
-#     end
-
-#     def start
-#       @output.puts "Welcome to Codebreaker!"
-#       @output.puts "Enter guess:"
-#     end
-#   end
-# end
-# ## [spec/spec_helper.rb]
-# require 'codebreaker'
-# ## [spec/codebreaker/game_spec.rb]
-# require 'spec_helper'
-
-# module Codebreaker
-#   describe Game do
-#     describe "#start" do
-#       it "sends a welcome message" do
-#         output = double('output').as_null_object
-#         game = Game.new(output)
-#         output.should_receive(:puts).with('Welcome to Codebreaker!')
-#         game.start
-#       end
-
-#       it "propmts for the first guess" do
-#         output = double('output').as_null_object
-#         game = Game.new(output)
-#         output.should_receive(:puts).with('Enter guess:')
-#         game.start
-#       end
-#     end
-#   end
-###
-
-## NOTE to replace standard STDOUT with RSpec::Mocks use 'double()'
-## [lib/codebreaker/game.rb]
-# module Codebreaker
-#   class Game
-#     def initialize(output)
-#       @output = output
-#     end
-
-#     def start
-#       @output.puts "Welcome to Codebreaker!"
-#     end
-#   end
-# end
-# ## [spec/spec_helper.rb]
-# require 'codebreaker'
-# ## [spec/codebreaker/game_spec.rb]
-# require 'spec_helper'
-
-# module Codebreaker
-#   describe Game do ## hooks into RSpec API, returns RSpec::Core::ExampleGroup
-#     describe "#start" do
-#       it "sends a welcome message" do
-#         output = double('output') ## Fake output
-#         game = Game.new(output) ## Initialize Game object
-#         output.should_receive(:puts).with('Welcome to Codebreaker!') ## Set message expectation
-#         game.start ## Execute start method
-#       end
-#
-#       it "propmts for the first guess"
-#     end
-#   end
-
-# rspec spec --color --format doc
-
-## NOTE How to connect specs to code
-# 1. spec requires spec_helper.rb
-# 2. spec_helper.rb requires code
-
-## [spec/codebreaker/game_spec.rb]
-# require 'spec_helper'
-## [spec/spec_helper.rb]
-# require 'codebreaker'
-
-# module Codebreaker
-#   describe Game do ## hooks into RSpec API, returns RSpec::Core::ExampleGroup
-#     describe "#start" do
-#       it "sends a welcome message"
-#       it "propmts for the first guess"
-#     end
-#   end
-
-# rspec spec/codebreaker/game_spec.rb --format doc
-
-###########################
-### Single-file EXAMPLE ###
-## Hello World Application
-# class RSpecGreeter
-#   def greet
-#     "Hello RSpec!"
-#   end
-# end
-
-## CREATE RSpec 'Hello world!' example
-# describe RSpecGreeter do ## CREATE example group
-#   describe '#greet' do
-#     it "should say 'Hello RSpec!' when it receives the greet() message" do ## CREATE example
-#       greeter = RSpecGreeter.new        ## BDD: [given]
-#       greeting = greeter.greet          ## BDD: [when]
-#       greeting.should == "Hello RSpec!" ## BDD: [then]
-#     end
-#   end
-# end
-### Single-file EXAMPLE ###
-###########################
