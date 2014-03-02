@@ -3,4 +3,7 @@
 # Author: Andy Bettisworth
 # Description: Testing schedule.rb script
 
-puts 'Testing 1 2 3'
+puts "How are you doing?"
+answer = gets
+puts "Glad to hear your doing #{answer.chomp}."
+
