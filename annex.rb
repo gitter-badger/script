@@ -46,16 +46,16 @@ git pull --rebase origin master;
     system <<-EOF
 cd #{SYNC}/.canvas;
 git add -u;
-git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
 cd #{SYNC}/.script;
 git add -u;
-git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
 cd #{SYNC}/.template;
 git add -u;
-git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
 cd #{HOME}/.rbenv;
 git add -u;
-git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     EOF
   end
 end
