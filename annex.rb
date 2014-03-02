@@ -40,15 +40,22 @@ git push origin master;
 
   def commit_local
     system <<-EOF
+echo 'commiting: CANVAS';
 cd #{SYNC}/.canvas;
 git add -u;
 git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+echo '';
+echo 'commiting: SCRIPT';
 cd #{SYNC}/.script;
 git add -u;
 git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+echo '';
+echo 'commiting: TEMPLATE';
 cd #{SYNC}/.template;
 git add -u;
 git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+echo '';
+echo 'commiting: RBENV';
 cd #{HOME}/.rbenv;
 git add -u;
 git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
