@@ -12,6 +12,7 @@ class Annex
 
   def remote
     raise 'USB Annex not found.' unless File.exist?(ANNEX)
+    commit_local
     system <<-EOF
 cd #{SYNC}/.canvas;
 git push origin master;
@@ -26,6 +27,7 @@ git push origin master;
 
   def local
     raise 'USB Annex not found.' unless File.exist?(ANNEX)
+    commit_local
     system <<-EOF
 cd #{SYNC}/.canvas;
 git pull --rebase origin master;
@@ -35,6 +37,25 @@ cd #{SYNC}/.template;
 git pull --rebase origin master;
 cd #{HOME}/.rbenv;
 git pull --rebase origin master;
+    EOF
+  end
+
+  private
+
+  def commit_local
+    system <<-EOF
+cd #{SYNC}/.canvas;
+git add -u;
+git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+cd #{SYNC}/.script;
+git add -u;
+git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+cd #{SYNC}/.template;
+git add -u;
+git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
+cd #{HOME}/.rbenv;
+git add -u;
+git commit -m "#{Time.now.strftime('%Y%m%d%H%M%S')}";
     EOF
   end
 end
