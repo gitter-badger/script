@@ -43,6 +43,8 @@ git push origin master;
         cd #{SYNC}/.app/#{application};
         git add -u;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
       EOF
     end
     GEMS.each do |gem_project|
@@ -52,6 +54,8 @@ git push origin master;
         cd #{SYNC}/.gem/#{gem_project};
         git add -u;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
       EOF
     end
   end
