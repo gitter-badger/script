@@ -10,6 +10,7 @@ class Annex
   SYNC = "#{ENV['HOME']}/.sync"
   ANNEX = "/media/Annex/preseed/seed/.sync"
   APPS = ['accreu', 'tribetriage']
+  GEMS = ['tribe_triage','collective_vibration','phantom_assembly','tandem_feet']
 
   def sync
     raise 'Annex not found.' unless File.exist?(ANNEX)
@@ -34,13 +35,21 @@ echo 'syncing: RBENV';
 cd #{HOME}/.rbenv;
 git pull origin master;
 git push origin master;
-echo '';
     EOF
     APPS.each do |application|
       system <<-EOF
         echo '';
         echo "syncing APP: #{application}";
         cd #{SYNC}/.app/#{application};
+        git add -u;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      EOF
+    end
+    GEMS.each do |gem_project|
+      system <<-EOF
+        echo '';
+        echo "syncing APP: #{gem_project}";
+        cd #{SYNC}/.gem/#{gem_project};
         git add -u;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
       EOF
