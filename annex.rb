@@ -48,7 +48,7 @@ git push origin master;
     GEMS.each do |gem_project|
       system <<-EOF
         echo '';
-        echo "syncing APP: #{gem_project}";
+        echo "syncing GEM: #{gem_project}";
         cd #{SYNC}/.gem/#{gem_project};
         git add -u;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
