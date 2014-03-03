@@ -26,7 +26,7 @@ class Annex
 
   def sync_all
     commit_local
-    system <<-EOF
+    system <<-CMD
       echo 'syncing: CANVAS';
       cd #{SYNC}/.canvas;
       git pull origin master;
@@ -46,11 +46,11 @@ class Annex
       cd #{HOME}/.rbenv;
       git pull origin master;
       git push origin master;
-    EOF
+    CMD
   end
 
   def commit_local
-    system <<-EOF
+    system <<-CMD
       echo 'commiting: CANVAS';
       cd #{SYNC}/.canvas;
       git add -u;
@@ -70,12 +70,12 @@ class Annex
       cd #{HOME}/.rbenv;
       git add -u;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-    EOF
+    CMD
   end
 
   def sync_apps
     APPS.each do |application|
-      system <<-EOF
+      system <<-CMD
         echo '';
         echo "syncing APP: #{application}";
         cd #{SYNC}/.app/#{application};
@@ -83,13 +83,13 @@ class Annex
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
         git pull origin master;
         git push origin master;
-      EOF
+      CMD
     end
   end
 
   def sync_gems
     GEMS.each do |gem_project|
-      system <<-EOF
+      system <<-CMD
         echo '';
         echo "syncing GEM: #{gem_project}";
         cd #{SYNC}/.gem/#{gem_project};
@@ -97,19 +97,27 @@ class Annex
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
         git pull origin master;
         git push origin master;
-      EOF
+      CMD
     end
   end
 
   def ensure_repositories
     APPS.each do |application|
       unless File.exist?("#{SYNC}/.app/#{application}")
-        puts "missing dir: #{application}"
+        Dir.mkdir("#{SYNC}/.app/#{application}")
+        system <<-CMD
+          cd #{SYNC}/.app/#{application};
+          git clone #{ANNEX}/.app/#{application}.git;
+        CMD
       end
     end
     GEMS.each do |gem_project|
       unless File.exist?("#{SYNC}/.gem/#{gem_project}")
-        puts "missing dir: #{gem_project}"
+        Dir.mkdir("#{SYNC}/.gem/#{gem_project}")
+        system <<-CMD
+          cd #{SYNC}/.gem/#{gem_project};
+          git clone #{ANNEX}/.gem/#{gem_project}.git;
+        CMD
       end
     end
   end
