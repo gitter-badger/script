@@ -45,7 +45,6 @@ class Annex
 
   def sync_all
     commit_local
-    sync_all
     system <<-EOF
       echo 'syncing: CANVAS';
       cd #{SYNC}/.canvas;
