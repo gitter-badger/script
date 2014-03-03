@@ -277,3 +277,67 @@
 #         game = Game.new(output)
 #         output.should_receive(:puts).with('Welcome to Codebreaker!')
 #         game.start
+
+###############
+### SUBJECT ###
+## Explicit
+# describe Person do
+#   subject { Person.new(birthdate: 19.years.ago) }
+#   it { should be_eligible_to_vote }
+# end
+# ## Implicit  - requires an instantiable class with no arguments
+# describe Person do
+#   it { should be_happy }
+# end
+### SUBJECT ###
+###############
+
+####################
+### RSpec::Mocks ###
+## Mock - enable 'method stubs' and 'message expectations'
+# some_thing = mock('some-thing')
+
+## Stub - a programmable method that return a predefined response
+# some_thing.stub(:some_method).and_return('Testing 1 2 3')
+
+## Mock && Stub
+# shortcut = mock('customer', name: 'Wurde', list_projects: ['Orbit', 'Accreu'])
+
+## Stub Conditional
+# ages = mock('ages')
+# ages.stub(:age_for) do |what|
+#   if what == 'drinking'
+#     21
+#   elsif what == 'voting'
+#     18
+#   end
+# end
+
+## Stub Chain
+# article = mock()
+# Article.stub_chain(:recent, :published, :authored_by).and_return(article)
+
+## Message Expectations - is a method stub that raises an error if never called
+
+## Stub Negative
+# network_mock.stub(:ping).and_return(false)
+# network_mock.should_not_receive(:open_connection)
+
+## Stub Arguments
+# account_mock.should_receive(:withdraw).with(50)
+# account_mock.should_receive(:transfer).with(50, savings_account)
+# account_mock.should_receive(:transfer).with(50, instance_of(Fixnum))
+# account_mock.should_receive(:transfer).with(50, anything())
+# account_mock.should_receive(:transfer).with(no_args())
+# account_mock.should_receive(:transfer).with(hash_including('Electric' => '123', 'Gas' => '234'))
+# account_mock.should_receive(:transfer).with(hash_not_including('Electric' => '123', 'Gas' => '234'))
+# account_mock.should_receive(:transfer).with(/.* User/)
+
+## Stub Custom Arguments
+# calculator.should_receive(:add).with(greater_than(37))
+
+## Test-Specific Extensions (partial mock/stub)
+### RSpec::Mocks ###
+####################
+
+
