@@ -17,28 +17,9 @@ class Annex
   def sync
     raise 'Annex not found.' unless File.exist?(ANNEX)
     sync_all
-    APPS.each do |application|
-      system <<-EOF
-        echo '';
-        echo "syncing APP: #{application}";
-        cd #{SYNC}/.app/#{application};
-        git add -u;
-        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-        git pull origin master;
-        git push origin master;
-      EOF
-    end
-    GEMS.each do |gem_project|
-      system <<-EOF
-        echo '';
-        echo "syncing GEM: #{gem_project}";
-        cd #{SYNC}/.gem/#{gem_project};
-        git add -u;
-        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-        git pull origin master;
-        git push origin master;
-      EOF
-    end
+    ensure_repositories
+    sync_apps
+    sync_gems
   end
 
   private
@@ -90,6 +71,47 @@ class Annex
       git add -u;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     EOF
+  end
+
+  def sync_apps
+    APPS.each do |application|
+      system <<-EOF
+        echo '';
+        echo "syncing APP: #{application}";
+        cd #{SYNC}/.app/#{application};
+        git add -u;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
+      EOF
+    end
+  end
+
+  def sync_gems
+    GEMS.each do |gem_project|
+      system <<-EOF
+        echo '';
+        echo "syncing GEM: #{gem_project}";
+        cd #{SYNC}/.gem/#{gem_project};
+        git add -u;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
+      EOF
+    end
+  end
+
+  def ensure_repositories
+    APPS.each do |application|
+      unless File.exists?("#{SYNC}/.app/#{application}")
+        puts "missing dir: #{application}"
+      end
+    end
+    GEMS.each do |gem_project|
+      unless File.exists?("#{SYNC}/.gem/#{gem_project}")
+        puts "missing dir: #{gem_project}"
+      end
+    end
   end
 end
 
