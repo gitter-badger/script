@@ -1,7 +1,9 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Sync [.script, .canvas, .template, .rbenv] with Annex
+# Description: Sync files with Annex
+# Sync all: [.script, .canvas, .template, .rbenv]
+# Sync some: [.app, .gem]
 
 require 'optparse'
 
@@ -14,28 +16,7 @@ class Annex
 
   def sync
     raise 'Annex not found.' unless File.exist?(ANNEX)
-    commit_local
-    system <<-EOF
-echo 'syncing: CANVAS';
-cd #{SYNC}/.canvas;
-git pull origin master;
-git push origin master;
-echo '';
-echo 'syncing: SCRIPT';
-cd #{SYNC}/.script;
-git pull origin master;
-git push origin master;
-echo '';
-echo 'syncing: TEMPLATE';
-cd #{SYNC}/.template;
-git pull origin master;
-git push origin master;
-echo '';
-echo 'syncing: RBENV';
-cd #{HOME}/.rbenv;
-git pull origin master;
-git push origin master;
-    EOF
+    sync_all
     APPS.each do |application|
       system <<-EOF
         echo '';
@@ -62,27 +43,53 @@ git push origin master;
 
   private
 
+  def sync_all
+    commit_local
+    sync_all
+    system <<-EOF
+      echo 'syncing: CANVAS';
+      cd #{SYNC}/.canvas;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: SCRIPT';
+      cd #{SYNC}/.script;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: TEMPLATE';
+      cd #{SYNC}/.template;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: RBENV';
+      cd #{HOME}/.rbenv;
+      git pull origin master;
+      git push origin master;
+    EOF
+  end
+
   def commit_local
     system <<-EOF
-echo 'commiting: CANVAS';
-cd #{SYNC}/.canvas;
-git add -u;
-git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-echo '';
-echo 'commiting: SCRIPT';
-cd #{SYNC}/.script;
-git add -u;
-git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-echo '';
-echo 'commiting: TEMPLATE';
-cd #{SYNC}/.template;
-git add -u;
-git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-echo '';
-echo 'commiting: RBENV';
-cd #{HOME}/.rbenv;
-git add -u;
-git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo 'commiting: CANVAS';
+      cd #{SYNC}/.canvas;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: SCRIPT';
+      cd #{SYNC}/.script;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: TEMPLATE';
+      cd #{SYNC}/.template;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: RBENV';
+      cd #{HOME}/.rbenv;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     EOF
   end
 end
