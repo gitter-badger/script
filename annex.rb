@@ -106,6 +106,7 @@ class Annex
       unless File.exist?("#{SYNC}/.app/#{application}")
         Dir.mkdir("#{SYNC}/.app/#{application}")
         system <<-CMD
+          mkdir -p #{SYNC}/.app/#{application};
           cd #{SYNC}/.app/#{application};
           git clone #{ANNEX}/.app/#{application}.git;
         CMD
@@ -113,8 +114,8 @@ class Annex
     end
     GEMS.each do |gem_project|
       unless File.exist?("#{SYNC}/.gem/#{gem_project}")
-        Dir.mkdir("#{SYNC}/.gem/#{gem_project}")
         system <<-CMD
+          mkdir -p #{SYNC}/.gem/#{gem_project};
           cd #{SYNC}/.gem/#{gem_project};
           git clone #{ANNEX}/.gem/#{gem_project}.git;
         CMD
