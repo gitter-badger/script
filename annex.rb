@@ -27,6 +27,7 @@ class Annex
   def sync_all
     commit_local
     system <<-CMD
+      echo '';
       echo 'syncing: CANVAS';
       cd #{SYNC}/.canvas;
       git pull origin master;
@@ -51,6 +52,7 @@ class Annex
 
   def commit_local
     system <<-CMD
+      echo '';
       echo 'commiting: CANVAS';
       cd #{SYNC}/.canvas;
       git add -u;
@@ -106,6 +108,7 @@ class Annex
       unless File.exist?("#{SYNC}/.app/#{application}")
         Dir.mkdir("#{SYNC}/.app/#{application}")
         system <<-CMD
+          echo '';
           mkdir -p #{SYNC}/.app;
           cd #{SYNC}/.app;
           git clone #{ANNEX}/.app/#{application}.git;
@@ -115,6 +118,7 @@ class Annex
     GEMS.each do |gem_project|
       unless File.exist?("#{SYNC}/.gem/#{gem_project}")
         system <<-CMD
+          echo '';
           mkdir -p #{SYNC}/.gem;
           cd #{SYNC}/.gem;
           git clone #{ANNEX}/.gem/#{gem_project}.git;
