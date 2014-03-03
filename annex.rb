@@ -103,12 +103,12 @@ class Annex
 
   def ensure_repositories
     APPS.each do |application|
-      unless File.exists?("#{SYNC}/.app/#{application}")
+      unless File.exist?("#{SYNC}/.app/#{application}")
         puts "missing dir: #{application}"
       end
     end
     GEMS.each do |gem_project|
-      unless File.exists?("#{SYNC}/.gem/#{gem_project}")
+      unless File.exist?("#{SYNC}/.gem/#{gem_project}")
         puts "missing dir: #{gem_project}"
       end
     end
