@@ -277,6 +277,7 @@
 #         game = Game.new(output)
 #         output.should_receive(:puts).with('Welcome to Codebreaker!')
 #         game.start
+<<<<<<< HEAD
 
 ###############
 ### SUBJECT ###
@@ -341,3 +342,5 @@
 ####################
 
 
+=======
+>>>>>>> accb885db036182c43b07d2ff57d9a1ce508d756

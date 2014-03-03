@@ -19,6 +19,13 @@ TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
 
 # The directory used in these examples contains the two regular files (config.h
 # and main.rb), the parent directory (..), and the directory itself (.).
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+>>>>>>> accb885db036182c43b07d2ff57d9a1ce508d756
 # ------------------------------------------------------------------------------
 
 ## Class Methods
@@ -74,3 +81,11 @@ TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
 # ------------------------------------------------------------------------------
 # Deletes the named directory. Raises a subclass of SystemCallError if the
 # directory isn't empty.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+>>>>>>> accb885db036182c43b07d2ff57d9a1ce508d756
