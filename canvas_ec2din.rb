@@ -6,6 +6,9 @@
 ## LINK http://joemaller.com/990/a-web-focused-git-workflow/
 ## LINK http://danbarber.me/using-git-for-deployment/
 
+## Add Remote hub
+# git remote add hub ubuntu@accreu.com:~/.hub/accreu.git
+
 ## SET credentials [~/.bashrc]
 ## Set \$EC2_HOME for ec2-api-tools
 # export EC2_HOME=/usr/bin
@@ -18,6 +21,10 @@
 ## RESOLVE conflicts
 ## NOTE create branch on hub with conflict, use clones to pull fixme branch
 # git push hub master:refs/heads/fixme
+
+## Secure Copy Files
+# scp -i /path/to/keypair.pem ubuntu@domain.com:~/file-to-import ~/Desktop
+# scp -i /path/to/keypair.pem file-to-export ubuntu@domain.com:~/apps/accreu/
 
 #############################
 ### LAUNCHING AN INSTANCE ###
