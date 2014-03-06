@@ -1,7 +1,9 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Sync [.script, .canvas, .template] with Annex
+# Description: Sync files with Annex
+# Sync all: [.script, .canvas, .template, .rbenv]
+# Sync some: [.app, .gem]
 
 require 'optparse'
 
@@ -9,60 +11,122 @@ class Annex
   HOME = ENV['HOME']
   SYNC = "#{ENV['HOME']}/.sync"
   ANNEX = "/media/Annex/preseed/seed/.sync"
+  APPS = ['accreu', 'tribetriage']
+  GEMS = ['tribe_triage','collective_vibration','phantom_assembly','tandem_feet']
 
-  def remote
-    raise 'USB Annex not found.' unless File.exist?(ANNEX)
-    system <<-EOF
-cd #{SYNC}/.canvas;
-git push origin master;
-cd #{SYNC}/.script;
-git push origin master;
-cd #{SYNC}/.template;
-git push origin master;
-cd #{HOME}/.rbenv;
-git push origin master;
-    EOF
+  def sync
+    raise 'Annex not found.' unless File.exist?(ANNEX)
+    sync_all
+    ensure_repositories
+    sync_apps
+    sync_gems
   end
 
-  def local
-    raise 'USB Annex not found.' unless File.exist?(ANNEX)
-    system <<-EOF
-cd #{SYNC}/.canvas;
-git pull --rebase origin master;
-cd #{SYNC}/.script;
-git pull --rebase origin master;
-cd #{SYNC}/.template;
-git pull --rebase origin master;
-cd #{HOME}/.rbenv;
-git pull --rebase origin master;
-    EOF
+  private
+
+  def sync_all
+    commit_local
+    system <<-CMD
+      echo '';
+      echo 'syncing: CANVAS';
+      cd #{SYNC}/.canvas;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: SCRIPT';
+      cd #{SYNC}/.script;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: TEMPLATE';
+      cd #{SYNC}/.template;
+      git pull origin master;
+      git push origin master;
+      echo '';
+      echo 'syncing: RBENV';
+      cd #{HOME}/.rbenv;
+      git pull origin master;
+      git push origin master;
+    CMD
+  end
+
+  def commit_local
+    system <<-CMD
+      echo '';
+      echo 'commiting: CANVAS';
+      cd #{SYNC}/.canvas;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: SCRIPT';
+      cd #{SYNC}/.script;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: TEMPLATE';
+      cd #{SYNC}/.template;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      echo '';
+      echo 'commiting: RBENV';
+      cd #{HOME}/.rbenv;
+      git add -u;
+      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+    CMD
+  end
+
+  def sync_apps
+    APPS.each do |application|
+      system <<-CMD
+        echo '';
+        echo "syncing APP: #{application}";
+        cd #{SYNC}/.app/#{application};
+        git add -u;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
+      CMD
+    end
+  end
+
+  def sync_gems
+    GEMS.each do |gem_project|
+      system <<-CMD
+        echo '';
+        echo "syncing GEM: #{gem_project}";
+        cd #{SYNC}/.gem/#{gem_project};
+        git add -u;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+        git pull origin master;
+        git push origin master;
+      CMD
+    end
+  end
+
+  def ensure_repositories
+    APPS.each do |application|
+      unless File.exist?("#{SYNC}/.app/#{application}")
+        Dir.mkdir("#{SYNC}/.app/#{application}")
+        system <<-CMD
+          echo '';
+          mkdir -p #{SYNC}/.app;
+          cd #{SYNC}/.app;
+          git clone #{ANNEX}/.app/#{application}.git;
+        CMD
+      end
+    end
+    GEMS.each do |gem_project|
+      unless File.exist?("#{SYNC}/.gem/#{gem_project}")
+        system <<-CMD
+          echo '';
+          mkdir -p #{SYNC}/.gem;
+          cd #{SYNC}/.gem;
+          git clone #{ANNEX}/.gem/#{gem_project}.git;
+        CMD
+      end
+    end
   end
 end
-
-## USAGE
-# annex --push
-# annex --pull
-
-options = {}
-option_parser = OptionParser.new do |opts|
-  executable_name = File.basename($PROGRAM_NAME, ".rb")
-  opts.banner = "Usage: #{executable_name} OPTION..."
-
-  opts.on('--pull', 'bring local repo up to date with Annex remote') do
-    options[:pull] = true
-  end
-
-  opts.on('--push', 'bring Annex up to date with local repo') do
-    options[:push] = true
-  end
-end
-option_parser.parse!
 
 update = Annex.new
-if options[:push] == true
-  update.remote
-elsif options[:pull] == true
-  update.local
-else
-  puts option_parser.help
-end
+update.sync
