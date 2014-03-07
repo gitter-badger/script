@@ -297,12 +297,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 #   File.open(filename [, mode [, perm]] [, opt])         -> file
 #   File.open(filename, mode="r" [, opt]) {|file| block } -> obj
 #   File.open(filename [, mode [, perm]] [, opt]) {|file| block } -> obj
-
 # ------------------------------------------------------------------------------
-
-
-
-
 # With no associated block, File.open is a synonym for File.new. If the optional
 # code block is given, it will be passed the opened file as an argument and the
 # File object will automatically be closed when the block terminates.  The value
@@ -313,10 +308,6 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # See IO.new for a description of the mode and opt parameters.
 
-
-
-
-
 ## File.delete
 # (from ruby core)
 # ------------------------------------------------------------------------------
@@ -325,16 +316,11 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # Deletes the named files, returning the number of names passed as arguments.
 # Raises an exception on any error. See also Dir::rmdir.
 
-
-
 # File.basename("/home/gumby/work/ruby.rb")          #=> "ruby.rb"
 # File.basename("/home/gumby/work/ruby.rb", ".rb")   #=> "ruby"
 
-
-
 # File.basename("/home/gumby/work/ruby.rb")          #=> "ruby.rb"
 # File.basename("/home/gumby/work/ruby.rb", ".rb")   #=> "ruby"
-
 
 # Returns the extension (the portion of file name in path starting from the last
 # period).

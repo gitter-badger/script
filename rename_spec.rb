@@ -49,7 +49,7 @@ class RenameFile
 
   private
   def rename_file(file, dir = @target_dir)
-    if (@match_pattern =~ file)
+    if @match_pattern =~ file
       new_filename = @update_pattern
 
       @match_pattern.named_captures.each_key do |key|

@@ -23,30 +23,45 @@
 
 ######################
 ### Simple Example ###
-# require 'pg'
-# require 'active_record'
+require 'pg'
+require 'active_record'
 
-# ActiveRecord::Base.establish_connection(
-#   adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
-#   host:     'localhost',
-#   database: 'accreu_development',
-#   username: 'wurde',
-#   password: 'trichoderma'
-# )
+ActiveRecord::Base.establish_connection(
+  adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
+  host:     'localhost',
+  database: 'canvas_test',
+  username: 'wurde',
+  password: 'shiitake'
+)
 
-# class Orbit < ActiveRecord::Base
+puts ActiveRecord::Base.descendants
+# ActiveRecord::Base.descendants.select do |model|
+#   model.to_s
+#  # (model.to_s != 'ActiveRecord::SchemaMigration') && \
+#  #  model.table_exists? && \
+#  #  model.exists?
 # end
 
+class Blah < ActiveRecord::Base
+end
+
 # ## READ all
-# puts Orbit.all
+# puts Blah.count
 # #=> #<Orbit:0xb96582cc>
 # #=> ...
 
 # ## CREATE one new orbit
-# my_post = Orbit.new
+# my_post = Blah.new
 ### Simple Example ###
 ######################
 
+## CHECK connection
+# begin
+#   ActiveRecord::Base.connection
+#   puts true
+# rescue ActiveRecord::ConnectionNotEstablished
+#   puts false
+# end
 
 ################################
 ## ActiveRecord for ~/.script ##
@@ -510,13 +525,10 @@
 # * StatementInvalid - The database server rejected the SQL statement. The
 #   precise error is added in the message.
 
-<<<<<<< HEAD
-=======
 # NNoottee: The attributes listed are class-level attributes (accessible
 # from both the class and instance level). So it's possible to assign a logger
 # to the class through Base.logger= which will then be used by all instances in
 # the current object space.
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612
 # ------------------------------------------------------------------------------
 # Also found in:
 #   gem activerecord-deprecated_finders-1.0.3
@@ -563,8 +575,6 @@
 # (from gem activerecord-4.0.2)
 # === IImmpplleemmeennttaattiioonn  ffrroomm  TTaabblleeDDeeffiinniittiioonn
 # ------------------------------------------------------------------------------
-<<<<<<< HEAD
-=======
 # Also found in:
 #   gem activerecord-deprecated_finders-1.0.3
 
@@ -612,7 +622,6 @@
 # (from gem activerecord-4.0.2)
 # === IImmpplleemmeennttaattiioonn  ffrroomm  TTaabblleeDDeeffiinniittiioonn
 # ------------------------------------------------------------------------------
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612
 #   column(name, type, options = {})
 
 # ------------------------------------------------------------------------------
@@ -698,10 +707,6 @@
 # single statement.
 
 # What can be written like this with the regular calls to column:
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612
 #   create_table :products do |t|
 #     t.column :shop_id,    :integer
 #     t.column :creator_id, :integer
@@ -712,10 +717,6 @@
 #   end
 
 # can also be written as follows using the short-hand:
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612
 #   create_table :products do |t|
 #     t.integer :shop_id, :creator_id
 #     t.string  :name, :value, default: "Untitled"
@@ -741,17 +742,8 @@
 #   add_index :taggings, [:tagger_id, :tagger_type]
 
 # Can also be written as follows using references:
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612
 #   create_table :taggings do |t|
 #     t.references :tag, index: { name: 'index_taggings_on_tag_id' }
 #     t.references :tagger, polymorphic: true, index: true
 #     t.references :taggable, polymorphic: { default: 'Photo' }
 #   end
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3a4a56ab88f5b68240984f26b51e2a18e6b06612

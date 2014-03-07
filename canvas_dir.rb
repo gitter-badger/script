@@ -2,8 +2,12 @@
 # canvas_dir.rb
 # Description: Canvas Dir ruby class
 
-TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
+## READ list of directories
+# Dir["**/"].each do |dir|
+#   puts dir
+# end
 
+# TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
 # Dir.mkdir(TEST_DIR)
 
 ## Dir < Object
@@ -19,13 +23,6 @@ TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
 
 # The directory used in these examples contains the two regular files (config.h
 # and main.rb), the parent directory (..), and the directory itself (.).
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
->>>>>>> accb885db036182c43b07d2ff57d9a1ce508d756
 # ------------------------------------------------------------------------------
 
 ## Class Methods
@@ -81,11 +78,25 @@ TEST_DIR = ENV['HOME'] + "/Desktop/test_dir"
 # ------------------------------------------------------------------------------
 # Deletes the named directory. Raises a subclass of SystemCallError if the
 # directory isn't empty.
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
+## SEARCH for file in all subdirectories
+# class SearchForFile
+#   def locate(target_file)
+#     ## Search current directory
+#     Dir.foreach('.') do |item|
+#       next if item == '.' or item == '..' or File.directory?(item)
+#       return File.absolute_path(item) if item =~ /#{target_file}/
+#     end
+#     ## Search all subdirectories
+#     Dir["**/"].each do |recursive_dir|
+#       Dir.foreach(recursive_dir) do |item|
+#         next if item == '.' or item == '..' or File.directory?(item)
+#         return File.absolute_path(item) if item =~ /#{target_file}/
+#       end
+#     end
+#   end
+# end
+# find_file = SearchForFile.new
+# puts find_file.locate('canvas')
 
 
-=======
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
->>>>>>> accb885db036182c43b07d2ff57d9a1ce508d756
