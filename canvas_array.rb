@@ -33,7 +33,7 @@
 # puts arr2
 ## NOTE every indexed variable gets put on a newline
 ## Q: how to print out on a single line pur array
-## A: convert to string
+## A: convert to strinung
 # puts arr1.to_s
 # puts arr2.to_s
 
@@ -47,6 +47,30 @@
 ## 'foo' represents the default value
 ## so we get #=>'foo' as our output
 ## Array.new(<SIZE>, <DEFAULT_VARIABLE>)= AArrrraayy  <<  OObbjjeecctt
+
+
+########################################
+### PROBLEM: extract all sums of 100 ###
+## SOLUTION:
+# arr_one_hundred = [80, 20, 95]
+
+# class SumOneHundred
+#   def sum_to_one_hundred(values)
+#     m = values.length
+#     (1...2**m).map do | n |
+#       (0...m).select { | i | n[i] == 1 }.map { | i | values[i] }
+#     end
+#   end
+# end
+
+# iterate = SumOneHundred.new
+# all_combinations = iterate.sum_to_one_hundred(arr_one_hundred).to_s
+# select_combinations = iterate.sum_to_one_hundred(arr_one_hundred).keep_if { |a| a.inject(:+) == 100 }.to_s
+
+# puts "All possible combinations: #{all_combinations}"
+# puts "These add to 100: #{select_combinations}"
+### PROBLEM: extract all sums of 100 ###
+########################################
 
 # ------------------------------------------------------------------------------
 # = IInncclluuddeess::

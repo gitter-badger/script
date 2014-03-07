@@ -78,7 +78,7 @@
 # end
 ## LINK http://stackoverflow.com/questions/15119724/ruby-lexical-scope-vs-inheritance
 
-## Convention: Never rely on anything that happens inside assignment method,
+## Convention: Never rely on anything that happens inside an assignment method,
 #              eg. in conditional statements like this:
 # class Foo
 #   def self.bar=(value)

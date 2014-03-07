@@ -48,6 +48,11 @@
 # puts @version = rubygems_doc.at_css("div.title h3").text
 # puts @total_downloads = rubygems_doc.at_css("div.downloads strong").text.to_i
 
+## GET rails app version number (business_models pulled from db)
+# rails_url = "https://api.github.com/repos/wurde/lean_canvas/releases"
+# rails_doc = Nokogiri::HTML(open(rails_url))
+# puts @app_version = /"tag_name":"(\d\.\d\.\d)",/.match(rails_doc)[1]
+
 ############
 ### RDoc ###
 # Nokogiri parses and searches XML/HTML very quickly, and also has correctly
