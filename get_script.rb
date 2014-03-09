@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # get_script.rb
+# Author: Andy Bettisworth
 # Description: Get scripts from ~/.sync/.script
 
 require 'optparse'
