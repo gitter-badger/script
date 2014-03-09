@@ -122,7 +122,6 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # File.atime("temp.txt")
 # ##=> Thu Nov 29 11:14:19 EST 2007
 
-
 ## CREATE file if it does not exist
 # unless File.exist?(list)
 #   File.new(list,'w+')

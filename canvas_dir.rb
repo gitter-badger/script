@@ -85,18 +85,16 @@
 #     ## Search current directory
 #     Dir.foreach('.') do |item|
 #       next if item == '.' or item == '..' or File.directory?(item)
-#       return File.absolute_path(item) if item =~ /#{target_file}/
+#       return File.join(File.absolute_path(recursive_dir), item) if item =~ /#{target_file}/
 #     end
 #     ## Search all subdirectories
 #     Dir["**/"].each do |recursive_dir|
 #       Dir.foreach(recursive_dir) do |item|
 #         next if item == '.' or item == '..' or File.directory?(item)
-#         return File.absolute_path(item) if item =~ /#{target_file}/
+#         return File.join(File.absolute_path(recursive_dir), item) if item =~ /#{target_file}/
 #       end
 #     end
 #   end
 # end
 # find_file = SearchForFile.new
-# puts find_file.locate('canvas')
-
-
+# puts find_file.locate('schema.rb')

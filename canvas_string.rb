@@ -2,7 +2,6 @@
 # Author: Andy Bettisworth
 # Description: Canvas String class
 
-<<<<<<< HEAD
 # # String < Object
 # ------------------------------------------------------------------------------
 # # Include:
@@ -40,7 +39,6 @@
 #   new
 #   try_convert
 # # Instance Methods
-=======
 ## Replace characters inside string
 # my_string = 'Testing 1_2_3'
 # puts 'updated: ' + my_string.gsub('_',', ')
@@ -82,7 +80,6 @@
 #   try_convert
 
 ## Instance Methods
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 #   %
 #   *
 #   +
@@ -412,21 +409,19 @@
 # puts "1100101".to_i(10)       #=> 1100101
 # puts "1100101".to_i(16)       #=> 17826049
 
-<<<<<<< HEAD
 ## Initializing a String
 # str1 = 'Testing 1 2 3'
 # str2 = String.new("Using class method .new")
 # puts 'str1: ' + str1
 # puts 'str2: ' + str2
-=======
 ## String.%
 # ------------------------------------------------------------------------------
 #   str % arg   -> new_str
 # ------------------------------------------------------------------------------
 
-# Format---Uses _s_t_r as a format specification, and returns the result of
-# applying it to _a_r_g. If the format specification contains more than one
-# substitution, then _a_r_g must be an Array or Hash containing the values to
+# Format---Uses _s_t_r as a format specification, and returns the result of
+# applying it to _a_r_g. If the format specification contains more than one
+# substitution, then _a_r_g must be an Array or Hash containing the values to
 # be substituted. See Kernel::sprintf for details of the format string.
 
 #   "%05d" % 123                              #=> "00123"
@@ -486,5 +481,36 @@
 #      string }.squish                   # => "Multi-line string"
 #   " foo   bar    \n   \t   boo".squish # => "foo bar boo"
 
+# = SSttrriinngg..ssccaann
 
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
+# (from ruby core)
+# ------------------------------------------------------------------------------
+#   str.scan(pattern)                         -> array
+#   str.scan(pattern) {|match, ...| block }   -> str
+
+# ------------------------------------------------------------------------------
+
+# Both forms iterate through _s_t_r, matching the pattern (which may be a
+# Regexp or a String). For each match, a result is generated and either added to
+# the result array or passed to the block. If the pattern contains no groups,
+# each individual result consists of the matched string, $&.  If the pattern
+# contains groups, each individual result is itself an array containing one
+# entry per group.
+
+#   a = "cruel world"
+#   a.scan(/\w+/)        #=> ["cruel", "world"]
+#   a.scan(/.../)        #=> ["cru", "el ", "wor"]
+#   a.scan(/(...)/)      #=> [["cru"], ["el "], ["wor"]]
+#   a.scan(/(..)(..)/)   #=> [["cr", "ue"], ["l ", "wo"]]
+
+# And the block form:
+
+#   a.scan(/\w+/) {|w| print "<<#{w}>> " }
+#   print "\n"
+#   a.scan(/(.)(.)/) {|x,y| print y, x }
+#   print "\n"
+
+# _p_r_o_d_u_c_e_s_:
+
+#   <<cruel>> <<world>>
+#   rceu lowlr

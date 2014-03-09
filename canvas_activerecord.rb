@@ -34,34 +34,90 @@ ActiveRecord::Base.establish_connection(
   password: 'shiitake'
 )
 
-puts ActiveRecord::Base.descendants
-# ActiveRecord::Base.descendants.select do |model|
-#   model.to_s
-#  # (model.to_s != 'ActiveRecord::SchemaMigration') && \
-#  #  model.table_exists? && \
-#  #  model.exists?
+# ActiveRecord::Schema.define do
 # end
 
-class Blah < ActiveRecord::Base
-end
+## > EXEC raw SQL
+# ActiveRecord::Base.connection.execute("SELECT * FROM blahs;")
+# >> print result
 
-# ## READ all
+# class Blah < ActiveRecord::Base
+# end
+
+## READ all
 # puts Blah.count
-# #=> #<Orbit:0xb96582cc>
-# #=> ...
+#=> #<Orbit:0xb96582cc>
+#=> ...
 
-# ## CREATE one new orbit
+## CREATE one new orbit
 # my_post = Blah.new
 ### Simple Example ###
 ######################
 
-## CHECK connection
+#########################
+### CREATE connection ###
 # begin
 #   ActiveRecord::Base.connection
-#   puts true
 # rescue ActiveRecord::ConnectionNotEstablished
-#   puts false
+#   database_config = locate('database.yml')
+#   ActiveRecord::Base.establish_connection(YAML.load_file(database_config))
 # end
+
+# def locate(target_file)
+#   ## Search current directory
+#   Dir.foreach('.') do |item|
+#     next if item == '.' or item == '..' or File.directory?(item)
+#     return File.absolute_path(item) if item =~ /#{target_file}/
+#   end
+#   ## Search all subdirectories
+#   Dir["**/"].each do |recursive_dir|
+#     Dir.foreach(recursive_dir) do |item|
+#       next if item == '.' or item == '..' or File.directory?(item)
+#       return File.absolute_path(item) if item =~ /#{target_file}/
+#     end
+#   end
+# end
+### CREATE connection ###
+#########################
+
+## READ all class models
+# ActiveRecord::Base.descendants.select do |model|
+#   puts model
+# end
+
+## TEST datatypes
+## :string, :text, :integer, :float, :decimal, :datetime,
+## :timestamp, :time, :date, :binary, :boolean
+# ActiveRecord::Schema.define do
+#   create_table :test_table do |t|
+#     t.string :my_string
+#     t.text    :my_text
+#     t.integer :my_integer
+#     t.float :my_float
+#     t.decimal :my_decimal
+#     t.datetime :my_datetime
+#     t.timestamp :my_timestamp
+#     t.time :my_time
+#     t.date :my_date
+#     t.binary :my_binary
+#     t.boolean :my_boolean
+#   end
+# end
+## POSTGRESQL adapter
+#=>     Column    |            Type             |                        Modifiers
+#=> --------------+-----------------------------+---------------------------------------------------------
+#=>  id           | integer                     | not null default nextval('test_table_id_seq'::regclass)
+#=>  my_string    | character varying(255)      |
+#=>  my_text      | text                        |
+#=>  my_integer   | integer                     |
+#=>  my_float     | double precision            |
+#=>  my_decimal   | numeric                     |
+#=>  my_datetime  | timestamp without time zone |
+#=>  my_timestamp | timestamp without time zone |
+#=>  my_time      | time without time zone      |
+#=>  my_date      | date                        |
+#=>  my_binary    | bytea                       |
+#=>  my_boolean   | boolean                     |
 
 ################################
 ## ActiveRecord for ~/.script ##
