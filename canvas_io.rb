@@ -1,36 +1,29 @@
 #!/usr/bin/env ruby -w
 # canvas_io.rb
+# Author: Andy Bettisworth
 # Description: Canvas IO ruby class
-
-TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 ## IO < Object
 # ------------------------------------------------------------------------------
-# = IInncclluuddeess::
+# = IInncclluuddeess::
 # (from ruby core)
 #   File::Constants
 #   Enumerable
-
 # ------------------------------------------------------------------------------
-# = EExxtteennddeedd  bbyy::
+# = EExxtteennddeedd  bbyy::
 # (from gem tins-0.13.1)
 #   Tins::SecureWrite
 #   Tins::Write
-
 # (from ruby core)
 # ------------------------------------------------------------------------------
 
 # Expect library adds the IO instance method #expect, which does similar act to
 # tcl's expect extension.
-
 # In order to use this method, you must require expect:
-
 #   require 'expect'
-
 # Please see #expect for usage.
-
 # The IO class is the basis for all input and output in Ruby. An I/O stream may
-# be _d_u_p_l_e_x_e_d (that is, bidirectional), and so may use more than
+# be _d_u_p_l_e_x_e_d (that is, bidirectional), and so may use more than
 # one native operating system stream.
 
 # Many of the examples in this section use the File class, the only standard
@@ -72,7 +65,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # files are mentioned). ARGF#path and its alias ARGF#filename are provided to
 # access the name of the file currently being read.
 
-# == iioo//ccoonnssoollee
+# == iioo//ccoonnssoollee
 
 # The io/console extension provides methods for interacting with the console.
 # The console can be accessed from IO.console or the standard input/output/error
@@ -255,7 +248,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 
 # The PID of the started process can be obtained by IO#pid method.
 
-# _c_m_d is a string or an array as follows.
+# _c_m_d is a string or an array as follows.
 
 #   cmd:
 #     "-"                                      : fork
@@ -264,16 +257,16 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 #     [env, [cmdname, argv0], arg1, ..., opts] : command name, argv[0] and zero or more arguments (no shell)
 #   (env and opts are optional.)
 
-# If _c_m_d is a String ``-'', then a new instance of Ruby is started as the
+# If _c_m_d is a String ``-'', then a new instance of Ruby is started as the
 # subprocess.
 
-# If _c_m_d is an Array of String, then it will be used as the subprocess's
+# If _c_m_d is an Array of String, then it will be used as the subprocess's
 # argv bypassing a shell. The array can contains a hash at first for
 # environments and a hash at last for options similar to spawn.
 
-# The default mode for the new file object is ``r'', but _m_o_d_e may be set
+# The default mode for the new file object is ``r'', but _m_o_d_e may be set
 # to any of the modes listed in the description for class IO. The last argument
-# _o_p_t qualifies _m_o_d_e.
+# _o_p_t qualifies _m_o_d_e.
 
 #   # set IO encoding
 #   IO.popen("nkf -e filename", :external_encoding=>"EUC-JP") {|nkf_io|
@@ -298,7 +291,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 # block. At the end of block, Ruby close the pipe and sets $?. In this case
 # IO.popen returns the value of the block.
 
-# If a block is given with a _c_m_d of ``-'', the block will be run in two
+# If a block is given with a _c_m_d of ``-'', the block will be run in two
 # separate processes: once in the parent, and once in a child. The parent
 # process will be passed the pipe object as a parameter to the block, the child
 # version of the block will be passed nil, and the child's standard in and
@@ -316,7 +309,7 @@ TEST_FILE = ENV['HOME'] + "/Desktop/test_file.rb"
 #   f.puts "bar"; f.close_write; puts f.gets
 # }
 
-# _p_r_o_d_u_c_e_s_:
+# _p_r_o_d_u_c_e_s_:
 
 # ["Linux\n"]
 # Parent is 21346

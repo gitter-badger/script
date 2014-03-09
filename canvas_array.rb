@@ -46,7 +46,7 @@
 ## 1 represents the size or length
 ## 'foo' represents the default value
 ## so we get #=>'foo' as our output
-## Array.new(<SIZE>, <DEFAULT_VARIABLE>)= AArrrraayy  <<  OObbjjeecctt
+## Array.new(<SIZE>, <DEFAULT_VARIABLE>)= AArrrraayy  <<  OObbjjeecctt
 
 
 ########################################
@@ -73,7 +73,7 @@
 ########################################
 
 # ------------------------------------------------------------------------------
-# = IInncclluuddeess::
+# = IInncclluuddeess::
 # Enumerable (from ruby core)
 
 # (from gem arrayfields-4.9.0)
@@ -100,7 +100,7 @@
 # last element of the array, -2 is the next to last element in the array, and so
 # on.
 
-# == CCrreeaattiinngg  AArrrraayyss
+# == CCrreeaattiinngg  AArrrraayyss
 
 # A new array can be created by using the literal constructor [].  Arrays can
 # contain different types of objects.  For example, the array below contains an
@@ -137,7 +137,7 @@
 
 #   Array({:a => "a", :b => "b"}) #=> [[:a, "a"], [:b, "b"]]
 
-# == EExxaammppllee  UUssaaggee
+# == EExxaammppllee  UUssaaggee
 
 # In addition to the methods it mixes in through the Enumerable module, the
 # Array class has proprietary methods for accessing, searching and otherwise
@@ -145,7 +145,7 @@
 
 # Some of the more common ones are illustrated below.
 
-# == AAcccceessssiinngg  EElleemmeennttss
+# == AAcccceessssiinngg  EElleemmeennttss
 
 # Elements in an array can be retrieved using the Array#[] method.  It can take
 # a single integer argument (a numeric index), a pair of arguments (start and
@@ -188,7 +188,7 @@
 
 #   arr.drop(3) #=> [4, 5, 6]
 
-# == OObbttaaiinniinngg  IInnffoorrmmaattiioonn  aabboouutt  aann  AArrrraayy
+# == OObbttaaiinniinngg  IInnffoorrmmaattiioonn  aabboouutt  aann  AArrrraayy
 
 # Arrays keep track of their own length at all times.  To query an array about
 # the number of elements it contains, use #length, #count or #size.
@@ -205,7 +205,7 @@
 
 #   browsers.include?('Konqueror') #=> false
 
-# == AAddddiinngg  IItteemmss  ttoo  AArrrraayyss
+# == AAddddiinngg  IItteemmss  ttoo  AArrrraayyss
 
 # Items can be added to the end of an array by using either #push or #<<
 
@@ -226,7 +226,7 @@
 #   arr.insert(3, 'orange', 'pear', 'grapefruit')
 #   #=> [0, 1, 2, "orange", "pear", "grapefruit", "apple", 3, 4, 5, 6]
 
-# == RReemmoovviinngg  IItteemmss  ffrroomm  aann  AArrrraayy
+# == RReemmoovviinngg  IItteemmss  ffrroomm  aann  AArrrraayy
 
 # The method #pop removes the last element in an array and returns it:
 
@@ -265,7 +265,7 @@
 #   arr = [2, 5, 6, 556, 6, 6, 8, 9, 0, 123, 556]
 #   arr.uniq #=> [2, 5, 6, 556, 8, 9, 0, 123]
 
-# == IItteerraattiinngg  oovveerr  AArrrraayyss
+# == IItteerraattiinngg  oovveerr  AArrrraayyss
 
 # Like all classes that include the Enumerable module, Array has an each method,
 # which defines what elements should be iterated over and how.  In case of
@@ -295,7 +295,7 @@
 #   arr.map! { |a| a**2 } #=> [1, 4, 9, 16, 25]
 #   arr                   #=> [1, 4, 9, 16, 25]
 
-# == SSeelleeccttiinngg  IItteemmss  ffrroomm  aann  AArrrraayy
+# == SSeelleeccttiinngg  IItteemmss  ffrroomm  aann  AArrrraayy
 
 # Elements can be selected from an array according to criteria defined in a
 # block.  The selection can happen in a destructive or a non-destructive manner.
@@ -303,7 +303,7 @@
 # the non-destructive methods usually return a new array with the selected
 # elements, but leave the original array unchanged.
 
-# === NNoonn--ddeessttrruuccttiivvee  SSeelleeccttiioonn
+# === NNoonn--ddeessttrruuccttiivvee  SSeelleeccttiioonn
 
 #   arr = [1, 2, 3, 4, 5, 6]
 #   arr.select { |a| a > 3 }     #=> [4, 5, 6]
@@ -311,7 +311,7 @@
 #   arr.drop_while { |a| a < 4 } #=> [4, 5, 6]
 #   arr                          #=> [1, 2, 3, 4, 5, 6]
 
-# === DDeessttrruuccttiivvee  SSeelleeccttiioonn
+# === DDeessttrruuccttiivvee  SSeelleeccttiioonn
 
 # #select! and #reject! are the corresponding destructive methods to #select and
 # #reject
@@ -325,20 +325,14 @@
 #   arr = [1, 2, 3, 4, 5, 6]
 #   arr.keep_if { |a| a < 4 } #=> [1, 2, 3]
 #   arr                       #=> [1, 2, 3]
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 # ------------------------------------------------------------------------------
-# = CCllaassss  mmeetthhooddss::
+# = CCllaassss  mmeetthhooddss::
 
 #   []
 #   new
 #   try_convert
 
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   &
 #   *
@@ -449,11 +443,11 @@
 
 
 # ------------------------------------------------------------------------------
-# = CCllaassss  mmeetthhooddss::
+# = CCllaassss  mmeetthhooddss::
 
 #   wrap
 
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   deep_dup
 #   extract_options!
@@ -484,12 +478,12 @@
 # ArrayFields methods auto-extend the Array instance.  the Array class also has
 # added a class generator when the fields are known apriori.
 # ------------------------------------------------------------------------------
-# = CCllaassss  mmeetthhooddss::
+# = CCllaassss  mmeetthhooddss::
 
 #   []
 #   new
 
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   fields
 #   struct
@@ -498,13 +492,13 @@
 # ------------------------------------------------------------------------------
 # @private
 # ------------------------------------------------------------------------------
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   none?
 
 # (from gem sshkit-1.3.0)
 # ------------------------------------------------------------------------------
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   extract_options!
 
@@ -515,7 +509,7 @@
 
 
 # ------------------------------------------------------------------------------
-# = IInnssttaannccee  mmeetthhooddss::
+# = IInnssttaannccee  mmeetthhooddss::
 
 #   uniq_by!
 
@@ -525,3 +519,41 @@
 #   gem mocha-1.0.0
 #   gem pry-0.9.12.4
 
+# = AArrrraayy..iinnjjeecctt
+
+# (from ruby core)
+# === IImmpplleemmeennttaattiioonn  ffrroomm  EEnnuummeerraabbllee
+# ------------------------------------------------------------------------------
+#   enum.inject(initial, sym) -> obj
+
+#   enum.inject(sym)          -> obj
+#   enum.inject(initial) { |memo, obj| block }  -> obj
+#   enum.inject          { |memo, obj| block }  -> obj
+# ------------------------------------------------------------------------------
+# Combines all elements of _e_n_u_m by applying a binary operation,
+# specified by a block or a symbol that names a method or operator.
+
+# If you specify a block, then for each element in _e_n_u_m the block is
+# passed an accumulator value (_m_e_m_o) and the element. If you specify a
+# symbol instead, then each element in the collection will be passed to the
+# named method of _m_e_m_o. In either case, the result becomes the new value
+# for _m_e_m_o. At the end of the iteration, the final value of _m_e_m_o
+# is the return value for the method.
+
+# If you do not explicitly specify an _i_n_i_t_i_a_l value for
+# _m_e_m_o, then the first element of collection is used as the initial
+# value of _m_e_m_o.
+
+#   # Sum some numbers
+#   (5..10).reduce(:+)                             #=> 45
+#   # Same using a block and inject
+#   (5..10).inject { |sum, n| sum + n }            #=> 45
+#   # Multiply some numbers
+#   (5..10).reduce(1, :*)                          #=> 151200
+#   # Same using a block
+#   (5..10).inject(1) { |product, n| product * n } #=> 151200
+#   # find the longest word
+#   longest = %w{ cat sheep bear }.inject do |memo, word|
+#      memo.length > word.length ? memo : word
+#   end
+#   longest                                        #=> "sheep"

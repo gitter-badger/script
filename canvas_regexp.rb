@@ -2,8 +2,6 @@
 # Author: Andy Bettisworth
 # Description: Canvas Regexp for dynamic parsing using patterns
 
-<<<<<<< HEAD
-=======
 ## READ all non-alphanumeric characters
 # validate_me = 'This is & - some thoughts / that are.'
 # puts 'original: ' + validate_me
@@ -11,7 +9,6 @@
 # puts 'Best method: '+ validate_me.gsub(/\W/,'_')
 # puts 'updated: '+ validate_me.gsub(/\W/,'_')
 
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 ## DELETE all comments
 # doc_with_comments = <<-EOF
 #   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -80,7 +77,7 @@
 # //.match(content)
 # // =~ content
 # %r{}
-# Regexp.new= RReeggeexxpp  <<  OObbjjeecctt
+# Regexp.new= RReeggeexxpp  <<  OObbjjeecctt
 
 # (from ruby core)
 # ------------------------------------------------------------------------------
@@ -90,17 +87,17 @@
 # Regexps are created using the /.../ and %r{...} literals, and by the
 # Regexp::new constructor.
 
-# Regular expressions (_r_e_g_e_x_ps) are patterns which describe the
+# Regular expressions (_r_e_g_e_x_ps) are patterns which describe the
 # contents of a string. They're used for testing whether a string contains a
 # given pattern, or extracting the portions that match. They are created with
-# the /_p_a_t/ and %r{_p_a_t} literals or the Regexp.new constructor.
+# the /_p_a_t/ and %r{_p_a_t} literals or the Regexp.new constructor.
 
 # A regexp is usually delimited with forward slashes (/). For example:
 
 #   /hay/ =~ 'haystack'   #=> 0
 #   /y/.match('haystack') #=> #<MatchData "y">
 
-# If a string contains the pattern it is said to _m_a_t_c_h. A literal
+# If a string contains the pattern it is said to _m_a_t_c_h. A literal
 # string matches itself.
 
 # Here 'haystack' does not contain the pattern 'needle', so it doesn't match:
@@ -111,14 +108,14 @@
 
 #   /hay/.match('haystack')    #=> #<MatchData "hay">
 
-# Specifically, /st/ requires that the string contains the letter _s followed
-# by the letter _t, so it matches _h_a_y_s_t_a_c_k, also.
+# Specifically, /st/ requires that the string contains the letter _s followed
+# by the letter _t, so it matches _h_a_y_s_t_a_c_k, also.
 
-# == ==~~  aanndd  RReeggeexxpp##mmaattcchh
+# == ==~~  aanndd  RReeggeexxpp##mmaattcchh
 
 # Pattern matching may be achieved by using =~ operator or Regexp#match method.
 
-# === ==~~  ooppeerraattoorr
+# === ==~~  ooppeerraattoorr
 
 # =~ is Ruby's basic pattern-matching operator.  When one operand is a regular
 # expression and the other is a string then the regular expression is used as a
@@ -136,15 +133,15 @@
 # a successful match.  $~ holds a MatchData object. Regexp.last_match is
 # equivalent to $~.
 
-# === RReeggeexxpp##mmaattcchh  mmeetthhoodd
+# === RReeggeexxpp##mmaattcchh  mmeetthhoodd
 
 # The #match method returns a MatchData object:
 
 #   /st/.match('haystack')   #=> #<MatchData "st">
 
-# == MMeettaacchhaarraacctteerrss  aanndd  EEssccaappeess
+# == MMeettaacchhaarraacctteerrss  aanndd  EEssccaappeess
 
-# The following are _m_e_t_a_c_h_a_r_a_c_t_e_r_s (, ), [, ], {, },
+# The following are _m_e_t_a_c_h_a_r_a_c_t_e_r_s (, ), [, ], {, },
 # ., ?, +, *. They have a specific meaning when appearing in a pattern. To match
 # them literally they must be backslash-escaped. To match a backslash literally
 # backslash-escape that: \\\\\.
@@ -164,12 +161,12 @@
 #   /#{place}/.match("Go to 東京都")
 #       #=> #<MatchData "東京都">
 
-# == CChhaarraacctteerr  CCllaasssseess
+# == CChhaarraacctteerr  CCllaasssseess
 
-# A _c_h_a_r_a_c_t_e_r_ _c_l_a_s_s is delimited with square
+# A _c_h_a_r_a_c_t_e_r_ _c_l_a_s_s is delimited with square
 # brackets ([, ]) and lists characters that may appear at that point in the
-# match. /[ab]/ means _a or _b, as opposed to /ab/ which means _a followed by
-# _b.
+# match. /[ab]/ means _a or _b, as opposed to /ab/ which means _a followed by
+# _b.
 
 #   /W[aeiou]rd/.match("Word") #=> #<MatchData "Word">
 
@@ -183,7 +180,7 @@
 #   /[9f]/.match('9f')     #=> #<MatchData "9">
 
 # If the first character of a character class is a caret (^) the class is
-# inverted: it matches any character _e_x_c_e_p_t those named.
+# inverted: it matches any character _e_x_c_e_p_t those named.
 
 #   /[^a-eg-z]/.match('f') #=> #<MatchData "f">
 
@@ -213,23 +210,20 @@
 # * /\s/ - A whitespace character: /[ \t\r\n\f]/
 # * /\S/ - A non-whitespace character: /[^ \t\r\n\f]/
 
-# POSIX _b_r_a_c_k_e_t_ _e_x_p_r_e_s_s_i_o_n_s are also
+# POSIX _b_r_a_c_k_e_t_ _e_x_p_r_e_s_s_i_o_n_s are also
 # similar to character classes. They provide a portable alternative to the
 # above, with the added benefit that they encompass non-ASCII characters. For
 # instance, /\d/ matches only the ASCII decimal digits (0-9); whereas
-# /[[:digit:]]/ matches any character in the Unicode _N_d category.
+# /[[:digit:]]/ matches any character in the Unicode _N_d category.
 
 # * /[[:alnum:]]/ - Alphabetic and numeric character
 # * /[[:alpha:]]/ - Alphabetic character
 # * /[[:blank:]]/ - Space or tab
 # * /[[:cntrl:]]/ - Control character
 # * /[[:digit:]]/ - Digit
-<<<<<<< HEAD
 # * /[[:graph:]]/ - Non-blank character (excludes spaces, control characters,
 #   and similar)
-=======
 # * /[[:graph:]]/ - Non-blank character (excludes spaces, control characters
->>>>>>> 009a0d805c565cd30f9a7283bd8c85cae0bb8209
 # * /[[:lower:]]/ - Lowercase alphabetical character
 # * /[[:print:]]/ - Like [:graph:], but includes the space character
 # * /[[:punct:]]/ - Punctuation character
@@ -241,8 +235,8 @@
 # Ruby also supports the following non-POSIX character classes:
 
 # * /[[:word:]]/ - A character in one of the following Unicode general
-#   categories _L_e_t_t_e_r, _M_a_r_k, _N_u_m_b_e_r,
-#   _C_o_n_n_e_c_t_o_r___P_u_n_c_t_u_a_t_i_o_n
+#   categories _L_e_t_t_e_r, _M_a_r_k, _N_u_m_b_e_r,
+#   _C_o_n_n_e_c_t_o_r___P_u_n_c_t_u_a_t_i_o_n
 # * /[[:ascii:]]/ - A character in the ASCII character set
 
 #     # U+06F2 is "EXTENDED ARABIC-INDIC DIGIT TWO"
@@ -250,28 +244,28 @@
 #     /[[:upper:]][[:lower:]]/.match("Hello") #=> #<MatchData "He">
 #     /[[:xdigit:]][[:xdigit:]]/.match("A6")  #=> #<MatchData "A6">
 
-# == RReeppeettiittiioonn
+# == RReeppeettiittiioonn
 
 # The constructs described so far match a single character. They can be followed
 # by a repetition metacharacter to specify how many times they need to occur.
-# Such metacharacters are called _q_u_a_n_t_i_f_i_e_r_s.
+# Such metacharacters are called _q_u_a_n_t_i_f_i_e_r_s.
 
 # * * - Zero or more times
 # * + - One or more times
 # * ? - Zero or one times (optional)
-# * {_n} - Exactly _n times
-# * {_n,} - _n or more times
-# * {,_m} - _m or less times
-# * {_n,_m} - At least _n and at most _m times
+# * {_n} - Exactly _n times
+# * {_n,} - _n or more times
+# * {,_m} - _m or less times
+# * {_n,_m} - At least _n and at most _m times
 
 # At least one uppercase character ('H'), at least one lowercase character
 # ('e'), two 'l' characters, then one 'o':
 
 #   "Hello".match(/[[:upper:]]+[[:lower:]]+l{2}o/) #=> #<MatchData "Hello">
 
-# Repetition is _g_r_e_e_d_y by default: as many occurrences as possible
+# Repetition is _g_r_e_e_d_y by default: as many occurrences as possible
 # are matched while still allowing the overall match to succeed. By contrast,
-# _l_a_z_y matching makes the minimal amount of matches necessary for
+# _l_a_z_y matching makes the minimal amount of matches necessary for
 # overall success. A greedy metacharacter can be made lazy by following it with
 # ?.
 
@@ -282,17 +276,17 @@
 #   /<.+>/.match("<a><b>")  #=> #<MatchData "<a><b>">
 #   /<.+?>/.match("<a><b>") #=> #<MatchData "<a>">
 
-# A quantifier followed by + matches _p_o_s_s_e_s_s_i_v_e_l_y: once
+# A quantifier followed by + matches _p_o_s_s_e_s_s_i_v_e_l_y: once
 # it has matched it does not backtrack. They behave like greedy quantifiers, but
 # having matched they refuse to "give up" their match even if this jeopardises
 # the overall match.
 
-# == CCaappttuurriinngg
+# == CCaappttuurriinngg
 
-# Parentheses can be used for _c_a_p_t_u_r_i_n_g. The text enclosed by
-# the _n<sup>th</sup> group of parentheses can be subsequently referred to with
-# _n. Within a pattern use the _b_a_c_k_r_e_f_e_r_e_n_c_e \n;
-# outside of the pattern use MatchData[_n].
+# Parentheses can be used for _c_a_p_t_u_r_i_n_g. The text enclosed by
+# the _n<sup>th</sup> group of parentheses can be subsequently referred to with
+# _n. Within a pattern use the _b_a_c_k_r_e_f_e_r_e_n_c_e \n;
+# outside of the pattern use MatchData[_n].
 
 # 'at' is captured by the first group of parentheses, then referred to later
 # with \1:
@@ -306,19 +300,19 @@
 #   /[csh](..) [csh]\1 in/.match("The cat sat in the hat")[1] #=> 'at'
 
 # Capture groups can be referred to by name when defined with the
-# (?<_n_a_m_e>) or (?'_n_a_m_e') constructs.
+# (?<_n_a_m_e>) or (?'_n_a_m_e') constructs.
 
 #   /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")
 #       => #<MatchData "$3.67" dollars:"3" cents:"67">
 #   /\$(?<dollars>\d+)\.(?<cents>\d+)/.match("$3.67")[:dollars] #=> "3"
 
-# Named groups can be backreferenced with \k<_n_a_m_e>, where _n_a_m_e
+# Named groups can be backreferenced with \k<_n_a_m_e>, where _n_a_m_e
 # is the group name.
 
 #   /(?<vowel>[aeiou]).\k<vowel>.\k<vowel>/.match('ototomy')
 #       #=> #<MatchData "ototo" vowel:"o">
 
-# NNoottee: A regexp can't use named backreferences and numbered
+# NNoottee: A regexp can't use named backreferences and numbered
 # backreferences simultaneously.
 
 # When named capture groups are used with a literal regexp on the left-hand side
@@ -328,10 +322,10 @@
 #   /\$(?<dollars>\d+)\.(?<cents>\d+)/ =~ "$3.67" #=> 0
 #   dollars #=> "3"
 
-# == GGrroouuppiinngg
+# == GGrroouuppiinngg
 
-# Parentheses also _g_r_o_u_p the terms they enclose, allowing them to be
-# quantified as one _a_t_o_m_i_c whole.
+# Parentheses also _g_r_o_u_p the terms they enclose, allowing them to be
+# quantified as one _a_t_o_m_i_c whole.
 
 # The pattern below matches a vowel followed by 2 word characters:
 
@@ -360,38 +354,38 @@
 #   /I(?:n)ves(ti)ga\1ons/.match("Investigations")
 #       #=> #<MatchData "Investigations" 1:"ti">
 
-# === AAttoommiicc  GGrroouuppiinngg
+# === AAttoommiicc  GGrroouuppiinngg
 
-# Grouping can be made _a_t_o_m_i_c with (?>_p_a_t). This causes the
-# subexpression _p_a_t to be matched independently of the rest of the
+# Grouping can be made _a_t_o_m_i_c with (?>_p_a_t). This causes the
+# subexpression _p_a_t to be matched independently of the rest of the
 # expression such that what it matches becomes fixed for the remainder of the
 # match, unless the entire subexpression must be abandoned and subsequently
-# revisited. In this way _p_a_t is treated as a non-divisible whole. Atomic
+# revisited. In this way _p_a_t is treated as a non-divisible whole. Atomic
 # grouping is typically used to optimise patterns so as to prevent the regular
 # expression engine from backtracking needlessly.
 
 # The " in the pattern below matches the first character of the string, then .*
-# matches _Q_u_o_t_e_". This causes the overall match to fail, so the text
+# matches _Q_u_o_t_e_". This causes the overall match to fail, so the text
 # matched by .* is backtracked by one position, which leaves the final character
 # of the string available to match "
 
 #   /".*"/.match('"Quote"')     #=> #<MatchData "\"Quote\"">
 
-# If .* is grouped atomically, it refuses to backtrack _Q_u_o_t_e_", even
+# If .* is grouped atomically, it refuses to backtrack _Q_u_o_t_e_", even
 # though this means that the overall match fails
 
 #   /"(?>.*)"/.match('"Quote"') #=> nil
 
-# == SSuubbeexxpprreessssiioonn  CCaallllss
+# == SSuubbeexxpprreessssiioonn  CCaallllss
 
-# The \g<_n_a_m_e> syntax matches the previous subexpression named
-# _n_a_m_e, which can be a group name or number, again. This differs from
+# The \g<_n_a_m_e> syntax matches the previous subexpression named
+# _n_a_m_e, which can be a group name or number, again. This differs from
 # backreferences in that it re-executes the group rather than simply trying to
 # re-match the same text.
 
-# This pattern matches a _( character and assigns it to the paren group, tries
+# This pattern matches a _( character and assigns it to the paren group, tries
 # to call that the paren sub-expression again but fails, then matches a literal
-# _):
+# _):
 
 #   /\A(?<paren>\(\g<paren>*\))*\z/ =~ '()'
 
@@ -409,28 +403,28 @@
 
 # 1. Matches at the beginning of the string, i.e. before the first character.
 # 2. Enters a named capture group called paren
-# 3. Matches a literal _(, the first character in the string
+# 3. Matches a literal _(, the first character in the string
 # 4. Calls the paren group again, i.e. recurses back to the second step
 # 5. Re-enters the paren group
-# 6. Matches a literal _(, the second character in the string
+# 6. Matches a literal _(, the second character in the string
 # 7. Try to call paren a third time, but fail because doing so would prevent an
 #    overall successful match
-# 8. Match a literal _), the third character in the string. Marks the end of
+# 8. Match a literal _), the third character in the string. Marks the end of
 #    the second recursive call
-# 9. Match a literal _), the fourth character in the string
+# 9. Match a literal _), the fourth character in the string
 # 10. Match the end of the string
 
-# == AAlltteerrnnaattiioonn
+# == AAlltteerrnnaattiioonn
 
 # The vertical bar metacharacter (|) combines two expressions into a single one
 # that matches either of the expressions. Each expression is an
-# _a_l_t_e_r_n_a_t_i_v_e.
+# _a_l_t_e_r_n_a_t_i_v_e.
 
 #   /\w(and|or)\w/.match("Feliformia") #=> #<MatchData "form" 1:"or">
 #   /\w(and|or)\w/.match("furandi")    #=> #<MatchData "randi" 1:"and">
 #   /\w(and|or)\w/.match("dissemblance") #=> nil
 
-# == CChhaarraacctteerr  PPrrooppeerrttiieess
+# == CChhaarraacctteerr  PPrrooppeerrttiieess
 
 # The \p{} construct matches characters with the named property, much like POSIX
 # bracket classes.
@@ -450,14 +444,14 @@
 # * /\p{Upper}/ - Uppercase alphabetical
 # * /\p{XDigit}/ - Digit allowed in a hexadecimal number (i.e., 0-9a-fA-F)
 # * /\p{Word}/ - A member of one of the following Unicode general category
-#   _L_e_t_t_e_r, _M_a_r_k, _N_u_m_b_e_r,
-#   _C_o_n_n_e_c_t_o_r___P_u_n_c_t_u_a_t_i_o_n
+#   _L_e_t_t_e_r, _M_a_r_k, _N_u_m_b_e_r,
+#   _C_o_n_n_e_c_t_o_r___P_u_n_c_t_u_a_t_i_o_n
 # * /\p{ASCII}/ - A character in the ASCII character set
 # * /\p{Any}/ - Any Unicode character (including unassigned characters)
 # * /\p{Assigned}/ - An assigned character
 
-# A Unicode character's _G_e_n_e_r_a_l_ _C_a_t_e_g_o_r_y value
-# can also be matched with \p{_A_b} where _A_b is the category's
+# A Unicode character's _G_e_n_e_r_a_l_ _C_a_t_e_g_o_r_y value
+# can also be matched with \p{_A_b} where _A_b is the category's
 # abbreviation as described below:
 
 # * /\p{L}/ - 'Letter'
@@ -500,35 +494,35 @@
 # * /\p{Co}/ - 'Other: Private Use'
 # * /\p{Cs}/ - 'Other: Surrogate'
 
-# Lastly, \p{} matches a character's Unicode _s_c_r_i_p_t. The following
-# scripts are supported: _A_r_a_b_i_c, _A_r_m_e_n_i_a_n,
-# _B_a_l_i_n_e_s_e, _B_e_n_g_a_l_i, _B_o_p_o_m_o_f_o,
-# _B_r_a_i_l_l_e, _B_u_g_i_n_e_s_e, _B_u_h_i_d,
-# _C_a_n_a_d_i_a_n___A_b_o_r_i_g_i_n_a_l, _C_a_r_i_a_n,
-# _C_h_a_m, _C_h_e_r_o_k_e_e, _C_o_m_m_o_n,
-# _C_o_p_t_i_c, _C_u_n_e_i_f_o_r_m, _C_y_p_r_i_o_t,
-# _C_y_r_i_l_l_i_c, _D_e_s_e_r_e_t,
-# _D_e_v_a_n_a_g_a_r_i, _E_t_h_i_o_p_i_c,
-# _G_e_o_r_g_i_a_n, _G_l_a_g_o_l_i_t_i_c, _G_o_t_h_i_c,
-# _G_r_e_e_k, _G_u_j_a_r_a_t_i, _G_u_r_m_u_k_h_i,
-# _H_a_n, _H_a_n_g_u_l, _H_a_n_u_n_o_o, _H_e_b_r_e_w,
-# _H_i_r_a_g_a_n_a, _I_n_h_e_r_i_t_e_d, _K_a_n_n_a_d_a,
-# _K_a_t_a_k_a_n_a, _K_a_y_a_h___L_i,
-# _K_h_a_r_o_s_h_t_h_i, _K_h_m_e_r, _L_a_o, _L_a_t_i_n,
-# _L_e_p_c_h_a, _L_i_m_b_u, _L_i_n_e_a_r___B,
-# _L_y_c_i_a_n, _L_y_d_i_a_n, _M_a_l_a_y_a_l_a_m,
-# _M_o_n_g_o_l_i_a_n, _M_y_a_n_m_a_r,
-# _N_e_w___T_a_i___L_u_e, _N_k_o, _O_g_h_a_m,
-# _O_l___C_h_i_k_i, _O_l_d___I_t_a_l_i_c,
-# _O_l_d___P_e_r_s_i_a_n, _O_r_i_y_a, _O_s_m_a_n_y_a,
-# _P_h_a_g_s___P_a, _P_h_o_e_n_i_c_i_a_n, _R_e_j_a_n_g,
-# _R_u_n_i_c, _S_a_u_r_a_s_h_t_r_a, _S_h_a_v_i_a_n,
-# _S_i_n_h_a_l_a, _S_u_n_d_a_n_e_s_e,
-# _S_y_l_o_t_i___N_a_g_r_i, _S_y_r_i_a_c,
-# _T_a_g_a_l_o_g, _T_a_g_b_a_n_w_a, _T_a_i___L_e,
-# _T_a_m_i_l, _T_e_l_u_g_u, _T_h_a_a_n_a, _T_h_a_i,
-# _T_i_b_e_t_a_n, _T_i_f_i_n_a_g_h, _U_g_a_r_i_t_i_c,
-# _V_a_i, and _Y_i.
+# Lastly, \p{} matches a character's Unicode _s_c_r_i_p_t. The following
+# scripts are supported: _A_r_a_b_i_c, _A_r_m_e_n_i_a_n,
+# _B_a_l_i_n_e_s_e, _B_e_n_g_a_l_i, _B_o_p_o_m_o_f_o,
+# _B_r_a_i_l_l_e, _B_u_g_i_n_e_s_e, _B_u_h_i_d,
+# _C_a_n_a_d_i_a_n___A_b_o_r_i_g_i_n_a_l, _C_a_r_i_a_n,
+# _C_h_a_m, _C_h_e_r_o_k_e_e, _C_o_m_m_o_n,
+# _C_o_p_t_i_c, _C_u_n_e_i_f_o_r_m, _C_y_p_r_i_o_t,
+# _C_y_r_i_l_l_i_c, _D_e_s_e_r_e_t,
+# _D_e_v_a_n_a_g_a_r_i, _E_t_h_i_o_p_i_c,
+# _G_e_o_r_g_i_a_n, _G_l_a_g_o_l_i_t_i_c, _G_o_t_h_i_c,
+# _G_r_e_e_k, _G_u_j_a_r_a_t_i, _G_u_r_m_u_k_h_i,
+# _H_a_n, _H_a_n_g_u_l, _H_a_n_u_n_o_o, _H_e_b_r_e_w,
+# _H_i_r_a_g_a_n_a, _I_n_h_e_r_i_t_e_d, _K_a_n_n_a_d_a,
+# _K_a_t_a_k_a_n_a, _K_a_y_a_h___L_i,
+# _K_h_a_r_o_s_h_t_h_i, _K_h_m_e_r, _L_a_o, _L_a_t_i_n,
+# _L_e_p_c_h_a, _L_i_m_b_u, _L_i_n_e_a_r___B,
+# _L_y_c_i_a_n, _L_y_d_i_a_n, _M_a_l_a_y_a_l_a_m,
+# _M_o_n_g_o_l_i_a_n, _M_y_a_n_m_a_r,
+# _N_e_w___T_a_i___L_u_e, _N_k_o, _O_g_h_a_m,
+# _O_l___C_h_i_k_i, _O_l_d___I_t_a_l_i_c,
+# _O_l_d___P_e_r_s_i_a_n, _O_r_i_y_a, _O_s_m_a_n_y_a,
+# _P_h_a_g_s___P_a, _P_h_o_e_n_i_c_i_a_n, _R_e_j_a_n_g,
+# _R_u_n_i_c, _S_a_u_r_a_s_h_t_r_a, _S_h_a_v_i_a_n,
+# _S_i_n_h_a_l_a, _S_u_n_d_a_n_e_s_e,
+# _S_y_l_o_t_i___N_a_g_r_i, _S_y_r_i_a_c,
+# _T_a_g_a_l_o_g, _T_a_g_b_a_n_w_a, _T_a_i___L_e,
+# _T_a_m_i_l, _T_e_l_u_g_u, _T_h_a_a_n_a, _T_h_a_i,
+# _T_i_b_e_t_a_n, _T_i_f_i_n_a_g_h, _U_g_a_r_i_t_i_c,
+# _V_a_i, and _Y_i.
 
 # Unicode codepoint U+06E9 is named "ARABIC PLACE OF SAJDAH" and belongs to the
 # Arabic script:
@@ -543,10 +537,10 @@
 
 #   /\p{^Ll}/.match("A") #=> #<MatchData "A">
 
-# == AAnncchhoorrss
+# == AAnncchhoorrss
 
 # Anchors are metacharacter that match the zero-width positions between
-# characters, _a_n_c_h_o_r_i_n_g the match to a specific position.
+# characters, _a_n_c_h_o_r_i_n_g the match to a specific position.
 
 # * ^ - Matches beginning of line
 # * $ - Matches end of line
@@ -558,17 +552,17 @@
 # * \b - Matches word boundaries when outside brackets; backspace (0x08) when
 #   inside brackets
 # * \B - Matches non-word boundaries
-# * (?=_p_a_t) - _P_o_s_i_t_i_v_e_ _l_o_o_k_a_h_e_a_d
-#   assertion: ensures that the following characters match _p_a_t, but
+# * (?=_p_a_t) - _P_o_s_i_t_i_v_e_ _l_o_o_k_a_h_e_a_d
+#   assertion: ensures that the following characters match _p_a_t, but
 #   doesn't include those characters in the matched text
-# * (?!_p_a_t) - _N_e_g_a_t_i_v_e_ _l_o_o_k_a_h_e_a_d
-#   assertion: ensures that the following characters do not match _p_a_t, but
+# * (?!_p_a_t) - _N_e_g_a_t_i_v_e_ _l_o_o_k_a_h_e_a_d
+#   assertion: ensures that the following characters do not match _p_a_t, but
 #   doesn't include those characters in the matched text
-# * (?<=_p_a_t) - _P_o_s_i_t_i_v_e_ _l_o_o_k_b_e_h_i_n_d
-#   assertion: ensures that the preceding characters match _p_a_t, but
+# * (?<=_p_a_t) - _P_o_s_i_t_i_v_e_ _l_o_o_k_b_e_h_i_n_d
+#   assertion: ensures that the preceding characters match _p_a_t, but
 #   doesn't include those characters in the matched text
-# * (?<!_p_a_t) - _N_e_g_a_t_i_v_e_ _l_o_o_k_b_e_h_i_n_d
-#   assertion: ensures that the preceding characters do not match _p_a_t, but
+# * (?<!_p_a_t) - _N_e_g_a_t_i_v_e_ _l_o_o_k_b_e_h_i_n_d
+#   assertion: ensures that the preceding characters do not match _p_a_t, but
 #   doesn't include those characters in the matched text
 
 # If a pattern isn't anchored it can begin at any point in the string:
@@ -598,7 +592,7 @@
 #   /(?<=<b>)\w+(?=<\/b>)/.match("Fortune favours the <b>bold</b>")
 #       #=> #<MatchData "bold">
 
-# == OOppttiioonnss
+# == OOppttiioonnss
 
 # The end delimiter for a regexp can be followed by one or more single-letter
 # options which control how the pattern can match.
@@ -609,8 +603,8 @@
 # * /pat/o - Perform #{} interpolation only once
 
 # i, m, and x can also be applied on the subexpression level with the
-# (?_o_n-_o_f_f) construct, which enables options _o_n, and disables
-# options _o_f_f for the expression enclosed by the parentheses.
+# (?_o_n-_o_f_f) construct, which enables options _o_n, and disables
+# options _o_f_f for the expression enclosed by the parentheses.
 
 #   /a(?i:b)c/.match('aBc') #=> #<MatchData "aBc">
 #   /a(?i:b)c/.match('abc') #=> #<MatchData "abc">
@@ -622,9 +616,9 @@
 #   Regexp.new("abc # Comment", Regexp::EXTENDED)             #=> /abc # Comment/x
 #   Regexp.new("abc", Regexp::IGNORECASE | Regexp::MULTILINE) #=> /abc/mi
 
-# == FFrreeee--SSppaacciinngg  MMooddee  aanndd  CCoommmmeennttss
+# == FFrreeee--SSppaacciinngg  MMooddee  aanndd  CCoommmmeennttss
 
-# As mentioned above, the x option enables _f_r_e_e_-_s_p_a_c_i_n_g
+# As mentioned above, the x option enables _f_r_e_e_-_s_p_a_c_i_n_g
 # mode. Literal white space inside the pattern is ignored, and the octothorpe
 # (#) character introduces a comment until the end of the line. This allows the
 # components of the pattern to be organised in a potentially more readable
@@ -640,32 +634,32 @@
 #   \Z/x
 #   float_pat.match('3.14') #=> #<MatchData "3.14" 1:".14">
 
-# NNoottee: To match whitespace in an x pattern use an escape such as \s or
+# NNoottee: To match whitespace in an x pattern use an escape such as \s or
 # \p{Space}.
 
-# Comments can be included in a non-x pattern with the (?#_c_o_m_m_e_n_t)
-# construct, where _c_o_m_m_e_n_t is arbitrary text ignored by the regexp
+# Comments can be included in a non-x pattern with the (?#_c_o_m_m_e_n_t)
+# construct, where _c_o_m_m_e_n_t is arbitrary text ignored by the regexp
 # engine.
 
-# == EEnnccooddiinngg
+# == EEnnccooddiinngg
 
 # Regular expressions are assumed to use the source encoding. This can be
 # overridden with one of the following modifiers.
 
-# * /_p_a_t/u - UTF-8
-# * /_p_a_t/e - EUC-JP
-# * /_p_a_t/s - Windows-31J
-# * /_p_a_t/n - ASCII-8BIT
+# * /_p_a_t/u - UTF-8
+# * /_p_a_t/e - EUC-JP
+# * /_p_a_t/s - Windows-31J
+# * /_p_a_t/n - ASCII-8BIT
 
 # A regexp can be matched against a string when they either share an encoding,
-# or the regexp's encoding is _U_S_-_A_S_C_I_I and the string's encoding
+# or the regexp's encoding is _U_S_-_A_S_C_I_I and the string's encoding
 # is ASCII-compatible.
 
 # If a match between incompatible encodings is attempted an
 # Encoding::CompatibilityError exception is raised.
 
 # The Regexp#fixed_encoding? predicate indicates whether the regexp has a
-# _f_i_x_e_d encoding, that is one incompatible with ASCII. A regexp's
+# _f_i_x_e_d encoding, that is one incompatible with ASCII. A regexp's
 # encoding can be explicitly fixed by supplying Regexp::FIXEDENCODING as the
 # second argument of Regexp.new:
 
@@ -674,7 +668,7 @@
 #      #=> Encoding::CompatibilityError: incompatible encoding regexp match
 #           (ISO-8859-1 regexp with UTF-8 string)
 
-# == SSppeecciiaall  gglloobbaall  vvaarriiaabblleess
+# == SSppeecciiaall  gglloobbaall  vvaarriiaabblleess
 
 # Pattern matching sets some global variables :
 # * $~ is equivalent to Regexp.last_match;
@@ -707,12 +701,12 @@
 
 # These global variables are thread-local and method-local variables.
 
-# == PPeerrffoorrmmaannccee
+# == PPeerrffoorrmmaannccee
 
 # Certain pathological combinations of constructs can lead to abysmally bad
 # performance.
 
-# Consider a string of 25 _as, a _d, 4 _as, and a _c.
+# Consider a string of 25 _as, a _d, 4 _as, and a _c.
 
 #   s = 'a' * 25 + 'd' + 'a' * 4 + 'c'
 #   #=> "aaaaaaaaaaaaaaaaaaaaaaaaadaaaac"
@@ -730,9 +724,9 @@
 # This happens because an atom in the regexp is quantified by both an immediate
 # + and an enclosing * with nothing to differentiate which is in control of any
 # particular character. The nondeterminism that results produces super-linear
-# performance. (Consult _M_a_s_t_e_r_i_n_g_ _R_e_g_u_l_a_r_
-# _E_x_p_r_e_s_s_i_o_n_s (3rd ed.), pp 222, by
-# _J_e_f_f_e_r_y_ _F_r_i_e_d_l, for an in-depth analysis). This
+# performance. (Consult _M_a_s_t_e_r_i_n_g_ _R_e_g_u_l_a_r_
+# _E_x_p_r_e_s_s_i_o_n_s (3rd ed.), pp 222, by
+# _J_e_f_f_e_r_y_ _F_r_i_e_d_l, for an in-depth analysis). This
 # particular case can be fixed by use of atomic grouping, which prevents the
 # unnecessary backtracking:
 
@@ -744,12 +738,12 @@
 # A similar case is typified by the following example, which takes approximately
 # 60 seconds to execute for me:
 
-# Match a string of 29 _as against a pattern of 29 optional _as followed by 29
-# mandatory _as:
+# Match a string of 29 _as against a pattern of 29 optional _as followed by 29
+# mandatory _as:
 
 #   Regexp.new('a?' * 29 + 'a' * 29) =~ 'a' * 29
 
-# The 29 optional _as match the string, but this prevents the 29 mandatory _as
+# The 29 optional _as match the string, but this prevents the 29 mandatory _as
 # that follow from matching. Ruby must then backtrack repeatedly so as to
 # satisfy as many of the optional matches as it can while still matching the
 # mandatory 29. It is plain to us that none of the optional matches can succeed,
@@ -757,36 +751,25 @@
 
 # The best way to improve performance is to significantly reduce the amount of
 # backtracking needed.  For this case, instead of individually matching 29
-# optional _as, a range of optional _as can be matched all at once with
-# _a_{_0_,_2_9_}:
+# optional _as, a range of optional _as can be matched all at once with
+# _a_{_0_,_2_9_}:
 
 #   Regexp.new('a{0,29}' + 'a' * 29) =~ 'a' * 29
 # ------------------------------------------------------------------------------
-# = CCoonnssttaannttss::
+# = CCoonnssttaannttss::
 
 # EXTENDED:
 #   see Regexp.options and Regexp.new
-
-
 # FIXEDENCODING:
 #   see Regexp.options and Regexp.new
-
-
 # IGNORECASE:
 #   see Regexp.options and Regexp.new
-
-
 # MULTILINE:
 #   see Regexp.options and Regexp.new
-
-
 # NOENCODING:
 #   see Regexp.options and Regexp.new
 
-
-
-# = CCllaassss  mmeetthhooddss::
-
+# = CCllaassss  mmeetthhooddss::
 #   compile
 #   escape
 #   json_create
@@ -796,8 +779,7 @@
 #   try_convert
 #   union
 
-# = IInnssttaannccee  mmeetthhooddss::
-
+# = IInnssttaannccee  mmeetthhooddss::
 #   ==
 #   ===
 #   =~
@@ -821,12 +803,10 @@
 # ------------------------------------------------------------------------------
 # Regexp serialization/deserialization
 # ------------------------------------------------------------------------------
-# = CCllaassss  mmeetthhooddss::
+# = CCllaassss  mmeetthhooddss::
 
 #   json_create
-
-# = IInnssttaannccee  mmeetthhooddss::
-
+# = IInnssttaannccee  mmeetthhooddss::
 #   as_json
 #   to_json
 
