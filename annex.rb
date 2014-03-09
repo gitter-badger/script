@@ -82,6 +82,7 @@ class Annex
         echo "syncing APP: #{application}";
         cd #{SYNC}/.app/#{application};
         git add -u;
+        git add .;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
         git pull origin master;
         git push origin master;
@@ -96,6 +97,7 @@ class Annex
         echo "syncing GEM: #{gem_project}";
         cd #{SYNC}/.gem/#{gem_project};
         git add -u;
+        git add .;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
         git pull origin master;
         git push origin master;
