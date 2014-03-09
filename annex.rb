@@ -11,7 +11,7 @@ class Annex
   HOME = ENV['HOME']
   SYNC = "#{ENV['HOME']}/.sync"
   ANNEX = "/media/Annex/preseed/seed/.sync"
-  APPS = ['accreu', 'tribetriage']
+  APPS = ['accreu']
   GEMS = ['tribe_triage','collective_vibration','phantom_assembly','tandem_feet']
 
   def sync
