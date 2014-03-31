@@ -1,27 +1,36 @@
-#!/usr/bin/env ruby -w
-# background_spec.rb
+#!/usr/bin/ruby -w
+# background_task.rb
 # Author: Andy Bettisworth
 # Description: Rotate desktop background
 
 class RotateBackground
-  def next
-    current_pic = `gsettings get org.gnome.desktop.background picture-uri`
-    current_pic = /(Backgrounds)\/(\w.*)/.match(current_pic)
-    if current_pic.class == NilClass
-      new_pic = "desktop-background.jpg"
-    else
-      current_pic = current_pic[2]
-      current_pic.gsub!("'", '')
-      new_pic = current_pic
+  GSETTING = "org.gnome.desktop.background"
+  BACKGROUND_IMAGES = "file:///home/#{ENV['USER']}/Pictures/Backgrounds"
+
+  def rotate
+    current_background_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
+    current_background   = File.basename(current_background_path.strip.gsub("'", ''))
+    current_background ||= "desktop-background.jpg"
+
+    all_pictures = Dir.entries("#{ENV['HOME']}/Pictures/Backgrounds").reject { |x| x == '.' || x == '..' }
+    current_background_index = all_pictures.index(current_background)
+
+    rand = current_background_index
+    until rand != current_background_index
+      rand = Random.rand(1..all_pictures.length-1)
     end
-    all_pics = Dir.entries("#{ENV['HOME']}/Pictures/Backgrounds").reject { |x| x=='.' || x=='..' }
-    while current_pic == new_pic
-      random_number = Random.rand(1..all_pics.length)
-      new_pic = all_pics[random_number]
-    end
-    system("gsettings set org.gnome.desktop.background picture-uri 'file:///home/wurde/Pictures/Backgrounds/#{new_pic}'")
+    new_pic = all_pictures[rand]
+
+    system "gsettings set #{GSETTING} picture-uri '#{BACKGROUND_IMAGES}/#{new_pic}'"
   end
 end
 
+## Usage
 spinster = RotateBackground.new
-spinster.next
+spinster.rotate
+
+# describe RotateBackground do
+#   describe "#rotate" do
+#     it "should "
+#   end
+# end
