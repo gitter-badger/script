@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby -w
-# get_script.rb
+# script.rb
+# Author: Andy Bettisworth
 # Description: Get scripts from ~/.sync/.script
+
+require 'optparse'
 
 HOME = ENV['HOME']
 DESKTOP = "#{HOME}/Desktop"
 SYNC_SCRIPT = "#{HOME}/.sync/.script"
 
-class GetScript
+class Script
 
   attr_reader :script
 
@@ -58,13 +61,28 @@ class GetScript
   end
 end
 
+options = {}
+OptionParser.new do |opts|
+  opts.on("--fetch", 'Move target scripts to Desktop') do
+    options[:fetch] = true
+  end
+
+  opts.on("--clean", 'Put away all open scripts') do
+    options[:clean] = true
+  end
+end.parse!
+
 ## USAGE
-# secretary = GetScript.new
-# secretary.fetch
+# secretary = Script.new
+# if options[:clean] == true
+#   secretary.clean
+# else
+#   ARGV.each do |arg|
+#     secretary.fetch arg
+#   end
+# end
 
-## TEST
-describe GetScript do
-
+describe Script do
   before(:each) do
     File.open("#{SYNC_SCRIPT}/test1.rb",'w+')
     File.open("#{SYNC_SCRIPT}/test3.rb",'w+')
@@ -94,13 +112,13 @@ describe GetScript do
 
   describe "#fetch" do
     it "should move target scripts to Desktop" do
-      getter = GetScript.new
+      getter = Script.new
       getter.fetch "test1.rb"
       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
     end
 
     it "should accept an Array of scripts" do
-      getter = GetScript.new
+      getter = Script.new
       getter.fetch("test1.rb", "test2.rb", "test3.rb")
       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
       expect(File.exist?("#{DESKTOP}/test2.rb")).to be_true
@@ -109,14 +127,14 @@ describe GetScript do
 
     it "should ask for script if no argument provided" do
       pending("TODO, add a stub for gets()")
-      getter = GetScript.new
+      getter = Script.new
       getter.fetch
       STDIN.should_receive(:read).and_return("test1.rb")
       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
     end
 
     it "should accept script without extension '.rb'" do
-      getter = GetScript.new
+      getter = Script.new
       getter.fetch "test1"
       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
     end
@@ -124,7 +142,7 @@ describe GetScript do
 
   describe "#clean" do
     it "should put away all scripts on Desktop", wip: true do
-      getter = GetScript.new
+      getter = Script.new
       getter.clean
       getter.fetch("test1.rb", "test2.rb", "test3.rb")
       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_false
