@@ -1,5 +1,7 @@
 #!/usr/bin/ruby -w
 # add_commas_to_integers.rb
+# Author: Andy Bettisworth
+# Description: Add commas to integers
 
 module Precision
   COMMIFY_DELIMITER = ','
@@ -15,7 +17,7 @@ module Precision
 
     int_as_string, float_as_string = to_s.split('.')
 
-    in_out = format_int(
+    int_out = format_int(
       int_as_string,
       args[:breakpoint],
       args[:delimiter]
@@ -45,5 +47,16 @@ module Precision
     return output unless show_hundredths
     output += '0' if (float_as_string.size == 1)
     output
+  end
+end
+
+describe Precision do
+  describe "#commify" do
+  end
+
+  describe "#format_int" do
+  end
+
+  describe "#format_float" do
   end
 end
