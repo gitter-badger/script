@@ -5,8 +5,8 @@
 
 require 'optparse'
 
-HOME = ENV['HOME']
-DESKTOP = "#{HOME}/Desktop"
+HOME        = ENV['HOME']
+DESKTOP     = "#{HOME}/Desktop"
 SYNC_CANVAS = "#{HOME}/.sync/.canvas"
 
 class Canvas
@@ -15,23 +15,20 @@ class Canvas
 
   def fetch(*target_canvas)
     if target_canvas.empty?
-      puts "What canvas do you want?"
-      @canvas = gets.strip
+      ask_for_canvas
       format_canvas!(@canvas)
-      fail "No such canvas exists: '#{@canvas}'" unless canvas_exist?(@canvas)
-      @canvas = format_canvas!(@canvas)
-      system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")
+      get_canvas(@canvas) if canvas_exist?(@canvas)
+
     elsif target_canvas.length == 1
       @canvas = target_canvas[0]
       format_canvas!(@canvas)
-      fail "No such canvas exists: '#{@canvas}'" unless canvas_exist?(@canvas)
-      system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")
+      get_canvas(@canvas) if canvas_exist?(@canvas)
+
     elsif target_canvas.length > 1
       target_canvas.each do |canvas|
         @canvas = canvas
         format_canvas!(@canvas)
-        fail "No such canvas exists: '#{@canvas}'" unless canvas_exist?(@canvas)
-        system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")
+        get_canvas(@canvas) if canvas_exist?(@canvas)
       end
     end
   end
@@ -40,34 +37,49 @@ class Canvas
     all_canvas = Array.new
     Dir.foreach("#{SYNC_CANVAS}") do |canvas|
       next if File.directory?(canvas)
-      next unless canvas.include?(".rb")
       all_canvas << canvas
     end
 
     Dir.foreach("#{DESKTOP}") do |open_canvas|
       next if File.directory?(open_canvas)
-      next unless open_canvas.include?(".rb")
       system("mv #{DESKTOP}/#{open_canvas.to_s} #{SYNC_CANVAS}") if all_canvas.include?(open_canvas)
     end
   end
 
   private
+
+  def get_canvas(canvas)
+    system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")
+  end
+
+  def ask_for_canvas
+    while @canvas.nil?
+      puts "What canvas do you want?"
+      @canvas = gets.strip
+    end
+  end
+
   def canvas_exist?(canvas)
-    File.exist?("#{SYNC_CANVAS}/#{canvas}")
+    if File.exist?("#{SYNC_CANVAS}/#{canvas}")
+      true
+    else
+      puts "WARNING: No such canvas exists: '#{canvas}'"
+      false
+    end
   end
 
   def format_canvas!(canvas)
-    @canvas += ".rb" unless canvas.include?(".rb")
+    @canvas += ".rb" unless canvas.match(/\.\w.*/)
   end
 end
 
 options = {}
 OptionParser.new do |opts|
-  opts.on("--fetch", 'Move target canvas to Desktop') do
+  opts.on("--fetch", 'Get target canvas(es)') do
     options[:fetch] = true
   end
 
-  opts.on("--clean", 'Put away all open canvas') do
+  opts.on("--clean", 'Put away all open canvases') do
     options[:clean] = true
   end
 end.parse!
@@ -84,70 +96,72 @@ end
 
 # describe Canvas do
 #   before(:each) do
-#     File.open("#{SYNC_CANVAS}/test1.rb",'w+')
-#     File.open("#{SYNC_CANVAS}/test3.rb",'w+')
-#     File.open("#{SYNC_CANVAS}/test2.rb",'w+')
+#     3.times do |i|
+#       File.open("#{SYNC_CANVAS}/canvas_test#{i}.rb",'w+')
+#       File.open("#{SYNC_CANVAS}/canvas_test#{i}.py",'w+')
+#     end
 #   end
 
 #   after(:each) do
-#     if File.exist?("#{SYNC_CANVAS}/test1.rb")
-#       File.delete("#{SYNC_CANVAS}/test1.rb")
-#     end
-#     if File.exist?("#{SYNC_CANVAS}/test2.rb")
-#       File.delete("#{SYNC_CANVAS}/test2.rb")
-#     end
-#     if File.exist?("#{SYNC_CANVAS}/test3.rb")
-#       File.delete("#{SYNC_CANVAS}/test3.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test1.rb")
-#       File.delete("#{DESKTOP}/test1.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test2.rb")
-#       File.delete("#{DESKTOP}/test2.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test3.rb")
-#       File.delete("#{DESKTOP}/test3.rb")
+#     3.times do |i|
+#       if File.exist?("#{SYNC_CANVAS}/canvas_test#{i}.rb")
+#         File.delete("#{SYNC_CANVAS}/canvas_test#{i}.rb")
+#       end
+#       if File.exist?("#{SYNC_CANVAS}/canvas_test#{i}.py")
+#         File.delete("#{SYNC_CANVAS}/canvas_test#{i}.py")
+#       end
+#       if File.exist?("#{DESKTOP}/canvas_test#{i}.rb")
+#         File.delete("#{DESKTOP}/canvas_test#{i}.rb")
+#       end
+#       if File.exist?("#{DESKTOP}/canvas_test#{i}.py")
+#         File.delete("#{DESKTOP}/canvas_test#{i}.py")
+#       end
 #     end
 #   end
 
 #   describe "#fetch" do
-#     it "should move target canvas to Desktop" do
-#       getter = GetCanvas.new
-#       getter.fetch "test1.rb"
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
+#     it "should move target canvas to ~/Desktop" do
+#       getter = Canvas.new
+#       getter.fetch "canvas_test1.rb"
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
 #     end
 
-#     it "should accept an Array of canvas" do
-#       getter = GetCanvas.new
-#       getter.fetch("test1.rb", "test2.rb", "test3.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/test2.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/test3.rb")).to be_true
+#     it "should accept an Array of canvases" do
+#       getter = Canvas.new
+#       getter.fetch("canvas_test0.rb", "canvas_test1.rb", "canvas_test2.rb")
+#       expect(File.exist?("#{DESKTOP}/canvas_test0.rb")).to be_true
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
+#       expect(File.exist?("#{DESKTOP}/canvas_test2.rb")).to be_true
 #     end
 
 #     it "should ask for canvas if no argument provided" do
-#       pending("TODO, add a stub for gets()")
-#       getter = GetCanvas.new
+#       pending "stub the ask return value"
+#       getter = Canvas.new
+#       expect(getter).to receive(:puts).with('What canvas do you want?')
 #       getter.fetch
-#       STDIN.should_receive(:read).and_return("test1.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
 #     end
 
 #     it "should accept canvas without extension '.rb'" do
-#       getter = GetCanvas.new
-#       getter.fetch "test1"
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
+#       getter = Canvas.new
+#       getter.fetch "canvas_test1"
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
+#     end
+
+#     it "should accept multiple filetypes" do
+#       getter = Canvas.new
+#       getter.fetch "canvas_test1.py"
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.py")).to be_true
 #     end
 #   end
 
 #   describe "#clean" do
-#     it "should put away all canvas on Desktop", wip: true do
-#       getter = GetCanvas.new
+#     it "should put away all canvas on Desktop" do
+#       pending "canvas.rb the script gets in the way of this test."
+#       getter = Canvas.new
 #       getter.clean
-#       getter.fetch("test1.rb", "test2.rb", "test3.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_false
-#       expect(File.exist?("#{DESKTOP}/test2.rb")).to be_false
-#       expect(File.exist?("#{DESKTOP}/test3.rb")).to be_false
+#       getter.fetch("canvas_test1.rb")
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_false
+#       expect(File.exist?("#{SYNC_CANVAS}/canvas_test1.rb")).to be_true
 #     end
 #   end
 # end
