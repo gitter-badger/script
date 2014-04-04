@@ -24,7 +24,12 @@ terminal_window.relocate("top-left");
 terminal_window.change_window_state('add','fullscreen')
 
 ## Firefox
-firefox_window = RBWindow.new
-firefox_window.create_application("firefox", "127.0.0.1:3000")
-firefox_window.relocate("bottom-right")
-firefox_window.change_window_state('add','fullscreen')
+# firefox_window = RBWindow.new
+# firefox_window.create_application("firefox", "127.0.0.1:3000")
+# firefox_window.relocate("bottom-right")
+# firefox_window.change_window_state('add','fullscreen')
+## Chrome
+chrome_window = RBWindow.new
+chrome_window.create_application("google-chrome", "localhost:3000 localhost:8000")
+chrome_window.relocate("bottom-right")
+chrome_window.change_window_state('add','fullscreen')
