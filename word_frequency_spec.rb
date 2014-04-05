@@ -1,3 +1,8 @@
+#!/usr/bin/ruby -w
+# word_frequency_spec.rb
+# Author: Andy Bettisworth
+# Description: GET word frequencies
+
 class WordFrequency
   def get(content)
     content_array = content.downcase.split(/\b/).select { |x| /\w/.match(x) }

@@ -5,8 +5,9 @@
 
 require 'optparse'
 
-HOME = ENV['HOME']
-DESKTOP = "#{HOME}/Desktop"
+HOME        = ENV['HOME']
+DESKTOP     = "#{HOME}/Desktop"
+SYNC        = "#{ENV['HOME']}/.sync"
 SYNC_SCRIPT = "#{HOME}/.sync/.script"
 
 class Script
