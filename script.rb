@@ -49,9 +49,23 @@ class Script
       next unless open_script.include?(".rb")
       system("mv #{DESKTOP}/#{open_script.to_s} #{SYNC_SCRIPT}") if all_scripts.include?(open_script)
     end
+
+    sync_script
   end
 
   private
+
+  def sync_script
+    system <<-CMD
+      echo '';
+      echo 'annex sync: SCRIPT';
+      cd #{SYNC}/.script;
+      git add -u;
+      git add .;
+      git commit -m "script_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+    CMD
+  end
+
   def script_exist?(script)
     File.exist?("#{SYNC_SCRIPT}/#{script}")
   end
