@@ -3,11 +3,11 @@
 # Author: Andy Bettisworth
 # Description: Rotate desktop background
 
-class RotateBackground
+class Background
   GSETTING = "org.gnome.desktop.background"
   BACKGROUND_IMAGES = "file:///home/#{ENV['USER']}/Pictures/Backgrounds"
 
-  def rotate
+  def self.rotate
     current_background_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
     current_background   = File.basename(current_background_path.strip.gsub("'", ''))
     current_background ||= "desktop-background.jpg"
@@ -26,8 +26,7 @@ class RotateBackground
 end
 
 ## Usage
-spinster = RotateBackground.new
-spinster.rotate
+Background.rotate
 
 # describe RotateBackground do
 #   describe "#rotate" do
