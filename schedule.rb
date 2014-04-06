@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # schedule.rb
 # Author: Andy Bettisworth
-# Description: It schedules automated tasks
+# Description: My replacement for cron tasks
 
 require 'optparse'
 require 'queue_classic'
@@ -114,8 +114,9 @@ end
 ### OptionParser ###
 ####################
 
-###################
-### RSpec Tests ###
+######################
+### TESTS: feature ###
+
 describe Schedule do
   describe "#task" do
     before(:each) do
@@ -171,8 +172,9 @@ describe Schedule do
     end
   end
 end
-### RSpec Tests ###
-###################
+
+### TESTS: feature ###
+######################
 
 ############
 ### TODO ###
