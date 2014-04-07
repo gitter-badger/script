@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Description: Schedule tasks [~/.sync/.script/.tasks/*_task.rb]
 
-require_relative "../schedule.rb"
+TASK = "#{ENV['HOME']}/.sync/.script/.tasks"
 
 ## OPTIONS
 # method:
@@ -14,5 +14,17 @@ require_relative "../schedule.rb"
 # repeat:
 # task:
 
-tactical = Schedule.new
-tactical.task(task: "background_task.rb", interval: 20.minutes)
+cron_locked = File.exist?("#{TASK}/cron.lock")
+
+## Rotate background every 20 minutes
+unless cron_locked
+  require "#{TASK}/rotate_background_task.rb"
+  minute = Time.now.strftime('%M')
+  Background.rotate if minute.to_i % 20 == 0
+end
+
+## TEST
+# unless cron_locked
+#   suffix = Random.new.rand(1..99)
+#   File.open("#{ENV['HOME']}/Desktop/file_#{suffix}.txt", 'w')
+# end
