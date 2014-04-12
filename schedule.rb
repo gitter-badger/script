@@ -1,7 +1,11 @@
 #!/usr/bin/ruby -w
 # schedule.rb
 # Author: Andy Bettisworth
+<<<<<<< HEAD
 # Description: My replacement for cron tasks
+=======
+# Description: Schedules automated tasks
+>>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e
 
 require 'optparse'
 require 'queue_classic'
@@ -12,20 +16,24 @@ require 'clockwork'
 include Clockwork
 
 class Schedule
-  attr_accessor :queue, :method, :args, :script, :delay, :interval, :repeat
+  TASKS = "#{ENV['HOME']}/.sync/.script/.tasks"
+
+  attr_accessor :queue
+
+  def initialize(queue = 'default')
+    self.queue = queue
+  end
 
   def task(params)
-    @queue   = params[:queue]
-    @queue ||= 'default'
-    @method  = params[:method]
-    @args    = params[:args]
-    if params[:script]
+    @method = params[:method]
+    @args   = params[:args]
+    if params[:task]
       @method = 'Kernel.load'
-      @args   = ENV['HOME'] + '/.sync/.script/routine/' + params[:script]
+      @args   = "#{TASKS}/#{params[:task]}"
     end
     @delay    = params[:delay]
     @interval = params[:interval]
-    fail "Cannot have --interval #{@interval} and --delay #{@delay}" if @delay && @interval
+    fail "Cannot have @interval and @delay" if @interval && @delay
     @repeat = params[:repeat]
     @repeat ||= 1
     execute
@@ -35,18 +43,21 @@ class Schedule
 
   def execute
     timer = Timers.new
+
     unless @interval
       @delay ||= 1;
       timer.every(@delay) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
+
       @repeat.times { timer.wait }
     else
       timer.every(@interval) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
       end
+
       loop { timer.wait }
     end
   end
@@ -56,61 +67,54 @@ class Schedule
   end
 end
 
-####################
-### OptionParser ###
 # options = {}
 # option_parser = OptionParser.new do |opts|
 #   executable_name = File.basename($PROGRAM_NAME, ".rb")
 #   opts.banner = "Usage: #{executable_name} -m METHOD -a ARGS [OPTIONS]..."
 
-#   opts.on('-m METHOD','--method METHOD', 'task to execute') do |method|
+#   opts.on('-m',' --method', 'method') do |method|
 #     options[:method] = method
 #   end
 
-#   opts.on('-a ARGS','--args ARGS', 'task arguments') do |args|
+#   opts.on('-a','--args', 'arguments') do |args|
 #     options[:args] = args
 #   end
 
-#   opts.on('-q QUEUE','--queue QUEUE', 'custom queue') do |queue|
+#   opts.on('-q','--queue', 'custom queue') do |queue|
 #     options[:queue] = queue
 #   end
 
-#   opts.on('-d DELAY','--delay DELAY', 'time inbetween each job') do |delay|
-#     options[:delay] = delay.to_i
+#   opts.on('-d','--delay', 'time inbetween each job') do |delay|
+#     options[:delay] = delay
 #   end
 
-#   opts.on('-i INTERVAL','--interval INTERVAL', 'loop jobs indefinitely') do |interval|
-#     options[:interval] = interval.to_i
+#   opts.on('-i','--interval', 'loop jobs indefinitely') do |interval|
+#     options[:interval] = interval
 #   end
 
-#   opts.on('-r REPEAT','--repeat REPEAT', 'repeat job X times') do |repeat|
-#     options[:repeat] = repeat.to_i
+#   opts.on('-r','--repeat', 'repeat job X times') do |repeat|
+#     options[:repeat] = repeat
 #   end
 
-#   opts.on('-s SCRIPT','--script SCRIPT', 'script path') do |script|
-#     options[:script] = script
+#   opts.on('-t','--task', 'task name (e.g. test_task.rb)') do |task|
+#     options[:task] = task
 #   end
 # end
 # option_parser.parse!
 
-#@tactical.= Schedule.new
-# if options[:script]
-#  @tactical.task(queue:    options[:queue],
-#                 delay: options[:delay],
-#                 interval: options[:interval],
-#                 repeat: options[:repeat],
-#                 script: options[:script])
-
-# elsif options[:method]  && options[:args]
-#  @tactical.task(method:   options[:method],
+# if options[:method] && options[:args]
+#   tactical = Schedule.new
+#   tactical.task(method:   options[:method],
 #                 args:     options[:args],
 #                 queue:    options[:queue],
-#                 delay: options[:delay],
+#                 delay:    options[:delay],
 #                 interval: options[:interval],
-#                 repeat: options[:repeat])
+#                 repeat:   options[:repeat],
+#                 task:     options[:task])
 # else
 #   puts option_parser.help
 # end
+<<<<<<< HEAD
 ### OptionParser ###
 ####################
 
@@ -196,3 +200,53 @@ end
 # clockwork script.rb &
 ### TODO ###
 ############
+=======
+
+# tactical = Schedule.new
+# tactical.task(method: 'puts', args: 'Testing 1 2 3')
+# tactical = Schedule.new
+# tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
+# tactical = Schedule.new
+# tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 10.seconds)
+# tactical = Schedule.new
+# tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
+# tactical = Schedule.new
+# tactical.task(task: 'create_file_task.rb')
+
+# describe Schedule do
+#   describe "#schedule" do
+#     before(:each) do
+#       @tactical = Schedule.new
+#     end
+
+#     it "should accept method: 'puts' and args: 'Testing 1 2 3' job input" do
+#       expect(@tactical).to receive(:execute)
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3')
+#     end
+
+#     it "should accept custom queue: 'routine'" do
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', queue: 'routine')
+#     end
+
+#     it "should accept a delay: '10.seconds'" do
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
+#     end
+
+#     it "should accept routine: 'true' with interval: '1.day'" do
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 1.day)
+#     end
+
+#     it "should accept repeat: '3' count" do
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
+#     end
+
+#     it "should accept script_path: 'test.rb'" do
+#       @tactical.task(script: 'test.rb')
+#     end
+
+#     it "should accept a at a at: '01:30'", wip: true do
+#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', at: '01:30')
+#     end
+#   end
+# end
+>>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e

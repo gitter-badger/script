@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # rbsecurity.rb
+# Author: Andy Bettisworth
 # Description: OSI model multi-layer security
 
 require_relative 'secure_physical_layer.rb'
