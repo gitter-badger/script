@@ -7,7 +7,6 @@ require 'optparse'
 
 HOME        = ENV['HOME']
 DESKTOP     = "#{HOME}/Desktop"
-SYNC        = "#{ENV['HOME']}/.sync"
 SYNC_CANVAS = "#{HOME}/.sync/.canvas"
 
 class Canvas
@@ -45,22 +44,9 @@ class Canvas
       next if File.directory?(open_canvas)
       system("mv #{DESKTOP}/#{open_canvas.to_s} #{SYNC_CANVAS}") if all_canvas.include?(open_canvas)
     end
-
-    sync_canvas
   end
 
   private
-
-  def sync_canvas
-    system <<-CMD
-      echo '';
-      echo 'annex sync: CANVAS';
-      cd #{SYNC}/.canvas;
-      git add -u;
-      git add .;
-      git commit -m "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-    CMD
-  end
 
   def get_canvas(canvas)
     system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")

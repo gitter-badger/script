@@ -16,6 +16,7 @@ require 'clockwork'
 include Clockwork
 
 class Schedule
+
   TASKS = "#{ENV['HOME']}/.sync/.script/.tasks"
 
   attr_accessor :queue
@@ -27,15 +28,19 @@ class Schedule
   def task(params)
     @method = params[:method]
     @args   = params[:args]
+
     if params[:task]
       @method = 'Kernel.load'
       @args   = "#{TASKS}/#{params[:task]}"
     end
+
     @delay    = params[:delay]
     @interval = params[:interval]
     fail "Cannot have @interval and @delay" if @interval && @delay
+
     @repeat = params[:repeat]
     @repeat ||= 1
+
     execute
   end
 
@@ -45,7 +50,7 @@ class Schedule
     timer = Timers.new
 
     unless @interval
-      @delay ||= 1;
+      @delay ||= 1
       timer.every(@delay) do
         enqueue_task(@method, @args)
         QC::Worker.new(q_name: @queue).work
@@ -67,40 +72,40 @@ class Schedule
   end
 end
 
-# options = {}
-# option_parser = OptionParser.new do |opts|
-#   executable_name = File.basename($PROGRAM_NAME, ".rb")
-#   opts.banner = "Usage: #{executable_name} -m METHOD -a ARGS [OPTIONS]..."
+options = {}
+option_parser = OptionParser.new do |opts|
+  executable_name = File.basename($PROGRAM_NAME, ".rb")
+  opts.banner = "Usage: #{executable_name} -m METHOD -a ARGS [OPTIONS]..."
 
-#   opts.on('-m',' --method', 'method') do |method|
-#     options[:method] = method
-#   end
+  opts.on('-m',' --method', 'method') do |method|
+    options[:method] = method
+  end
 
-#   opts.on('-a','--args', 'arguments') do |args|
-#     options[:args] = args
-#   end
+  opts.on('-a','--args', 'arguments') do |args|
+    options[:args] = args
+  end
 
-#   opts.on('-q','--queue', 'custom queue') do |queue|
-#     options[:queue] = queue
-#   end
+  opts.on('-q','--queue', 'custom queue') do |queue|
+    options[:queue] = queue
+  end
 
-#   opts.on('-d','--delay', 'time inbetween each job') do |delay|
-#     options[:delay] = delay
-#   end
+  opts.on('-d','--delay', 'time inbetween each job') do |delay|
+    options[:delay] = delay
+  end
 
-#   opts.on('-i','--interval', 'loop jobs indefinitely') do |interval|
-#     options[:interval] = interval
-#   end
+  opts.on('-i','--interval', 'loop jobs indefinitely') do |interval|
+    options[:interval] = interval
+  end
 
-#   opts.on('-r','--repeat', 'repeat job X times') do |repeat|
-#     options[:repeat] = repeat
-#   end
+  opts.on('-r','--repeat', 'repeat job X times') do |repeat|
+    options[:repeat] = repeat
+  end
 
-#   opts.on('-t','--task', 'task name (e.g. test_task.rb)') do |task|
-#     options[:task] = task
-#   end
-# end
-# option_parser.parse!
+  opts.on('-t','--task', 'task name (e.g. test_task.rb)') do |task|
+    options[:task] = task
+  end
+end
+option_parser.parse!
 
 # if options[:method] && options[:args]
 #   tactical = Schedule.new
@@ -211,7 +216,7 @@ end
 # tactical = Schedule.new
 # tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
 # tactical = Schedule.new
-# tactical.task(task: 'create_file_task.rb')
+# tactical.task(interval: 1200, task: 'rotate_background_task.rb')
 
 # describe Schedule do
 #   describe "#schedule" do
