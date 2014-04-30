@@ -41,8 +41,8 @@ class Annex
 
   def commit_local(path)
     system <<-CMD
-      git checkout annex;
       cd #{path};
+      git checkout annex;
       git add -A;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     CMD
@@ -51,7 +51,12 @@ class Annex
   def sync_upstream(path)
     system <<-CMD
       cd #{path};
+      git checkout master;
       git pull origin master;
+      git checkout annex;
+      git rebase master;
+      git checkout master;
+      git merge annex;
       git push origin master;
     CMD
   end
