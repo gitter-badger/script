@@ -10,129 +10,52 @@ require 'optparse'
 class Annex
   HOME = ENV['HOME']
   SYNC = "#{ENV['HOME']}/.sync"
-  ANNEX = "/media/Annex/preseed/seed/.sync"
-  APPS = ['accreu']
-  GEMS = ['tribe_triage','collective_vibration','phantom_assembly','tandem_feet']
+  ANNEX_PATH = "/media/Village/preseed/seed/.sync"
+  SYNC_PATHS = [
+    "#{HOME}/.rbenv",
+    "#{SYNC}/.canvas",
+    "#{SYNC}/.script",
+    "#{SYNC}/.template",
+    "#{SYNC}/.app/accreu",
+    "#{SYNC}/.gem/tribe_triage",
+    "#{SYNC}/.gem/collective_vibration",
+    "#{SYNC}/.gem/phantom_assembly",
+    "#{SYNC}/.gem/tandem_feet"
+  ]
 
   def sync
-    raise 'Annex not found.' unless File.exist?(ANNEX)
-    sync_all
-    ensure_repositories
-    sync_apps
-    sync_gems
+    raise 'WARNING: Annex not found.' unless File.exist?(ANNEX_PATH)
+
+    SYNC_PATHS.each do |path|
+      unless File.exist?(path)
+        puts "WARNING: path not found"
+        puts "#{path}"
+        next
+      end
+      commit_local(path)
+      rebase_upstream(path)
+    end
   end
 
   private
 
-  def sync_all
-    commit_local
+  def commit_local(path)
     system <<-CMD
-      echo '';
-      echo 'syncing: CANVAS';
-      cd #{SYNC}/.canvas;
-      git pull origin master;
-      git push origin master;
-      echo '';
-      echo 'syncing: SCRIPT';
-      cd #{SYNC}/.script;
-      git pull origin master;
-      git push origin master;
-      echo '';
-      echo 'syncing: TEMPLATE';
-      cd #{SYNC}/.template;
-      git pull origin master;
-      git push origin master;
-      echo '';
-      echo 'syncing: RBENV';
-      cd #{HOME}/.rbenv;
-      git pull origin master;
-      git push origin master;
-    CMD
-  end
-
-  def commit_local
-    system <<-CMD
-      echo '';
-      echo 'commiting: CANVAS';
-      cd #{SYNC}/.canvas;
-      git add -u;
-      git add .;
-      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-      echo '';
-      echo 'commiting: SCRIPT';
-      cd #{SYNC}/.script;
-      git add -u;
-      git add .;
-      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-      echo '';
-      echo 'commiting: TEMPLATE';
-      cd #{SYNC}/.template;
-      git add -u;
-      git add .;
-      git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-      echo '';
-      echo 'commiting: RBENV';
-      cd #{HOME}/.rbenv;
-      git add -u;
-      git add .;
+      cd #{path};
+      git add -A;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     CMD
   end
 
-  def sync_apps
-    APPS.each do |application|
-      system <<-CMD
-        echo '';
-        echo "syncing APP: #{application}";
-        cd #{SYNC}/.app/#{application};
-        git add -u;
-        git add .;
-        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-        git pull origin master;
-        git push origin master;
-      CMD
-    end
-  end
-
-  def sync_gems
-    GEMS.each do |gem_project|
-      system <<-CMD
-        echo '';
-        echo "syncing GEM: #{gem_project}";
-        cd #{SYNC}/.gem/#{gem_project};
-        git add -u;
-        git add .;
-        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-        git pull origin master;
-        git push origin master;
-      CMD
-    end
-  end
-
-  def ensure_repositories
-    APPS.each do |application|
-      unless File.exist?("#{SYNC}/.app/#{application}")
-        Dir.mkdir("#{SYNC}/.app/#{application}")
-        system <<-CMD
-          echo '';
-          mkdir -p #{SYNC}/.app;
-          cd #{SYNC}/.app;
-          git clone #{ANNEX}/.app/#{application}.git;
-        CMD
-      end
-    end
-    GEMS.each do |gem_project|
-      unless File.exist?("#{SYNC}/.gem/#{gem_project}")
-        system <<-CMD
-          echo '';
-          mkdir -p #{SYNC}/.gem;
-          cd #{SYNC}/.gem;
-          git clone #{ANNEX}/.gem/#{gem_project}.git;
-        CMD
-      end
-    end
+  def rebase_upstream(path)
+    system <<-CMD
+      cd #{path};
+      git pull --rebase master origin;
+      git push origin master;
+    CMD
   end
 end
 
+# Usage
 update = Annex.new
 update.sync
