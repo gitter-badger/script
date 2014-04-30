@@ -33,7 +33,7 @@ class Annex
         next
       end
       commit_local(path)
-      rebase_upstream(path)
+      sync_upstream(path)
     end
   end
 
@@ -41,16 +41,17 @@ class Annex
 
   def commit_local(path)
     system <<-CMD
+      git checkout annex;
       cd #{path};
       git add -A;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     CMD
   end
 
-  def rebase_upstream(path)
+  def sync_upstream(path)
     system <<-CMD
       cd #{path};
-      git pull --rebase master origin;
+      git pull origin master;
       git push origin master;
     CMD
   end
