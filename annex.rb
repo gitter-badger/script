@@ -13,9 +13,9 @@ class Annex
     "#{HOME}/.rbenv",
     "#{LOCAL_SYNC}/.canvas",
     "#{LOCAL_SYNC}/.script",
-    "#{LOCAL_SYNC}/.template"
+    "#{LOCAL_SYNC}/.template",
+    "#{LOCAL_SYNC}/.app/accreu"
   ]
-    # "#{LOCAL_SYNC}/.app/accreu",
     # "#{LOCAL_SYNC}/.gem/tribe_triage",
     # "#{LOCAL_SYNC}/.gem/collective_vibration",
     # "#{LOCAL_SYNC}/.gem/phantom_assembly",
