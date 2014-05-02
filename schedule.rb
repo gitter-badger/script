@@ -1,7 +1,11 @@
 #!/usr/bin/ruby -w
 # schedule.rb
 # Author: Andy Bettisworth
+<<<<<<< HEAD
+# Description: My replacement for cron tasks
+=======
 # Description: Schedules automated tasks
+>>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e
 
 require 'optparse'
 require 'queue_classic'
@@ -115,6 +119,93 @@ option_parser.parse!
 # else
 #   puts option_parser.help
 # end
+<<<<<<< HEAD
+### OptionParser ###
+####################
+
+######################
+### TESTS: feature ###
+
+describe Schedule do
+  describe "#task" do
+    before(:each) do
+      @tactical = Schedule.new
+    end
+
+    def expect_default
+      expect(@tactical.method).to eq("puts")
+      expect(@tactical.args).to eq("Testing 1 2 3")
+      expect(@tactical.queue).to eq("default")
+    end
+
+    it "should accept method: 'puts' and args: 'Testing 1 2 3'" do
+      @tactical.task(method: 'puts', args: 'Testing 1 2 3')
+      expect_default
+    end
+
+    it "should accept custom queue: 'routine'" do
+      @tactical = Schedule.new()
+      @tactical.task(queue: 'routine', method: 'puts', args: 'Testing 1 2 3')
+      expect(@tactical.method).to eq("puts")
+      expect(@tactical.args).to eq("Testing 1 2 3")
+      expect(@tactical.queue).to eq("routine")
+    end
+
+    it "should accept a delay: '10.seconds'" do
+      @tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
+      expect_default
+    end
+
+    it "should accept routine: 'true' with interval: '1.day'" do
+      pending "handle loops"
+      @tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 1.day)
+      expect_default
+    end
+
+    it "should accept repeat: '3' count" do
+      @tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
+      expect_default
+    end
+
+    it "should accept script_path: 'test.rb'" do
+      @tactical.task(script: 'test.rb')
+      expect(@tactical.method).to eq("Kernel.load")
+      expect(@tactical.args).to match /test.rb/
+      expect(@tactical.queue).to eq("default")
+    end
+
+    it "should accept a at a at: '01:30'", wip: true do
+      pending "handle gem clockwork"
+      @tactical.task(method: 'puts', args: 'Testing 1 2 3', at: '01:30')
+      expect_default
+    end
+  end
+end
+
+### TESTS: feature ###
+######################
+
+############
+### TODO ###
+## == Timeout gem
+#   require 'timeout'
+#   status = Timeout::timeout(5) {
+#     # Something that should be interrupted if it takes more than 5 seconds...
+#   }
+
+## == Clockwork gem
+# :at parameter specifies when to trigger the event:
+# Valid formats:
+#   HH:MM
+#    H:MM
+#   **:MM
+#   HH:**
+#   (Mon|mon|Monday|monday) HH:MM
+## SET as a background process
+# clockwork script.rb &
+### TODO ###
+############
+=======
 
 # tactical = Schedule.new
 # tactical.task(method: 'puts', args: 'Testing 1 2 3')
@@ -163,3 +254,4 @@ option_parser.parse!
 #     end
 #   end
 # end
+>>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e
