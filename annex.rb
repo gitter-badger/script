@@ -2,29 +2,27 @@
 # annex.rb
 # Author: Andy Bettisworth
 # Description: Sync files with Annex
-# Sync all: [.script, .canvas, .template, .rbenv]
-# Sync some: [.app, .gem]
 
 require 'optparse'
 
 class Annex
   HOME = ENV['HOME']
-  SYNC = "#{ENV['HOME']}/.sync"
-  ANNEX_PATH = "/media/Village/preseed/seed/.sync"
+  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
+  ANNEX_SYNC = "/media/Village/preseed/seed/.sync"
   SYNC_PATHS = [
     "#{HOME}/.rbenv",
-    "#{SYNC}/.canvas",
-    "#{SYNC}/.script",
-    "#{SYNC}/.template",
-    "#{SYNC}/.app/accreu",
-    "#{SYNC}/.gem/tribe_triage",
-    "#{SYNC}/.gem/collective_vibration",
-    "#{SYNC}/.gem/phantom_assembly",
-    "#{SYNC}/.gem/tandem_feet"
+    "#{LOCAL_SYNC}/.canvas",
+    "#{LOCAL_SYNC}/.script",
+    "#{LOCAL_SYNC}/.template",
+    "#{LOCAL_SYNC}/.app/accreu",
+    "#{LOCAL_SYNC}/.gem/tribe_triage",
+    "#{LOCAL_SYNC}/.gem/collective_vibration",
+    "#{LOCAL_SYNC}/.gem/phantom_assembly",
+    "#{LOCAL_SYNC}/.gem/tandem_feet"
   ]
 
   def sync
-    raise 'WARNING: Annex not found.' unless File.exist?(ANNEX_PATH)
+    raise 'WARNING: Annex not found.' unless File.exist?(ANNEX_SYNC)
 
     SYNC_PATHS.each do |path|
       unless File.exist?(path)
