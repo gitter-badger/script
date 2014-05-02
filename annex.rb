@@ -65,6 +65,7 @@ class Annex
       git checkout master;
       git merge annex;
       git push origin master;
+      git checkout annex;
     CMD
   end
 end
