@@ -6,8 +6,8 @@
 require 'optparse'
 
 options = {}
-parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: extract_line -i [INPUT_FILE] -o [OUTPUT_FILE] -r [REGEXP]'
+OptionParser.new do |opts|
+  opts.banner = 'USAGE: extract -i [INPUT_FILE] -o [OUTPUT_FILE] -r [REGEXP]'
 
   opts.on('-i [INPUT]', '--input [INPUT]', 'Targeted file to filter') do |input_file|
     options[:input] = input_file.to_s
@@ -40,8 +40,6 @@ class Extract
     end
   end
 end
-
-parser.help
 
 ## USAGE
 extractor = Extract.new
