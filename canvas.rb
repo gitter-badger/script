@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 # canvas.rb
 # Author: Andy Bettisworth
-# Decanvasion: Get canvases from ~/.sync/.canvas
+# Description: Get canvases from ~/.sync/.canvas
 
 require 'optparse'
 
@@ -75,11 +75,9 @@ end
 
 options = {}
 OptionParser.new do |opts|
-  opts.on("--fetch", 'Get target canvas(es)') do
-    options[:fetch] = true
-  end
+  opts.banner = "USAGE: canvas [FILE]"
 
-  opts.on("--clean", 'Put away all open canvases') do
+  opts.on('--clean' 'Put away all open canvases') do
     options[:clean] = true
   end
 end.parse!
@@ -90,7 +88,7 @@ if options[:clean] == true
   secretary.clean
 else
   ARGV.each do |arg|
-    secretary.fetch arg
+    secretary.fetch(arg)
   end
 end
 
