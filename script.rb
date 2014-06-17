@@ -83,6 +83,8 @@ end
 
 options = {}
 option_parser = OptionParser.new do |opts|
+  opts.banner = "USAGE: script [options] [SCRIPT]"
+
   opts.on("--fetch", 'Copy script(s) to Desktop') do
     options[:fetch] = true
   end
