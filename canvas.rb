@@ -5,36 +5,33 @@
 
 require 'optparse'
 
-HOME        = ENV['HOME']
-DESKTOP     = "#{HOME}/Desktop"
-SYNC_CANVAS = "#{HOME}/.sync/.canvas"
-
 class Canvas
+  HOME        = ENV['HOME']
+  DESKTOP     = "#{HOME}/Desktop"
+  SYNC_CANVAS = "#{HOME}/.sync/.canvas"
 
-  attr_reader :canvas
+  attr_accessor :canvas_list
 
-  def fetch(*target_canvas)
-    if target_canvas.empty?
-      ask_for_canvas
-      format_canvas!(@canvas)
-      get_canvas(@canvas) if canvas_exist?(@canvas)
+  def fetch(*canvases)
+    @canvas_list = canvases.flatten
 
-    elsif target_canvas.length == 1
-      @canvas = target_canvas[0]
-      format_canvas!(@canvas)
-      get_canvas(@canvas) if canvas_exist?(@canvas)
+    ask_for_canvas while @canvas_list.flatten.empty?
 
-    elsif target_canvas.length > 1
-      target_canvas.each do |canvas|
-        @canvas = canvas
-        format_canvas!(@canvas)
-        get_canvas(@canvas) if canvas_exist?(@canvas)
+    @canvas_list.each_with_index do |target_canvas, index|
+      @canvas_list[index] = default_extension(target_canvas)
+      @canvas_list[index] = default_prefix(@canvas_list[index])
+
+      if File.exist?("#{SYNC_CANVAS}/#{@canvas_list[index]}")
+        get_canvas(@canvas_list[index])
+      else
+        puts "CanvasNotExistError: #{SYNC_CANVAS}/#{@canvas_list[index]}"
       end
     end
   end
 
   def clean
-    all_canvas = Array.new
+    all_canvas = []
+
     Dir.foreach("#{SYNC_CANVAS}") do |canvas|
       next if File.directory?(canvas)
       all_canvas << canvas
@@ -48,18 +45,30 @@ class Canvas
 
   private
 
-  def get_canvas(canvas)
-    system("cp #{SYNC_CANVAS}/#{@canvas} #{DESKTOP}")
+  def get_canvas(target_canvas)
+    system("cp #{SYNC_CANVAS}/#{target_canvas} #{DESKTOP}")
+  end
+
+  def default_prefix(canvas)
+    unless /canvas_/.match(canvas)
+      canvas = 'canvas_' + canvas
+    end
+    canvas
+  end
+
+  def default_extension(canvas)
+    if File.extname(canvas) == ""
+      canvas += '.rb'
+    end
+    canvas
   end
 
   def ask_for_canvas
-    while @canvas.nil?
-      puts "What canvas do you want?"
-      @canvas = gets.strip
-    end
+    puts "What canvas do you want?"
+    @canvas_list < gets.strip(' ')
   end
 
-  def canvas_exist?(canvas)
+  def canvas_exist?
     if File.exist?("#{SYNC_CANVAS}/#{canvas}")
       true
     else
@@ -67,32 +76,36 @@ class Canvas
       false
     end
   end
-
-  def format_canvas!(canvas)
-    @canvas += ".rb" unless canvas.match(/\.\w.*/)
-  end
 end
 
 options = {}
 OptionParser.new do |opts|
   opts.banner = "USAGE: canvas [FILE]"
 
-  opts.on('--clean' 'Put away all open canvases') do
+  opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
+    options[:fetch] = true
+  end
+
+  opts.on('-c', '--clean', 'Put canvas(es) back into ~/.sync') do
     options[:clean] = true
   end
 end.parse!
 
 ## USAGE
-secretary = Canvas.new
+canvas_dispatcher = Canvas.new
 if options[:clean] == true
-  secretary.clean
-else
-  ARGV.each do |arg|
-    secretary.fetch(arg)
-  end
+  canvas_dispatcher.clean
+end
+
+if options[:fetch]
+  canvas_dispatcher.fetch(ARGV)
 end
 
 # describe Canvas do
+#   HOME        = ENV['HOME']
+#   DESKTOP     = "#{HOME}/Desktop"
+#   SYNC_CANVAS = "#{HOME}/.sync/.canvas"
+
 #   before(:each) do
 #     3.times do |i|
 #       File.open("#{SYNC_CANVAS}/canvas_test#{i}.rb",'w+')
@@ -104,15 +117,6 @@ end
 #     3.times do |i|
 #       if File.exist?("#{SYNC_CANVAS}/canvas_test#{i}.rb")
 #         File.delete("#{SYNC_CANVAS}/canvas_test#{i}.rb")
-#       end
-#       if File.exist?("#{SYNC_CANVAS}/canvas_test#{i}.py")
-#         File.delete("#{SYNC_CANVAS}/canvas_test#{i}.py")
-#       end
-#       if File.exist?("#{DESKTOP}/canvas_test#{i}.rb")
-#         File.delete("#{DESKTOP}/canvas_test#{i}.rb")
-#       end
-#       if File.exist?("#{DESKTOP}/canvas_test#{i}.py")
-#         File.delete("#{DESKTOP}/canvas_test#{i}.py")
 #       end
 #     end
 #   end
@@ -150,14 +154,19 @@ end
 #       getter.fetch "canvas_test1.py"
 #       expect(File.exist?("#{DESKTOP}/canvas_test1.py")).to be_true
 #     end
+
+#     it "should not require the appended 'canvas_'" do
+#       getter = Canvas.new
+#       getter.fetch "test1.rb"
+#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
+#     end
 #   end
 
 #   describe "#clean" do
 #     it "should put away all canvas on Desktop" do
-#       pending "canvas.rb the script gets in the way of this test."
 #       getter = Canvas.new
-#       getter.clean
 #       getter.fetch("canvas_test1.rb")
+#       getter.clean
 #       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_false
 #       expect(File.exist?("#{SYNC_CANVAS}/canvas_test1.rb")).to be_true
 #     end
