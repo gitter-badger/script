@@ -5,12 +5,12 @@
 
 require 'optparse'
 
-HOME        = ENV['HOME']
-DESKTOP     = "#{HOME}/Desktop"
-SYNC        = "#{ENV['HOME']}/.sync"
-SYNC_SCRIPT = "#{HOME}/.sync/.script"
 
 class Script
+  HOME        = ENV['HOME']
+  DESKTOP     = "#{HOME}/Desktop"
+  SYNC        = "#{ENV['HOME']}/.sync"
+  SYNC_SCRIPT = "#{HOME}/.sync/.script"
 
   attr_reader :script
 
@@ -68,7 +68,12 @@ class Script
   end
 
   def script_exist?(script)
-    File.exist?("#{SYNC_SCRIPT}/#{script}")
+    if File.exist?("#{SYNC_SCRIPT}/#{script}")
+      true
+    else
+      puts "WARNING: No such canvas exists: '#{script}'"
+      false
+    end
   end
 
   def format_script!(script)
@@ -77,24 +82,27 @@ class Script
 end
 
 options = {}
-OptionParser.new do |opts|
-  opts.on("--fetch", 'Move target scripts to Desktop') do
+option_parser = OptionParser.new do |opts|
+  opts.on("--fetch", 'Copy script(s) to Desktop') do
     options[:fetch] = true
   end
 
-  opts.on("--clean", 'Put away all open scripts') do
+  opts.on("--clean", 'Move script(s) back into  ~/.sync') do
     options[:clean] = true
   end
-end.parse!
+end
+option_parser.parse!
 
 ## USAGE
 secretary = Script.new
-if options[:clean] == true
+if options[:clean]
   secretary.clean
-else
+elsif options[:fetch]
   ARGV.each do |arg|
     secretary.fetch arg
   end
+else
+  puts option_parser
 end
 
 # describe Script do

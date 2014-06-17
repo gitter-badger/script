@@ -15,7 +15,7 @@ class Canvas
   def fetch(*canvases)
     @canvas_list = canvases.flatten
 
-    ask_for_canvas while @canvas_list.flatten.empty?
+    ask_for_canvas while @canvas_list.empty?
 
     @canvas_list.each_with_index do |target_canvas, index|
       @canvas_list[index] = default_extension(target_canvas)
@@ -65,7 +65,7 @@ class Canvas
 
   def ask_for_canvas
     puts "What canvas do you want?"
-    @canvas_list < gets.strip(' ')
+    @canvas_list < gets
   end
 
   def canvas_exist?
@@ -79,26 +79,27 @@ class Canvas
 end
 
 options = {}
-OptionParser.new do |opts|
+option_parser = OptionParser.new do |opts|
   opts.banner = "USAGE: canvas [FILE]"
 
   opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
     options[:fetch] = true
   end
 
-  opts.on('-c', '--clean', 'Put canvas(es) back into ~/.sync') do
+  opts.on('-c', '--clean', 'Move canvas(es) back into ~/.sync') do
     options[:clean] = true
   end
-end.parse!
+end
+option_parser.parse!
 
 ## USAGE
 canvas_dispatcher = Canvas.new
 if options[:clean] == true
   canvas_dispatcher.clean
-end
-
-if options[:fetch]
+elsif options[:fetch]
   canvas_dispatcher.fetch(ARGV)
+else
+  puts option_parser
 end
 
 # describe Canvas do
