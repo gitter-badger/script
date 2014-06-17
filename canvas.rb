@@ -8,7 +8,7 @@ require 'optparse'
 class Canvas
   HOME        = ENV['HOME']
   DESKTOP     = "#{HOME}/Desktop"
-  SYNC_CANVAS = "#{HOME}/.sync/.canvas"
+  CANVAS_PATH = "#{HOME}/.sync/.canvas"
 
   attr_accessor :canvas_list
 
@@ -21,10 +21,10 @@ class Canvas
       @canvas_list[index] = default_extension(target_canvas)
       @canvas_list[index] = default_prefix(@canvas_list[index])
 
-      if File.exist?("#{SYNC_CANVAS}/#{@canvas_list[index]}")
+      if File.exist?("#{CANVAS_PATH}/#{@canvas_list[index]}")
         get_canvas(@canvas_list[index])
       else
-        puts "CanvasNotExistError: #{SYNC_CANVAS}/#{@canvas_list[index]}"
+        puts "CanvasNotExistError: #{CANVAS_PATH}/#{@canvas_list[index]}"
       end
     end
   end
@@ -32,21 +32,23 @@ class Canvas
   def clean
     all_canvas = []
 
-    Dir.foreach("#{SYNC_CANVAS}") do |canvas|
+    Dir.foreach("#{CANVAS_PATH}") do |canvas|
       next if File.directory?(canvas)
       all_canvas << canvas
     end
 
     Dir.foreach("#{DESKTOP}") do |open_canvas|
       next if File.directory?(open_canvas)
-      system("mv #{DESKTOP}/#{open_canvas.to_s} #{SYNC_CANVAS}") if all_canvas.include?(open_canvas)
+      system("mv #{DESKTOP}/#{open_canvas.to_s} #{CANVAS_PATH}") if all_canvas.include?(open_canvas)
     end
+
+    sync_canvas
   end
 
   private
 
   def get_canvas(target_canvas)
-    system("cp #{SYNC_CANVAS}/#{target_canvas} #{DESKTOP}")
+    system("cp #{CANVAS_PATH}/#{target_canvas} #{DESKTOP}")
   end
 
   def default_prefix(canvas)
@@ -69,12 +71,23 @@ class Canvas
   end
 
   def canvas_exist?
-    if File.exist?("#{SYNC_CANVAS}/#{canvas}")
+    if File.exist?("#{CANVAS_PATH}/#{canvas}")
       true
     else
       puts "WARNING: No such canvas exists: '#{canvas}'"
       false
     end
+  end
+
+  def sync_canvas
+    system <<-CMD
+      echo '';
+      echo 'Commit changes in ~/.sync/.canvas';
+      cd #{CANVAS_PATH};
+      git checkout annex;
+      git add -A;
+      git commit -m "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+    CMD
   end
 end
 
@@ -94,7 +107,7 @@ option_parser.parse!
 
 ## USAGE
 canvas_dispatcher = Canvas.new
-if options[:clean] == true
+if options[:clean]
   canvas_dispatcher.clean
 elsif options[:fetch]
   canvas_dispatcher.fetch(ARGV)
@@ -105,19 +118,19 @@ end
 # describe Canvas do
 #   HOME        = ENV['HOME']
 #   DESKTOP     = "#{HOME}/Desktop"
-#   SYNC_CANVAS = "#{HOME}/.sync/.canvas"
+#   CANVAS_PATH = "#{HOME}/.sync/.canvas"
 
 #   before(:each) do
 #     3.times do |i|
-#       File.open("#{SYNC_CANVAS}/canvas_test#{i}.rb",'w+')
-#       File.open("#{SYNC_CANVAS}/canvas_test#{i}.py",'w+')
+#       File.open("#{CANVAS_PATH}/canvas_test#{i}.rb",'w+')
+#       File.open("#{CANVAS_PATH}/canvas_test#{i}.py",'w+')
 #     end
 #   end
 
 #   after(:each) do
 #     3.times do |i|
-#       if File.exist?("#{SYNC_CANVAS}/canvas_test#{i}.rb")
-#         File.delete("#{SYNC_CANVAS}/canvas_test#{i}.rb")
+#       if File.exist?("#{CANVAS_PATH}/canvas_test#{i}.rb")
+#         File.delete("#{CANVAS_PATH}/canvas_test#{i}.rb")
 #       end
 #     end
 #   end
@@ -169,7 +182,7 @@ end
 #       getter.fetch("canvas_test1.rb")
 #       getter.clean
 #       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_false
-#       expect(File.exist?("#{SYNC_CANVAS}/canvas_test1.rb")).to be_true
+#       expect(File.exist?("#{CANVAS_PATH}/canvas_test1.rb")).to be_true
 #     end
 #   end
 # end

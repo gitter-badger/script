@@ -5,41 +5,33 @@
 
 require 'optparse'
 
-
 class Script
   HOME        = ENV['HOME']
   DESKTOP     = "#{HOME}/Desktop"
-  SYNC        = "#{ENV['HOME']}/.sync"
-  SYNC_SCRIPT = "#{HOME}/.sync/.script"
+  SCRIPT_PATH = "#{HOME}/.sync/.script"
 
-  attr_reader :script
+  attr_accessor :script_list
 
   def fetch(*scripts)
-    if scripts.empty?
-      puts "What script do you want?"
-      @script = gets.strip
-      format_script!(@script)
-      fail "No such script exists: '#{@script}'" unless script_exist?(@script)
-      @script = format_script!(@script)
-      system("cp #{SYNC_SCRIPT}/#{@script} #{DESKTOP}")
-    elsif scripts.length == 1
-      @script = scripts[0]
-      format_script!(@script)
-      fail "No such script exists: '#{@script}'" unless script_exist?(@script)
-      system("cp #{SYNC_SCRIPT}/#{@script} #{DESKTOP}")
-    elsif scripts.length > 1
-      scripts.each do |script|
-        @script = script
-        format_script!(@script)
-        fail "No such script exists: '#{@script}'" unless script_exist?(@script)
-        system("cp #{SYNC_SCRIPT}/#{@script} #{DESKTOP}")
+    @script_list = scripts.flatten
+
+    ask_for_script while @script_list.empty?
+
+    @script_list.each_with_index do |target_script, index|
+      @script_list[index] = default_extension(target_script)
+
+      if File.exist?("#{SCRIPT_PATH}/#{@script_list[index]}")
+        get_script(@script_list[index])
+      else
+        puts "ScriptNotExistError: #{SCRIPT_PATH}/#{@script_list[index]}"
       end
     end
   end
 
   def clean
-    all_scripts = Array.new
-    Dir.foreach("#{SYNC_SCRIPT}") do |script|
+    all_scripts = []
+
+    Dir.foreach("#{SCRIPT_PATH}") do |script|
       next if File.directory?(script)
       next unless script.include?(".rb")
       all_scripts << script
@@ -48,7 +40,7 @@ class Script
     Dir.foreach("#{DESKTOP}") do |open_script|
       next if File.directory?(open_script)
       next unless open_script.include?(".rb")
-      system("mv #{DESKTOP}/#{open_script.to_s} #{SYNC_SCRIPT}") if all_scripts.include?(open_script)
+      system("mv #{DESKTOP}/#{open_script.to_s} #{SCRIPT_PATH}") if all_scripts.include?(open_script)
     end
 
     sync_script
@@ -56,19 +48,24 @@ class Script
 
   private
 
-  def sync_script
-    system <<-CMD
-      echo '';
-      echo 'annex sync: SCRIPT';
-      cd #{SYNC}/.script;
-      git add -u;
-      git add .;
-      git commit -m "script_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-    CMD
+  def get_script(target_script)
+    system("cp #{SCRIPT_PATH}/#{target_script} #{DESKTOP}")
+  end
+
+  def ask_for_script
+    puts "What script do you want?"
+    @script_list < gets
+  end
+
+  def default_extension(script)
+    if File.extname(script) == ""
+      script += '.rb'
+    end
+    script
   end
 
   def script_exist?(script)
-    if File.exist?("#{SYNC_SCRIPT}/#{script}")
+    if File.exist?("#{SCRIPT_PATH}/#{script}")
       true
     else
       puts "WARNING: No such canvas exists: '#{script}'"
@@ -76,8 +73,15 @@ class Script
     end
   end
 
-  def format_script!(script)
-    @script += ".rb" unless script.include?(".rb")
+  def sync_script
+    system <<-CMD
+      echo '';
+      echo 'Commit changes in ~/.sync/.script';
+      cd #{SCRIPT_PATH};
+      git checkout annex;
+      git add -A;
+      git commit -m "script_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+    CMD
   end
 end
 
@@ -85,24 +89,22 @@ options = {}
 option_parser = OptionParser.new do |opts|
   opts.banner = "USAGE: script [options] [SCRIPT]"
 
-  opts.on("--fetch", 'Copy script(s) to Desktop') do
+  opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
     options[:fetch] = true
   end
 
-  opts.on("--clean", 'Move script(s) back into  ~/.sync') do
+  opts.on('-c', '--clean', 'Move script(s) back into  ~/.sync') do
     options[:clean] = true
   end
 end
 option_parser.parse!
 
 ## USAGE
-secretary = Script.new
+script_dispatcher = Script.new
 if options[:clean]
-  secretary.clean
+  script_dispatcher.clean
 elsif options[:fetch]
-  ARGV.each do |arg|
-    secretary.fetch arg
-  end
+  script_dispatcher.fetch(ARGV)
 else
   puts option_parser
 end
