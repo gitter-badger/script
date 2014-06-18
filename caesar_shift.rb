@@ -28,7 +28,11 @@ class CaesarShiftCipher
         encrypted_message += char
       else
         new_char_index = current_char_index + @shift_count
-        # puts "char: #{char} index: #{new_char_index}"
+
+        while new_char_index > 25
+          new_char_index -= 25
+        end
+
         encrypted_message += ALPHABET[new_char_index]
       end
     end
