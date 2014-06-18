@@ -23,7 +23,7 @@ class CaesarShiftCipher
       if current_char_index.nil?
         encrypted_message += char
       else
-        new_char_index = current_char_index + shift_count
+        new_char_index = current_char_index + @shift_count
         encrypted_message += ALPHABET[new_char_index]
       end
     end
@@ -40,7 +40,7 @@ class CaesarShiftCipher
       if current_char_index.nil?
         decrypted_message += char
       else
-        new_char_index = current_char_index - shift_count
+        new_char_index = current_char_index - @shift_count
         decrypted_message += ALPHABET[new_char_index]
       end
     end
