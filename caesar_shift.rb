@@ -11,6 +11,10 @@ class CaesarShiftCipher
   attr_accessor :shift_count
 
   def initialize(shift=0)
+    while shift > 25
+      shift -= 25
+    end
+
     self.shift_count = shift
   end
 
