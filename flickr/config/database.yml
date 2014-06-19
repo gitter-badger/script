@@ -1,5 +1,0 @@
-adapter:  postgresql
-host:     localhost
-database: flickr
-username: codebit
-password: trichoderma

@@ -1,5 +1,0 @@
-adapter:  postgresql
-host:     localhost
-database: mediawiki
-username: codebit
-password: trichoderma
