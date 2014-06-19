@@ -18,13 +18,13 @@ end
 # ARGUMENTS
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "USAGE: get_screenshot --url www.drawcrowd.com --img drawcrowd_homepage.png"
+  opts.banner = "USAGE: get_screenshot [options]"
 
-  opts.on("--url [PATH]", 'Set target URL') do |target_url|
+  opts.on('-u',"--url [PATH]", 'Set target URL') do |target_url|
     options[:url] = target_url.to_s
   end
 
-  opts.on("--img [FILENAME]", 'Set image filename') do |target_img|
+  opts.on('-i',"--img [FILENAME]", 'Set image filename') do |target_img|
     options[:img] = target_img.to_s
   end
 end.parse!
