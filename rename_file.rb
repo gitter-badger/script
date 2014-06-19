@@ -7,13 +7,10 @@ require 'optparse'
 
 class FileRenamer
   def replace(regexp_match, substitute)
-    Dir.chdir('/home/wurde/Desktop/rename_files')
-    puts "regexp: #{regexp_match.class}"
-    puts "substitute: #{substitute}"
-    # Dir.foreach('.') do |file|
-    #   next if File.directory?(file)
-    #   File.rename(file, file.gsub(regexp_match, substitute))
-    # end
+    Dir.foreach('.') do |file|
+      next if File.directory?(file)
+      File.rename(file, file.gsub(regexp_match, substitute))
+    end
   end
 end
 
@@ -22,7 +19,7 @@ option_parser = OptionParser.new do |opts|
   opts.banner = "USAGE: rename_file [options]"
 
   opts.on('-m REGEXP', '--match REGEXP', 'Regular expression used to match files') do |regexp|
-    options[:match] = Regexp.new(regexp)
+    options[:match] = regexp
   end
 
   opts.on('-r FILENAME', '--replace FILENAME', 'String to replace regexp match') do |filename|
@@ -33,8 +30,8 @@ option_parser.parse!
 
 ## USAGE
 renamer = FileRenamer.new
-if options[:match] && options[:rename]
-  renamer.replace(options[:match], options[:rename])
+if options[:match] && options[:replace]
+  renamer.replace(options[:match], options[:replace])
 else
   puts option_parser
 end
