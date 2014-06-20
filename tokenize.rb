@@ -17,7 +17,7 @@ class RubyTokenization
   end
 
   def get_code(filename)
-    code = File.open(filename).read
+    File.open(filename).read
   end
 end
 
