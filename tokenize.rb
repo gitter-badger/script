@@ -7,16 +7,37 @@ require 'optparse'
 require 'ripper'
 require 'pp'
 
-raise 'WARNING: only 1 script at a time. ' if ARGV.size > 1
+class RubyTokenization
+  def tokenize(filename, output=nil)
+    code = get_code(filename)
+    tokens = Ripper.lex(code)
+    tokens.each do |token|
+      puts token.to_s
+    end
+  end
 
-filename = ARGV[0]
-script = File.open(filename, 'r')
-code = String.new
-script.each_line do |line|
-  code << line
+  def get_code(filename)
+    code = File.open(filename).read
+  end
 end
 
-tokens = Ripper.lex(code)
-tokens.each do |t|
-  puts t.to_s
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.banner = "USAGE: tokenize [options] SCRIPT"
+
+  opts.on('-o FILE', '--output FILE', 'File for tokenization output') do |file|
+    options[:output] = file
+  end
+end
+option_parser.parse!
+
+## USAGE
+raise 'WARNING: only tokenize 1 script at a time.' if ARGV.size > 1
+tokenizer = RubyTokenization.new
+if options[:output] && ARGV[0]
+  tokenizer.tokenize(ARGV[0], options[:output])
+elsif ARGV[0]
+  tokenizer.tokenize(ARGV[0])
+else
+  puts option_parser
 end
