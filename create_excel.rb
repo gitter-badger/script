@@ -17,7 +17,7 @@ class SpreadsheetFactory
           next if arg_index == 0
           col = row.split(',')
           col.each_with_index do |value, col_index|
-            sheet[arg_index - 1, col_index] = value
+            sheet[arg_index - 1, col_index] = value.strip
           end
         end
       end
