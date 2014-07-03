@@ -68,7 +68,7 @@ class Script
     if File.exist?("#{SCRIPT_PATH}/#{script}")
       true
     else
-      puts "WARNING: No such canvas exists: '#{script}'"
+      puts "WARNING: No such script exists: '#{script}'"
       false
     end
   end
