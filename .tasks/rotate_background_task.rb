@@ -1,35 +1,53 @@
 #!/usr/bin/ruby -w
-# background_task.rb
+# rotate_background_task.rb
 # Author: Andy Bettisworth
-# Description: Rotate desktop background
+# Description: Rotate Desktop background image using locally stored images
 
-class Background
-  GSETTING          = "org.gnome.desktop.background"
-  BACKGROUND_IMAGES = "file:///home/wurde/Pictures/Backgrounds"
+class DesktopBackground
+  GSETTING = "org.gnome.desktop.background"
 
-  def self.rotate
-    current_background_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
-    current_background      = File.basename(current_background_path.strip.gsub("'", ''))
-    current_background    ||= "desktop-background.jpg"
+  attr_accessor :image_directory
+  attr_reader :current_background
 
-    all_pictures             = Dir.entries("/home/wurde/Pictures/Backgrounds").reject { |x| x == '.' || x == '..' }
-    current_background_index = all_pictures.index(current_background)
+  def rotate
+    dir_exists  = Dir.exist?(@image_directory)
+    entries     = Dir.entries(@image_directory).reject {|x| x == '.' || x == '..'}
+    entry_count = entries.length
 
-    rand = current_background_index
-    until rand != current_background_index
-      rand = Random.rand(1..all_pictures.length-1)
+    if dir_exists && entry_count > 0
+      get_current_background
+      @current_background ||= "desktop-background.jpg"
+
+      current_background_index = entries.index(@current_background)
+      rand = current_background_index
+
+      until rand != current_background_index
+        rand = Random.rand(1..entry_count - 1)
+      end
+      new_pic = entries[rand]
+
+      system "DISPLAY=:0 gsettings set #{GSETTING} picture-uri file://'#{@image_directory}/#{new_pic}'"
+
+    elsif Dir.exist?(@image_directory) == false
+      raise "ImageDirectoryRequiredError: set @image_directory before rotating the background."
+    elsif entry_count < 1
+      raise "ImageDirectoryEmptyError: no images found within target @image_directory."
+    else
+      raise "UnknownError: I have no clue what went wrong, you?"
     end
-    new_pic = all_pictures[rand]
+  end
 
-    system "DISPLAY=:0 gsettings set #{GSETTING} picture-uri '#{BACKGROUND_IMAGES}/#{new_pic}'"
+  def get_current_background
+    current_background_path  = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
+    current_background       = File.basename(current_background_path.strip.gsub("'", ''))
+    @current_background = current_background
+    current_background
   end
 end
 
 ## Usage
-# Background.rotate
-
-# describe RotateBackground do
-#   describe "#rotate" do
-#     it "should "
-#   end
-# end
+if Time.now.strftime('%M').to_i % 20 == 0
+  background = DesktopBackground.new
+  background.image_directory = "/home/wurde/Pictures/Backgrounds"
+  background.rotate
+end
