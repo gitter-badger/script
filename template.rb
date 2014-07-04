@@ -100,7 +100,7 @@ end
 option_parser.parse!
 
 ## USAGE
-template_dispatcher = template.new
+template_dispatcher = Template.new
 if options[:clean]
   template_dispatcher.clean
 elsif options[:fetch]
