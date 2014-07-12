@@ -5,24 +5,28 @@
 
 require 'yaml'
 
-user_list = File.readlines('/etc/passwd')
+raw_user_list = File.readlines('/etc/passwd')
 
-user_list.each_with_index do |user, index|
-  puts index + "\n" + user
-  puts "\n"
+user_json = []
+raw_user_list.each_with_index do |user, index|
+  user_attr = user.split(':')
 
-  # user_attributes =  user.split(':')
+  user_hash = {}
+  user_hash[:id] = index.to_i
+  user_hash[:username] = user_attr[0]
+  user_hash[:password] = user_attr[1]
+  user_hash[:user_id] = user_attr[2].to_i
+  user_hash[:group_id] = user_attr[3].to_i
+  user_hash[:user_info] = user_attr[4]
+  user_hash[:home_directory] = user_attr[5].chomp
+  user_hash[:login_shell] = user_attr[6].chomp
 
-  # # > CREATE sub-user hash user can contain [full_name, phone, email, location]
-  # user_hash = {}
-  # user_hash[:username] = user_attributes[0]
-  # user_hash[:password] = user_attributes[1]
-  # user_hash[:user_id] = user_attributes[2]
-  # user_hash[:group_id] = user_attributes[3]
-  # user_hash[:user_info] = user_attributes[4]
-  # user_hash[:home_directory] = user_attributes[5]
-  # user_hash[:login_shell] = user_attributes[6]
+  user_json << user_hash
+end
 
-  # File.open("current_users-#{Time.now.strftime('%Y%M%d%H%M%S')}.yaml", 'a') { |f| YAML.dump(user_hash, f) }
+# filename = "current_users-#{Time.now.strftime('%Y%M%d%H%M%S')}.yaml"
+filename = "current_users.yaml"
+user_json.each do |user|
+  File.open(filename, 'a') { |f| YAML.dump(user, f) }
 end
 
