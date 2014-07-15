@@ -1,5 +1,5 @@
 #!/usr/bin/ruby -w
-# log_keyboard_events.rb
+# keyboard_logger.rb
 # Author: Andy Bettisworth
 # Description: Keyboard event logger
 
