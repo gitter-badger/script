@@ -1,36 +1,55 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Sync files with Annex
-
-require 'optparse'
+# Description: Sync files with Village USB
 
 class Annex
-  HOME = ENV['HOME']
-  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
-  ANNEX_SYNC = "/media/Village/preseed/seed/.sync"
-  SYNC_PATHS = [
-    "#{HOME}/.rbenv",
-    "#{LOCAL_SYNC}/.canvas",
-    "#{LOCAL_SYNC}/.script",
-    "#{LOCAL_SYNC}/.template",
-    "#{LOCAL_SYNC}/.app/accreu",
-    "#{LOCAL_SYNC}/.app/developer_training",
-    "#{LOCAL_SYNC}/.gem/tribe_triage",
-    "#{LOCAL_SYNC}/.gem/collective_vibration",
-    "#{LOCAL_SYNC}/.gem/phantom_assembly",
-    "#{LOCAL_SYNC}/.gem/tandem_feet"
+  HOME            = ENV['HOME']
+  ANNEX_SYNC_PATH = "/media/Village/preseed/seed/.sync"
+  LOCAL_SYNC_PATH = "#{HOME}/.sync"
+  RBENV_PATH      = "#{HOME}/.rbenv"
+  CANVAS_PATH     = "#{LOCAL_SYNC_PATH}/.canvas"
+  SCRIPT_PATH     = "#{LOCAL_SYNC_PATH}/.script"
+  TEMPLATE_PATH   = "#{LOCAL_SYNC_PATH}/.template"
+  APPLICATIONS    = [
+    'developer_training',
+    'accreu'
+  ]
+  GEMS = [
+    'scrapyard',
+    'tribe_triage',
+    'accreu',
+    'phantom_assembly',
+    'tandem_feet',
+    'collective_vibration'
   ]
 
-  def sync
-    raise 'WARNING: Annex not found.' unless File.exist?(ANNEX_SYNC)
+  def self.start
+    raise 'Village USB is required.' unless File.exist?(ANNEX_SYNC_PATH)
 
-    SYNC_PATHS.each do |path|
+    sync RBENV_PATH
+    sync CANVAS_PATH
+    sync SCRIPT_PATH
+    sync TEMPLATE_PATH
+
+    APPLICATIONS.each do |app|
+      sync "#{LOCAL_SYNC_PATH}/.app/#{app}"
+    end
+
+    GEMS.each do |g|
+      sync "#{LOCAL_SYNC_PATH}/.gem/#{g}"
+    end
+  end
+
+  private
+
+  def sync(path)
       unless File.exist?(path)
         puts "WARNING: path not found"
         puts "#{path}"
-        next
+        return
       end
+
       puts ""
       puts "  #{path}"
       puts ""
@@ -42,10 +61,7 @@ class Annex
       sync_upstream(path)
       puts ""
       puts ""
-    end
   end
-
-  private
 
   def commit_local(path)
     system <<-CMD
@@ -71,6 +87,6 @@ class Annex
   end
 end
 
-# Usage
+# EXEC the annex sync
 update = Annex.new
-update.sync
+update.start
