@@ -18,13 +18,12 @@ class Annex
   GEMS = [
     'scrapyard',
     'tribe_triage',
-    'accreu',
     'phantom_assembly',
     'tandem_feet',
     'collective_vibration'
   ]
 
-  def self.start
+  def start
     raise 'Village USB is required.' unless File.exist?(ANNEX_SYNC_PATH)
 
     sync RBENV_PATH
