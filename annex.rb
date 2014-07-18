@@ -63,7 +63,8 @@ class Annex
   end
 
   def commit_local(path)
-    system <<-CMD
+    # system <<-CMD
+    puts <<-CMD
       cd #{path};
       git checkout annex;
       git add -A;
@@ -72,7 +73,8 @@ class Annex
   end
 
   def sync_upstream(path)
-    system <<-CMD
+    # system <<-CMD
+    puts <<-CMD
       cd #{path};
       git checkout master;
       git pull origin master;
@@ -83,7 +85,8 @@ class Annex
       git push origin master;
     CMD
 
-    system 'git checkout annex;'
+    # system 'git checkout annex;'
+    puts 'git checkout annex;'
   end
 end
 
