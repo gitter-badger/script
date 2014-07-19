@@ -12,7 +12,8 @@ class Annex
   SYNC_REPOSITORY = [
     '.canvas',
     '.script',
-    '.template'
+    '.template',
+    '.todo'
   ]
   SYNC_APPLICATIONS    = [
     'developer_training',
