@@ -28,52 +28,72 @@ class Annex
   ]
 
   def start
-    require_annex
+    require_annex_usb
 
     SYNC_REPOSITORY.each do |r|
-      sync "#{LOCAL_SYNC_PATH}/#{r}"
+      sync(r)
     end
 
     SYNC_APPLICATIONS.each do |a|
-      sync "#{LOCAL_SYNC_PATH}/.app/#{a}"
+      sync(a, '.app/')
     end
 
     SYNC_GEMS.each do |g|
-      sync "#{LOCAL_SYNC_PATH}/.gem/#{g}"
+      sync(g, '.gem/')
     end
   end
 
   private
 
-  def require_annex
-    raise 'VillageUSBNotFound!' unless File.exist?(ANNEX_SYNC_PATH)
+  def require_annex_usb
+    raise 'USBNotFound!' unless File.exist?(ANNEX_SYNC_PATH)
   end
 
-  def sync(repo)
-    ensure_repository_exist(repo)
-    ensure_annex_branch_exist(repo)
-    ensure_origin_remote(repo)
-    commit_local(repo)
-    sync_upstream(repo)
+  def sync(repo, subdir='')
+    local_repo = "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
+    annex_repo = "#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
+
+    ensure_local_repo_exist(local_repo)
+    ensure_origin_remote(repo, subdir)
+    ensure_upstream_repo_exist(annex_repo)
+    commit_local(local_repo)
+    sync_upstream(local_repo)
   end
 
-  def ensure_repository_exist(repo)
-    unless File.exist?(repo)
-      puts <<-MSG
-
-  No repository found at #{repo}
-  Creating repository...
-
-      MSG
-      FileUtils.mkdir_p repo
-      Dir.chdir repo
-
+  def ensure_local_repo_exist(path)
+    unless File.exist?(path)
+      create_repo(path)
+      Dir.chdir path
       system <<-CMD
-      git init;
-      git add -A;
-      git commit -m 'init';
+        touch .keep
+        git init;
+        git add -A;
+        git commit -m 'init';
+        git checkout -b annex;
       CMD
     end
+  end
+
+  def ensure_upstream_repo_exist(path)
+    unless File.exist?(path)
+      create_repo(path)
+      Dir.chdir path
+      system <<-CMD
+        git init --bare;
+        git add -A;
+        git commit -m 'init';
+      CMD
+    end
+  end
+
+  def create_repo(path)
+    puts <<-MSG
+
+  No repository found at #{path}
+  Creating repository...
+
+    MSG
+    FileUtils.mkdir_p path
   end
 
   def ensure_annex_branch_exist(repo)
@@ -101,24 +121,24 @@ class Annex
     return branches.include?(branch)
   end
 
-  def ensure_origin_remote(repo)
-    unless remote_exist?(repo, 'origin')
+  def ensure_origin_remote(repo, subdir)
+    unless remote_exist?(repo, subdir, 'origin')
       puts <<-MSG
 
   origin remote missing for #{repo}"
   Creating origin remote...
 
       MSG
-      Dir.chdir repo
+      Dir.chdir "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
 
       system <<-CMD
-        git remote add origin file://#{ANNEX_SYNC_PATH}/#{repo};
+        git remote add origin file://#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git;
       CMD
     end
   end
 
-  def remote_exist?(repo, remote)
-    Dir.chdir repo
+  def remote_exist?(repo, subdir, remote)
+    Dir.chdir "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
     remotes = `git remote -v`
     return remotes.include?(remote)
   end
