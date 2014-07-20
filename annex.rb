@@ -65,10 +65,10 @@ class Annex
       create_repo(path)
       Dir.chdir path
       system <<-CMD
-        touch .keep
         git init;
         git add -A;
         git commit -m 'init';
+        touch .keep;
         git checkout -b annex;
       CMD
     end
