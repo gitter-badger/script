@@ -16,10 +16,10 @@ class TODO
     read_tasks
   end
 
-  def add(description)
+  def add(description, priority=0, created_at=Time.now)
     get_project
     ensure_project_exist
-    add_task(description)
+    add_task(description, priority, created_at)
   end
 
   private
@@ -42,11 +42,18 @@ class TODO
   end
 
   def read_tasks
-    puts YAML.load_file("#{SYNC_TODO}/#{@project}.yaml")
+    task_list = YAML.load_file("#{SYNC_TODO}/#{@project}.yaml")
+    unless task_list.nil?
+      task_list.sort_by! { |k| k[:priority] }
+      task_list.each_with_index do |todo, index|
+        # > add todo[:id] - to allow to enable `todo -c :id`
+        puts "[#{index + 1}] #{todo[:description]}"
+      end
+    end
   end
 
-  def add_task(description)
-    task = [{description: description, created_at: Time.now}]
+  def add_task(description, priority, created_at)
+    task = [{description: description, created_at: created_at, priority: priority}]
     File.open("#{SYNC_TODO}/#{@project}.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
   end
 end
