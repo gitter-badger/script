@@ -44,7 +44,7 @@ class TODO
     @project = File.basename(File.expand_path('.')).downcase.gsub(' ', '_')
   end
 
-  def get_project
+  def get_project_path
     @project_path = "#{SYNC_TODO}/#{@project}.yaml"
   end
 
