@@ -12,6 +12,7 @@ class TODO
 
   def initialize
     get_project
+    get_project_path
     ensure_project_exist
   end
 
@@ -24,16 +25,17 @@ class TODO
   end
 
   def complete(id)
-    task_list = YAML.load_file "#{SYNC_TODO}/#{@project}.yaml"
+    task_list = YAML.load_file @project_path
 
     task_list.collect! do |task|
       if task[:id] == id
         task[:is_complete] = true
+        task[:completed_at] = Time.now
       end
       task
     end
 
-    File.open("#{SYNC_TODO}/#{@project}.yaml", 'w') { |f| YAML.dump(task_list, f) }
+    File.open(@project_path, 'w') { |f| YAML.dump(task_list, f) }
   end
 
   private
@@ -42,8 +44,12 @@ class TODO
     @project = File.basename(File.expand_path('.')).downcase.gsub(' ', '_')
   end
 
+  def get_project
+    @project_path = "#{SYNC_TODO}/#{@project}.yaml"
+  end
+
   def ensure_project_exist
-    unless File.exist?("#{SYNC_TODO}/#{@project}.yaml")
+    unless File.exist?(@project_path)
       Dir.chdir SYNC_TODO
       until project_exist?
         File.new("#{@project}.yaml", 'w') << "---\n"
@@ -52,24 +58,30 @@ class TODO
   end
 
   def project_exist?
-    File.exist?("#{SYNC_TODO}/#{@project}.yaml")
+    File.exist?(@project_path)
   end
 
   def read_tasks
-    task_list = YAML.load_file("#{SYNC_TODO}/#{@project}.yaml")
+    task_list = YAML.load_file(@project_path)
     task_list.select! { |k| !k[:is_complete] }
     unless task_list.nil?
       task_list.sort_by! { |k| -k[:priority] }
       task_list.each_with_index do |todo, index|
-        # > add todo[:id] - to allow to enable `todo -c :id`
         puts "#{todo[:priority]} - [#{todo[:id]}] #{todo[:description]}"
       end
     end
   end
 
   def add_task(description, priority, created_at)
-    task = [{id: rand(1000..9999), description: description, created_at: created_at, priority: priority, is_complete: false}]
-    File.open("#{SYNC_TODO}/#{@project}.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    task = [{
+      id: rand(1000..9999),
+      description: description,
+      created_at: created_at,
+      priority: priority,
+      is_complete: false,
+      completed_at: nil
+    }]
+    File.open(@project_path, 'a+') << task.to_yaml.gsub("---\n", '')
   end
 end
 
