@@ -10,26 +10,36 @@ class TODO
   HOME      = ENV['HOME']
   SYNC_TODO = "#{HOME}/.sync/.todo"
 
-  def list
+  def initialize
     get_project
     ensure_project_exist
+  end
+
+  def list
     read_tasks
   end
 
   def add(description, priority, created_at=Time.now)
-    get_project
-    ensure_project_exist
     add_task(description, priority, created_at)
+  end
+
+  def complete(id)
+    task_list = YAML.load_file "#{SYNC_TODO}/#{@project}.yaml"
+
+    task_list.collect! do |task|
+      if task[:id] == id
+        task[:is_complete] = true
+      end
+      task
+    end
+
+    File.open("#{SYNC_TODO}/#{@project}.yaml", 'w') { |f| YAML.dump(task_list, f) }
   end
 
   private
 
   def get_project
     @project = File.basename(File.expand_path('.')).downcase.gsub(' ', '_')
-  end
-
-  def project_exist?
-    File.exist?("#{SYNC_TODO}/#{@project}.yaml")
   end
 
   def ensure_project_exist
@@ -39,6 +49,10 @@ class TODO
         File.new("#{@project}.yaml", 'w') << "---\n"
       end
     end
+  end
+
+  def project_exist?
+    File.exist?("#{SYNC_TODO}/#{@project}.yaml")
   end
 
   def read_tasks
@@ -74,6 +88,10 @@ option_parser = OptionParser.new do |opts|
   opts.on('-p PRIORITY', '--priority PRIORITY') do |p|
     options[:priority] = p.to_i
   end
+
+  opts.on('-c ID', '--complete ID') do |i|
+    options[:complete] = i.to_i
+  end
 end
 option_parser.parse!
 
@@ -84,4 +102,6 @@ if options[:task]
   prio ||= 0
   tasker.add(options[:task], prio)
 end
+task_id = options[:complete]
+tasker.complete(task_id) if task_id
 puts option_parser if options.empty?
