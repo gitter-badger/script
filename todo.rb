@@ -48,13 +48,13 @@ class TODO
       task_list.sort_by! { |k| -k[:priority] }
       task_list.each_with_index do |todo, index|
         # > add todo[:id] - to allow to enable `todo -c :id`
-        puts "[#{index + 1}] #{todo[:description]}"
+        puts "#{todo[:priority]} - [#{todo[:id]}] #{todo[:description]}"
       end
     end
   end
 
   def add_task(description, priority, created_at)
-    task = [{description: description, created_at: created_at, priority: priority, is_complete: false}]
+    task = [{id: rand(1000..9999), description: description, created_at: created_at, priority: priority, is_complete: false}]
     File.open("#{SYNC_TODO}/#{@project}.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
   end
 end
