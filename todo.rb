@@ -16,7 +16,7 @@ class TODO
     read_tasks
   end
 
-  def add(description, priority=0, created_at=Time.now)
+  def add(description, priority, created_at=Time.now)
     get_project
     ensure_project_exist
     add_task(description, priority, created_at)
@@ -43,8 +43,9 @@ class TODO
 
   def read_tasks
     task_list = YAML.load_file("#{SYNC_TODO}/#{@project}.yaml")
+    task_list.select! { |k| !k[:is_complete] }
     unless task_list.nil?
-      task_list.sort_by! { |k| k[:priority] }
+      task_list.sort_by! { |k| -k[:priority] }
       task_list.each_with_index do |todo, index|
         # > add todo[:id] - to allow to enable `todo -c :id`
         puts "[#{index + 1}] #{todo[:description]}"
@@ -53,7 +54,7 @@ class TODO
   end
 
   def add_task(description, priority, created_at)
-    task = [{description: description, created_at: created_at, priority: priority}]
+    task = [{description: description, created_at: created_at, priority: priority, is_complete: false}]
     File.open("#{SYNC_TODO}/#{@project}.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
   end
 end
@@ -66,13 +67,21 @@ option_parser = OptionParser.new do |opts|
     options[:list] = true
   end
 
-  opts.on('-a TASK', '--add TASK') do |task|
-    options[:task] = task
+  opts.on('-a TASK', '--add TASK') do |t|
+    options[:task] = t
+  end
+
+  opts.on('-p PRIORITY', '--priority PRIORITY') do |p|
+    options[:priority] = p.to_i
   end
 end
 option_parser.parse!
 
 tasker = TODO.new
 tasker.list if options[:list]
-tasker.add(options[:task]) if options[:task]
-# puts option_parser if options.empty?
+if options[:task]
+  prio = options[:priority]
+  prio ||= 0
+  tasker.add(options[:task], prio)
+end
+puts option_parser if options.empty?
