@@ -1,11 +1,7 @@
 #!/usr/bin/ruby -w
 # schedule.rb
 # Author: Andy Bettisworth
-<<<<<<< HEAD
-# Description: My replacement for cron tasks
-=======
 # Description: Schedules automated tasks
->>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e
 
 require 'optparse'
 require 'queue_classic'
@@ -119,12 +115,10 @@ option_parser.parse!
 # else
 #   puts option_parser.help
 # end
-<<<<<<< HEAD
-### OptionParser ###
-####################
 
-######################
-### TESTS: feature ###
+
+
+## TESTS: feature
 
 describe Schedule do
   describe "#task" do
@@ -182,11 +176,7 @@ describe Schedule do
   end
 end
 
-### TESTS: feature ###
-######################
-
-############
-### TODO ###
+## TODO
 ## == Timeout gem
 #   require 'timeout'
 #   status = Timeout::timeout(5) {
@@ -203,55 +193,3 @@ end
 #   (Mon|mon|Monday|monday) HH:MM
 ## SET as a background process
 # clockwork script.rb &
-### TODO ###
-############
-=======
-
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3')
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 10.seconds)
-# tactical = Schedule.new
-# tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
-# tactical = Schedule.new
-# tactical.task(interval: 1200, task: 'rotate_background_task.rb')
-
-# describe Schedule do
-#   describe "#schedule" do
-#     before(:each) do
-#       @tactical = Schedule.new
-#     end
-
-#     it "should accept method: 'puts' and args: 'Testing 1 2 3' job input" do
-#       expect(@tactical).to receive(:execute)
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3')
-#     end
-
-#     it "should accept custom queue: 'routine'" do
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', queue: 'routine')
-#     end
-
-#     it "should accept a delay: '10.seconds'" do
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', delay: 10.seconds)
-#     end
-
-#     it "should accept routine: 'true' with interval: '1.day'" do
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', interval: 1.day)
-#     end
-
-#     it "should accept repeat: '3' count" do
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', repeat: 3)
-#     end
-
-#     it "should accept script_path: 'test.rb'" do
-#       @tactical.task(script: 'test.rb')
-#     end
-
-#     it "should accept a at a at: '01:30'", wip: true do
-#       @tactical.task(method: 'puts', args: 'Testing 1 2 3', at: '01:30')
-#     end
-#   end
-# end
->>>>>>> 26fed2bb54feb935220755070825824bdb67bc5e
