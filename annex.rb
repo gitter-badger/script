@@ -6,10 +6,9 @@
 require 'fileutils'
 
 class Annex
-  HOME            = ENV['HOME']
   ANNEX_SYNC_PATH = "/media/Village/preseed/seed/.sync"
-  LOCAL_SYNC_PATH = "#{HOME}/.sync"
-  SYNC_REPOSITORY = [
+  LOCAL_SYNC_PATH = "#{ENV['HOME']}/.sync"
+  SYNC_REPOSITORIES = [
     '.canvas',
     '.script',
     '.template',
@@ -29,18 +28,9 @@ class Annex
 
   def start
     require_annex_usb
-
-    SYNC_REPOSITORY.each do |r|
-      sync(r)
-    end
-
-    SYNC_APPLICATIONS.each do |a|
-      sync(a, '.app/')
-    end
-
-    SYNC_GEMS.each do |g|
-      sync(g, '.gem/')
-    end
+    SYNC_REPOSITORIES.each { |r| sync(r) }
+    SYNC_APPLICATIONS.each { |a| sync(a, '.app/') }
+    SYNC_GEMS.each { |g| sync(g, '.gem/') }
   end
 
   private
@@ -50,12 +40,14 @@ class Annex
   end
 
   def sync(repo, subdir='')
-    local_repo = "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
-    annex_repo = "#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
+    local_repo  = "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
+    annex_repo  = "#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
+    remote_path = "file://#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
 
-    ensure_local_repo_exist(local_repo)
-    ensure_origin_remote(repo, subdir)
-    ensure_upstream_repo_exist(annex_repo)
+    ensure_local_repo_exists(local_repo)
+    ensure_annex_repo_exists(annex_repo)
+    ensure_remote_branch_exists(local_repo, 'origin', remote_path)
+
     commit_local(local_repo)
     sync_upstream(local_repo)
   end
@@ -63,12 +55,12 @@ class Annex
   def ensure_local_repo_exist(path)
     unless File.exist?(path)
       create_repo(path)
-      Dir.chdir path
+      Dir.chdir pathrepo
       system <<-CMD
+        touch .keep;
         git init;
         git add -A;
         git commit -m 'init';
-        touch .keep;
         git checkout -b annex;
       CMD
     end
@@ -78,11 +70,7 @@ class Annex
     unless File.exist?(path)
       create_repo(path)
       Dir.chdir path
-      system <<-CMD
-        git init --bare;
-        git add -A;
-        git commit -m 'init';
-      CMD
+      system 'git init --bare;'
     end
   end
 
@@ -121,36 +109,36 @@ class Annex
     return branches.include?(branch)
   end
 
-  def ensure_origin_remote(repo, subdir)
-    unless remote_exist?(repo, subdir, 'origin')
+  def ensure_remote_branch_exists(local_repo, remote_branch, remote_path)
+    unless remote_exist?(local_repo, remote_branch)
       puts <<-MSG
 
-  origin remote missing for #{repo}"
-  Creating origin remote...
+  #{remote_branch} remote branch missing for #{local_repo}"
+  Creating remote branch #{remote_branch}...
 
       MSG
-      Dir.chdir "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
+      Dir.chdir local_repo
 
       system <<-CMD
-        git remote add origin file://#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git;
+        git remote add #{remote_branch} #{remote_path};
       CMD
     end
   end
 
-  def remote_exist?(repo, subdir, remote)
-    Dir.chdir "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
+  def remote_exist?(path, remote_branch)
+    Dir.chdir path
     remotes = `git remote -v`
-    return remotes.include?(remote)
+    return remotes.include?(remote_branch)
   end
 
-  def commit_local(repo)
+  def commit_local(local_repo)
     puts <<-MSG
 
-  #{repo}
+  #{local_repo}
 
   saving any local changes...
     MSG
-    Dir.chdir repo
+    Dir.chdir local_repo
 
     system <<-CMD
       git checkout annex;
@@ -159,9 +147,9 @@ class Annex
     CMD
   end
 
-  def sync_upstream(repo)
+  def sync_upstream(local_repo)
     puts "  syncing upstream changes..."
-    Dir.chdir repo
+    Dir.chdir local_repo
 
     system <<-CMD
       git checkout master;
