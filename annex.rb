@@ -52,7 +52,7 @@ class Annex
     sync_upstream(local_repo)
   end
 
-  def ensure_local_repo_exist(path)
+  def ensure_local_repo_exists(path)
     unless File.exist?(path)
       create_repo(path)
       Dir.chdir pathrepo
@@ -84,7 +84,7 @@ class Annex
     FileUtils.mkdir_p path
   end
 
-  def ensure_annex_branch_exist(repo)
+  def ensure_annex_branch_exists(repo)
     unless branch_exist?(repo, 'annex')
       puts <<-MSG
 
