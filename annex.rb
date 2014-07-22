@@ -46,6 +46,7 @@ class Annex
 
     ensure_local_repo_exists(local_repo)
     ensure_annex_repo_exists(annex_repo)
+    ensure_branch_exists(local_repo, 'annex')
     ensure_remote_branch_exists(local_repo, 'origin', remote_path)
 
     commit_local(local_repo)
@@ -55,7 +56,7 @@ class Annex
   def ensure_local_repo_exists(path)
     unless File.exist?(path)
       create_repo(path)
-      Dir.chdir pathrepo
+      Dir.chdir path
       system <<-CMD
         touch .keep;
         git init;
@@ -66,7 +67,7 @@ class Annex
     end
   end
 
-  def ensure_upstream_repo_exist(path)
+  def ensure_annex_repo_exists(path)
     unless File.exist?(path)
       create_repo(path)
       Dir.chdir path
@@ -84,12 +85,12 @@ class Annex
     FileUtils.mkdir_p path
   end
 
-  def ensure_annex_branch_exists(repo)
-    unless branch_exist?(repo, 'annex')
+  def ensure_branch_exists(repo, branch)
+    unless branch_exist?(repo, branch)
       puts <<-MSG
 
-  annex branch missing for #{repo}"
-  Creating annex branch...
+  #{branch} branch missing for #{repo}"
+  Creating #{branch} branch...
 
       MSG
       Dir.chdir repo
@@ -98,7 +99,7 @@ class Annex
       git add -A;
       git stash save;
       git stash drop;
-      git checkout -b annex;
+      git checkout -b #{branch};
       CMD
     end
   end
