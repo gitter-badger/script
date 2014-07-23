@@ -1,16 +1,30 @@
 #!/usr/bin/env ruby -w
 # canvas.rb
 # Author: Andy Bettisworth
-# Description: Get canvases from ~/.sync/.canvas
+# Description: Canvas Management System
 
 require 'optparse'
 
 class Canvas
-  HOME        = ENV['HOME']
-  DESKTOP     = "#{HOME}/Desktop"
-  CANVAS_PATH = "#{HOME}/.sync/.canvas"
+  DESKTOP = "#{ENV['HOME']}/Desktop"
+  CANVAS_DIR  = "#{ENV['HOME']}/.sync/.canvas"
 
   attr_accessor :canvas_list
+
+  BOILERPLATE = <<-TXT
+#!/usr/bin/env ruby -w
+# $1
+# Author: Andy Bettisworth
+# Description: $2
+  TXT
+
+  def add(canvas)
+    if canvas_exist?(canvas)
+      raise 'CanvasExistsError: A canvas by that name already exists.'
+    else
+      create_canvas(canvas)
+    end
+  end
 
   def fetch(*canvases)
     @canvas_list = canvases.flatten
@@ -21,10 +35,10 @@ class Canvas
       @canvas_list[index] = default_extension(target_canvas)
       @canvas_list[index] = default_prefix(@canvas_list[index])
 
-      if File.exist?("#{CANVAS_PATH}/#{@canvas_list[index]}")
-        get_canvas(@canvas_list[index])
+      if File.exist?("#{CANVAS_DIR}/#{@canvas_list[index]}")
+        get(@canvas_list[index])
       else
-        puts "CanvasNotExistError: #{CANVAS_PATH}/#{@canvas_list[index]}"
+        raise "CanvasNotExistError: #{CANVAS_DIR}/#{@canvas_list[index]}"
       end
     end
   end
@@ -32,23 +46,33 @@ class Canvas
   def clean
     all_canvas = []
 
-    Dir.foreach("#{CANVAS_PATH}") do |canvas|
+    Dir.foreach("#{CANVAS_DIR}") do |canvas|
       next if File.directory?(canvas)
       all_canvas << canvas
     end
 
     Dir.foreach("#{DESKTOP}") do |open_canvas|
       next if File.directory?(open_canvas)
-      system("mv #{DESKTOP}/#{open_canvas.to_s} #{CANVAS_PATH}") if all_canvas.include?(open_canvas)
+      system("mv #{DESKTOP}/#{open_canvas.to_s} #{CANVAS_DIR}") if all_canvas.include?(open_canvas)
     end
 
-    sync_canvas
+    sync
   end
 
   private
 
-  def get_canvas(target_canvas)
-    system("cp #{CANVAS_PATH}/#{target_canvas} #{DESKTOP}")
+  def create_canvas(canvas)
+    canvas = default_prefix(canvas)
+    canvas = default_extension(canvas)
+
+    puts 'Describe this canvas: '
+    description = gets
+    description ||= '...'
+    File.new("#{DESKTOP}/#{canvas}", 'w+') <<  BOILERPLATE.gsub('$1', canvas).gsub('$2', description)
+  end
+
+  def get(canvas)
+    system("cp #{CANVAS_DIR}/#{canvas} #{DESKTOP}")
   end
 
   def default_prefix(canvas)
@@ -70,20 +94,15 @@ class Canvas
     @canvas_list < gets
   end
 
-  def canvas_exist?
-    if File.exist?("#{CANVAS_PATH}/#{canvas}")
-      true
-    else
-      puts "WARNING: No such canvas exists: '#{canvas}'"
-      false
-    end
+  def canvas_exist?(canvas)
+    return if File.exist?("#{CANVAS_DIR}/#{canvas}") ? true : false
   end
 
-  def sync_canvas
+  def sync
     system <<-CMD
       echo '';
       echo 'Commit changes in ~/.sync/.canvas';
-      cd #{CANVAS_PATH};
+      cd #{CANVAS_DIR};
       git checkout annex;
       git add -A;
       git commit -m "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
@@ -95,94 +114,28 @@ options = {}
 option_parser = OptionParser.new do |opts|
   opts.banner = "USAGE: canvas [FILE]"
 
+  opts.on('-a CANVAS_DIR', '--add CANVAS_DIR', 'Add canvas') do |c|
+    options[:add] = c
+  end
+
   opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
     options[:fetch] = true
   end
 
-  opts.on('-c', '--clean', 'Move canvas(es) back into ~/.sync') do
+  opts.on('-c', '--clean', 'Sync all canvases') do
     options[:clean] = true
   end
 end
 option_parser.parse!
 
 ## USAGE
-canvas_dispatcher = Canvas.new
+c = Canvas.new
 if options[:clean]
-  canvas_dispatcher.clean
+  c.clean
 elsif options[:fetch]
-  canvas_dispatcher.fetch(ARGV)
+  c.fetch(ARGV)
+elsif options[:add]
+  c.add(options[:add])
 else
   puts option_parser
 end
-
-# describe Canvas do
-#   HOME        = ENV['HOME']
-#   DESKTOP     = "#{HOME}/Desktop"
-#   CANVAS_PATH = "#{HOME}/.sync/.canvas"
-
-#   before(:each) do
-#     3.times do |i|
-#       File.open("#{CANVAS_PATH}/canvas_test#{i}.rb",'w+')
-#       File.open("#{CANVAS_PATH}/canvas_test#{i}.py",'w+')
-#     end
-#   end
-
-#   after(:each) do
-#     3.times do |i|
-#       if File.exist?("#{CANVAS_PATH}/canvas_test#{i}.rb")
-#         File.delete("#{CANVAS_PATH}/canvas_test#{i}.rb")
-#       end
-#     end
-#   end
-
-#   describe "#fetch" do
-#     it "should move target canvas to ~/Desktop" do
-#       getter = Canvas.new
-#       getter.fetch "canvas_test1.rb"
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
-#     end
-
-#     it "should accept an Array of canvases" do
-#       getter = Canvas.new
-#       getter.fetch("canvas_test0.rb", "canvas_test1.rb", "canvas_test2.rb")
-#       expect(File.exist?("#{DESKTOP}/canvas_test0.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/canvas_test2.rb")).to be_true
-#     end
-
-#     it "should ask for canvas if no argument provided" do
-#       pending "stub the ask return value"
-#       getter = Canvas.new
-#       expect(getter).to receive(:puts).with('What canvas do you want?')
-#       getter.fetch
-#     end
-
-#     it "should accept canvas without extension '.rb'" do
-#       getter = Canvas.new
-#       getter.fetch "canvas_test1"
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
-#     end
-
-#     it "should accept multiple filetypes" do
-#       getter = Canvas.new
-#       getter.fetch "canvas_test1.py"
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.py")).to be_true
-#     end
-
-#     it "should not require the appended 'canvas_'" do
-#       getter = Canvas.new
-#       getter.fetch "test1.rb"
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_true
-#     end
-#   end
-
-#   describe "#clean" do
-#     it "should put away all canvas on Desktop" do
-#       getter = Canvas.new
-#       getter.fetch("canvas_test1.rb")
-#       getter.clean
-#       expect(File.exist?("#{DESKTOP}/canvas_test1.rb")).to be_false
-#       expect(File.exist?("#{CANVAS_PATH}/canvas_test1.rb")).to be_true
-#     end
-#   end
-# end
