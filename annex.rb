@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Sync my Annex with Village USB
+# Description: Sync Annex with Village
 
 require 'fileutils'
 
@@ -14,7 +14,7 @@ class Annex
     '.template',
     '.todo'
   ]
-  SYNC_APPLICATIONS    = [
+  SYNC_APPLICATIONS = [
     'developer_training',
     'accreu'
   ]
