@@ -48,6 +48,6 @@ end
 ## Usage
 if Time.now.strftime('%M').to_i % 20 == 0
   background = DesktopBackground.new
-  background.image_directory = "/home/wurde/Pictures/Backgrounds"
+  background.image_directory = "#{ENV['HOME']}/Pictures/Backgrounds"
   background.rotate
 end
