@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Sync Annex with Village
+# Description: Annex local ~/.sync files
 
 require 'fileutils'
 
@@ -12,7 +12,8 @@ class Annex
     '.canvas',
     '.script',
     '.template',
-    '.todo'
+    '.todo',
+    '.preseed'
   ]
   SYNC_APPLICATIONS = [
     'developer_training',
