@@ -10,7 +10,11 @@ cron_locked = File.exist?("#{TASK_DIR}/cron.lock")
 
 # Rotate background every 20 minutes
 unless cron_locked
-  require "#{TASK}/rotate_background_task.rb"
-  minute = Time.now.strftime('%M')
-  Background.rotate if minute.to_i % 20 == 0
+  require "#{TASK_DIR}/rotate_background_task.rb"
+
+  if Time.now.strftime('%M').to_i % 20 == 0
+    background = DesktopBackground.new
+    background.image_directory = "#{ENV['HOME']}/Pictures/Backgrounds"
+    background.rotate
+  end
 end
