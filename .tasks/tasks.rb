@@ -5,7 +5,6 @@
 
 TASK_DIR = "/home/raist/.sync/.script/.tasks"
 
-## Is cron locked? (cron.lock file is found in $TASK_DIR)
 cron_locked = File.exist?("#{TASK_DIR}/cron.lock")
 
 ## Rotate background every 20 minutes
