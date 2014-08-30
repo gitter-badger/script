@@ -6,8 +6,8 @@
 require 'fileutils'
 
 class Annex
-  ANNEX_SYNC_PATH = "/media/Village/preseed/seed/.sync"
-  LOCAL_SYNC_PATH = "#{ENV['HOME']}/.sync"
+  ANNEX_SYNC = "/media/#{ENV['USER']}/Village/preseed/seed-install/.sync"
+  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
   SYNC_REPOSITORIES = [
     '.canvas',
     '.script',
@@ -37,13 +37,13 @@ class Annex
   private
 
   def require_annex_usb
-    raise 'USBNotFound!' unless File.exist?(ANNEX_SYNC_PATH)
+    raise 'USBNotFound!' unless File.exist?(ANNEX_SYNC)
   end
 
   def sync(repo, subdir='')
-    local_repo  = "#{LOCAL_SYNC_PATH}/#{subdir}#{repo}"
-    annex_repo  = "#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
-    remote_path = "file://#{ANNEX_SYNC_PATH}/#{subdir}#{repo}.git"
+    local_repo  = "#{LOCAL_SYNC}/#{subdir}#{repo}"
+    annex_repo  = "#{ANNEX_SYNC}/#{subdir}#{repo}.git"
+    remote_path = "file://#{ANNEX_SYNC}/#{subdir}#{repo}.git"
 
     ensure_local_repo_exists(local_repo)
     ensure_annex_repo_exists(annex_repo)
@@ -166,6 +166,6 @@ class Annex
   end
 end
 
-# EXEC the annex sync
+## USAGE
 update = Annex.new
 update.start
