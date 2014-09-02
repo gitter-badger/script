@@ -19,13 +19,15 @@ class GetPkg
 
       all_packages = File.new(file).readlines if File.exist?(file)
       all_packages.each do |pkg|
-        ## > print correct deb url
-        puts "#{REPOSITORY}/#{pkg.chomp}_amd64.deb"
-        puts "#{REPOSITORY}/#{pkg.chomp}_i386.deb"
+        url = "http://#{REPOSITORY}/i386/#{pkg.chomp}/download"
+        doc = Nokogiri::HTML(open(url))
+        url_node = doc.css('ul li a').first
 
-        ## > download deb
-        # `wget #{REPOSITORY}/#{pkg}_amd64.deb`
-        # `wget #{REPOSITORY}/#{pkg}_i386.deb`
+        if url_node
+          target_url = url_node['href']
+          `wget #{target_url}`
+          sleep(2)
+        end
       end
     end
   end
