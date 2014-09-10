@@ -32,14 +32,12 @@ class Script
 
     Dir.foreach("#{SCRIPT}") do |script|
       next if File.directory?(script)
-      next unless script.include?(".rb")
       all_scripts << script
     end
 
     Dir.foreach("#{DESKTOP}") do |open_script|
       next if File.directory?(open_script)
-      next unless open_script.include?(".rb")
-      system("mv #{DESKTOP}/#{open_script.to_s} #{SCRIPT}") if all_scripts.include?(open_script)
+      system("mv #{DESKTOP}/#{open_script} #{SCRIPT}") if all_scripts.include?(open_script)
     end
 
     sync_script
