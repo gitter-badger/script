@@ -1,0 +1,18 @@
+#!/usr/bin/env expect
+# passwd.exp
+# Author: Andy Bettisworth
+# Description: Set account password
+
+set account [lindex $argv 0]
+set old_password [lindex $argv 1]
+set new_password [lindex $argv 2]
+
+spawn passwd "$account"
+
+expect "password:"
+send "$old_password\r"
+expect "password:"
+send "$new_password\r"
+expect "password:"
+send "$new_password\r"
+expect eof

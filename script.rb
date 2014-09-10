@@ -6,32 +6,31 @@
 require 'optparse'
 
 class Script
-  HOME        = ENV['HOME']
-  DESKTOP     = "#{HOME}/Desktop"
-  SCRIPT_PATH = "#{HOME}/.sync/.script"
+  DESKTOP = "#{ENV['HOME']}/Desktop"
+  SCRIPT  = "#{ENV['HOME']}/.sync/.script"
 
-  attr_accessor :script_list
+  attr_accessor :scripts
 
-  def fetch(*scripts)
-    @script_list = scripts.flatten
+  def fetch_all(*scripts)
+    @scripts = scripts.flatten
+    ask_for_script while @scripts.empty?
 
-    ask_for_script while @script_list.empty?
+    @scripts.each_with_index do |s, i|
+      target = default_extension(s)
 
-    @script_list.each_with_index do |target_script, index|
-      @script_list[index] = default_extension(target_script)
-
-      if File.exist?("#{SCRIPT_PATH}/#{@script_list[index]}")
-        get_script(@script_list[index])
-      else
-        puts "ScriptNotExistError: #{SCRIPT_PATH}/#{@script_list[index]}"
+      unless File.exist?("#{SCRIPT}/#{target}")
+        puts "Warning: script not found! '#{target}'"
+        next
       end
+
+      get_script(target)
     end
   end
 
   def clean
     all_scripts = []
 
-    Dir.foreach("#{SCRIPT_PATH}") do |script|
+    Dir.foreach("#{SCRIPT}") do |script|
       next if File.directory?(script)
       next unless script.include?(".rb")
       all_scripts << script
@@ -40,7 +39,7 @@ class Script
     Dir.foreach("#{DESKTOP}") do |open_script|
       next if File.directory?(open_script)
       next unless open_script.include?(".rb")
-      system("mv #{DESKTOP}/#{open_script.to_s} #{SCRIPT_PATH}") if all_scripts.include?(open_script)
+      system("mv #{DESKTOP}/#{open_script.to_s} #{SCRIPT}") if all_scripts.include?(open_script)
     end
 
     sync_script
@@ -48,27 +47,26 @@ class Script
 
   private
 
-  def get_script(target_script)
-    system("cp #{SCRIPT_PATH}/#{target_script} #{DESKTOP}")
+  def get_script(target)
+    system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
 
   def ask_for_script
-    puts "What script do you want?"
-    @script_list < gets
+    puts "What script do you want? (ex: annex.rb, polygot.py, install_vmware.exp)"
+    scripts = gets.split(/\s.*?/).flatten
+    scripts.each { |s| @scripts << s }
   end
 
   def default_extension(script)
-    if File.extname(script) == ""
-      script += '.rb'
-    end
+    script += '.rb' if File.extname(script) == ""
     script
   end
 
   def script_exist?(script)
-    if File.exist?("#{SCRIPT_PATH}/#{script}")
+    if File.exist?("#{SCRIPT}/#{script}")
       true
     else
-      puts "WARNING: No such script exists: '#{script}'"
+      puts "Warning: no script found '#{script}'"
       false
     end
   end
@@ -77,7 +75,7 @@ class Script
     system <<-CMD
       echo '';
       echo 'Commit changes in ~/.sync/.script';
-      cd #{SCRIPT_PATH};
+      cd #{SCRIPT};
       git checkout annex;
       git add -A;
       git commit -m "script_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
@@ -93,7 +91,7 @@ option_parser = OptionParser.new do |opts|
     options[:fetch] = true
   end
 
-  opts.on('-c', '--clean', 'Move script(s) back into  ~/.sync') do
+  opts.on('--clean', 'Move script(s) back into  ~/.sync') do
     options[:clean] = true
   end
 end
@@ -104,77 +102,7 @@ script_dispatcher = Script.new
 if options[:clean]
   script_dispatcher.clean
 elsif options[:fetch]
-  script_dispatcher.fetch(ARGV)
+  script_dispatcher.fetch_all(ARGV)
 else
   puts option_parser
 end
-
-# describe Script do
-#   before(:each) do
-#     File.open("#{SYNC_SCRIPT}/test1.rb",'w+')
-#     File.open("#{SYNC_SCRIPT}/test3.rb",'w+')
-#     File.open("#{SYNC_SCRIPT}/test2.rb",'w+')
-#   end
-
-#   after(:each) do
-#     if File.exist?("#{SYNC_SCRIPT}/test1.rb")
-#       File.delete("#{SYNC_SCRIPT}/test1.rb")
-#     end
-#     if File.exist?("#{SYNC_SCRIPT}/test2.rb")
-#       File.delete("#{SYNC_SCRIPT}/test2.rb")
-#     end
-#     if File.exist?("#{SYNC_SCRIPT}/test3.rb")
-#       File.delete("#{SYNC_SCRIPT}/test3.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test1.rb")
-#       File.delete("#{DESKTOP}/test1.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test2.rb")
-#       File.delete("#{DESKTOP}/test2.rb")
-#     end
-#     if File.exist?("#{DESKTOP}/test3.rb")
-#       File.delete("#{DESKTOP}/test3.rb")
-#     end
-#   end
-
-#   describe "#fetch" do
-#     it "should move target scripts to Desktop" do
-#       getter = GetScript.new
-#       getter.fetch "test1.rb"
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
-#     end
-
-#     it "should accept an Array of scripts" do
-#       getter = GetScript.new
-#       getter.fetch("test1.rb", "test2.rb", "test3.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/test2.rb")).to be_true
-#       expect(File.exist?("#{DESKTOP}/test3.rb")).to be_true
-#     end
-
-#     it "should ask for script if no argument provided" do
-#       pending("TODO, add a stub for gets()")
-#       getter = GetScript.new
-#       getter.fetch
-#       STDIN.should_receive(:read).and_return("test1.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
-#     end
-
-#     it "should accept script without extension '.rb'" do
-#       getter = GetScript.new
-#       getter.fetch "test1"
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_true
-#     end
-#   end
-
-#   describe "#clean" do
-#     it "should put away all scripts on Desktop", wip: true do
-#       getter = GetScript.new
-#       getter.clean
-#       getter.fetch("test1.rb", "test2.rb", "test3.rb")
-#       expect(File.exist?("#{DESKTOP}/test1.rb")).to be_false
-#       expect(File.exist?("#{DESKTOP}/test2.rb")).to be_false
-#       expect(File.exist?("#{DESKTOP}/test3.rb")).to be_false
-#     end
-#   end
-# end
