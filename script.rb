@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 # script.rb
 # Author: Andy Bettisworth
-# Description: Get scripts from ~/.sync/.script
+# Description: Script Management Class
 
 require 'optparse'
 
@@ -9,13 +9,25 @@ class Script
   DESKTOP = "#{ENV['HOME']}/Desktop"
   SCRIPT  = "#{ENV['HOME']}/.sync/.script"
 
-  attr_accessor :scripts
+  attr_accessor :script_list
+
+  BOILERPLATE = <<-TXT
+#!/usr/bin/env ruby -w
+# $1
+# Author: Andy Bettisworth
+# Description: $2
+  TXT
+
+  def add(script)
+    raise 'ScriptExistsError: A script by that name already exists.' if script_exist?(script)
+    create_script(script)
+  end
 
   def fetch_all(*scripts)
-    @scripts = scripts.flatten
-    ask_for_script while @scripts.empty?
+    @script_list = scripts.flatten
+    ask_for_script while @script_list.empty?
 
-    @scripts.each_with_index do |s, i|
+    @script_list.each_with_index do |s, i|
       target = default_extension(s)
 
       unless File.exist?("#{SCRIPT}/#{target}")
@@ -45,6 +57,15 @@ class Script
 
   private
 
+  def create_script(script)
+    script = default_extension(script)
+
+    puts 'Describe this script: '
+    description = gets
+    description ||= '...'
+    File.new("#{DESKTOP}/#{script}", 'w+') <<  BOILERPLATE.gsub('$1', script).gsub('$2', description)
+  end
+
   def get_script(target)
     system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
@@ -52,7 +73,7 @@ class Script
   def ask_for_script
     puts "What script do you want? (ex: annex.rb, polygot.py, install_vmware.exp)"
     scripts = gets.split(/\s.*?/).flatten
-    scripts.each { |s| @scripts << s }
+    scripts.each { |s| @script_list << s }
   end
 
   def default_extension(script)
@@ -85,6 +106,10 @@ options = {}
 option_parser = OptionParser.new do |opts|
   opts.banner = "USAGE: script [options] [SCRIPT]"
 
+  opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
+    options[:add] = s
+  end
+
   opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
     options[:fetch] = true
   end
@@ -96,11 +121,13 @@ end
 option_parser.parse!
 
 ## USAGE
-script_dispatcher = Script.new
+s = Script.new
 if options[:clean]
-  script_dispatcher.clean
+  s.clean
 elsif options[:fetch]
-  script_dispatcher.fetch_all(ARGV)
+  s.fetch_all(ARGV)
+elsif options[:add]
+  s.add(options[:add])
 else
   puts option_parser
 end
