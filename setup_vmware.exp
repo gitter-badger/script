@@ -1,0 +1,83 @@
+#!/bin/expect
+# setup_vmware.exp
+# Author: Andy Bettisworth
+# Description: Install VMWare Workstation
+
+set USER raist
+set DESKTOP /home/$USER/Desktop
+set PACKAGES $DESKTOP/seed-install/seed-packages
+
+send "USER     $USER\n"
+send "DESKTOP  $DESKTOP\n"
+send "PACKAGES $PACKAGES\n"
+
+## > CHECK VMWare bundle exists else quit
+
+
+
+
+
+## > CHECK system architecture (32/64-bit)
+#uname -a IF contains i686
+
+#sudo vmware-modconfig --console --get-kernel-headers
+#sudo vmware-modconfig --console --get-gcc
+#sudo vmware-modconfig --console --validate-kernel-headers
+#sudo vmware-modconfig --console --validate-gcc /usr/bin/gcc
+
+#exec sudo cp $SEED/package/VMware-Player-5.0.3-1410761.i386.bundle /tmp/
+#exec gksudo bash /tmp/VMware-Player-5.0.3-1410761.i386.bundle
+
+### INSTALL VMware vSphere
+
+#exec sudo cp $SEED/package/VMware-vSphere-Perl-SDK-5.5.0-1384587.i386.tar.gz /tmp/
+#exec sudo tar xzf /tmp/VMware-vSphere-Perl-SDK-5.5.0-1384587.i386.tar.gz -C /tmp/
+#exec sudo chown -R $USER:$USER /tmp/vmware-vsphere-cli-distrib/
+#send "spawning vmware-install...\n"
+#exp_internal 1
+#spawn sudo perl /tmp/vmware-vsphere-cli-distrib/vmware-install.pl
+
+## > add conditional to handle if need to uninstall old version
+## NOTE: this is to aid graceful install of vmware AFTER a seeded install
+#expect "DB? [no]"
+#Send "yes\r"
+#Send "Had to cleanup previous install. Try again."
+#Send "Sorry, we haven't automated this yet."
+
+#expect "\[sudo\]*" { send "$PASSWORD\r" }
+#expect "*More*" { send \003 }
+#expect "(yes/no)*" { send "yes\r" }
+#exec sudo rm /tmp/VMware-vSphere-Perl-SDK-5.5.0-1384587.i386.tar.gz
+#exec sudo rm -rf /tmp/vmware-vsphere-cli-distrib
+#interact
+
+## TODO:
+## > CREATE a vmx image of your 'devbox, hackbox, berrybox, etc...'
+## > CREATE startup script for boot process (launch computer straight into vm)
+## > tighten security at host level (only internet through bridged conn w/ vm, etc...)
+
+## NOTE `vmm` - manage VMware virtual machines
+## 0. Dependencies:
+## libclass-methodmaker-perl libcrypt-ssleay-perl \
+## libsoap-lite-perl libuuid-perl libxml-libxml-perl
+##
+## 1. Requires: vSphere SDK for Perl
+## NOTE: we used 'expect' to automate this interactive prompt
+## https://www.vmware.com/support/developer/viperltoolkit/
+##   a. cp $SEED/packages/VMware-vSphere-Perl-SDK-5.5.0-1384587.i386.tar.gz /tmp/
+##   b. tar xzf /tmp/VMware-vSphere-Perl-SDK-5.5.0-1384587.i386.tar.gz
+##   c. sudo vmware-vsphere-cli-distrib/vmware-install.pl
+##     (1) pass enter on Terms of Service
+##     (2) pass 'y' yes
+##     (3) In which directory do you want to install the executable files? default.
+##
+## Default Files:
+## /usr/bin                            vCLI scripts
+## /usr/lib/vmware-vcli/apps           vSphere SDK for Perl utility applications
+## /usr/share/doc/vmware-vcli/samples  vSphere SDK for Perl sample scripts
+
+## 2.Configure
+## Use sample: /usr/share/doc/vmware-manager
+##
+## Virtualization Tool: VMware
+## https://help.ubuntu.com/community/VMware/Player
