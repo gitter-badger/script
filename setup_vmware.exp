@@ -3,37 +3,71 @@
 # Author: Andy Bettisworth
 # Description: Install VMWare Workstation
 
+## TEST
+#/home/raist/Desktop/seed-install/seed-packages/VMware-Workstation-Full-10.0.3-1895310.i386.bundle
+
+## TODO
+## > CHECK system architecture (32/64-bit) to choose which .bundle
+#uname -a IF contains i686
+
 set USER raist
 set DESKTOP /home/$USER/Desktop
 set PACKAGES $DESKTOP/seed-install/seed-packages
+set VMWARE_VERSION VMware-Workstation-Full-10.0.3-1895310.i386.bundle
+set SHARED_DIR "/var/lib/vmware/Shared VMs"
+set SERVER_PORT 443
+set LICENSE_KEY NV6EA-21K8L-NZ6M8-P19Q0-CCL0Q
 
-send "USER     $USER\n"
-send "DESKTOP  $DESKTOP\n"
-send "PACKAGES $PACKAGES\n"
+set timeout 90
 
-## > CHECK VMWare bundle exists
+if {![file exists $hostFile]} {
+  exec touch $DESKTOP/vmware-not-found
+  quit
+}
 
-## EXEC install
-spawn sudo sh VMware-Workstation-Full-10.0.3-1895310.i386.bundle
+## > IF vmware-workstation installed
+if {[vmware-installer -l] == ""} {
+  sudo vmware-installer --uninstall-product vmware-workstation --console
+  ## All configuration information is about to be removed. Do you wish to
+  ## keep your configuration files? [no]:
+  send "no\n"
+}
 
-## > ACCEPT end user agreement
-## > CLICK next
-## > ACCEPT license agreement
-## > CLICK next
-## > DENY automatic product updates
-## > CLICK next
-## > DENY sending usage statistics
-## > CLICK next
-## > SET initial user 'raist'
-## > CLICK next
-## > SET pathname for shared virtual machines '/var/lib/vmware/Shared VMs'
-## > CLICK next
-## > SET https port
-## > CLICK next
-## > SET license key
-
-## TODO
-## > CHECK system architecture (32/64-bit)
-#uname -a IF contains i686
-## > CREATE a vmx image 'dos, mac, dev, hack, berry'
-## > SECURE host level (only internet through bridged conn w/ vm, etc...)
+spawn sudo sh $PACKAGES/$VMWARE_VERSION --console
+## Extracting VMware Installer...done.
+## You must accept the VMware Workstation End User License Agreement to
+## continue.  Press Enter to proceed.
+send "\r"
+## VMWARE END USER LICENSE AGREEMENT ...
+send "q"
+## Do you agree? [yes/no]:
+send "yes\r"
+## You must accept the VMware OVF Tool component for Linux End User
+## License Agreement to continue.  Press Enter to proceed.
+send "\r"
+## VMWARE END USER LICENSE AGREEMENT
+send "q"
+send "yes\r"
+## Would you like to check for product updates on startup? [yes]:
+send "no\r"
+## Would you like to help make VMware software better by sending
+## anonymous system data and usage statistics to VMware? [yes]:
+send "no\r"
+## Please enter the user that will initially connect to Workstation
+## Server. Without setting this correctly, you will not be able to share
+## VMs with other users. Additional users and administrators can be
+## configured later in Workstation by selecting "Shared VMs" and clicking
+## "Permissions".  [raist]:
+send "$USER\r"
+## Please choose a directory for your shared virtual machines.
+## [/var/lib/vmware/Shared VMs]:
+send "$SHARED_DIR\r"
+## Please enter the port to use for https access to Workstation Server.
+## (HTTPS port:) [443]:
+send "$SERVER_PORT\r"
+## Enter license key. (optional) You can enter this information later.:
+send "$LICENSE_KEY\r"
+## The product is ready to be installed.  Press Enter to begin
+## installation or Ctrl-C to cancel.
+send "\r"
+expect eof
