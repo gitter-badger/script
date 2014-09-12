@@ -20,54 +20,72 @@ set LICENSE_KEY NV6EA-21K8L-NZ6M8-P19Q0-CCL0Q
 
 set timeout 90
 
-if {![file exists $hostFile]} {
+if {![file exists $PACKAGES/$VMWARE_VERSION]} {
   exec touch $DESKTOP/vmware-not-found
-  quit
+  exit
 }
 
-## > IF vmware-workstation installed
-if {[vmware-installer -l] == ""} {
-  sudo vmware-installer --uninstall-product vmware-workstation --console
-  ## All configuration information is about to be removed. Do you wish to
-  ## keep your configuration files? [no]:
-  send "no\n"
+if {[file exists /usr/bin/vmware-installer]} {
+  set existing_installs [exec vmware-installer -l --console]
+
+  if { [string match "*vmware-workstation*" $existing_installs] } {
+    spawn sudo vmware-installer --uninstall-product vmware-workstation --console
+    ## All configuration information is about to be removed. Do you wish to
+    ## keep your configuration files? [no]:
+    send "no\r"
+  }
 }
 
 spawn sudo sh $PACKAGES/$VMWARE_VERSION --console
 ## Extracting VMware Installer...done.
 ## You must accept the VMware Workstation End User License Agreement to
 ## continue.  Press Enter to proceed.
+expect "Extracting*Press Enter to proceed."
 send "\r"
 ## VMWARE END USER LICENSE AGREEMENT ...
-send "q"
+expect "*--More--*"
+expect *
+send "q\r"
 ## Do you agree? [yes/no]:
+expect "*yes/no*"
+expect *
 send "yes\r"
 ## You must accept the VMware OVF Tool component for Linux End User
 ## License Agreement to continue.  Press Enter to proceed.
+expect "*You must accept*Press Enter to proceed.*"
+expect *
 send "\r"
 ## VMWARE END USER LICENSE AGREEMENT
-send "q"
+expect "VMWARE END USER LICENSE AGREEMENT*More"
+send "q\r"
 send "yes\r"
 ## Would you like to check for product updates on startup? [yes]:
+expect "*Would you like to check for product updates on startup? ?yes?:*"
 send "no\r"
 ## Would you like to help make VMware software better by sending
 ## anonymous system data and usage statistics to VMware? [yes]:
+expect "*anonymous system data and usage statistics to VMware? ?yes?:*"
 send "no\r"
 ## Please enter the user that will initially connect to Workstation
 ## Server. Without setting this correctly, you will not be able to share
 ## VMs with other users. Additional users and administrators can be
 ## configured later in Workstation by selecting "Shared VMs" and clicking
 ## "Permissions".  [raist]:
+expect "*Permissions?.  ?raist?:*"
 send "$USER\r"
 ## Please choose a directory for your shared virtual machines.
 ## [/var/lib/vmware/Shared VMs]:
+expect "*?/var/lib/vmware/Shared VMs?:*"
 send "$SHARED_DIR\r"
 ## Please enter the port to use for https access to Workstation Server.
 ## (HTTPS port:) [443]:
+expect "*(HTTPS port:) ?443?:*"
 send "$SERVER_PORT\r"
 ## Enter license key. (optional) You can enter this information later.:
+expect "*Enter license key. (optional) You can enter this information later.:*"
 send "$LICENSE_KEY\r"
 ## The product is ready to be installed.  Press Enter to begin
 ## installation or Ctrl-C to cancel.
+expect "*installation or Ctrl-C to cancel.*"
 send "\r"
 expect eof
