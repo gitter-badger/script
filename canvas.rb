@@ -96,13 +96,16 @@ class Canvas
   end
 
   def sync
+    puts 'Enter a commit message:'
+    commit_msg = gets
+    commit_msg ||= "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}"
     system <<-CMD
       echo '';
       echo 'Commit changes in ~/.sync/.canvas';
       cd #{CANVAS};
       git checkout annex;
       git add -A;
-      git commit -m "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      git commit -m "#{commit_msg}";
     CMD
   end
 end

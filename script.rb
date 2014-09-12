@@ -91,13 +91,16 @@ class Script
   end
 
   def sync_script
+    puts 'Enter a commit message:'
+    commit_msg = gets
+    commit_msg ||= "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}"
     system <<-CMD
       echo '';
       echo 'Commit changes in ~/.sync/.script';
       cd #{SCRIPT};
       git checkout annex;
       git add -A;
-      git commit -m "script_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      git commit -m "#{commit_msg}";
     CMD
   end
 end
