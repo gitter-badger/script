@@ -97,7 +97,7 @@ class Canvas
 
   def sync
     puts 'Enter a commit message:'
-    commit_msg = gets
+    commit_msg = gets.strip
     commit_msg = "canvas_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
     system <<-CMD
       echo '';

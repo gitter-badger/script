@@ -92,8 +92,8 @@ class Script
 
   def sync_script
     puts 'Enter a commit message:'
-    commit_msg = gets
-    commit_msg ||= "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}"
+    commit_msg = gets.strip
+    commit_msg = "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
     system <<-CMD
       echo '';
       echo 'Commit changes in ~/.sync/.script';
