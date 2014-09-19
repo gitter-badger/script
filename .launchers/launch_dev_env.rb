@@ -18,15 +18,16 @@ wm_data.reject! { |w| w[:state].include?("_NET_WM_STATE_SKIP_PAGER") }
 wm_data.reject! { |w| w[:class].include?("desktop_window.Nautilus") }
 wm_data.each { |w| wm.action_window(w[:id], :close) }
 
-sleep(1.2)
+sleep(1.5)
 
 wm.change_viewport(0,0)
 
+# !!!! assigns terminal process to launch_dev_env in unity-launcher panel
 spawn('gnome-terminal')
 spawn('sublime')
 spawn('google-chrome')
 
-sleep(1.2)
+sleep(1.5)
 
 ## OPEN terminal
 wm_terminal = wm.list_windows.select! { |w| w[:class] == "gnome-terminal.Gnome-terminal" }
