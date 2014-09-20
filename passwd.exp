@@ -3,11 +3,38 @@
 # Author: Andy Bettisworth
 # Description: Set account password
 
-set account [lindex $argv 0]
+set user [lindex $argv 0]
 set old_password [lindex $argv 1]
 set new_password [lindex $argv 2]
 
-spawn passwd "$account"
+while {[string length $user] == 0} {
+  stty -echo
+  send_user -- "Which user account:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set user $expect_out(1,string)
+}
+
+while {[string length $old_password] == 0} {
+  stty -echo
+  send_user -- "What is the old password:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set old_password $expect_out(1,string)
+}
+
+while {[string length $new_password] == 0} {
+  stty -echo
+  send_user -- "What is the new password:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set new_password $expect_out(1,string)
+}
+
+spawn passwd $user
 
 expect "password:"
 send "$old_password\r"

@@ -39,6 +39,8 @@ wm_texteditor = wm.list_windows.select! { |w| w[:class] == "sublime.Sublime" }
 wm.action_window(wm_texteditor[0][:id], :move_resize, 0, x_boundary, 0, -1, -1)
 wm.action_window(wm_texteditor[0][:id], :change_state, "add", "maximized_vert")
 
+sleep(1)
+
 ## OPEN browser
 wm_browser = wm.list_windows.select! { |w| w[:class] == "Google-chrome.Google-chrome" }
 wm.action_window(wm_browser[0][:id], :move_resize, 0, x_boundary, y_boundary, -1, -1)
