@@ -11,6 +11,17 @@ class Preseed
   LOCAL_SYNC         = "#{ENV['HOME']}/.sync"
   LOCAL_PRESEED_SEED = "#{LOCAL_SYNC}/.preseed/seed-install/.sync/.preseed.git"
 
+  REPOS = [
+    ".app",
+    ".canvas.git",
+    ".gem",
+    ".preseed.git",
+    ".rbenv.git",
+    ".script.git",
+    ".template.git",
+    ".todo.git"
+  ]
+
   def start
     require_annex_usb
     require_usb_repo
@@ -28,15 +39,20 @@ class Preseed
   end
 
   def sync_preseed
-    remove_local_version
-    copy_usb_version
+    REPOS.each do |repository|
+      puts repository
+      # remove_local_version(repository)
+      # copy_usb_version(repository)
+    end
   end
 
   def remove_local_version
+    # > abstract target
     `sudo rm --recursive --verbose #{LOCAL_PRESEED_SEED}`
   end
 
   def copy_usb_version
+    # > abstract target
     `cp --recursive --verbose #{USB_PRESEED_SEED} #{LOCAL_PRESEED_SEED}`
   end
 end
