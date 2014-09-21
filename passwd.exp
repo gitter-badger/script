@@ -3,9 +3,18 @@
 # Author: Andy Bettisworth
 # Description: Set account password
 
-set user [lindex $argv 0]
-set old_password [lindex $argv 1]
-set new_password [lindex $argv 2]
+exp_internal 1
+
+set priviledge [exec whoami]
+
+if { $priviledge == "root" } {
+  set user [lindex $argv 0]
+  set new_password [lindex $argv 2]
+} else {
+  set user [lindex $argv 0]
+  set old_password [lindex $argv 1]
+  set new_password [lindex $argv 2]
+}
 
 while {[string length $user] == 0} {
   stty -echo
@@ -16,13 +25,15 @@ while {[string length $user] == 0} {
   set user $expect_out(1,string)
 }
 
-while {[string length $old_password] == 0} {
-  stty -echo
-  send_user -- "What is the old password:\n"
-  expect_user -re "(.*)\n"
-  send_user "\n"
-  stty echo
-  set old_password $expect_out(1,string)
+if { $priviledge != "root" } {
+  while {[string length $old_password] == 0} {
+    stty -echo
+    send_user -- "What is the old password:\n"
+    expect_user -re "(.*)\n"
+    send_user "\n"
+    stty echo
+    set old_password $expect_out(1,string)
+  }
 }
 
 while {[string length $new_password] == 0} {
@@ -36,8 +47,10 @@ while {[string length $new_password] == 0} {
 
 spawn passwd $user
 
-expect "password:"
-send "$old_password\r"
+if { $priviledge != "root" } {
+  expect "password:"
+  send "$old_password\r"
+}
 expect "password:"
 send "$new_password\r"
 expect "password:"
