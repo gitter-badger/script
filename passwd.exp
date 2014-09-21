@@ -3,13 +3,11 @@
 # Author: Andy Bettisworth
 # Description: Set account password
 
-exp_internal 1
-
 set priviledge [exec whoami]
 
 if { $priviledge == "root" } {
   set user [lindex $argv 0]
-  set new_password [lindex $argv 2]
+  set new_password [lindex $argv 1]
 } else {
   set user [lindex $argv 0]
   set old_password [lindex $argv 1]
