@@ -33,11 +33,11 @@ class Preseed
   end
 
   def remove_local_version
-    `sudo rm -vr #{LOCAL_PRESEED_SEED}`
+    `sudo rm --recursive --verbose #{LOCAL_PRESEED_SEED}`
   end
 
   def copy_usb_version
-    `cp -vr #{USB_PRESEED_SEED} #{LOCAL_PRESEED_SEED}`
+    `cp --recursive --verbose #{USB_PRESEED_SEED} #{LOCAL_PRESEED_SEED}`
   end
 end
 
