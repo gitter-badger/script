@@ -16,3 +16,8 @@ unless cron_locked
     b.rotate
   end
 end
+
+## Purge packages that are blacklisted
+unless cron_locked
+  `sudo bash #{TASK_DIR}/purge_packages.sh`
+end
