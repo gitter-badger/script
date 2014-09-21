@@ -1,0 +1,46 @@
+#!/usr/bin/env expect
+# cryptsetup_passwd.exp
+# Author: Andy Bettisworth
+# Description: change LUKS partition password
+
+exp_internal 1
+set_timeout 20
+
+set device [lindex $argv 0]
+set old_password [lindex $argv 1]
+set new_password [lindex $argv 2]
+
+while {[string length $device] == 0} {
+  stty -echo
+  send_user -- "Which device is encrypted. Typically /dev/sda5:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set device $expect_out(1,string)
+}
+
+while {[string length $old_password] == 0} {
+  stty -echo
+  send_user -- "What password will be replaced:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set old_password $expect_out(1,string)
+}
+
+while {[string length $new_password] == 0} {
+  stty -echo
+  send_user -- "What is the new password:\n"
+  expect_user -re "(.*)\n"
+  send_user "\n"
+  stty echo
+  set new_password expect_out(1,string)
+}
+
+spawn cryptsetup luksChangeKey $device
+
+expect "changed:"
+send "$old_password\r"
+expect "passphrase:"
+send "$new_password\r"
+expect eof
