@@ -4,11 +4,17 @@
 # Description: change LUKS partition password
 
 exp_internal 1
-set_timeout 20
+set timeout 20
 
+set priviledge [exec whoami]
 set device [lindex $argv 0]
 set old_password [lindex $argv 1]
 set new_password [lindex $argv 2]
+
+if { $priviledge != "root" } {
+  send_user "FAILED: requires root priviledges\n"
+  exit 1
+}
 
 while {[string length $device] == 0} {
   stty -echo
@@ -34,7 +40,7 @@ while {[string length $new_password] == 0} {
   expect_user -re "(.*)\n"
   send_user "\n"
   stty echo
-  set new_password expect_out(1,string)
+  set new_password $expect_out(1,string)
 }
 
 spawn cryptsetup luksChangeKey $device
