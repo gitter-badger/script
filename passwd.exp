@@ -3,6 +3,7 @@
 # Author: Andy Bettisworth
 # Description: Set account password
 
+set timeout -1
 set priviledge [exec whoami]
 
 if { $priviledge == "root" } {

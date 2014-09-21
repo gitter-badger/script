@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Description: change LUKS partition password
 
-set timeout 20
+set timeout -1
 
 set priviledge [exec whoami]
 set device [lindex $argv 0]
