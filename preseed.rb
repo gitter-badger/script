@@ -6,9 +6,9 @@
 require 'fileutils'
 
 class Preseed
-  USB_SYNC = "/media/#{ENV['USER']}/Village/preseed/seed-install/.sync"
-  USB_PRESEED_SEED = "#{USB_SYNC}/.preseed.git"
-  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
+  USB_SYNC           = "/media/#{ENV['USER']}/Village/preseed/seed-install/.sync"
+  USB_PRESEED_SEED   = "#{USB_SYNC}/.preseed.git"
+  LOCAL_SYNC         = "#{ENV['HOME']}/.sync"
   LOCAL_PRESEED_SEED = "#{LOCAL_SYNC}/.preseed/seed-install/.sync/.preseed.git"
 
   def start
@@ -20,11 +20,11 @@ class Preseed
   private
 
   def require_annex_usb
-    raise 'USB_NOT_FOUND!' unless File.exist?(USB_SYNC)
+    raise 'Village USB not found!' unless File.exist?(USB_SYNC)
   end
 
   def require_usb_repo
-    raise 'USB_PRESEED_NOT_FOUND!' unless File.exist?(USB_PRESEED_SEED)
+    raise 'Village USB missing sync/preseed.git repo!' unless File.exist?(USB_PRESEED_SEED)
   end
 
   def sync_preseed
@@ -37,7 +37,7 @@ class Preseed
   end
 
   def copy_usb_version
-    `cp -vr #{USB_PRESEED_SEED} #{LOCAL_SYNC}`
+    `cp -vr #{USB_PRESEED_SEED} #{LOCAL_PRESEED_SEED}`
   end
 end
 
