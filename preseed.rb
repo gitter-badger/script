@@ -20,19 +20,14 @@ class Preseed
   ]
 
   def start
-    require_annex_usb
-    require_usb_repo
+    require_usb
     sync_preseed
   end
 
   private
 
-  def require_annex_usb
+  def require_usb
     raise 'Village USB not found!' unless File.exist?(USB_SYNC)
-  end
-
-  def require_usb_repo
-    raise 'Village USB missing sync/preseed.git repo!' unless File.exist?(USB_PRESEED_SEED)
   end
 
   def sync_preseed
