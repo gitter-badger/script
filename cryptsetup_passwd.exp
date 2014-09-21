@@ -3,7 +3,6 @@
 # Author: Andy Bettisworth
 # Description: change LUKS partition password
 
-exp_internal 1
 set timeout 20
 
 set priviledge [exec whoami]
