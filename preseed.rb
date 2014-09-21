@@ -39,10 +39,16 @@ class Preseed
 
   def remove_local_version(repository)
     system("sudo rm --recursive --verbose #{LOCAL_SYNC}/#{repository}")
+    puts ""
+    puts "REMOVED #{repository} locally"
+    puts ""
   end
 
   def copy_usb_version(repository)
     system("cp --recursive --verbose #{USB_SYNC}/#{repository} #{LOCAL_SYNC}")
+    puts ""
+    puts "COPIED #{repository} from Village USB"
+    puts ""
   end
 end
 
