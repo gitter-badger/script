@@ -26,6 +26,10 @@ class PackageDownloader
         download_package(pkg) unless package_local?(pkg)
         install_target(@package_queue, pkg)
 
+        puts ""
+        puts "Target package has dependencies: #{pkg}"
+        puts ""
+
         read_dependencies(pkg)
         install_dependencies(pkg)
       end
@@ -45,17 +49,30 @@ class PackageDownloader
   end
 
   def read_dependencies(pkg)
+    puts ""
+    puts "Reading dependencies for: #{pkg}"
+    puts ""
+
     error = File.open("#{ENV['HOME']}/Desktop/dependencies_#{pkg}").read
     dependencies = error.scan(/depends on (.*)?;/).flatten
+    dependencies.collect! { |x| x.gsub(/\W\(.*?\)/, '') }
     @dependency_queue[pkg] = Hash[dependencies.each_with_index.map { |value, index| [value, false] }]
+    puts @dependency_queue[pkg]
   end
 
   def install_dependencies(pkg)
+    puts ""
+    puts "Installing dependencies: #{@dependency_queue[pkg]}"
+    puts ""
+
     @dependency_queue[pkg].each do |dep, status|
       until @dependency_queue[pkg][dep] == true
         # > Dir.chdir('to-correct-dependency-bucket')
         download_package(dep) unless package_local?(dep)
         install_target(@dependency_queue[pkg], dep)
+
+        read_dependencies(dep)
+        install_dependencies(dep)
       end
     end
   end
