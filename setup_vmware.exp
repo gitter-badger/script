@@ -3,9 +3,6 @@
 # Author: Andy Bettisworth
 # Description: Install VMWare Workstation
 
-## TEST
-#/home/raist/Desktop/seed-install/seed-packages/VMware-Workstation-Full-10.0.3-1895310.i386.bundle
-
 set USER raist
 set DESKTOP /home/$USER/Desktop
 set SEED $DESKTOP/seed-install
@@ -35,7 +32,7 @@ if {[file exists /usr/bin/vmware-installer]} {
     send "no\r"
     puts "Uninstalling VMWare Workstation"
   }
-  wait(5)
+  sleep 5
 }
 
 spawn sudo sh $PACKAGES/$VMWARE_VERSION --console
