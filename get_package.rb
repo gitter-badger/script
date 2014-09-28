@@ -3,7 +3,6 @@
 # Author: Andy Bettisworth
 # Description: get package and it's dependencies
 
-require 'fileutils'
 require 'open-uri'
 
 class PackageDownloader
@@ -11,15 +10,13 @@ class PackageDownloader
   attr_accessor :package_queue
   attr_accessor :dependency_queue
 
-  attr_accessor :target_package_index
-  attr_accessor :dependency_index
-
   def get(packages)
     raise "NoNetworkConnection: Check your network configuration" unless internet_connection?
     raise "MissingArgument: At least one target package is required." unless packages[0]
 
-    @top_directory  = Dir.pwd
-    @package_queue = Hash[packages.flatten.each_with_index.map { |value, index| [value, false] }]
+    @top_directory    = Dir.pwd
+    @package_queue    = Hash[packages.flatten.each_with_index.map { |value, index| [value, false] }]
+    @dependency_queue = Hash.new
 
     @package_queue.each do |pkg, status|
       raise "UnknownPackageError: '#{pkg}'" unless package_exist?(pkg) || package_local?(pkg)
@@ -27,8 +24,10 @@ class PackageDownloader
       until @package_queue[pkg] == true
         Dir.chdir(@top_directory)
         download_package(pkg) unless package_local?(pkg)
-        install_target(pkg)
-        # install_dependencies(pkg)
+        install_target(@package_queue, pkg)
+
+        read_dependencies(pkg)
+        install_dependencies(pkg)
       end
     end
   end
@@ -39,37 +38,27 @@ class PackageDownloader
     system("aptitude download #{pkg}")
   end
 
-  def install_target(pkg)
-    result = system("sudo dpkg -i #{pkg}_*")
-    @package_queue[pkg] = true if result
+  def install_target(queue, pkg)
+    if system("sudo dpkg -i #{pkg}_* 2> #{ENV['HOME']}/Desktop/dependencies_#{pkg}")
+      queue[pkg] = true
+    end
   end
 
-  # def install_dependencies(pkg)
-  #   system("mkdir -p dependency_bucket_#{@dir_level}")
-  #   Dir.chdir("dependency_bucket_#{@dir_level}")
+  def read_dependencies(pkg)
+    error = File.open("#{ENV['HOME']}/Desktop/dependencies_#{pkg}").read
+    dependencies = error.scan(/depends on (.*)?;/).flatten
+    @dependency_queue[pkg] = Hash[dependencies.each_with_index.map { |value, index| [value, false] }]
+  end
 
-  #   dependencies = read_dependencies
-  #   @dir_level += 1
-
-  #   dependencies.each do |dep_pkg|
-  #     @target_pakage = dep_pkg
-  #     download_package(dep_pkg)
-
-  #     is_installed = false
-
-  #     until is_installed == true
-  #       is_installed = install_target(dep_pkg)
-
-  #       Dir.chdir("#{ENV['HOME']}/Desktop")
-  #       get_dependencies(dep_pkg)
-  #     end
-  #   end
-  # end
-
-  # def read_dependencies
-  #   error = File.open("#{ENV['HOME']}/Desktop/dependency_error#{@dir_level}_#{@target_pakage}").read
-  #   error.scan(/depends on (.*)?;/).flatten
-  # end
+  def install_dependencies(pkg)
+    @dependency_queue[pkg].each do |dep, status|
+      until @dependency_queue[pkg][dep] == true
+        # > Dir.chdir('to-correct-dependency-bucket')
+        download_package(dep) unless package_local?(dep)
+        install_target(@dependency_queue[pkg], dep)
+      end
+    end
+  end
 
   def package_exist?(pkg)
     result = `aptitude show #{pkg}`
