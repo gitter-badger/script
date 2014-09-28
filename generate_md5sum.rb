@@ -13,7 +13,5 @@ class GenerateMD5Sum
   end
 end
 
-## > optparse dir_in and dir_out
-## > handle dir or file
 md5_gen = GenerateMD5Sum.new
 md5_gen.generate
