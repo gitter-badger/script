@@ -30,13 +30,13 @@ class PackageDownloader
         puts "Target package has dependencies: #{pkg}"
         puts ""
 
-        system("mkdir -p #{ENV['HOME']}/Desktop/dependencies")
-        Dir.chdir("#{ENV['HOME']}/Desktop/dependencies")
+        system("mkdir -p #{@top_directory}/dependencies")
+        Dir.chdir("#{@top_directory}/dependencies")
         read_dependencies(pkg)
         install_dependencies(pkg)
       end
 
-      system("rm #{ENV['HOME']}/Desktop/dependencies*")
+      system("rm #{@top_directory}/dependencies*")
     end
   end
 
@@ -47,7 +47,7 @@ class PackageDownloader
   end
 
   def install_target(queue, pkg)
-    if system("sudo dpkg -i #{pkg}_* 2> #{ENV['HOME']}/Desktop/dependencies_#{pkg}")
+    if system("sudo dpkg -i #{pkg}_* 2> #{@top_directory}/dependencies_#{pkg}")
       queue[pkg] = true
     end
   end
@@ -57,9 +57,10 @@ class PackageDownloader
     puts "Reading dependencies for: #{pkg}"
     puts ""
 
-    error = File.open("#{ENV['HOME']}/Desktop/dependencies_#{pkg}").read
+    error = File.open("#{@top_directory}/dependencies_#{pkg}").read
     dependencies = error.scan(/depends on (.*)?;/).flatten
     dependencies.collect! { |x| x.gsub(/\W\(.*?\)/, '') }
+    dependencies.collect! { |x| x.gsub(/.*?\|/, '').strip }
     @dependency_queue[pkg] = Hash[dependencies.each_with_index.map { |value, index| [value, false] }]
   end
 
