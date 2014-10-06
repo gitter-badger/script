@@ -6,7 +6,7 @@
 require 'fileutils'
 
 class Annex
-  ANNEX_SYNC = "/media/#{ENV['USER']}/Village/preseed/seed-install/.sync"
+  ANNEX_SYNC = "/media/#{ENV['USER']}/Village/preseed/.seed-install/.sync"
   LOCAL_SYNC = "#{ENV['HOME']}/.sync"
   SYNC_REPOSITORIES = [
     '.canvas',
