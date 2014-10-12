@@ -15,6 +15,8 @@ class ProjectManager
   def initialize
     @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
     @project_path = "#{TODO_PATH}/#{@project}"
+    puts @project
+    puts @project_path
   end
 
   def init_project
