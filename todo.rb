@@ -15,8 +15,6 @@ class ProjectManager
   def initialize
     @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
     @project_path = "#{TODO_PATH}/#{@project}"
-    puts @project
-    puts @project_path
   end
 
   def init_project
@@ -36,9 +34,11 @@ class ProjectManager
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_list
-    list.each_with_index do |todo, index|
-      puts "[#{index + 1}] #{todo[:description]}"
-    end
+    puts list
+    puts list.class
+    # list.each_with_index do |todo, index|
+    #   puts "[#{index + 1}] #{todo[:description]}"
+    # end
   end
 
   def complete_task(id)
