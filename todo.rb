@@ -33,8 +33,11 @@ class ProjectManager
 
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
-    ## > cat task.yaml contents
-    puts YAML.load_file("#{@project_path}/tasks.yaml")
+    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
+    task_list.select! { |k| !k[:completed_at] }
+    task_list.each do |todo|
+      puts todo[:description]
+    end
   end
 
   private
@@ -45,9 +48,7 @@ class ProjectManager
 
   # def read_tasks
   #   task_list = YAML.load_file(@project_path)
-  #   task_list.select! { |k| !k[:is_complete] }
   #   unless task_list.nil?
-  #     task_list.sort_by! { |k| -k[:priority] }
   #     task_list.each_with_index do |todo, index|
   #       puts "#{todo[:priority]} - [#{todo[:id]}] #{todo[:description]}"
   #     end
