@@ -57,7 +57,7 @@ option_parser = OptionParser.new do |opts|
     options[:init] = true
   end
 
-  opts.on('-a', '--add', 'Add a task') do |task|
+  opts.on('-a TASK', '--add TASK', 'Add a task') do |task|
     options[:add] = task
   end
 end
