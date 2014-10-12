@@ -40,20 +40,18 @@ class ProjectManager
     end
   end
 
+  def complete_task(id)
+    raise "No known project #{@project}" unless project_exist?(@project)
+    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
+    # raise "No such task #{id}" unless task_list
+    puts task_list.count
+  end
+
   private
 
   def project_exist?(project)
     File.exist?("#{TODO_PATH}/#{project}")
   end
-
-  # def read_tasks
-  #   task_list = YAML.load_file(@project_path)
-  #   unless task_list.nil?
-  #     task_list.each_with_index do |todo, index|
-  #       puts "#{todo[:priority]} - [#{todo[:id]}] #{todo[:description]}"
-  #     end
-  #   end
-  # end
 end
 
 options = {}
@@ -71,6 +69,10 @@ option_parser = OptionParser.new do |opts|
   opts.on('-l', '--list', 'List all tasks') do
     options[:list] = true
   end
+
+  opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
+    options[:complete] = id
+  end
 end
 option_parser.parse!
 
@@ -84,6 +86,9 @@ elsif options[:add]
   exit
 elsif options[:list]
   mgmt.list_tasks
+  exit
+elsif options[:complete]
+  mgmt.complete_task(options[:complete])
   exit
 end
 
