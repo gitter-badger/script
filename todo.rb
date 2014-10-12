@@ -34,7 +34,7 @@ class ProjectManager
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
     ## > cat task.yaml contents
-    puts YAML.load_file(@project_path)
+    puts YAML.load_file("#{@project_path}/tasks.yaml")
   end
 
   private
