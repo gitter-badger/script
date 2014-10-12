@@ -69,7 +69,7 @@ if options[:init]
   mgmt.init_project
   exit
 elsif options[:add]
-  mgmt.add_task(options[:add])
+  mgmt.add_task(ARGV)
   exit
 end
 
