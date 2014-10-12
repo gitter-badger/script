@@ -34,18 +34,18 @@ class ProjectManager
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_list
-    task_list.each_with_index do |todo, index|
+    list.each_with_index do |todo, index|
       puts "[#{index + 1}] #{todo[:description]}"
     end
   end
 
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
-    task_list = get_list
-    raise "No such task #{id}" unless (1..task_list.count).member?(id.to_i)
-    puts task_list[id.to_i - 1]
-    # task_list[id.to_i - 1][:completed_at] = Time.now
-    # File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(task_list, f) }
+    list = get_list
+    raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
+    puts list[id.to_i - 1]
+    # list[id.to_i - 1][:completed_at] = Time.now
+    # File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
   end
 
   private
