@@ -33,8 +33,7 @@ class ProjectManager
 
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
-    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
-    task_list.select! { |k| !k[:completed_at] }
+    list = get_list
     task_list.each_with_index do |todo, index|
       puts "[#{index + 1}] #{todo[:description]}"
     end
@@ -42,7 +41,7 @@ class ProjectManager
 
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
-    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
+    task_list = get_list
     raise "No such task #{id}" unless (1..task_list.count).member?(id.to_i)
     puts task_list[id.to_i - 1]
     # task_list[id.to_i - 1][:completed_at] = Time.now
@@ -53,6 +52,11 @@ class ProjectManager
 
   def project_exist?(project)
     File.exist?("#{TODO_PATH}/#{project}")
+  end
+
+  def get_list
+    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
+    task_list.select! { |k| !k[:completed_at] }
   end
 end
 
