@@ -56,9 +56,9 @@ class ProjectManager
   end
 
   def get_list
-    task_list = YAML.load_file("#{@project_path}/tasks.yaml")
-    task_list.select! { |k| !k[:completed_at] }
-    puts task_list
+    list = YAML.load_file("#{@project_path}/tasks.yaml")
+    list.select! { |k| !k[:completed_at] }
+    list
   end
 end
 
