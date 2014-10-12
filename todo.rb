@@ -33,14 +33,14 @@ class ProjectManager
 
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
+    ## > cat task.yaml contents
+    puts YAML.load_file(@project_path)
   end
 
   private
 
   def project_exist?(project)
     File.exist?("#{TODO_PATH}/#{project}")
-    ## > cat task.yaml contents
-    puts YAML.load_file(@project_path)
   end
 
   # def read_tasks
@@ -68,7 +68,7 @@ option_parser = OptionParser.new do |opts|
   end
 
   opts.on('-l', '--list', 'List all tasks') do
-    options[:list]
+    options[:list] = true
   end
 end
 option_parser.parse!
