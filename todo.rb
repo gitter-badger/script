@@ -36,7 +36,7 @@ class ProjectManager
     task_list = YAML.load_file("#{@project_path}/tasks.yaml")
     task_list.select! { |k| !k[:completed_at] }
     task_list.each_with_index do |todo, index|
-      puts "[#{index}] #{todo[:description]}"
+      puts "[#{index + 1}] #{todo[:description]}"
     end
   end
 
