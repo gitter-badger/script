@@ -34,11 +34,9 @@ class ProjectManager
   def list_tasks
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_list
-    puts list
-    puts list.class
-    # list.each_with_index do |todo, index|
-    #   puts "[#{index + 1}] #{todo[:description]}"
-    # end
+    list.each_with_index do |todo, index|
+      puts "[#{index + 1}] #{todo[:description]}"
+    end
   end
 
   def complete_task(id)
