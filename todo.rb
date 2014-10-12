@@ -14,6 +14,11 @@ class ProjectManager
     Dir.mkdir("#{TODO_PATH}/#{project}") unless project_exist?(project)
   end
 
+  def add_task(task)
+    puts task
+    puts task.class
+  end
+
   private
 
   def project_exist?(project)
@@ -51,15 +56,20 @@ option_parser = OptionParser.new do |opts|
   opts.on('--init', 'Create a new project for current working directory') do
     options[:init] = true
   end
+
+  opts.on('-a', '--add', 'Add a task') do |task|
+    options[:add] = task
+  end
 end
 option_parser.parse!
 
 mgmt = ProjectManager.new
 
-# Q: can it handle a dir with a space
-# A; no
 if options[:init]
   mgmt.init_project
+  exit
+elsif options[:add]
+  mgmt.add_task(options[:add])
   exit
 end
 
