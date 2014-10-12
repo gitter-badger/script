@@ -29,6 +29,7 @@ class ProjectManager
       completed_at: nil
     }]
     File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    todo_commit("Added task to #{@project} #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
   def list_tasks
@@ -45,6 +46,7 @@ class ProjectManager
     raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
     list[id.to_i - 1][:completed_at] = Time.now
     File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
+    todo_commit("Completed task from #{@project} #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
   private
@@ -57,6 +59,15 @@ class ProjectManager
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list.select! { |k| !k[:completed_at] }
     list
+  end
+
+  def todo_commit(msg)
+    system <<-CMD
+      cd #{TODO_PATH};
+      git checkout annex;
+      git add -A;
+      git commit -m "#{msg}";
+    CMD
   end
 end
 
