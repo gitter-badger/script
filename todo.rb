@@ -10,7 +10,7 @@ class ProjectManager
   TODO_PATH = "#{ENV['HOME']}/.sync/.todo"
 
   def init_project
-    project = File.basename(Dir.getwd).downcase
+    project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
     Dir.mkdir("#{TODO_PATH}/#{project}") unless project_exist?(project)
   end
 
@@ -56,6 +56,8 @@ option_parser.parse!
 
 mgmt = ProjectManager.new
 
+# Q: can it handle a dir with a space
+# A; no
 if options[:init]
   mgmt.init_project
   exit
