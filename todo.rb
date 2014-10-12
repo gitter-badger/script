@@ -44,7 +44,7 @@ class ProjectManager
     raise "No known project #{@project}" unless project_exist?(@project)
     task_list = YAML.load_file("#{@project_path}/tasks.yaml")
     # raise "No such task #{id}" unless task_list.count >= id.to_i
-    puts task_list.count >= id.to_i
+    puts (1..task_list.count).member?(id.to_i)
   end
 
   private
