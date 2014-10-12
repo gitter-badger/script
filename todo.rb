@@ -85,6 +85,14 @@ option_parser = OptionParser.new do |opts|
   opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
     options[:complete] = id
   end
+
+  opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
+    options[:fetch] = project
+  end
+
+  opts.on('--clean', 'Clean all open projects') do
+    options[:clean] = true
+  end
 end
 option_parser.parse!
 
@@ -101,6 +109,12 @@ elsif options[:list]
   exit
 elsif options[:complete]
   mgmt.complete_task(options[:complete])
+  exit
+elsif options[:fetch]
+  mgmt.fetch_project(options[:fetch])
+  exit
+elsif options[:clean]
+  mgmt.clean_projects
   exit
 end
 
