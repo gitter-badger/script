@@ -43,8 +43,9 @@ class ProjectManager
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
     task_list = YAML.load_file("#{@project_path}/tasks.yaml")
-    # raise "No such task #{id}" unless task_list.count >= id.to_i
-    puts (1..task_list.count).member?(id.to_i)
+    raise "No such task #{id}" unless (1..task_list.count).member?(id.to_i)
+    task_list[id.to_i][:completed_at] = Time.now
+    File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(task_list, f) }
   end
 
   private
