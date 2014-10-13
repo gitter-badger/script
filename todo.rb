@@ -51,6 +51,11 @@ class ProjectManager
     end
   end
 
+  def list_projects
+    list = []
+    puts Dir[TODO_PATH]
+  end
+
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_list
@@ -103,6 +108,10 @@ option_parser = OptionParser.new do |opts|
     options[:list] = true
   end
 
+  opts.on('--list-projects', 'List all projects') do
+    options[:list_projects] = true
+  end
+
   opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
     options[:complete] = id
   end
@@ -123,6 +132,9 @@ elsif options[:add]
   exit
 elsif options[:list]
   mgmt.list_tasks
+  exit
+elsif options[:list_projects]
+  mgmt.list_projects
   exit
 elsif options[:complete]
   mgmt.complete_task(options[:complete])
