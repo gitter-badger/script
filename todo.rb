@@ -55,7 +55,7 @@ class ProjectManager
     projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
     projects.each do |project|
       info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
-      puts info
+      puts "#{project} - #{info[:description]}"
     end
   end
 
