@@ -82,8 +82,7 @@ class ProjectManager
       if desktop_dir.include? project
         info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
         ## > mv each to their designated :location
-        puts project
-        puts info[:location]
+        `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
       end
     end
   end
