@@ -20,13 +20,14 @@ class ProjectManager
   def init_project
     Dir.mkdir("#{TODO_PATH}/#{@project}") unless project_exist?(@project)
     puts "Describe this project:\n"
-    description = gets until description
+    description = gets.strip until description
     project = {
       description: description,
       location: File.dirname(Dir.pwd),
       created_at: Time.now
     }
-    File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+    f = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+    f.close
     todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
@@ -37,7 +38,8 @@ class ProjectManager
       created_at: Time.now,
       completed_at: nil
     }]
-    File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    f = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    f.close
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
@@ -54,7 +56,8 @@ class ProjectManager
     list = get_list
     raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
     list[id.to_i - 1][:completed_at] = Time.now
-    File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
+    f = File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
+    f.close
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
