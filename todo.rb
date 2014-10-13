@@ -76,15 +76,14 @@ class ProjectManager
   end
 
   def clean(project)
-    puts "'#{project}'"
-    # all_projects = get_projects
-    # desktop_dir = get_desktop_dir
-    # all_projects.each do |project|
-    #   if desktop_dir.include? project
-    #     info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
-    #     `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
-    #   end
-    # end
+    all_projects = get_projects
+    desktop_dir = get_desktop_dir
+    all_projects.each do |project|
+      if desktop_dir.include? project
+        info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+        `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+      end
+    end
   end
 
   def info
