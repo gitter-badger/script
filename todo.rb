@@ -26,8 +26,8 @@ class ProjectManager
       location: File.dirname(Dir.pwd),
       created_at: Time.now
     }
-    f = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
-    f.close
+    file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+    file.close
     todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
@@ -38,8 +38,8 @@ class ProjectManager
       created_at: Time.now,
       completed_at: nil
     }]
-    f = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
-    f.close
+    file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    file.close
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
@@ -56,8 +56,8 @@ class ProjectManager
     list = get_list
     raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
     list[id.to_i - 1][:completed_at] = Time.now
-    f = File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
-    f.close
+    file = File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
+    file.close
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
