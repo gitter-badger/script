@@ -27,6 +27,7 @@ class ProjectManager
       created_at: Time.now
     }
     File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+    todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
   def add_task(description)
