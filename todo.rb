@@ -19,6 +19,14 @@ class ProjectManager
 
   def init_project
     Dir.mkdir("#{TODO_PATH}/#{@project}") unless project_exist?(@project)
+    puts "Describe this project:\n"
+    description = gets until description
+    project = {
+      description: description,
+      project_path: Dir.pwd,
+      created_at: Time.now
+    }
+    File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
   end
 
   def add_task(description)
@@ -47,6 +55,11 @@ class ProjectManager
     list[id.to_i - 1][:completed_at] = Time.now
     File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+  end
+
+  def info
+    raise "No known project #{@project}" unless project_exist?(@project)
+    puts YAML.load_file("#{@project_path}/project.yaml")
   end
 
   private
@@ -86,12 +99,8 @@ option_parser = OptionParser.new do |opts|
     options[:complete] = id
   end
 
-  opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
-    options[:fetch] = project
-  end
-
-  opts.on('--clean', 'Clean all open projects') do
-    options[:clean] = true
+  opts.on('--info', 'Info for current project') do
+    options[:info] = true
   end
 end
 option_parser.parse!
@@ -110,11 +119,8 @@ elsif options[:list]
 elsif options[:complete]
   mgmt.complete_task(options[:complete])
   exit
-elsif options[:fetch]
-  mgmt.fetch_project(options[:fetch])
-  exit
-elsif options[:clean]
-  mgmt.clean_projects
+elsif options[:info]
+  mgmt.info
   exit
 end
 
