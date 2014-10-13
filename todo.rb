@@ -72,7 +72,7 @@ class ProjectManager
   def fetch_project(target)
     raise "No known project #{target}" unless project_exist?(target)
     # `mv #{TODO_PATH}/#{target}`
-    info = YAML.load_file("#{@project_path}/project.yaml")
+    info = YAML.load_file("#{TODO_PATH}/#{target}/project.yaml")
     puts "#{info[:location]}/#{target}"
   end
 
