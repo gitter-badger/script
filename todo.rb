@@ -75,6 +75,17 @@ class ProjectManager
     `mv #{info[:location]}/#{target} #{ENV['HOME']}/Desktop`
   end
 
+  def clean
+    all_projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
+    puts all_projects
+    # all_projects.each do |p|
+    #   info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+    #   puts "#{project} - #{info[:description]}"
+    # end
+    ## > get all opened projects on Desktop
+    ## > mv each to their designated :location
+  end
+
   def info
     raise "No known project #{@project}" unless project_exist?(@project)
     info = YAML.load_file("#{@project_path}/project.yaml")
@@ -154,6 +165,9 @@ elsif options[:complete]
   exit
 elsif options[:fetch]
   mgmt.fetch_project(options[:fetch])
+  exit
+elsif options[:clean]
+  mgmt.clean
   exit
 elsif options[:info]
   mgmt.info
