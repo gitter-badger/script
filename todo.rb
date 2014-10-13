@@ -77,7 +77,10 @@ class ProjectManager
 
   def clean
     all_projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
+    desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop")
     puts all_projects
+    puts ""
+    puts desktop_dir
     # all_projects.each do |p|
     #   info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
     #   puts "#{project} - #{info[:description]}"
