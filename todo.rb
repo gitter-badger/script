@@ -140,6 +140,10 @@ option_parser = OptionParser.new do |opts|
     options[:fetch] = project
   end
 
+  opts.on('--clean', 'Clean all open projects') do
+    options[:clean] = true
+  end
+
   opts.on('--info', 'Info for current project') do
     options[:info] = true
   end
