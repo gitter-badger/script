@@ -52,8 +52,11 @@ class ProjectManager
   end
 
   def list_projects
-    # list = []
-    puts Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
+    projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
+    projects.each do |project|
+      info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+      puts info
+    end
   end
 
   def complete_task(id)
