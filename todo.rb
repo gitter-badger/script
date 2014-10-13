@@ -52,7 +52,7 @@ class ProjectManager
   end
 
   def list_projects
-    projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
+    projects = get_projects
     projects.each do |project|
       info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
       puts "#{project} - #{info[:description]}"
@@ -76,8 +76,8 @@ class ProjectManager
   end
 
   def clean
-    all_projects = Dir.entries(TODO_PATH).select! {|e| File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")}
-    desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop")
+    all_projects = get_projects
+    desktop_dir = get_desktop_dir
     puts all_projects
     puts ""
     puts desktop_dir
@@ -108,6 +108,20 @@ class ProjectManager
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list.select! { |k| !k[:completed_at] }
     list
+  end
+
+  def get_projects
+    projects = Dir.entries(TODO_PATH).select! do |e|
+      File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")
+    end
+    projects
+  end
+
+  def get_desktop_dir
+    desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop").select! do |e|
+      File.directory?(File.join("#{ENV['HOME']}/Desktop", e)) and !(e == '.' || e == '..' || e == ".git")
+    end
+    desktop_dir
   end
 
   def todo_commit(msg)
