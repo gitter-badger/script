@@ -23,7 +23,7 @@ class ProjectManager
     description = gets until description
     project = {
       description: description,
-      project_path: Dir.pwd,
+      location: File.dirname(Dir.pwd),
       created_at: Time.now
     }
     File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
@@ -59,7 +59,11 @@ class ProjectManager
 
   def info
     raise "No known project #{@project}" unless project_exist?(@project)
-    puts YAML.load_file("#{@project_path}/project.yaml")
+    info = YAML.load_file("#{@project_path}/project.yaml")
+    puts "Project:     #{@project}"
+    puts "Description: #{info[:description]}"
+    puts "Location:    #{info[:location]}"
+    puts "Created At:  #{info[:created_at]}"
   end
 
   private
