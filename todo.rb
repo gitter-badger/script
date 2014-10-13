@@ -79,13 +79,13 @@ class ProjectManager
     all_projects = get_projects
     desktop_dir = get_desktop_dir
     all_projects.each do |project|
-      puts desktop_dir.include? project
+      if desktop_dir.include? project
+        info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+        ## > mv each to their designated :location
+        puts project
+        puts info[:location]
+      end
     end
-    # all_projects.each do |p|
-    #   info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
-    #   puts "#{project} - #{info[:description]}"
-    # end
-    ## > mv each to their designated :location
   end
 
   def info
