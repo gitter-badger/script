@@ -78,14 +78,13 @@ class ProjectManager
   def clean
     all_projects = get_projects
     desktop_dir = get_desktop_dir
-    puts all_projects
-    puts ""
-    puts desktop_dir
+    all_projects.each do |project|
+      puts desktop_dir.include? project
+    end
     # all_projects.each do |p|
     #   info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
     #   puts "#{project} - #{info[:description]}"
     # end
-    ## > get all opened projects on Desktop
     ## > mv each to their designated :location
   end
 
