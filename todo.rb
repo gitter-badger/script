@@ -69,6 +69,12 @@ class ProjectManager
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
+  def fetch_project(target)
+    raise "No known project #{target}" unless project_exist?(target)
+    # `mv #{TODO_PATH}/#{target}`
+    puts "#{TODO_PATH}/#{target}"
+  end
+
   def info
     raise "No known project #{@project}" unless project_exist?(@project)
     info = YAML.load_file("#{@project_path}/project.yaml")
@@ -119,6 +125,10 @@ option_parser = OptionParser.new do |opts|
     options[:complete] = id
   end
 
+  opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
+    options[:fetch] = project
+  end
+
   opts.on('--info', 'Info for current project') do
     options[:info] = true
   end
@@ -141,6 +151,9 @@ elsif options[:list_projects]
   exit
 elsif options[:complete]
   mgmt.complete_task(options[:complete])
+  exit
+elsif options[:fetch]
+  mgmt.fetch_project(options[:fetch])
   exit
 elsif options[:info]
   mgmt.info
