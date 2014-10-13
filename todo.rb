@@ -75,16 +75,16 @@ class ProjectManager
     `mv #{info[:location]}/#{target} #{ENV['HOME']}/Desktop`
   end
 
-  def clean
-    all_projects = get_projects
-    desktop_dir = get_desktop_dir
-    all_projects.each do |project|
-      if desktop_dir.include? project
-        info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
-        ## > mv each to their designated :location
-        `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
-      end
-    end
+  def clean(project)
+    puts "'#{project}'"
+    # all_projects = get_projects
+    # desktop_dir = get_desktop_dir
+    # all_projects.each do |project|
+    #   if desktop_dir.include? project
+    #     info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+    #     `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+    #   end
+    # end
   end
 
   def info
@@ -155,8 +155,8 @@ option_parser = OptionParser.new do |opts|
     options[:fetch] = project
   end
 
-  opts.on('--clean', 'Clean all open projects') do
-    options[:clean] = true
+  opts.on('--clean [PROJECT]', 'Clean all open projects') do |project|
+    options[:clean] = project
   end
 
   opts.on('--info', 'Info for current project') do
@@ -186,7 +186,7 @@ elsif options[:fetch]
   mgmt.fetch_project(options[:fetch])
   exit
 elsif options[:clean]
-  mgmt.clean
+  mgmt.clean(options[:clean])
   exit
 elsif options[:info]
   mgmt.info
