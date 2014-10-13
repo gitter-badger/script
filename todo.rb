@@ -53,7 +53,10 @@ class ProjectManager
 
   def list_projects
     # list = []
-    puts Dir.entries(TODO_PATH).select! {|e| File.directory? e }
+    Dir.entries(TODO_PATH).each do |e|
+      puts e
+    end
+    # .select! {|e| File.directory? e }
     # {|entry| File.directory? File.join(TODO_PATH, entry) and !(entry =='.' || entry == '..' || '.git') }
   end
 
