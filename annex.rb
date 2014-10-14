@@ -182,7 +182,7 @@ option_parser = OptionParser.new do |opts|
     options[:full] = true
   end
 
-  opts.on('-s', '--slim', 'Annex only repositories listed on GitHub') do
+  opts.on('-s', '--slim', 'Annex only a select few repositories') do
     options[:slim] = true
   end
 end
