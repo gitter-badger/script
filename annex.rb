@@ -3,6 +3,7 @@
 # Author: Andy Bettisworth
 # Description: Annex local ~/.sync files
 
+require 'optparse'
 require 'fileutils'
 
 class Annex
