@@ -44,7 +44,7 @@ class ProjectManager
     `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
   end
 
-  def clean(project)
+  def clean
     all_projects = get_projects
     desktop_dir = get_desktop_dir
     all_projects.each do |project|
@@ -104,8 +104,8 @@ option_parser = OptionParser.new do |opts|
     options[:fetch] = project
   end
 
-  opts.on('--clean [PROJECT]', 'Clean all open projects') do |project|
-    options[:clean] = project
+  opts.on('--clean [PROJECT]', 'Clean all open projects') do
+    options[:clean] = true
   end
 
   opts.on('--set-location PATH', 'Set project target location') do |location|
@@ -116,6 +116,7 @@ option_parser = OptionParser.new do |opts|
     options[:info] = true
   end
 end
+option_parser.parse!
 
 mgmt = ProjectManager.new
 
@@ -129,7 +130,7 @@ elsif options[:fetch]
   mgmt.fetch(options[:fetch])
   exit
 elsif options[:clean]
-  mgmt.clean(options[:clean])
+  mgmt.clean
   exit
 elsif options[:set_location]
   mgmt.set_location(options[:set_location])

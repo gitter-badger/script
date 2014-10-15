@@ -28,6 +28,7 @@ option_parser = OptionParser.new do |opts|
     options[:toggle] = project
   end
 end
+option_parser.parse!
 
 mgmt = LauncherManager.new
 
