@@ -57,6 +57,12 @@ class ProjectManager
   end
 
   def set_location(path)
+    raise "No known project #{@project}" unless project_exist?(@project)
+    info = YAML.load_file("#{TODO_PATH}/#{@project}/project.yaml")
+    info[:location] = path
+    file = File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
+    file.close
+    todo_commit("Set project location to '#{path}'")
   end
 
   def info
