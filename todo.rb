@@ -80,7 +80,8 @@ class TaskManager
   end
 
   def largest_task_id(list)
-    list.max_by{|h| h[:id]}][:id]
+    last_task = list.max_by{|h| h[:id]}]
+    last_task[:id]
   end
 
   def get_next_id
