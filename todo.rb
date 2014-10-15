@@ -19,10 +19,9 @@ class TaskManager
 
   def add_task(description)
     raise "No known project #{@project}" unless project_exist?(@project)
-    list = get_all_tasks
-    # > CREATE todo id
+    id = get_next_id
     task = [{
-      id: largest_task_id(list) + 1,
+      id: id,
       description: description,
       created_at: Time.now,
       completed_at: nil
@@ -82,6 +81,15 @@ class TaskManager
 
   def largest_task_id(list)
     list.max_by{|h| h[:id]}
+  end
+
+  def get_next_id
+    if File.exist?("#{TODO_PATH}/#{@project}/tasks.yaml")
+      list = get_all_tasks
+      return largest_task_id(list) + 1
+    else
+      return 0
+    end
   end
 end
 
