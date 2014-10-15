@@ -4,6 +4,7 @@
 # Description: Manage projects
 
 require 'optparse'
+require 'yaml'
 
 class ProjectManager
   TODO_PATH = "#{ENV['HOME']}/.sync/.todo"
