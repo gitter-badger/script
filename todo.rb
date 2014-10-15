@@ -52,7 +52,7 @@ class TaskManager
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
-    raise "No such task #{id}" unless list.member?(id.to_i)
+    raise "No such task #{id}" unless largest_task_id(list) <= id.to_i
     list.each {|t| t[:completed_at] = Time.now if t[:id] == id.to_i }
     File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
