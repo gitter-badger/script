@@ -18,17 +18,21 @@ class ProjectManager
   end
 
   def init
-    Dir.mkdir("#{TODO_PATH}/#{@project}") unless project_exist?(@project)
-    puts "Describe this project:\n"
-    description = gets.strip until description
-    project = {
-      description: description,
-      location: File.dirname(Dir.pwd),
-      created_at: Time.now
-    }
-    file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
-    file.close
-    todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    unless project_exist?(@project)
+      Dir.mkdir("#{TODO_PATH}/#{@project}")
+      puts "Describe this project:\n"
+      description = gets.strip until description
+      project = {
+        description: description,
+        location: File.dirname(Dir.pwd),
+        created_at: Time.now
+      }
+      file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+      file.close
+      todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    else
+      puts "Project already exists for #{@project}"
+    end
   end
 
   def list
