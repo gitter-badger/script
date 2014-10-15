@@ -59,10 +59,13 @@ class ProjectManager
   def set_location(path)
     raise "No known project #{@project}" unless project_exist?(@project)
     info = YAML.load_file("#{TODO_PATH}/#{@project}/project.yaml")
+    old_path = info[:location]
     info[:location] = path
     file = File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
-    file.close
-    todo_commit("Set project location to '#{path}'")
+    # todo_commit("Set project location to '#{path}'")
+    # `mv #{current_path} #{path}`
+    puts old_path
+    puts info[:location]
   end
 
   def info
@@ -123,7 +126,7 @@ option_parser = OptionParser.new do |opts|
     options[:set_location] = location
   end
 
-  opts.on('--info', 'Info for current project') do
+  opts.on('-i', '--info', 'Info for current project') do
     options[:info] = true
   end
 end
