@@ -43,7 +43,7 @@ class TaskManager
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
     list.each_with_index do |todo, index|
-      task = "[#{index + 1}] #{todo[:description]} "
+      task = "[#{todo[:id]}] #{todo[:description]} "
       task += "[COMPLETED #{todo[:completed_at]}]" if todo[:completed_at]
       puts task
     end
