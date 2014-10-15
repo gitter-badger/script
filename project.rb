@@ -61,11 +61,9 @@ class ProjectManager
     info = YAML.load_file("#{TODO_PATH}/#{@project}/project.yaml")
     old_path = info[:location]
     info[:location] = path
-    file = File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
-    # todo_commit("Set project location to '#{path}'")
-    # `mv #{current_path} #{path}`
-    puts old_path
-    puts info[:location]
+    File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
+    todo_commit("Set project location to '#{path}'")
+    `mv #{old_path} #{path}`
   end
 
   def info
