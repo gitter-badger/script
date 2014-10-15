@@ -123,7 +123,7 @@ mgmt = ProjectManager.new
 if options[:init]
   mgmt.init
   exit
-if options[:list]
+elsif options[:list]
   mgmt.list
   exit
 elsif options[:fetch]
