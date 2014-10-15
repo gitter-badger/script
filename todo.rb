@@ -20,17 +20,16 @@ class TaskManager
   def add_task(description)
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
-    puts largest_hash_key(list)
     # > CREATE todo id
-    # task = [{
-    #   id:
-    #   description: description,
-    #   created_at: Time.now,
-    #   completed_at: nil
-    # }]
-    # file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
-    # file.close
-    # todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    task = [{
+      id: largest_task_id(list) + 1
+      description: description,
+      created_at: Time.now,
+      completed_at: nil
+    }]
+    file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    file.close
+    todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
   def list
@@ -81,9 +80,8 @@ class TaskManager
     `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 
-  def largest_hash_key(array)
-    array.max_by{|h| h[:created_at]}
-    # array.max_by{|h| h[:id]}
+  def largest_task_id(list)
+    list.max_by{|h| h[:id]}
   end
 end
 
