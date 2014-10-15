@@ -22,7 +22,7 @@ class TaskManager
     list = get_all_tasks
     # > CREATE todo id
     task = [{
-      id: largest_task_id(list) + 1
+      id: largest_task_id(list) + 1,
       description: description,
       created_at: Time.now,
       completed_at: nil
