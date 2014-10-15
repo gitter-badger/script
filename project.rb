@@ -87,6 +87,10 @@ class ProjectManager
     end
     desktop_dir
   end
+
+  def todo_commit(msg)
+    `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+  end
 end
 
 options = {}
