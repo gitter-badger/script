@@ -20,7 +20,8 @@ class TaskManager
   def add_task(description)
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
-    puts largest_hash_key(list)
+    puts list
+    # puts largest_hash_key(list)
     # > CREATE todo id
     # task = [{
     #   id:
