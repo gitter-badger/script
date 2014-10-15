@@ -42,7 +42,7 @@ class TaskManager
     list = get_all_tasks
     list.each_with_index do |todo, index|
       task = "[#{index + 1}] #{todo[:description]} "
-      task += "#{todo[:completed_at]}" if todo[:completed_at]
+      task += "[COMPLETED #{todo[:completed_at]}]" if todo[:completed_at]
       puts task
     end
   end
