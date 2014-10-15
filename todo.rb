@@ -52,8 +52,7 @@ class TaskManager
     list = get_active_tasks
     raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
     list[id.to_i - 1][:completed_at] = Time.now
-    file = File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
-    file.close
+    File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
