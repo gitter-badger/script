@@ -82,8 +82,9 @@ class TaskManager
     `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 
-  def largest_hash_key(hash)
-    hash.max_by{|k,v| v}
+  def largest_hash_key(array)
+    array.max_by{|h| h[:created_at]}
+    # array.max_by{|h| h[:id]}
   end
 end
 
