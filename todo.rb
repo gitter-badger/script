@@ -89,10 +89,6 @@ options = {}
 option_parser = OptionParser.new do |opts|
   opts.banner = 'USAGE: todo [options]'
 
-  opts.on('--init', 'Create a new project for current working directory') do
-    options[:init] = true
-  end
-
   opts.on('-a TASK', '--add TASK', 'Add a task') do |task|
     options[:add] = task
   end
@@ -113,10 +109,7 @@ option_parser.parse!
 
 mgmt = TaskManager.new
 
-if options[:init]
-  mgmt.init_project
-  exit
-elsif options[:add]
+if options[:add]
   mgmt.add_task(options[:add])
   exit
 elsif options[:list]
