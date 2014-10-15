@@ -19,21 +19,25 @@ class TaskManager
 
   def add_task(description)
     raise "No known project #{@project}" unless project_exist?(@project)
-    task = [{
-      description: description,
-      created_at: Time.now,
-      completed_at: nil
-    }]
-    file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
-    file.close
-    todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    list = get_all_tasks
+    puts largest_hash_key(list)
+    # > CREATE todo id
+    # task = [{
+    #   id:
+    #   description: description,
+    #   created_at: Time.now,
+    #   completed_at: nil
+    # }]
+    # file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
+    # file.close
+    # todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
 
   def list
     raise "No known project #{@project}" unless project_exist?(@project)
     list = get_active_tasks
     list.each_with_index do |todo, index|
-      puts "[#{index + 1}] #{todo[:description]}"
+      puts "[#{todo[:id]}] #{todo[:description]}"
     end
   end
 
@@ -49,9 +53,9 @@ class TaskManager
 
   def complete_task(id)
     raise "No known project #{@project}" unless project_exist?(@project)
-    list = get_active_tasks
-    raise "No such task #{id}" unless (1..list.count).member?(id.to_i)
-    list[id.to_i - 1][:completed_at] = Time.now
+    list = get_all_tasks
+    raise "No such task #{id}" unless list.member?(id.to_i)
+    list[id][:completed_at] = Time.now
     File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
@@ -75,6 +79,10 @@ class TaskManager
 
   def todo_commit(msg)
     `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+  end
+
+  def largest_hash_key(hash)
+    hash.max_by{|k,v| k}
   end
 end
 
