@@ -7,19 +7,19 @@ require 'optparse'
 require 'yaml'
 
 class ProjectManager
-  TODO_PATH = "#{ENV['HOME']}/.sync/.todo"
+  PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
 
   attr_accessor :project
   attr_accessor :project_path
 
   def initialize
     @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
-    @project_path = "#{TODO_PATH}/#{@project}"
+    @project_path = "#{PROJECT_PATH}/#{@project}"
   end
 
   def init
     unless project_exist?(@project)
-      Dir.mkdir("#{TODO_PATH}/#{@project}")
+      Dir.mkdir("#{PROJECT_PATH}/#{@project}")
       puts "Describe this project:\n"
       description = gets.strip until description
       project = {
@@ -38,14 +38,14 @@ class ProjectManager
   def list
     projects = get_projects
     projects.each do |project|
-      info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+      info = YAML.load_file("#{PROJECT_PATH}/#{project}/project.yaml")
       puts "#{project} - #{info[:description]}"
     end
   end
 
   def fetch(project)
     raise "No known project #{project}" unless project_exist?(project)
-    info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+    info = YAML.load_file("#{PROJECT_PATH}/#{project}/project.yaml")
     `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
   end
 
@@ -54,7 +54,7 @@ class ProjectManager
     desktop_dir = get_desktop_dir
     all_projects.each do |project|
       if desktop_dir.include? project
-        info = YAML.load_file("#{TODO_PATH}/#{project}/project.yaml")
+        info = YAML.load_file("#{PROJECT_PATH}/#{project}/project.yaml")
         `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
       end
     end
@@ -62,7 +62,7 @@ class ProjectManager
 
   def set_location(path)
     raise "No known project #{@project}" unless project_exist?(@project)
-    info = YAML.load_file("#{TODO_PATH}/#{@project}/project.yaml")
+    info = YAML.load_file("#{PROJECT_PATH}/#{@project}/project.yaml")
     old_path = info[:location]
     info[:location] = path
     File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
@@ -82,12 +82,12 @@ class ProjectManager
   private
 
   def project_exist?(project)
-    File.exist?("#{TODO_PATH}/#{project}")
+    File.exist?("#{PROJECT_PATH}/#{project}")
   end
 
   def get_projects
-    projects = Dir.entries(TODO_PATH).select! do |e|
-      File.directory?(File.join(TODO_PATH, e)) and !(e == '.' || e == '..' || e == ".git")
+    projects = Dir.entries(PROJECT_PATH).select! do |e|
+      File.directory?(File.join(PROJECT_PATH, e)) and !(e == '.' || e == '..' || e == ".git")
     end
     projects
   end
@@ -100,7 +100,7 @@ class ProjectManager
   end
 
   def todo_commit(msg)
-    `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+    `cd #{PROJECT_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 end
 

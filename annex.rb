@@ -13,7 +13,7 @@ class Annex
     '.canvas',
     '.script',
     '.template',
-    '.todo',
+    '.project',
     '.preseed'
   ]
   SYNC_APPLICATIONS = [
@@ -39,7 +39,7 @@ class Annex
     require_annex_usb
     sync('.canvas')
     sync('.script')
-    sync('.todo')
+    sync('.project')
   end
 
   private
