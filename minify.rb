@@ -5,7 +5,6 @@
 
 raise 'Target file required.' unless ARGV[0]
 raise 'No such file exists.' unless File.exist?(ARGV[0])
-target = ARGV[0]
 
 content = File.open(ARGV[0]).read
 content.gsub!(/\s/, '')
