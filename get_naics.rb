@@ -44,6 +44,7 @@ puts ""
 puts "Select a 6 digit NAICS code:"
 six_code = gets.to_i until six_code
 
+puts ""
 puts "#{two_code} #{data[two_code]}"
 puts "#{three_code} #{data[three_code]}"
 puts "#{four_code} #{data[four_code]}"
