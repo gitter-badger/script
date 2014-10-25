@@ -8,7 +8,6 @@ require 'yaml'
 require 'get_naics'
 
 ## > Add naics_code
-## > Add classification
 
 class FeatureManager
   PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
@@ -32,7 +31,7 @@ class FeatureManager
     @project_path = "#{PROJECT_PATH}/#{@project}"
   end
 
-  def add_feature
+  def add
     raise "No known project #{@project}" unless project_exist?(@project)
     feature = build_feature
     file = File.open("#{@project_path}/features.yaml", 'a+') << feature.to_yaml.gsub("---\n", '')
@@ -56,7 +55,6 @@ class FeatureManager
 
   def build_feature
     id = get_next_id
-
     puts "Feature: ____"
     name = gets until name
     puts "As a ____"
@@ -65,8 +63,9 @@ class FeatureManager
     requirement = gets until requirement
     puts "So that ____"
     value = gets until value
-    app_class = get_app_class until app_class
-    naics_code = get_naics_code until naics_code
+    naics_getter = GetNAICSCode.new
+    naics_code   = naics_getter.ask
+    app_class    = get_app_class
 
     feature = [{
       id: id,
@@ -107,7 +106,8 @@ class FeatureManager
   def get_app_class
     APP_CLASS.each { |k,v| puts "[#{k}] #{v}" }
     puts "Which application classification does this feature best match?"
-    classification = gets
+    classification = 0
+    classification = gets.to_i until classification != 0
     classification
   end
 
@@ -119,28 +119,28 @@ class FeatureManager
   end
 end
 
-# options = {}
-# option_parser = OptionParser.new do |opts|
-#   opts.banner = 'USAGE: feature [options]'
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.banner = 'USAGE: feature [options]'
 
-#   opts.on('-a', '--add', 'Add a feature') do
-#     options[:add] = true
-#   end
+  opts.on('-a', '--add', 'Add a feature') do
+    options[:add] = true
+  end
 
-#   opts.on('-l', '--list', 'List project features') do
-#     options[:list] = true
-#   end
-# end
-# option_parser.parse!
+  opts.on('-l', '--list', 'List project features') do
+    options[:list] = true
+  end
+end
+option_parser.parse!
 
 mgmt = FeatureManager.new
 
-# if options[:add]
-#   mgmt.add_feature
-#   exit
-# elsif options[:list]
-#   mgmt.list
-#   exit
-# end
+if options[:add]
+  mgmt.add
+  exit
+elsif options[:list]
+  mgmt.list
+  exit
+end
 
-# puts option_parser
+puts option_parser
