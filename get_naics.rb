@@ -51,5 +51,7 @@ class GetNAICSCode
   end
 end
 
-questions = GetNAICSCode.new
-questions.ask
+if __FILE__ == $0
+  questions = GetNAICSCode.new
+  questions.ask
+end
