@@ -10,17 +10,19 @@ class AddressBook
   end
 end
 
-user = User.new('23', 'Jane', 'Doe')
-address_book = AddressBook.new(connection, user)
-recipient = Recipient.new(
-  'Jose', 'Rodriguez',
-  'Casanova Street 8', '77002',
-  'Houston', 'TX',
-  'Rrrrr!'
-)
-address_book.delete(recipient)
+if __FILE__ == $0
+  user = User.new('23', 'Jane', 'Doe')
+  address_book = AddressBook.new(connection, user)
+  recipient = Recipient.new(
+    'Jose', 'Rodriguez',
+    'Casanova Street 8', '77002',
+    'Houston', 'TX',
+    'Rrrrr!'
+  )
+  address_book.delete(recipient)
 
 
-class AddressBook
-  def delete() @connection.delete(udn); end
+  class AddressBook
+    def delete() @connection.delete(udn); end
+  end
 end

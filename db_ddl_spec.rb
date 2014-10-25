@@ -1,3 +1,8 @@
+#!/usr/bin/env ruby -w
+# db_ddl_spec.rb
+# Author: Andy Bettisworth
+# Description: Recreate the DDL of a schema
+
 require 'pg'
 require 'active_record'
 

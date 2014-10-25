@@ -43,11 +43,11 @@ class AddressBook
   end
 end
 
+if __FILE__ == $0
+  user = User.new('23', 'Jane', 'Doe')
+  address_book = AddressBook.new(connection, user)
+  address_book.each_recipient { |recipient| pp recipient }
 
-user = User.new('23', 'Jane', 'Doe')
-address_book = AddressBook.new(connection, user)
-address_book.each_recipient { |recipient| pp recipient }
-
-# OR with formating
-
-puts address_book.to_ldif
+  # OR with formating
+  puts address_book.to_ldif
+end

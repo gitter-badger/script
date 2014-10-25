@@ -27,13 +27,15 @@ class SpreadsheetFactory
   end
 end
 
-excel_factory = SpreadsheetFactory.new
-if ARGV[0] && ARGV[1]
-  excel_factory.add_workbook(ARGV[0], ARGV)
-elsif ARGV[0]
-  excel_factory.add_workbook(ARGV[0])
-else
-  puts "USAGE: create_excel 'NAME' [VALUES]"
+if __FILE__ == $0
+  excel_factory = SpreadsheetFactory.new
+  if ARGV[0] && ARGV[1]
+    excel_factory.add_workbook(ARGV[0], ARGV)
+  elsif ARGV[0]
+    excel_factory.add_workbook(ARGV[0])
+  else
+    puts "USAGE: create_excel 'NAME' [VALUES]"
+  end
 end
 
 # describe SpreadsheetFactory do

@@ -16,5 +16,7 @@ class Tasks
   end
 end
 
-tasker = Tasks.new
-tasker.every_minute
+if __FILE__ == $0
+  tasker = Tasks.new
+  tasker.every_minute
+end

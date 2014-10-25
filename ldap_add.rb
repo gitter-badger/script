@@ -4,6 +4,7 @@
 # Description: Add an LDAP entry
 
 User = Struct.new(:uid, :forename, :surname)
+
 class AddressBook
   BASE_DC = 'dc=pragbouquet,dc=com'
 
@@ -33,4 +34,3 @@ class AddressBook
     AddressBook.new(connection, user)
   end
 end
-

@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 # currency_converter_dynamic.rb
+# Author: Andy Bettisworth
 # Description: Using dynamic exchange rates
 # LINK http://www.currencysource.com/rss_currencyexchangerates.html
 

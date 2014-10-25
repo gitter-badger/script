@@ -110,32 +110,33 @@ class Canvas
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: canvas [FILE]"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: canvas [FILE]"
 
-  opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
-    options[:add] = c
+    opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
+      options[:add] = c
+    end
+
+    opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('--clean', 'Sync all canvases') do
+      options[:clean] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
-    options[:fetch] = true
+  c = Canvas.new
+  if options[:clean]
+    c.clean
+  elsif options[:fetch]
+    c.fetch_all(ARGV)
+  elsif options[:add]
+    c.add(options[:add])
+  else
+    puts option_parser
   end
-
-  opts.on('--clean', 'Sync all canvases') do
-    options[:clean] = true
-  end
-end
-option_parser.parse!
-
-## USAGE
-c = Canvas.new
-if options[:clean]
-  c.clean
-elsif options[:fetch]
-  c.fetch_all(ARGV)
-elsif options[:add]
-  c.add(options[:add])
-else
-  puts option_parser
 end

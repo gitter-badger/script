@@ -15,28 +15,28 @@ class WebScreenshotFetcher
   end
 end
 
-# ARGUMENTS
-options = {}
-OptionParser.new do |opts|
-  opts.banner = "USAGE: get_screenshot [options]"
+if __FILE__ == $0
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "USAGE: get_screenshot [options]"
 
-  opts.on('-u',"--url [PATH]", 'Set target URL') do |target_url|
-    options[:url] = target_url.to_s
-  end
+    opts.on('-u',"--url [PATH]", 'Set target URL') do |target_url|
+      options[:url] = target_url.to_s
+    end
 
-  opts.on('-i',"--img [FILENAME]", 'Set image filename') do |target_img|
-    options[:img] = target_img.to_s
-  end
-end.parse!
+    opts.on('-i',"--img [FILENAME]", 'Set image filename') do |target_img|
+      options[:img] = target_img.to_s
+    end
+  end.parse!
 
-# USAGES
-snappy = WebScreenshotFetcher.new
-if options[:url]
-  if options[:img]
-    snappy.get_screenshot(options[:url], options[:img])
+  snappy = WebScreenshotFetcher.new
+  if options[:url]
+    if options[:img]
+      snappy.get_screenshot(options[:url], options[:img])
+    else
+      puts '!ERROR: An image filename is required. [--img]'
+    end
   else
-    puts '!ERROR: An image filename is required. [--img]'
+    puts '!ERROR: A target URL is required. [--url]'
   end
-else
-  puts '!ERROR: A target URL is required. [--url]'
 end

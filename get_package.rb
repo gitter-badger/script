@@ -99,7 +99,11 @@ class PackageDownloader
   end
 end
 
-if ARGV
-  getter = PackageDownloader.new
-  getter.get(ARGV)
+if __FILE__ == $0
+  if ARGV
+    getter = PackageDownloader.new
+    getter.get(ARGV)
+  else
+    puts "ERROR: Arguments required"
+  end
 end

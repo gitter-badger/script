@@ -49,6 +49,7 @@ class GetPkg
   end
 end
 
-## USAGE
-cmd = GetPkg.new
-cmd.get
+if __FILE__ == $0
+  cmd = GetPkg.new
+  cmd.get
+end

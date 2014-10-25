@@ -25,12 +25,7 @@ class RotateBackground
   end
 end
 
-## Usage
-spinster = RotateBackground.new
-spinster.rotate
-
-# describe RotateBackground do
-#   describe "#rotate" do
-#     it "should "
-#   end
-# end
+if __FILE__ == $0
+  spinster = RotateBackground.new
+  spinster.rotate
+end

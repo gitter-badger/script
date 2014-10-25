@@ -63,26 +63,28 @@ class CaesarShiftCipher
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: caesar_shift [-d/-e] SHIFT_COUNT MESSAGE'
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: caesar_shift [-d/-e] SHIFT_COUNT MESSAGE'
 
-  opts.on('-e', '--encrypt SHIFT_COUNT', 'Encrypt your message') do |shift_count|
-    options[:encrypt] = shift_count.to_i
+    opts.on('-e', '--encrypt SHIFT_COUNT', 'Encrypt your message') do |shift_count|
+      options[:encrypt] = shift_count.to_i
+    end
+
+    opts.on('-d', '--decrypt SHIFT_COUNT', 'Decrypt your message') do |shift_count|
+      options[:decrypt] = shift_count.to_i
+    end
   end
+  option_parser.parse!
 
-  opts.on('-d', '--decrypt SHIFT_COUNT', 'Decrypt your message') do |shift_count|
-    options[:decrypt] = shift_count.to_i
+  if options[:encrypt]
+    cipher = CaesarShiftCipher.new(options[:encrypt])
+    puts cipher.encrypt(ARGV[0])
+  elsif options[:decrypt]
+    cipher = CaesarShiftCipher.new(options[:decrypt])
+    puts cipher.decrypt(ARGV[0])
+  else
+    puts option_parser
   end
-end
-option_parser.parse!
-
-if options[:encrypt]
-  cipher = CaesarShiftCipher.new(options[:encrypt])
-  puts cipher.encrypt(ARGV[0])
-elsif options[:decrypt]
-  cipher = CaesarShiftCipher.new(options[:decrypt])
-  puts cipher.decrypt(ARGV[0])
-else
-  puts option_parser
 end

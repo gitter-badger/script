@@ -17,15 +17,17 @@ class AddressBook
   end
 end
 
-# UPDATE object identified by 'distinguished name' (dn)
-# `LDAP::Conn.modify(dn, attributes)`
 
-user = User.new('23', 'Jane', 'Doe')
-address_book = AddressBook.new(connection, user)
-recipient = Recipient.new(
-  'Jose', 'Rodriguez',
-  'Casanova Street 8', '77002',
-  'Houston', 'TX',
-  'Rrrrrr!'
-)
-address_book.update(recipient)
+if __FILE__ == $0
+  # UPDATE object identified by 'distinguished name' (dn)
+  # `LDAP::Conn.modify(dn, attributes)`
+  user = User.new('23', 'Jane', 'Doe')
+  address_book = AddressBook.new(connection, user)
+  recipient = Recipient.new(
+    'Jose', 'Rodriguez',
+    'Casanova Street 8', '77002',
+    'Houston', 'TX',
+    'Rrrrrr!'
+  )
+  address_book.update(recipient)
+end

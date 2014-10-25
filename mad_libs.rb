@@ -32,11 +32,7 @@ module MadLibGame
   end
 end
 
-mad_libber = MadLib.new
-mad_libber.create
-
-# describe MadLib do
-#   describe "#create" do
-#     it "should "
-#   end
-# end
+if __FILE__ == $0
+  mad_libber = MadLib.new
+  mad_libber.create
+end

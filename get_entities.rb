@@ -1,4 +1,9 @@
-sclass SchemaCollective
+#!/usr/bin/ruby -w
+# get_entities.rb
+# Author: Andy Bettisworth
+# Description: Get the entities from Rails schema.rb file
+
+class SchemaCollective
   ENTITIES_REGEXP    = Regexp.new("create_table.*?end", Regexp::IGNORECASE | Regexp::MULTILINE)
   ENTITY_NAME_REGEXP = Regexp.new('create_table\s+"(\w+)"')
   ATTRIBUTE_REGEXP   = Regexp.new('\w.*?\..*')
@@ -135,5 +140,7 @@ sclass SchemaCollective
   end
 end
 
-collective = SchemaCollective.new
-collective.init
+if __FILE__ == $0
+  collective = SchemaCollective.new
+  collective.init
+end

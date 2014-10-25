@@ -1,6 +1,7 @@
 #!/usr/bin/ruby -w
 # currency_converter_static.rb
-# DESCRIPTION: Using fixed exchange rates
+# Author: Andy Bettisworth
+# Description: Using fixed exchange rates
 
 class CurrencyConverter
   BASE_ABBR_AND_NAME = { 'USD' => 'US Dollar' }

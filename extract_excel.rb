@@ -35,9 +35,11 @@ class SpreadsheetArray
   end
 end
 
-excel_array = SpreadsheetArray.new
-if ARGV[0]
-  excel_array.extract(ARGV[0])
-else
-  puts "USAGE: extract_excel NAME"
+if __FILE__ == $0
+  excel_array = SpreadsheetArray.new
+  if ARGV[0]
+    excel_array.extract(ARGV[0])
+  else
+    puts "USAGE: extract_excel NAME"
+  end
 end
