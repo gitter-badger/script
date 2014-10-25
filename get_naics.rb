@@ -13,6 +13,7 @@ class GetNAICSCode
   attr_accessor :four_digits
   attr_accessor :five_digits
   attr_accessor :six_digits
+  attr_accessor :digit_array
 
   def initialize
     @two_digits   = NAICS_CODES.select { |code, desc| code.to_s.size == 2 }
@@ -20,72 +21,33 @@ class GetNAICSCode
     @four_digits  = NAICS_CODES.select { |code, desc| code.to_s.size == 4 }
     @five_digits  = NAICS_CODES.select { |code, desc| code.to_s.size == 5 }
     @six_digits   = NAICS_CODES.select { |code, desc| code.to_s.size == 6 }
+    @digit_array = [@two_digits, @three_digits, @four_digits, @five_digits, @six_digits]
   end
 
   def ask
-    # > stop after initial 0
-    two_digit   = get_two_digit
-    three_digit = get_three_digit(two_digit)
-    four_digit  = get_four_digit(three_digit)
-    five_digit  = get_five_digit(four_digit)
-    six_digit   = get_six_digit(five_digit)
-    # > display final selections
-    display_selection_tree
+    target_naics_code = 0
+    @digit_array.each_with_index do |naics_codes, index|
+      code = get_naics_code(naics_codes)
+      break if code == 0
+      filter(@digit_array[index+1], code) if index < 4
+      target_naics_code = code
+    end
+    puts "Target NAICS Code: [#{target_naics_code}] #{NAICS_CODES[target_naics_code]}"
+    target_naics_code
   end
 
   private
 
-  def get_two_digit
-    @two_digits.each { |code, desc| puts "#{code} #{desc}" }
+  def get_naics_code(code_list)
+    code_list.each { |code, desc| puts "#{code} #{desc}" }
     puts ""
-    puts "Select a 2 digit NAICS code:"
+    puts "Select a #{code_list.keys[0].to_s.size} digit NAICS code:"
     two_code = gets.to_i until two_code
     two_code
   end
 
-  def get_three_digit(two_digit)
-    @three_digits.select! { |code| code.to_s =~ /^#{two_digit}/ ? true : false }
-    @three_digits.each { |code, desc| puts "#{code} #{desc}" }
-    puts ""
-    puts "Select a 3 digit NAICS code:"
-    three_code = gets.to_i until three_code
-    three_code
-  end
-
-  def get_four_digit(three_digit)
-    @four_digits.keep_if { |code, desc| /^#{three_digit}/ =~ code.to_s }
-    @four_digits.each { |code, desc| puts "#{code} #{desc}" }
-    puts ""
-    puts "Select a 4 digit NAICS code:"
-    four_code = gets.to_i until four_code
-    four_code
-  end
-
-  def get_five_digit(four_digit)
-    @five_digits.keep_if { |code, desc| /^#{four_digit}/ =~ code.to_s }
-    @five_digits.each { |code, desc| puts "#{code} #{desc}" }
-    puts ""
-    puts "Select a 5 digit NAICS code:"
-    five_code = gets.to_i until five_code
-    five_code
-  end
-
-  def get_six_digit(five_digit)
-    @six_digits.keep_if { |code, desc| /^#{five_digit}/ =~ code.to_s }
-    @six_digits.each { |code, desc| puts "#{code} #{desc}" }
-    puts ""
-    puts "Select a 6 digit NAICS code:"
-    six_code = gets.to_i until six_code
-    six_code
-  end
-
-  def display_selection_tree
-    puts ""
-    puts "#{two_code}     #{NAICS_CODES[two_code]}"
-    puts "#{three_code}     #{NAICS_CODES[three_code]}"
-    puts "#{four_code}    #{NAICS_CODES[four_code]}"
-    puts "#{five_code}   #{NAICS_CODES[five_code]}"
-    puts "#{six_code}  #{NAICS_CODES[six_code]}"
+  def filter(code_list, digit_filter)
+    code_list.select! { |code| code.to_s =~ /^#{digit_filter}/ ? true : false }
   end
 end
 
