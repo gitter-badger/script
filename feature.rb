@@ -5,7 +5,7 @@
 
 require 'optparse'
 require 'yaml'
-require 'get_naics'
+require_relative 'get_naics'
 
 ## > Add naics_code
 
