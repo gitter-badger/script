@@ -74,8 +74,9 @@ class Canvas
     canvas_list.select! { |s| pattern.match(s) } if pattern
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
-      if d[0]
-        canvas_dict[c] = d[0].gsub(/# description: /i, '')
+      if d
+        puts d
+        # canvas_dict[c] = d[0].gsub(/# description: /i, '')
       else
         canvas_dict[c] = ''
       end
