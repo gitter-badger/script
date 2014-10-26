@@ -58,7 +58,6 @@ class Canvas
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
     canvas_list = get_canvases
-    puts canvas_list
     # canvas_list.select! { |s| pattern.match(s) } if pattern
     # puts canvas_list
     # canvas_list
@@ -68,9 +67,9 @@ class Canvas
 
   def get_canvases
     canvases = Dir.entries(CANVAS).select! do |e|
-      puts e
       File.directory?(File.join(CANVAS, e)) and !(e == '.' || e == '..' || e == ".git")
     end
+    puts canvases
     canvases
   end
 
