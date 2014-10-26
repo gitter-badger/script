@@ -165,7 +165,7 @@ if __FILE__ == $0
       options[:list_pattern] = regexp
     end
 
-    opts.on('--refresh', 'Refresh BASH_ALIASESes of scripts') do
+    opts.on('--refresh', 'Refresh script Bash aliases') do
       options[:refresh] = true
     end
   end

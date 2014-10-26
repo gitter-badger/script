@@ -124,7 +124,7 @@ if __FILE__ == $0
       options[:fetch] = project
     end
 
-    opts.on('--clean', 'Clean all open projects') do
+    opts.on('--clean', 'Move project(s) off Desktop') do
       options[:clean] = true
     end
 
