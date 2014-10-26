@@ -71,12 +71,8 @@ class Canvas
     end
     canvas_list.select! { |s| pattern.match(s) } if pattern
     canvas_list.each do |c|
-      d = File.open(File.join(CANVAS, c), "rb:UTF-16BE").readlines.select! { |l| /description:/i.match(l) }
-      if d
-        canvas_dict[c] = d[0]
-      else
-        canvas_dict[c] = ''
-      end
+      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
+      puts "#{c} #{d}"
     end
     # canvas_list.collect! { |s| s.gsub('canvas_', '') }
     canvas_dict
