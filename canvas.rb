@@ -59,7 +59,7 @@ class Canvas
     pattern = Regexp.new(regexp) if regexp
     canvas_dict = get_canvases(pattern)
     canvas_dict.each do |name,desc|
-      puts "#{names.gsub('canvas_', '')} #{desc}"
+      puts "#{name.gsub('canvas_', '')} #{desc}"
     end
     canvas_dict
   end
