@@ -139,7 +139,7 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--clean', 'Sync all canvases') do
+    opts.on('--clean', 'Move canvas(es) off Desktop') do
       options[:clean] = true
     end
 
