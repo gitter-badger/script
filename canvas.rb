@@ -58,10 +58,9 @@ class Canvas
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
     canvas_list = get_canvases
+    canvas_list.select! { |s| pattern.match(s) } if pattern
     puts canvas_list
-    # canvas_list.select! { |s| pattern.match(s) } if pattern
-    # puts canvas_list
-    # canvas_list
+    canvas_list
   end
 
   private
