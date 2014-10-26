@@ -79,6 +79,7 @@ class Script
     bash_aliases.puts '## CREATE aliases for ~/.sync/.script/* via ~/.bash_aliases'
 
     ruby_scripts = Dir["#{ENV['HOME']}/.sync/.script/*.rb"]
+    puts ruby_scripts
     ruby_scripts.each do |script|
       next if script.include?("_spec.rb")
       name = File.basename(script, '.rb')
