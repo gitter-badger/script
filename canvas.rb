@@ -65,16 +65,15 @@ class Canvas
   private
 
   def get_canvases(pattern)
-    canvas_list = Dir.entries(CANVAS).delete_if do |e|
-      File.directory?(File.join(CANVAS, e))
+    canvas_list = Dir.entries(CANVAS).delete_if do |c|
+      File.directory?(File.join(CANVAS, c))
     end
     canvas_list.select! { |s| pattern.match(s) } if pattern
-    puts canvas_list
     # > GET description '# Description: '
-    # canvas_list.each do |c|
-    #   d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/u.match(l) }
-    #   puts "#{c} - #{d}"
-    # end
+    canvas_list.each do |c|
+      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/u.match(l) }
+      puts "#{c} - #{d}"
+    end
 
     # canvas_list.collect! { |s| s.gsub('canvas_', '') }
     canvas_list
