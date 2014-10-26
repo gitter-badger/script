@@ -101,7 +101,7 @@ class Script
   def get_scripts(pattern)
     script_dict = {}
     script_list = []
-    File.open(BASH_ALIASES).each_line_with_index do |line, index|
+    File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
       next if index == 0
       found_script = SCRIPT_REGEXP.match(line)
 
