@@ -35,8 +35,10 @@ class ProjectManager
     end
   end
 
-  def list
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
     projects = get_projects
+    projects.select! { |s| pattern.match(s) } if pattern
     projects.each do |project|
       info = YAML.load_file("#{PROJECT_PATH}/#{project}/project.yaml")
       puts "#{project} - #{info[:description]}"
@@ -113,8 +115,9 @@ if __FILE__ == $0
       options[:init] = true
     end
 
-    opts.on('-l', '--list', 'List all projects') do
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching projects') do |regexp|
       options[:list] = true
+      options[:list_pattern] = regexp
     end
 
     opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
@@ -141,7 +144,7 @@ if __FILE__ == $0
     mgmt.init
     exit
   elsif options[:list]
-    mgmt.list
+    mgmt.list(options[:list_pattern])
     exit
   elsif options[:fetch]
     mgmt.fetch(options[:fetch])
