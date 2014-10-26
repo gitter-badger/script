@@ -75,7 +75,7 @@ class Canvas
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
       if d
-        puts d
+        puts d.inspect
         # canvas_dict[c] = d[0].gsub(/# description: /i, '')
       else
         canvas_dict[c] = ''
