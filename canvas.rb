@@ -75,7 +75,7 @@ class Canvas
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
       if d
-        canvas_dict[c] = d
+        canvas_dict[c] = d[0]
       else
         canvas_dict[c] = ''
       end
