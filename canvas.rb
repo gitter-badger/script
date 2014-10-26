@@ -57,26 +57,25 @@ class Canvas
 
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
-    canvas_list = get_canvases(pattern)
-    # puts canvas_list
-    canvas_list
+    canvas_dict = get_canvases(pattern)
+    puts canvas_dict
+    canvas_dict
   end
 
   private
 
   def get_canvases(pattern)
+    canvas_dict = {}
     canvas_list = Dir.entries(CANVAS).delete_if do |c|
       File.directory?(File.join(CANVAS, c))
     end
     canvas_list.select! { |s| pattern.match(s) } if pattern
-    # > GET description '# Description: '
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
-      puts "#{c} - #{d}"
+      canvas_dict[c] = d[0]
     end
-
     # canvas_list.collect! { |s| s.gsub('canvas_', '') }
-    canvas_list
+    canvas_dict
   end
 
   def create_canvas(canvas)
