@@ -64,7 +64,7 @@ class Canvas
 
   private
 
-  def get_canvases
+  def get_canvases(pattern)
     canvas_list = Dir.entries(CANVAS).delete_if do |e|
       File.directory?(File.join(CANVAS, e)) and !(e == '.' || e == '..' || e == ".git")
     end
