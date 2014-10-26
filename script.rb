@@ -61,7 +61,7 @@ class Script
     pattern = Regexp.new(regexp) if regexp
     script_dict = get_scripts
     script_dict.each do |name, desc|
-      puts "#{name)}         #{desc}"
+      puts "#{name  }         #{desc}"
     end
     script_dict
   end
