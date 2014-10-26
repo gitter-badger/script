@@ -71,7 +71,7 @@ class Canvas
     canvas_list.select! { |s| pattern.match(s) } if pattern
     # > GET description '# Description: '
     canvas_list.each do |c|
-      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/u.match(l) }
+      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
       puts "#{c} - #{d}"
     end
 
