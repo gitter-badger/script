@@ -59,7 +59,7 @@ class Canvas
     pattern = Regexp.new(regexp) if regexp
     canvas_dict = get_canvases(pattern)
     canvas_dict.each do |name,desc|
-      puts "#{name.gsub('canvas_', '')} #{desc.gsub(/# description: /i, '')}"
+      puts "#{name.gsub('canvas_', '')} #{desc}"
     end
     canvas_dict
   end
@@ -75,12 +75,12 @@ class Canvas
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
       if d
-        canvas_dict[c] = d[0]
+        canvas_dict[c] = d[0].gsub(/# description: /i, '')
       else
         canvas_dict[c] = ''
       end
     end
-    canvas_dict
+    canvas_dict.sort
   end
 
   def create_canvas(canvas)
