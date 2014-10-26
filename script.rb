@@ -111,6 +111,7 @@ class Script
     end
     script_list.select! { |s| pattern.match(s) } if pattern
     script_list.each do |s|
+      puts "'#{s}'"
       d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
       begin
         script_dict[s] = d[0].gsub(/# description: /i, '')
