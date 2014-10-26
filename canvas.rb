@@ -58,7 +58,9 @@ class Canvas
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
     canvas_dict = get_canvases(pattern)
-    puts canvas_dict
+    canvas_dict.each do |name,desc|
+      puts "#{names.gsub('canvas_', '')} #{desc}"
+    end
     canvas_dict
   end
 
@@ -78,7 +80,6 @@ class Canvas
         canvas_dict[c] = ''
       end
     end
-    # canvas_list.collect! { |s| s.gsub('canvas_', '') }
     canvas_dict
   end
 
