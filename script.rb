@@ -8,7 +8,7 @@ require 'optparse'
 class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
-  BASH_ALIAS    = "#{ENV['HOME']}/.bash_aliases"
+  BASH_ALIASESES  = "#{ENV['HOME']}/.BASH_ALIASESes"
   SCRIPT_REGEXP = /alias (?<script_alias>.*?)=/
 
   attr_accessor :script_list
@@ -59,7 +59,7 @@ class Script
 
   def list
     script_list = []
-    File.open(BASH_ALIAS).each_line do |line|
+    File.open(BASH_ALIASES).each_line do |line|
       found_script = SCRIPT_REGEXP.match(line)
 
       if found_script
@@ -68,6 +68,29 @@ class Script
     end
     puts script_list
     script_list
+  end
+
+  def refresh_aliases
+    system "sudo rm -f #{BASH_ALIASESES}"
+
+    bash_aliases = File.open(BASH_ALIASESES, 'a')
+    bash_aliases.puts '## CREATE aliases for ~/.sync/.script/* via ~/.bash_aliases'
+
+    ruby_scripts = Dir["#{HOME}/.sync/.script/*.rb"]
+    ruby_scripts.each do |script|
+      next if script.include?("_spec.rb")
+      name = File.basename(script, '.rb')
+      str_a1 = "alias #{name}="
+      str_a2 = "'ruby "
+      str_a3 = "#{script}'"
+      str_alias = str_a1 + str_a2 + str_a3
+      bash_aliases.puts str_alias
+    end
+    bash_aliases.close
+
+    system "sudo chmod 755 #{BASH_ALIASESES}"
+    system "sudo chown #{USER}:#{USER} #{BASH_ALIASESES}"
+    system "source #{BASH_ALIASESES}"
   end
 
   private
@@ -86,7 +109,7 @@ class Script
   end
 
   def ask_for_script
-    puts "What script do you want? (ex: annex.rb, polygot.py, install_vmware.exp)"
+    puts "What script do you want? (ex: annex.rb, polygot.py, passwd.sh, install_vmware.exp)"
     scripts = gets.split(/\s.*?/).flatten
     scripts.each { |s| @script_list << s }
   end
@@ -133,12 +156,16 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--clean', 'Move script(s) back into  ~/.sync') do
+    opts.on('--clean', 'Move script(s) off Desktop') do
       options[:clean] = true
     end
 
-    opts.on('-l', '--list', 'List all script(s)') do
+    opts.on('-l', '--list', 'List all scripts') do
       options[:list] = true
+    end
+
+    opts.on('--refresh', 'Refresh BASH_ALIASESes of scripts') do
+      options[:refresh] = true
     end
   end
   option_parser.parse!
@@ -152,6 +179,8 @@ if __FILE__ == $0
     s.add(options[:add])
   elsif options[:list]
     s.list
+  elsif options[:refresh]
+    s.refresh_aliases
   else
     puts option_parser
   end
