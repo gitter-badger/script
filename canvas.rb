@@ -69,10 +69,11 @@ class Canvas
       File.directory?(File.join(CANVAS, e)) and !(e == '.' || e == '..' || e == ".git")
     end
     # > GET description '# Description: '
-    canvas_list.each do |c|
-      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/u.match(l) }
-      puts "#{c} - #{d}"
-    end
+    puts canvas_list
+    # canvas_list.each do |c|
+    #   d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/u.match(l) }
+    #   puts "#{c} - #{d}"
+    # end
 
     # canvas_list.select! { |s| pattern.match(s) } if pattern
     # canvas_list.collect! { |s| s.gsub('canvas_', '') }
