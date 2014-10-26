@@ -6,8 +6,10 @@
 require 'optparse'
 
 class Script
-  DESKTOP = "#{ENV['HOME']}/Desktop"
-  SCRIPT  = "#{ENV['HOME']}/.sync/.script"
+  DESKTOP       = "#{ENV['HOME']}/Desktop"
+  SCRIPT        = "#{ENV['HOME']}/.sync/.script"
+  BASH_ALIAS    = "#{ENV['HOME']}/.bash_aliases"
+  SCRIPT_REGEXP = /alias (?<script_alias>.*?)=/
 
   attr_accessor :script_list
 
@@ -53,6 +55,19 @@ class Script
     end
 
     sync_script
+  end
+
+  def list
+    script_list = []
+    File.open(BASH_ALIAS).each_line do |line|
+      found_script = SCRIPT_REGEXP.match(line)
+
+      if found_script
+        script_list << found_script[:script_alias]
+      end
+    end
+    puts script_list
+    script_list
   end
 
   private
@@ -105,32 +120,39 @@ class Script
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: script [options] [SCRIPT]"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: script [options] [SCRIPT]"
 
-  opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
-    options[:add] = s
+    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
+      options[:add] = s
+    end
+
+    opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('--clean', 'Move script(s) back into  ~/.sync') do
+      options[:clean] = true
+    end
+
+    opts.on('-l', '--list', 'List all script(s)') do
+      options[:list] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
-    options[:fetch] = true
+  s = Script.new
+  if options[:clean]
+    s.clean
+  elsif options[:fetch]
+    s.fetch_all(ARGV)
+  elsif options[:add]
+    s.add(options[:add])
+  elsif options[:list]
+    s.list
+  else
+    puts option_parser
   end
-
-  opts.on('--clean', 'Move script(s) back into  ~/.sync') do
-    options[:clean] = true
-  end
-end
-option_parser.parse!
-
-## USAGE
-s = Script.new
-if options[:clean]
-  s.clean
-elsif options[:fetch]
-  s.fetch_all(ARGV)
-elsif options[:add]
-  s.add(options[:add])
-else
-  puts option_parser
 end

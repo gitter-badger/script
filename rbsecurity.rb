@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # rbsecurity.rb
+# Author: Andy Bettisworth
 # Description: OSI model cross-layer security
 
 require_relative 'secure_physical_layer.rb'
@@ -19,7 +20,7 @@ include ApplicationLayerSecurity
 include PeopleLayerSecurity
 
 class SecureSystem
-  
+
   def initialize
     system 'ln -s /dev/null' unless File.exist?('/dev/null')
     fail "WARNING: permission denied." unless `whoami`.include?(ENV['USER'])
@@ -82,25 +83,14 @@ class SecureSystem
   end
 end
 
-sbot = SecureSystem.new
-sbot.secure_physical_layer
-sbot.secure_datalink_layer
-sbot.secure_network_layer
-sbot.secure_transport_layer
-sbot.secure_session_layer
-sbot.secure_application_layer
-sbot.secure_people_layer
-puts 'Sbot security sweep, successful!'
-
-## FEATURES
-
-# Feature: SysAdmin systems control
-#   As a SysAdmin
-#   I want to have a single interface for system security
-#   So I can customize its' functionality
-#   And so I can automate its' functionality
-
-# Scenario: SysAdmin runs security sweep
-# Scenario: SysAdmin sets security level
-# Scenario: SysAdmin whipes computer clean
-
+if __FILE__ == $0
+  sbot = SecureSystem.new
+  sbot.secure_physical_layer
+  sbot.secure_datalink_layer
+  sbot.secure_network_layer
+  sbot.secure_transport_layer
+  sbot.secure_session_layer
+  sbot.secure_application_layer
+  sbot.secure_people_layer
+  puts 'Sbot security sweep, successful!'
+end

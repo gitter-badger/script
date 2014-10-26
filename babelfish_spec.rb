@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # babelfish_spec.rb
+# Author: Andy Bettisworth
 # Description: Remove language boundaries
 
 require 'whatlanguage'
@@ -12,20 +13,6 @@ require 'to_lang'
 
 class BabelFish
 end
-
-## USAGE
-# babelfish --set en de
-  #=> Say 'Guten Tag!' (en|de)
-# babelfish
-  #=> listening...
-  #<= Hola!
-  #=> Say 'Hola amigo!' (en|es)
-# babelfish Hola.
-  #=> Say 'Hola amigo'. (en|es)
-# babelfish --out 'Hola amigo.'
-  #=> Hello friend.
-# babelfish -i 'Oh Hector, so good to see you!'
-  #=> Oh Hector, tan bueno verte!
 
 if __FILE__ == $0
 end

@@ -45,7 +45,8 @@ class PGActivity
   end
 end
 
-## USAGE
-# activity = PGActivity.new
-# puts activity.report.class #=> Array
-# puts activity.report #=> [{dataid: 16404, dataname: 'raist', ...}]
+if __FILE__ == $0
+  activity = PGActivity.new
+  puts activity.report.class #=> Array
+  puts activity.report #=> [{dataid: 16404, dataname: 'raist', ...}]
+end

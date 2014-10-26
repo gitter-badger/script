@@ -30,35 +30,3 @@ class DataRetriever
     # > test database exist
   end
 end
-
-# describe "Data Retriever" do
-#   it "should retrieve data from target URL" do
-#     retriever = DataRetriever.new
-#     target_url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson"
-#     retriever.set_content(target_url)
-#     retriever.content.should_not be_nil
-#   end
-
-#   it "should store data in target file" do
-#     retriever = DataRetriever.new
-#     target_url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson"
-#     target_file = ENV['HOME'] + "/Desktop/earthquakes-#{Time.now.strftime '%Y%m%d%H%M'}.geojson"
-#     action = 'w+'
-#     retriever.set_content(target_url)
-#     retriever.save_to_file(target_file,action)
-#     File.exist?(target_file).should be_true
-#     File.open(target_file,'r').read.should =~ /earthquake/
-#   end
-
-#   it "should store data in target database" do
-#     retriever = DataRetriever.new
-#     target_url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson"
-#     database = "earthquakes"
-#     host = "localhost"
-#     username = "wurde"
-#     password = "trichoderma"
-#     # > given database exists
-#     retriever.save_to_db(database, host, username, password)
-#     # > then assert new data exists in our target database
-#   end
-# end

@@ -21,23 +21,24 @@ class RubyTokenization
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: tokenize [options] SCRIPT"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: tokenize [options] SCRIPT"
 
-  opts.on('-o FILE', '--output FILE', 'File for tokenization output') do |file|
-    options[:output] = file
+    opts.on('-o FILE', '--output FILE', 'File for tokenization output') do |file|
+      options[:output] = file
+    end
   end
-end
-option_parser.parse!
+  option_parser.parse!
 
-## USAGE
-raise 'WARNING: only tokenize 1 script at a time.' if ARGV.size > 1
-tokenizer = RubyTokenization.new
-if options[:output] && ARGV[0]
-  tokenizer.tokenize(ARGV[0], options[:output])
-elsif ARGV[0]
-  tokenizer.tokenize(ARGV[0])
-else
-  puts option_parser
+  raise 'WARNING: only tokenize 1 script at a time.' if ARGV.size > 1
+  tokenizer = RubyTokenization.new
+  if options[:output] && ARGV[0]
+    tokenizer.tokenize(ARGV[0], options[:output])
+  elsif ARGV[0]
+    tokenizer.tokenize(ARGV[0])
+  else
+    puts option_parser
+  end
 end

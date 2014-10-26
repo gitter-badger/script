@@ -104,56 +104,58 @@ class ProjectManager
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: project [options]'
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: project [options]'
 
-  opts.on('--init', 'Create a new project for current working directory') do
-    options[:init] = true
+    opts.on('--init', 'Create a new project for current working directory') do
+      options[:init] = true
+    end
+
+    opts.on('-l', '--list', 'List all projects') do
+      options[:list] = true
+    end
+
+    opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
+      options[:fetch] = project
+    end
+
+    opts.on('--clean', 'Clean all open projects') do
+      options[:clean] = true
+    end
+
+    opts.on('--set-location PATH', 'Set project target location') do |location|
+      options[:set_location] = location
+    end
+
+    opts.on('-i', '--info', 'Info for current project') do
+      options[:info] = true
+    end
+  end
+  option_parser.parse!
+
+  mgmt = ProjectManager.new
+
+  if options[:init]
+    mgmt.init
+    exit
+  elsif options[:list]
+    mgmt.list
+    exit
+  elsif options[:fetch]
+    mgmt.fetch(options[:fetch])
+    exit
+  elsif options[:clean]
+    mgmt.clean
+    exit
+  elsif options[:set_location]
+    mgmt.set_location(options[:set_location])
+    exit
+  elsif options[:info]
+    mgmt.info
+    exit
   end
 
-  opts.on('-l', '--list', 'List all projects') do
-    options[:list] = true
-  end
-
-  opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
-    options[:fetch] = project
-  end
-
-  opts.on('--clean', 'Clean all open projects') do
-    options[:clean] = true
-  end
-
-  opts.on('--set-location PATH', 'Set project target location') do |location|
-    options[:set_location] = location
-  end
-
-  opts.on('-i', '--info', 'Info for current project') do
-    options[:info] = true
-  end
+  puts option_parser
 end
-option_parser.parse!
-
-mgmt = ProjectManager.new
-
-if options[:init]
-  mgmt.init
-  exit
-elsif options[:list]
-  mgmt.list
-  exit
-elsif options[:fetch]
-  mgmt.fetch(options[:fetch])
-  exit
-elsif options[:clean]
-  mgmt.clean
-  exit
-elsif options[:set_location]
-  mgmt.set_location(options[:set_location])
-  exit
-elsif options[:info]
-  mgmt.info
-  exit
-end
-
-puts option_parser

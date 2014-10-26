@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 # time_trigger_spec.rb
+# Author: Andy Bettisworth
 # Description: Delayed/Scheduled script execution
 
 require 'timers'
@@ -32,35 +33,6 @@ class TimeTrigger
       loop { @timer.wait }
     elsif repeat_count.size == 1
       repeat_count[0].times { @timer.wait }
-    end
-  end
-end
-
-describe TimeTrigger do
-  let (:delay) { "3 seconds" }
-  let (:command) { Proc.new {puts 'Testing 1 2 3'} }
-
-  def init_clock(command, delay)
-    TimeTrigger.new(command, delay)
-  end
-
-  describe '#trigger' do
-    it "should execute target script after given delay" do
-      clock = init_clock(command, delay)
-      clock.trigger
-    end
-  end
-
-  describe '#trigger_loop' do
-    it "should execute recurring target script with given delay inbetween" do
-      pending('It works. It also loops forever...')
-      clock = init_clock(command, delay)
-      clock.trigger_loop
-    end
-
-    it "should accept an iteration count" do
-      clock = init_clock(command, delay)
-      clock.trigger_loop(5)
     end
   end
 end

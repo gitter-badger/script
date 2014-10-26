@@ -2,12 +2,8 @@
 # tune_guitar.rb
 # Description: Tune your guitar
 
-
-
 ## 1. record your first string
 ## 2. extract signal vs time data
-## 3.
-
 
 ## 1. record your first string
 # LINK http://audacity.sourceforge.net/
@@ -19,8 +15,7 @@
 ## 3. convert .wav file data (sound vs time) to its spectrum (magnitude vs frequency).
 # LINK http://www.fftw.org/
 
-##################
-### plotter.rb ###
+### plotter.rb
 
 # require 'open3'
 
@@ -63,11 +58,7 @@
 # plotter = GNUPlotter.new(sound_data, plot_params)
 # plotter.plot
 
-### plotter.rb ###
-##################
-
-####################
-### transform.rb ###
+### transform.rb
 
 # require "fftw3"
 # require_relative "plotter"
@@ -103,7 +94,3 @@
 
 # plotter = GNUPlotter.new(spectrum, spectrum_plot_params)
 # plotter.plot
-
-### transform.rb ###
-####################
-

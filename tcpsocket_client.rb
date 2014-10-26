@@ -5,10 +5,12 @@
 
 require 'socket'
 
-s = TCPSocket.new 'localhost', 34891
+if __FILE__ == $0
+  s = TCPSocket.new 'localhost', 34891
 
-while line = s.gets # Read lines from socket
-  puts line # and print them
+  while line = s.gets # Read lines from socket
+    puts line # and print them
+  end
+
+  s.close # close socket when done
 end
-
-s.close # close socket when done

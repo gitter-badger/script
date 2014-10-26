@@ -37,16 +37,3 @@ if __FILE__ == $0
     puts "USAGE: create_excel 'NAME' [VALUES]"
   end
 end
-
-# describe SpreadsheetFactory do
-#   describe "#add_workbook" do
-#     it "should create an excel workbook named 'coordinates.xls'" do
-#       excel_factory = SpreadsheetFactory.new
-#       excel_factory.add_workbook('coordinates')
-#       expect(File.exist?('coordinates.xls')).to be_true
-#     end
-
-#     it "should create an excel worksheet named 'letters'"
-#     it "should have a second worksheet with values [[1,1],[1,2],[1,3]]"
-#   end
-# end

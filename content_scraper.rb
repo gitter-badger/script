@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby -w
-# scrape_spec.rb
+# content_scraper.rb
+# Author: Andy Bettisworth
 # Description: Extracting view layer content from remote servers
 
-class ScreenScraper
+class ContentScraper
   require 'nokogiri'
   require 'open-uri'
 

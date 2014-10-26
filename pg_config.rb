@@ -37,6 +37,8 @@ class PGConfig
   end
 end
 
-pg_config = PGConfig.new
-puts pg_config.get.class
-puts pg_config.get
+if __FILE__ == $0
+  pg_config = PGConfig.new
+  puts pg_config.get.class
+  puts pg_config.get
+end

@@ -25,20 +25,7 @@ class CardDeck
   end
 end
 
-## USAGE
-deck = CardDeck.new
-deck.blind_pick
-
-# describe CardDeck do
-#   CARD_TYPE = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Jack','Queen','King','Ace']
-#   CARD_SUITE = ['Spade', 'Club', 'Diamond', 'Heart']
-
-#   describe "#pick" do
-#     it "should randomly select a card to display" do
-#       deck = CardDeck.new
-#       random_card = deck.blind_pick
-#       expect(CARD_TYPE).to include(random_card)
-#       expect(CARD_SUITE).to include(random_card)
-#     end
-#   end
-# end
+if __FILE__ == $0
+  deck = CardDeck.new
+  deck.blind_pick
+end
