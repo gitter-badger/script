@@ -55,7 +55,22 @@ class Canvas
     sync
   end
 
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
+    canvas_list = get_canvases
+    canvas_list.select! { |s| pattern.match(s) } if pattern
+    puts canvas_list
+    canvas_list
+  end
+
   private
+
+  def get_canvases
+    canvases = Dir.entries(CANVAS).select! do |e|
+      File.directory?(File.join(CANVAS, e)) and !(e == '.' || e == '..' || e == ".git")
+    end
+    canvases
+  end
 
   def create_canvas(canvas)
     canvas = default_prefix(canvas)
@@ -126,6 +141,11 @@ if __FILE__ == $0
     opts.on('--clean', 'Sync all canvases') do
       options[:clean] = true
     end
+
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
+      options[:list] = true
+      options[:list_pattern] = regexp
+    end
   end
   option_parser.parse!
 
@@ -136,6 +156,8 @@ if __FILE__ == $0
     c.fetch_all(ARGV)
   elsif options[:add]
     c.add(options[:add])
+  elsif options[:list]
+    c.list(options[:list_pattern])
   else
     puts option_parser
   end
