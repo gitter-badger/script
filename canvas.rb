@@ -72,6 +72,7 @@ class Canvas
     canvas_list.select! { |s| pattern.match(s) } if pattern
     canvas_list.each do |c|
       d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
+      puts c
       puts "#{c} #{d}"
     end
     # canvas_list.collect! { |s| s.gsub('canvas_', '') }
