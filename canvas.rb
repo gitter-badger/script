@@ -32,7 +32,7 @@ class Canvas
       @canvas_list[index] = default_prefix(@canvas_list[index])
 
       if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
-        get(@canvas_list[index])
+        fetch(@canvas_list[index])
       else
         raise "CanvasNotExistError: #{CANVAS}/#{@canvas_list[index]}"
       end
@@ -58,7 +58,7 @@ class Canvas
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
     canvas_dict = get_canvases(pattern)
-    canvas_dict.each do |name,desc|
+    canvas_dict.each do |name, desc|
       puts "#{name.gsub('canvas_', '')}          #{desc}"
     end
     canvas_dict
@@ -93,7 +93,7 @@ class Canvas
     File.new("#{DESKTOP}/#{canvas}", 'w+') <<  BOILERPLATE.gsub('$1', canvas).gsub('$2', description)
   end
 
-  def get(canvas)
+  def fetch(canvas)
     system("cp #{CANVAS}/#{canvas} #{DESKTOP}")
   end
 

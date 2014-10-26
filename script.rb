@@ -37,7 +37,7 @@ class Script
         next
       end
 
-      get_script(target)
+      fetch(target)
     end
   end
 
@@ -59,17 +59,11 @@ class Script
 
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
-    script_list = []
-    File.open(BASH_ALIASES).each_line do |line|
-      found_script = SCRIPT_REGEXP.match(line)
-
-      if found_script
-        script_list << found_script[:script_alias]
-      end
+    script_dict = get_scripts
+    script_dict.each do |name, desc|
+      puts "#{name)}         #{desc}"
     end
-    script_list.select! { |s| pattern.match(s) } if pattern
-    puts script_list
-    script_list
+    script_dict
   end
 
   def refresh_aliases
@@ -104,7 +98,28 @@ class Script
     File.new("#{DESKTOP}/#{script}", 'w+') <<  BOILERPLATE.gsub('$1', script).gsub('$2', description)
   end
 
-  def get_script(target)
+  def get_scripts(pattern)
+    script_dict = {}
+    File.open(BASH_ALIASES).each_line do |line|
+      found_script = SCRIPT_REGEXP.match(line)
+
+      if found_script
+        script_list << found_script[:script_alias]
+      end
+    end
+    script_list.select! { |s| pattern.match(s) } if pattern
+    script_list.each do |s|
+      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
+      begin
+        script_dict[s] = d[0].gsub(/# description: /i, '')
+      rescue
+        script_dict[s] = ''
+      end
+    end
+    script_dict
+  end
+
+  def fetch(target)
     system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
 
