@@ -59,7 +59,7 @@ class Script
 
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
-    script_dict = get_scripts
+    script_dict = get_scripts(pattern)
     script_dict.each do |name, desc|
       puts "#{name  }         #{desc}"
     end
