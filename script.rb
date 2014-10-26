@@ -57,7 +57,8 @@ class Script
     sync_script
   end
 
-  def list
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
     script_list = []
     File.open(BASH_ALIASES).each_line do |line|
       found_script = SCRIPT_REGEXP.match(line)
@@ -66,6 +67,7 @@ class Script
         script_list << found_script[:script_alias]
       end
     end
+    script_list.select! { |s| pattern.match(s) } if pattern
     puts script_list
     script_list
   end
@@ -160,8 +162,9 @@ if __FILE__ == $0
       options[:clean] = true
     end
 
-    opts.on('-l', '--list', 'List all scripts') do
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
       options[:list] = true
+      options[:list_pattern] = regexp
     end
 
     opts.on('--refresh', 'Refresh BASH_ALIASESes of scripts') do
@@ -178,7 +181,7 @@ if __FILE__ == $0
   elsif options[:add]
     s.add(options[:add])
   elsif options[:list]
-    s.list
+    s.list(options[:list_pattern])
   elsif options[:refresh]
     s.refresh_aliases
   else
