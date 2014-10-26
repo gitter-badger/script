@@ -9,7 +9,7 @@ class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
   BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
-  SCRIPT_REGEXP = /\/(?<filename>.*?)$/
+  SCRIPT_REGEXP = /\/.*?\/(?<filename>.*?)$/
 
   attr_accessor :script_list
 
@@ -111,7 +111,7 @@ class Script
     end
     script_list.select! { |s| pattern.match(s) } if pattern
     script_list.each do |s|
-      d = File.open("/#{s}").readlines.select! { |l| /description:/i.match(l) }
+      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
       begin
         script_dict[s] = d[0].gsub(/# description: /i, '')
       rescue
