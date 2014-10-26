@@ -75,11 +75,10 @@ class Script
   def refresh_aliases
     system "sudo rm -f #{BASH_ALIASES}"
 
-    bash_aliases = File.open(BASH_ALIASES, 'a')
+    bash_aliases = File.open(BASH_ALIASES, 'w+')
     bash_aliases.puts '## CREATE aliases for ~/.sync/.script/* via ~/.bash_aliases'
 
     ruby_scripts = Dir["#{ENV['HOME']}/.sync/.script/*.rb"]
-    puts ruby_scripts
     ruby_scripts.each do |script|
       next if script.include?("_spec.rb")
       name = File.basename(script, '.rb')
