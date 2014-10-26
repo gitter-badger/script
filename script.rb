@@ -89,7 +89,7 @@ class Script
     bash_aliases.close
 
     system "sudo chmod 755 #{BASH_ALIASESES}"
-    system "sudo chown #{USER}:#{USER} #{BASH_ALIASESES}"
+    system "sudo chown #{ENV['USER']}:#{ENV['USER']} #{BASH_ALIASESES}"
     system "source #{BASH_ALIASESES}"
   end
 
