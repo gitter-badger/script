@@ -9,7 +9,7 @@ class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
   BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
-  SCRIPT_REGEXP = /alias (?<script_alias>.*?)=/
+  SCRIPT_REGEXP = /\/(?<filename>.*?)$/
 
   attr_accessor :script_list
 
@@ -105,7 +105,7 @@ class Script
       found_script = SCRIPT_REGEXP.match(line)
 
       if found_script
-        script_list << found_script[:script_alias]
+        script_list << found_script[:filename]
       end
     end
     script_list.select! { |s| pattern.match(s) } if pattern
