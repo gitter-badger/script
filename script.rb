@@ -8,7 +8,7 @@ require 'optparse'
 class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
-  BASH_ALIASES  = "#{ENV['HOME']}/.BASH_ALIASESes"
+  BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
   SCRIPT_REGEXP = /alias (?<script_alias>.*?)=/
 
   attr_accessor :script_list
@@ -73,8 +73,6 @@ class Script
   end
 
   def refresh_aliases
-    system "sudo rm -f #{BASH_ALIASES}"
-
     bash_aliases = File.open(BASH_ALIASES, 'w+')
     bash_aliases.puts '## CREATE aliases for ~/.sync/.script/* via ~/.bash_aliases'
 
