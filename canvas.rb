@@ -59,6 +59,7 @@ class Canvas
     pattern = Regexp.new(regexp) if regexp
     canvas_list = get_canvases
     canvas_list.select! { |s| pattern.match(s) } if pattern
+    canvas_list.collect! { |s| s.gsub('canvas_', '') }
     puts canvas_list
     canvas_list
   end
