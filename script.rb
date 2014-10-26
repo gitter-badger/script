@@ -9,7 +9,7 @@ class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
   BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
-  SCRIPT_REGEXP = /\/.*?\/(?<filename>.*?)$/
+  SCRIPT_REGEXP = /\/.*\/(?<filename>.*?)$/
 
   attr_accessor :script_list
 
