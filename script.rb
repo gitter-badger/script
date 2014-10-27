@@ -10,6 +10,12 @@ class Script
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
   BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
   SCRIPT_REGEXP = /\/.*\/(?<filename>.*?)'$/
+  ALIAS_CMD = {
+    'rb'  => 'ruby',
+    'py'  => 'python',
+    'exp' => 'expect',
+    'sh'  => 'bash'
+  }
 
   attr_accessor :script_list
 
@@ -74,13 +80,13 @@ class Script
     script_list.each do |script|
       next if /_spec/.match(script)
       extension = File.extname(script)
-      name = File.basename(script, extension)
-      puts name
-      # str_a1 = "alias #{name}="
+      puts extension
+      # name = File.basename(script, extension)
+      # alias_cmd = "alias #{name}="
       # # > handle multiple extensions [python .py, expect .exp, ruby .rb, shell .sh]
-      # str_a2 = "'ruby "
-      # str_a3 = "#{script}'"
-      # str_alias = str_a1 + str_a2 + str_a3
+      # exec_binary = "'ruby "
+      # script_path = "#{script}'"
+      # str_alias = alias_cmd + exec_binary + script_path
       # bash_aliases.puts str_alias
     end
     bash_aliases.close
