@@ -101,51 +101,28 @@ sudo desktop-file-install --dir=#{LAUNCHER_DIR} --delete-original #{TMP_LAUNCHER
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  executable_name = File.basename($PROGRAM_NAME, ".rb")
-  opts.banner = "Usage: #{executable_name} [OPTION]..."
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    executable_name = File.basename($PROGRAM_NAME, ".rb")
+    opts.banner = "Usage: #{executable_name} [OPTION]..."
 
-  opts.on('--add', 'Add a launchpad to project') do
-    options[:add] = true
+    opts.on('--add', 'Add a launchpad to project') do
+      options[:add] = true
+    end
+
+    opts.on('--remove', 'Remove launchpad from project') do
+      options[:remove] = true
+    end
+  end.parse!
+
+  if options[:remove] == true
+    Dir.chdir(Dir.pwd)
+    launcher = LaunchPad.new
+    launcher.remove
+  else
+    Dir.chdir(Dir.pwd)
+    launcher = LaunchPad.new
+    launcher.add
   end
-
-  opts.on('--remove', 'Remove launchpad from project') do
-    options[:remove] = true
-  end
-end.parse!
-
-if options[:remove] == true
-  Dir.chdir(Dir.pwd)
-  launcher = LaunchPad.new
-  launcher.remove
-else
-  Dir.chdir(Dir.pwd)
-  launcher = LaunchPad.new
-  launcher.add
 end
-
-# describe LaunchPad do
-#   let(:test_project) { "#{ENV['HOME']}/Desktop/test_project" }
-#   let(:unity_launcher) { "/usr/share/applications/launch_development_environment.desktop" }
-#   let(:test_action) { "Actions=" }
-
-#   def setup_test
-#     unless File.directory?(test_project)
-#       FileUtils.mkdir_p(test_project)
-#     end
-#   end
-
-#   describe "#add" do
-#     it "should create a Unity Launchbar 'Action'" do
-#       setup_test
-#       launcher = LaunchPad.new
-#       Dir.chdir(test_project)
-#       launcher.add
-#       # expect(File.read(unity_launcher)).to include(test_action)
-#     end
-
-#     it "should create a launcher script"
-#     it "should NOT duplicate action if project launcher exists"
-#   end
-# end

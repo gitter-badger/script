@@ -7,14 +7,14 @@ require 'optparse'
 require 'yaml'
 
 class TaskManager
-  TODO_PATH = "#{ENV['HOME']}/.sync/.todo"
+  PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
 
   attr_accessor :project
   attr_accessor :project_path
 
   def initialize
     @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
-    @project_path = "#{TODO_PATH}/#{@project}"
+    @project_path = "#{PROJECT_PATH}/#{@project}"
   end
 
   def add_task(description)
@@ -61,7 +61,7 @@ class TaskManager
   private
 
   def project_exist?(project)
-    File.exist?("#{TODO_PATH}/#{project}")
+    File.exist?("#{PROJECT_PATH}/#{project}")
   end
 
   def get_active_tasks
@@ -76,7 +76,7 @@ class TaskManager
   end
 
   def todo_commit(msg)
-    `cd #{TODO_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+    `cd #{PROJECT_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 
   def largest_task_id(list)
@@ -85,7 +85,7 @@ class TaskManager
   end
 
   def get_next_id
-    if File.exist?("#{TODO_PATH}/#{@project}/tasks.yaml")
+    if File.exist?("#{PROJECT_PATH}/#{@project}/tasks.yaml")
       list = get_all_tasks
       return largest_task_id(list) + 1
     else

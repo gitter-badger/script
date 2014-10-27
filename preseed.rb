@@ -52,6 +52,7 @@ class Preseed
   end
 end
 
-## USAGE
-update =  Preseed.new
-update.start
+if __FILE__ == $0
+  update =  Preseed.new
+  update.start
+end

@@ -13,7 +13,7 @@ class Annex
     '.canvas',
     '.script',
     '.template',
-    '.todo',
+    '.project',
     '.preseed'
   ]
   SYNC_APPLICATIONS = [
@@ -39,7 +39,7 @@ class Annex
     require_annex_usb
     sync('.canvas')
     sync('.script')
-    sync('.todo')
+    sync('.project')
   end
 
   private
@@ -174,28 +174,30 @@ class Annex
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: annex [options]'
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: annex [options]'
 
-  opts.on('-f', '--full', 'Annex all sync repositories') do
-    options[:full] = true
+    opts.on('-f', '--full', 'Annex all sync repositories') do
+      options[:full] = true
+    end
+
+    opts.on('-s', '--slim', 'Annex only a select few repositories') do
+      options[:slim] = true
+    end
+  end
+  option_parser.parse!
+
+  update = Annex.new
+
+  if options[:full]
+    update.full
+    exit
+  elsif options[:slim]
+    update.slim
+    exit
   end
 
-  opts.on('-s', '--slim', 'Annex only a select few repositories') do
-    options[:slim] = true
-  end
+  puts option_parser
 end
-option_parser.parse!
-
-update = Annex.new
-
-if options[:full]
-  update.full
-  exit
-elsif options[:slim]
-  update.slim
-  exit
-end
-
-puts option_parser

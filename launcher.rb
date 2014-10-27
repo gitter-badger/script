@@ -20,21 +20,23 @@ class LauncherManager
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: launcher [options]'
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: launcher [options]'
 
-  opts.on('-t PROJECT', '--toggle PROJECT', 'Toggle launcher for project') do |project|
-    options[:toggle] = project
+    opts.on('-t PROJECT', '--toggle PROJECT', 'Toggle launcher for project') do |project|
+      options[:toggle] = project
+    end
   end
+  option_parser.parse!
+
+  mgmt = LauncherManager.new
+
+  if options[:toggle]
+    mgmt.toggle(options[:toggle])
+    exit
+  end
+
+  puts option_parser
 end
-option_parser.parse!
-
-mgmt = LauncherManager.new
-
-if options[:toggle]
-  mgmt.toggle(options[:toggle])
-  exit
-end
-
-puts option_parser

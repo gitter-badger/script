@@ -99,6 +99,7 @@ class Employee < ActiveLDAP::Base
   ldap_mapping dnattr: 'uid', prefix: 'cn=employees,ou=Groups'
 end
 
-employees = Group.new('employees')
-employees.members.each { |emp| puts emp.cn }
-
+if __FILE__ == $0
+  employees = Group.new('employees')
+  employees.members.each { |emp| puts emp.cn }
+end

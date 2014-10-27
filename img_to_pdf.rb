@@ -21,26 +21,28 @@ class IMGToPDF
   end
 end
 
-options = {}
-OptionParser.new do |opts|
-  opts.banner = "USAGE: img_to_pdf --img rails_init_guide/ --pdf rails_initialization.pdf"
+if __FILE__ == $0
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "USAGE: img_to_pdf --img rails_init_guide/ --pdf rails_initialization.pdf"
 
-  opts.on("--img [DIR]", 'Set path to image directory') do |target_img_dir|
-    options[:image_dir] = File.expand_path(target_img_dir.to_s)
-  end
+    opts.on("--img [DIR]", 'Set path to image directory') do |target_img_dir|
+      options[:image_dir] = File.expand_path(target_img_dir.to_s)
+    end
 
-  opts.on("--pdf [PATH]", 'Set PDF filename') do |pdf_filename|
-    options[:pdf_filename] = pdf_filename.to_s
-  end
-end.parse!
+    opts.on("--pdf [PATH]", 'Set PDF filename') do |pdf_filename|
+      options[:pdf_filename] = pdf_filename.to_s
+    end
+  end.parse!
 
-if options[:image_dir]
-  if options[:pdf_filename]
-    converter = IMGToPDF.new
-    converter.generate_pdf_from_img(options[:image_dir], options[:pdf_filename])
+  if options[:image_dir]
+    if options[:pdf_filename]
+      converter = IMGToPDF.new
+      converter.generate_pdf_from_img(options[:image_dir], options[:pdf_filename])
+    else
+      puts '!ERROR: A PDF filename is required. (--pdf)'
+    end
   else
-    puts '!ERROR: A PDF filename is required. (--pdf)'
+    puts '!ERROR: An image directory is required. (--img)'
   end
-else
-  puts '!ERROR: An image directory is required. (--img)'
 end

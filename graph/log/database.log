@@ -1,4 +1,0 @@
-D, [2014-02-13T19:23:17.485141 #11727] DEBUG -- :   [1m[36m (69.1ms)[0m  [1mCREATE TABLE "point" ("id" serial primary key, "x" float NOT NULL, "y" float, "z" float) [0m
-E, [2014-02-13T19:23:17.485529 #11727] ERROR -- : PG::DuplicateTable: ERROR:  relation "point" already exists
-: CREATE TABLE "point" ("id" serial primary key, "x" float NOT NULL, "y" float, "z" float) 
-D, [2014-02-13T19:24:57.487621 #11770] DEBUG -- :   [1m[36m (58.4ms)[0m  [1mDROP TABLE "point"[0m

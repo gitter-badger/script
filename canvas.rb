@@ -32,7 +32,7 @@ class Canvas
       @canvas_list[index] = default_prefix(@canvas_list[index])
 
       if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
-        get(@canvas_list[index])
+        fetch(@canvas_list[index])
       else
         raise "CanvasNotExistError: #{CANVAS}/#{@canvas_list[index]}"
       end
@@ -55,7 +55,33 @@ class Canvas
     sync
   end
 
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
+    canvas_dict = get_canvases(pattern)
+    canvas_dict.each do |name, desc|
+      puts "#{name.gsub('canvas_', '')}          #{desc}"
+    end
+    canvas_dict
+  end
+
   private
+
+  def get_canvases(pattern)
+    canvas_dict = {}
+    canvas_list = Dir.entries(CANVAS).delete_if do |c|
+      File.directory?(File.join(CANVAS, c))
+    end
+    canvas_list.select! { |s| pattern.match(s) } if pattern
+    canvas_list.each do |c|
+      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
+      begin
+        canvas_dict[c] = d[0].gsub(/# description: /i, '')
+      rescue
+        canvas_dict[c] = ''
+      end
+    end
+    canvas_dict.sort
+  end
 
   def create_canvas(canvas)
     canvas = default_prefix(canvas)
@@ -67,7 +93,7 @@ class Canvas
     File.new("#{DESKTOP}/#{canvas}", 'w+') <<  BOILERPLATE.gsub('$1', canvas).gsub('$2', description)
   end
 
-  def get(canvas)
+  def fetch(canvas)
     system("cp #{CANVAS}/#{canvas} #{DESKTOP}")
   end
 
@@ -110,32 +136,40 @@ class Canvas
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: canvas [FILE]"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: canvas [FILE]"
 
-  opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
-    options[:add] = c
+    opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
+      options[:add] = c
+    end
+
+    opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('--clean', 'Move canvas(es) off Desktop') do
+      options[:clean] = true
+    end
+
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
+      options[:list] = true
+      options[:list_pattern] = regexp
+    end
   end
+  option_parser.parse!
 
-  opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
-    options[:fetch] = true
+  c = Canvas.new
+  if options[:clean]
+    c.clean
+  elsif options[:fetch]
+    c.fetch_all(ARGV)
+  elsif options[:add]
+    c.add(options[:add])
+  elsif options[:list]
+    c.list(options[:list_pattern])
+  else
+    puts option_parser
   end
-
-  opts.on('--clean', 'Sync all canvases') do
-    options[:clean] = true
-  end
-end
-option_parser.parse!
-
-## USAGE
-c = Canvas.new
-if options[:clean]
-  c.clean
-elsif options[:fetch]
-  c.fetch_all(ARGV)
-elsif options[:add]
-  c.add(options[:add])
-else
-  puts option_parser
 end

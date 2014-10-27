@@ -99,22 +99,23 @@
 # When immediately returning after calling render or redirect_to,
 #   put return on the next line, not the same line.
 
-## USAGE
-# format FILE
-# format --template ~/.rbtemplate/css_format .
-
-describe Formatter do
-  context "with defualt template" do
-    describe "#format" do
-      it "should apply the default template to file"
-      it "should apply the default template to all files in directory"
-    end
-  end
-
-  context "with custom template" do
-    describe "#format" do
-      it "should apply the custom template to file"
-      it "should apply the custom template to all files in directory"
-    end
-  end
+if __FILE__ == $0
+  format FILE
+  format --template ~/.rbtemplate/css_format .
 end
+
+# describe Formatter do
+#   context "with defualt template" do
+#     describe "#format" do
+#       it "should apply the default template to file"
+#       it "should apply the default template to all files in directory"
+#     end
+#   end
+
+#   context "with custom template" do
+#     describe "#format" do
+#       it "should apply the custom template to file"
+#       it "should apply the custom template to all files in directory"
+#     end
+#   end
+# end

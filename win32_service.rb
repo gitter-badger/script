@@ -27,7 +27,6 @@ end
 # irb>    'stock_observer.rb',
 # irb>    )
 
-
 def start_service(name)
   Service.start(name)
   started = false

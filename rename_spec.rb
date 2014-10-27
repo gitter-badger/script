@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # rename_spec.rb
+# Author: Andy Bettisworth
 # Description: rename files
 
 require 'optparse'
@@ -80,57 +81,12 @@ class RenameFile
   end
 end
 
-## EXEC rename
-# namer = RenameFile.new(options)
-# unless ARGV.size == 1
-#   ARGV.size.times do |i|
-#     namer.rename(ARGV[i])
-#   end
-# end
-# namer.rename(ARGV[0])
-
-describe RenameFile do
-  HOME = ENV['HOME'] + "/Desktop"
-
-  def create_test_file
-    File.new(HOME + '/test_file','w+')
-  end
-
-  def create_test_dir
-    unless Dir.exists?(HOME + '/test_dir1')
-      Dir.mkdir(HOME + '/test_dir1')
-    end
-    unless Dir.exists?(HOME + '/test_dir1/test_dir2')
-      Dir.mkdir(HOME + '/test_dir1/test_dir2')
-    end
-    File.new(HOME + '/test_dir1/test_file1','w+')
-    File.new(HOME + '/test_dir1/test_dir2/test_file2_a','w+')
-    File.new(HOME + '/test_dir1/test_dir2/test_file2_b','w+')
-  end
-
-  before(:each) do
-    @options ||= {}
-    @namer = RenameFile.new(@options)
-  end
-
-  after(:each) do
-    Dir.chdir(HOME)
-    @options = {}
-  end
-
-  describe "#rename" do
-    it "should rename all files in current dir", wip: true do
-      create_test_file
-      @namer.rename(Regexp.new("(?<x>test)_(?<y>file)"), '<y>_<x>')
-      expect(File.exist?(HOME + "/file_test")).to be_true
-    end
-
-    it "should rename files recursively from current dir" do
-      create_test_dir
-      Dir.chdir(HOME + '/test_dir1')
-      @options[:recursive] = true
-      @namer.rename(Regexp.new('(?<x>test)_(?<y>\w.*)'), '<y>_<x>')
-      expect(File.exist?(HOME + "/test_dir1/test_dir2/file2_b_test")).to be_true
+if __FILE__ == $0
+  namer = RenameFile.new(options)
+  unless ARGV.size == 1
+    ARGV.size.times do |i|
+      namer.rename(ARGV[i])
     end
   end
+  namer.rename(ARGV[0])
 end

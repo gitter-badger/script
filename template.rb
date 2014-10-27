@@ -85,26 +85,27 @@ class Template
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: template [options] [template]"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: template [options] [template]"
 
-  opts.on('-f', '--fetch', 'Copy template(s) to Desktop') do
-    options[:fetch] = true
+    opts.on('-f', '--fetch', 'Copy template(s) to Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('-c', '--clean', 'Move template(s) back into  ~/.sync') do
+      options[:clean] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-c', '--clean', 'Move template(s) back into  ~/.sync') do
-    options[:clean] = true
+  template_dispatcher = Template.new
+  if options[:clean]
+    template_dispatcher.clean
+  elsif options[:fetch]
+    template_dispatcher.fetch(ARGV)
+  else
+    puts option_parser
   end
-end
-option_parser.parse!
-
-## USAGE
-template_dispatcher = Template.new
-if options[:clean]
-  template_dispatcher.clean
-elsif options[:fetch]
-  template_dispatcher.fetch(ARGV)
-else
-  puts option_parser
 end

@@ -39,7 +39,7 @@ def svn_log(subsystem, start_date)
   'svn log #{timespan} #{root}/#{subsystem}'
 end
 
-if $0 == __FILE__
+if __FILE__ == $0
   subsystem_names = ['audit', 'fulfillment', 'persistence', 'ui', 'util', 'inventory']
   start_date = month_before(Time.now)
 

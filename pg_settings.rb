@@ -41,6 +41,8 @@ class PGSettings
   end
 end
 
-pg_settings = PGSettings.new
-puts pg_settings.get.class
-puts pg_settings.get
+if __FILE__ == $0
+  pg_settings = PGSettings.new
+  puts pg_settings.get.class
+  puts pg_settings.get
+end

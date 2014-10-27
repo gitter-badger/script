@@ -49,14 +49,3 @@ module Precision
     output
   end
 end
-
-describe Precision do
-  describe "#commify" do
-  end
-
-  describe "#format_int" do
-  end
-
-  describe "#format_float" do
-  end
-end

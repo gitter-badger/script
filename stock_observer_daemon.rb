@@ -45,3 +45,6 @@ class StockServerObserver < Daemon
   end
 end
 
+if __FILE__ == $0
+  observer = StockServerObserver.new
+end

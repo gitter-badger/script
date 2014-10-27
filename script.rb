@@ -6,8 +6,16 @@
 require 'optparse'
 
 class Script
-  DESKTOP = "#{ENV['HOME']}/Desktop"
-  SCRIPT  = "#{ENV['HOME']}/.sync/.script"
+  DESKTOP       = "#{ENV['HOME']}/Desktop"
+  SCRIPT        = "#{ENV['HOME']}/.sync/.script"
+  BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
+  SCRIPT_REGEXP = /\/.*\/(?<filename>.*?)'$/
+  ALIAS_CMD = {
+    '.rb'  => 'ruby',
+    '.py'  => 'python',
+    '.exp' => 'expect',
+    '.sh'  => 'bash'
+  }
 
   attr_accessor :script_list
 
@@ -35,7 +43,7 @@ class Script
         next
       end
 
-      get_script(target)
+      fetch(target)
     end
   end
 
@@ -55,6 +63,35 @@ class Script
     sync_script
   end
 
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
+    script_dict = get_scripts(pattern)
+    script_dict.each do |name, desc|
+      puts "#{name  }         #{desc}"
+    end
+    script_dict
+  end
+
+  def refresh_aliases
+    bash_aliases = File.open(BASH_ALIASES, 'w+')
+    bash_aliases.puts '## Create aliases for ~/.sync/.script/*'
+
+    script_list = Dir["#{ENV['HOME']}/.sync/.script/*"].delete_if { |s| File.directory?(s) }
+    script_list.each do |script|
+      next if /_spec/.match(script)
+      extension = File.extname(script)
+      name = File.basename(script, extension)
+      alias_cmd = "alias #{name}="
+      exec_binary = "'#{ALIAS_CMD[extension]} "
+      script_path = "#{script}'"
+      str_alias = alias_cmd + exec_binary + script_path
+      bash_aliases.puts str_alias
+    end
+    bash_aliases.close
+
+    system "source #{BASH_ALIASES}"
+  end
+
   private
 
   def create_script(script)
@@ -66,12 +103,35 @@ class Script
     File.new("#{DESKTOP}/#{script}", 'w+') <<  BOILERPLATE.gsub('$1', script).gsub('$2', description)
   end
 
-  def get_script(target)
+  def get_scripts(pattern)
+    script_dict = {}
+    script_list = []
+    File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
+      next if index == 0
+      found_script = SCRIPT_REGEXP.match(line)
+
+      if found_script
+        script_list << found_script[:filename]
+      end
+    end
+    script_list.select! { |s| pattern.match(s) } if pattern
+    script_list.each do |s|
+      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
+      begin
+        script_dict[s] = d[0].gsub(/# description: /i, '')
+      rescue
+        script_dict[s] = ''
+      end
+    end
+    script_dict
+  end
+
+  def fetch(target)
     system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
 
   def ask_for_script
-    puts "What script do you want? (ex: annex.rb, polygot.py, install_vmware.exp)"
+    puts "What script do you want? (ex: annex.rb, polygot.py, passwd.sh, install_vmware.exp)"
     scripts = gets.split(/\s.*?/).flatten
     scripts.each { |s| @script_list << s }
   end
@@ -105,32 +165,46 @@ class Script
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "USAGE: script [options] [SCRIPT]"
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "USAGE: script [options] [SCRIPT]"
 
-  opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
-    options[:add] = s
+    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
+      options[:add] = s
+    end
+
+    opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('--clean', 'Move script(s) off Desktop') do
+      options[:clean] = true
+    end
+
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
+      options[:list] = true
+      options[:list_pattern] = regexp
+    end
+
+    opts.on('--refresh', 'Refresh script Bash aliases') do
+      options[:refresh] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
-    options[:fetch] = true
+  s = Script.new
+  if options[:clean]
+    s.clean
+  elsif options[:fetch]
+    s.fetch_all(ARGV)
+  elsif options[:add]
+    s.add(options[:add])
+  elsif options[:list]
+    s.list(options[:list_pattern])
+  elsif options[:refresh]
+    s.refresh_aliases
+  else
+    puts option_parser
   end
-
-  opts.on('--clean', 'Move script(s) back into  ~/.sync') do
-    options[:clean] = true
-  end
-end
-option_parser.parse!
-
-## USAGE
-s = Script.new
-if options[:clean]
-  s.clean
-elsif options[:fetch]
-  s.fetch_all(ARGV)
-elsif options[:add]
-  s.add(options[:add])
-else
-  puts option_parser
 end

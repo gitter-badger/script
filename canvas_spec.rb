@@ -61,24 +61,25 @@ class Canvas
   end
 end
 
-options = {}
-OptionParser.new do |opts|
-  opts.on("--fetch", 'Move target canvas to Desktop') do
-    options[:fetch] = true
-  end
+if __FILE__ == $0
+  options = {}
+  OptionParser.new do |opts|
+    opts.on("--fetch", 'Move target canvas to Desktop') do
+      options[:fetch] = true
+    end
 
-  opts.on("--clean", 'Put away all open canvas') do
-    options[:clean] = true
-  end
-end.parse!
+    opts.on("--clean", 'Put away all open canvas') do
+      options[:clean] = true
+    end
+  end.parse!
 
-## USAGE
-secretary = Canvas.new
-if options[:clean] == true
-  secretary.clean
-else
-  ARGV.each do |arg|
-    secretary.fetch arg
+  secretary = Canvas.new
+  if options[:clean] == true
+    secretary.clean
+  else
+    ARGV.each do |arg|
+      secretary.fetch arg
+    end
   end
 end
 

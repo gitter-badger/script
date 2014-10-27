@@ -25,9 +25,11 @@ class String
   end
 end
 
-def well_formed?(filename)
-  return unless filename
-  return File.open(filename, 'r').well_ormed_xml?
-end
+if __FILE__ == $0
+  def well_formed?(filename)
+    return unless filename
+    return File.open(filename, 'r').well_formed_xml?
+  end
 
-puts well_formed?(ARGV[0])
+  puts well_formed?(ARGV[0])
+end

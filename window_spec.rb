@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -w
 # window_spec.rb
+# Author: Andy Bettisworth
 # Description: Window manager command-line app
 # Dependencies: libx11-dev, libglib2.0-dev, libxmu-dev
 
@@ -268,24 +269,3 @@ private
     @window_list = @window_manager.list_windows.delete_if {|window| window[:class] == nil}
   end
 end
-
-
-### 
-# Feature: Desktop window management
-#   As a desktop user
-#   I want to dynamically control windows from a command-line interface
-#   So that I am not dependent on a mouse
-#   And so I can save and automate window arrangements
-
-# Scenario: Desktop user opens up an application window
-# Scenario: Desktop user opens up an application window in target workspace
-# Scenario: Desktop user lists all application windows
-# Scenario: Desktop user moves target window to target workspace
-# Scenario: Desktop user changes target window properties
-# Scenario: Desktop user changes target window dimensions
-# Scenario: Desktop user closes an application window
-# Scenario: Desktop user saves current window arrangement
-# Scenario: Desktop user lists all window arrangements
-# Scenario: Desktop user opens last saved window arrangement
-# Scenario: Desktop user opens target window arrangement
-# Scenario: Desktop user deletes target window arrangement

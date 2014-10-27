@@ -25,12 +25,14 @@ class AddressBook
     @connection.add('cn=' + cn + ',' + udn(), entry)
 end
 
-user = User.new('23', 'Jane', 'Doe')
-address_book = AddressBook.new(connection, user)
-recipient = Recipient.new(
-  'Jose', 'Rodriquez',
-  'Casanova Street 6', '7702',
-  'Houston', 'TX',
-  'Rrrrrr!'
-)
-address_book.add(recipient)
+if __FILE__ == $0
+  user = User.new('23', 'Jane', 'Doe')
+  address_book = AddressBook.new(connection, user)
+  recipient = Recipient.new(
+    'Jose', 'Rodriquez',
+    'Casanova Street 6', '7702',
+    'Houston', 'TX',
+    'Rrrrrr!'
+  )
+  address_book.add(recipient)
+end

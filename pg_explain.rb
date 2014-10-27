@@ -46,10 +46,12 @@ class PGExplain
   end
 end
 
-analyze = PGExplain.new
-analyze.query = %q{
-  SELECT name, setting
-  FROM pg_settings
-  WHERE category = 'File Locations'
-}
-analyze.report
+if __FILE__ == $0
+  analyze = PGExplain.new
+  analyze.query = %q{
+    SELECT name, setting
+    FROM pg_settings
+    WHERE category = 'File Locations'
+  }
+  analyze.report
+end

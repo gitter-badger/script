@@ -82,6 +82,7 @@ class GetPkgDependencies
   end
 end
 
-## USAGE
-cmd = GetPkgDependencies.new
-cmd.get('target_packages')
+if __FILE__ == $0
+  cmd = GetPkgDependencies.new
+  cmd.get('target_packages')
+end
