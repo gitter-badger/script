@@ -73,8 +73,9 @@ class Script
     script_list = Dir["#{ENV['HOME']}/.sync/.script/*"].delete_if { |s| File.directory?(s) }
     script_list.each do |script|
       next if /_spec/.match(script)
-      puts script
-      # name = File.basename(script, '.rb')
+      extension = File.extname(script)
+      name = File.basename(script, extension)
+      puts name
       # str_a1 = "alias #{name}="
       # # > handle multiple extensions [python .py, expect .exp, ruby .rb, shell .sh]
       # str_a2 = "'ruby "
