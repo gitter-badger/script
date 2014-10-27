@@ -7,6 +7,7 @@ require 'optparse'
 require 'fileutils'
 
 class Annex
+  GITHUB = "https://www.github.com/wurde"
   ANNEX_SYNC = "/media/#{ENV['USER']}/Village/preseed/.seed-install/.sync"
   LOCAL_SYNC = "#{ENV['HOME']}/.sync"
   SYNC_REPOSITORIES = [
@@ -40,6 +41,11 @@ class Annex
     sync('.canvas')
     sync('.script')
     sync('.project')
+  end
+
+  def github
+    sync_github("#{LOCAL_SYNC}/.canvas")
+    sync_github("#{LOCAL_SYNC}/.script")
   end
 
   private
@@ -113,8 +119,8 @@ class Annex
     end
   end
 
-  def branch_exist?(repo, branch)
-    Dir.chdir repo
+  def branch_exist?(repository, branch)
+    Dir.chdir repository
     branches = `git branch`
     return branches.include?(branch)
   end
@@ -135,10 +141,10 @@ class Annex
     end
   end
 
-  def remote_exist?(path, remote_branch)
-    Dir.chdir path
+  def remote_exist?(repository, branch)
+    Dir.chdir repository
     remotes = `git remote -v`
-    return remotes.include?(remote_branch)
+    return remotes.include?(branch)
   end
 
   def commit_local(local_repo)
@@ -172,6 +178,21 @@ class Annex
       git checkout annex;
     CMD
   end
+
+  def sync_github(local)
+    raise "MissingBranch: No branch named 'master'" unless branch_exist?(local, 'master')
+    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(local, 'annex')
+    raise "MissingBranch: No remote named 'github'" unless remote_exist?(local, 'github')
+    system <<-CMD
+      cd #{local}
+      git checkout master
+      git merge annex
+      git pull github master
+      git push github master
+      git checkout annex
+      git merge master
+    CMD
+  end
 end
 
 if __FILE__ == $0
@@ -186,6 +207,10 @@ if __FILE__ == $0
     opts.on('-s', '--slim', 'Annex only a select few repositories') do
       options[:slim] = true
     end
+
+    opts.on('--github', 'Annex only a select few github repositories') do
+      options[:github] = true
+    end
   end
   option_parser.parse!
 
@@ -196,6 +221,9 @@ if __FILE__ == $0
     exit
   elsif options[:slim]
     update.slim
+    exit
+  elsif options[:github]
+    update.github
     exit
   end
 
