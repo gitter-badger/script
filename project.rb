@@ -117,7 +117,7 @@ if __FILE__ == $0
       if template
         options[:init] = template
       else
-        options[:init] = 1
+        options[:init] = 0
       end
     end
 
@@ -151,7 +151,7 @@ if __FILE__ == $0
   mgmt = ProjectManager.new
 
   if options[:init]
-    mgmt.init
+    mgmt.init(options[:init])
     exit
   elsif options[:list]
     mgmt.list(options[:list_pattern])
