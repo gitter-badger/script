@@ -70,7 +70,7 @@ class Script
     bash_aliases = File.open(BASH_ALIASES, 'w+')
     bash_aliases.puts '## Create aliases for ~/.sync/.script/*'
 
-    script_list = Dir["#{ENV['HOME']}/.sync/.script/*"].select! { |s| File.directory?(s) }
+    script_list = Dir["#{ENV['HOME']}/.sync/.script/*"].delete_if! { |s| File.directory?(s) }
     script_list.each do |script|
       puts script
       # next if script.include?("_spec.rb")
