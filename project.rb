@@ -73,13 +73,13 @@ class ProjectManager
   end
 
   def info(project)
-    puts project
-    # raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
-    # info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-    # puts "Project:     #{project}"
-    # puts "Description: #{info[:description]}"
-    # puts "Location:    #{info[:location]}"
-    # puts "Created At:  #{info[:created_at]}"
+    project = @project if project == '.'
+    raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
+    info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+    puts "Project:     #{project}"
+    puts "Description: #{info[:description]}"
+    puts "Location:    #{info[:location]}"
+    puts "Created At:  #{info[:created_at]}"
   end
 
   private
