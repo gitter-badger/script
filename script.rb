@@ -85,13 +85,12 @@ class Script
       exec_binary = "'#{ALIAS_CMD[extension]} "
       script_path = "#{script}'"
       str_alias = alias_cmd + exec_binary + script_path
-      puts str_alias
       bash_aliases.puts str_alias
     end
     bash_aliases.close
 
-    system "sudo chmod 755 #{BASH_ALIASES}"
-    system "sudo chown #{ENV['USER']}:#{ENV['USER']} #{BASH_ALIASES}"
+    # system "sudo chmod 755 #{BASH_ALIASES}"
+    # system "sudo chown #{ENV['USER']}:#{ENV['USER']} #{BASH_ALIASES}"
     system "source #{BASH_ALIASES}"
   end
 
