@@ -17,22 +17,23 @@ class ProjectManager
     @project_path = "#{PROJECT}/#{@project}"
   end
 
-  def init
-    unless project_exist?(@project)
-      Dir.mkdir("#{PROJECT}/#{@project}")
-      puts "Describe this project:\n"
-      description = gets.strip until description
-      project = {
-        description: description,
-        location: File.dirname(Dir.pwd),
-        created_at: Time.now
-      }
-      file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
-      file.close
-      todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
-    else
-      puts "Project already exists for #{@project}"
-    end
+  def init(template)
+    puts "'#{template}'"
+    # unless project_exist?(@project)
+    #   Dir.mkdir("#{PROJECT}/#{@project}")
+    #   puts "Describe this project:\n"
+    #   description = gets.strip until description
+    #   project = {
+    #     description: description,
+    #     location: File.dirname(Dir.pwd),
+    #     created_at: Time.now
+    #   }
+    #   file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+    #   file.close
+    #   todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    # else
+    #   puts "Project already exists for #{@project}"
+    # end
   end
 
   def list(regexp)
@@ -112,8 +113,12 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: project [options]'
 
-    opts.on('--init', 'Create a new project for current working directory') do
-      options[:init] = true
+    opts.on('--init [TEMPLATE]', 'Create a new project for current working directory') do |template|
+      if template
+        options[:init] = true
+      else
+        options[:init] = ''
+      end
     end
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching projects') do |regexp|
