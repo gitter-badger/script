@@ -117,7 +117,7 @@ if __FILE__ == $0
       if template
         options[:init] = true
       else
-        options[:init] = ''
+        options[:init] = false
       end
     end
 
