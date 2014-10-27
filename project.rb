@@ -8,7 +8,7 @@ require 'yaml'
 
 class ProjectManager
   PROJECT = "#{ENV['HOME']}/.sync/.project"
-  TEMPLATE = "#{ENV['HOME']}/.sync/.template"
+  TEMPLATE = "#{ENV['HOME']}/.sync/.template/projects"
 
   attr_accessor :project
   attr_accessor :project_path
@@ -31,7 +31,7 @@ class ProjectManager
       file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
       file.close
       if File.exist?("#{TEMPLATE}/#{template}")
-        `cp -r #{TEMPLATE}/#{template} #{@project_path}`
+        `cp -r #{TEMPLATE}/#{template}/* .`
       end
       todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
     else
