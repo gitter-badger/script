@@ -1,1 +1,0 @@
-D, [2014-02-13T20:01:05.009532 #12798] DEBUG -- :   [1m[36m (161.1ms)[0m  [1mCREATE TABLE "coordinate" ("id" serial primary key, "x_coordinate" float NOT NULL, "y_coordinate" float NOT NULL) [0m
