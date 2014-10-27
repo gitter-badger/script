@@ -73,12 +73,13 @@ class ProjectManager
   end
 
   def info(project)
-    raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
-    info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-    puts "Project:     #{project}"
-    puts "Description: #{info[:description]}"
-    puts "Location:    #{info[:location]}"
-    puts "Created At:  #{info[:created_at]}"
+    puts project
+    # raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
+    # info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+    # puts "Project:     #{project}"
+    # puts "Description: #{info[:description]}"
+    # puts "Location:    #{info[:location]}"
+    # puts "Created At:  #{info[:created_at]}"
   end
 
   private
@@ -133,7 +134,11 @@ if __FILE__ == $0
     end
 
     opts.on('-i [PROJECT]', '--info [PROJECT]', 'Info for current project') do |project|
-      options[:info] = project
+      if project
+        options[:info] = project
+      else
+        options[:info] = '.'
+      end
     end
   end
   option_parser.parse!
