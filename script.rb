@@ -68,17 +68,18 @@ class Script
 
   def refresh_aliases
     bash_aliases = File.open(BASH_ALIASES, 'w+')
-    bash_aliases.puts '## CREATE aliases for ~/.sync/.script/* via ~/.bash_aliases'
+    bash_aliases.puts '## Create aliases for ~/.sync/.script/*'
 
-    ruby_scripts = Dir["#{ENV['HOME']}/.sync/.script/*.rb"]
-    ruby_scripts.each do |script|
-      next if script.include?("_spec.rb")
-      name = File.basename(script, '.rb')
-      str_a1 = "alias #{name}="
-      str_a2 = "'ruby "
-      str_a3 = "#{script}'"
-      str_alias = str_a1 + str_a2 + str_a3
-      bash_aliases.puts str_alias
+    script_list = Dir["#{ENV['HOME']}/.sync/.script/*"]
+    script_list.each do |script|
+      puts script
+      # next if script.include?("_spec.rb")
+      # name = File.basename(script, '.rb')
+      # str_a1 = "alias #{name}="
+      # str_a2 = "'ruby "
+      # str_a3 = "#{script}'"
+      # str_alias = str_a1 + str_a2 + str_a3
+      # bash_aliases.puts str_alias
     end
     bash_aliases.close
 
