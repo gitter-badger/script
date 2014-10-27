@@ -115,9 +115,9 @@ if __FILE__ == $0
 
     opts.on('--init [TEMPLATE]', 'Create a new project for current working directory') do |template|
       if template
-        options[:init] = true
+        options[:init] = template
       else
-        options[:init] = false
+        options[:init] = 0
       end
     end
 
