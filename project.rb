@@ -8,6 +8,7 @@ require 'yaml'
 
 class ProjectManager
   PROJECT = "#{ENV['HOME']}/.sync/.project"
+  TEMPLATE = "#{ENV['HOME']}/.sync/.template"
 
   attr_accessor :project
   attr_accessor :project_path
@@ -18,22 +19,24 @@ class ProjectManager
   end
 
   def init(template)
-    puts "'#{template}'"
-    # unless project_exist?(@project)
-    #   Dir.mkdir("#{PROJECT}/#{@project}")
-    #   puts "Describe this project:\n"
-    #   description = gets.strip until description
-    #   project = {
-    #     description: description,
-    #     location: File.dirname(Dir.pwd),
-    #     created_at: Time.now
-    #   }
-    #   file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
-    #   file.close
-    #   todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
-    # else
-    #   puts "Project already exists for #{@project}"
-    # end
+    unless project_exist?(@project)
+      Dir.mkdir("#{PROJECT}/#{@project}")
+      puts "Describe this project:\n"
+      description = gets.strip until description
+      project = {
+        description: description,
+        location: File.dirname(Dir.pwd),
+        created_at: Time.now
+      }
+      file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
+      file.close
+      if File.exist?("#{TEMPLATE}/#{template}")
+        `cp -r #{TEMPLATE}/#{template} #{@project_path}`
+      end
+      todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+    else
+      puts "Project already exists for #{@project}"
+    end
   end
 
   def list(regexp)
