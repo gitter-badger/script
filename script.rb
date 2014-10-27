@@ -82,7 +82,7 @@ class Script
       extension = File.extname(script)
       name = File.basename(script, extension)
       alias_cmd = "alias #{name}="
-      exec_binary = "#{ALIAS_CMD[extension]} "
+      exec_binary = "'#{ALIAS_CMD[extension]} "
       script_path = "#{script}'"
       str_alias = alias_cmd + exec_binary + script_path
       puts str_alias
