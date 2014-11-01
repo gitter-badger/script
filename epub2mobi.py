@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # epub2mobi.py
-# Author: Juan Reyero
+# Author: Juan Reyero, Andy Bettisworth
 # Description: Convert books formatted epub to mobi (kindle usage)
 
 import os
 
-def epub2mobi(from_dir, to_dir, ignore_if=None):
+def epub2mobi(from_dir, to_dir):
     """
     Look for .epub files in from_dir, convert them to .mobi and store
     them in the flat directory to_dir unless their path includes any string
@@ -23,25 +23,18 @@ def epub2mobi(from_dir, to_dir, ignore_if=None):
         os.makedirs(to_dir)
 
     for root, dirs, files in os.walk(from_dir):
-        ignore = False
-        if ignore_if is not None:
-            ignore = reduce(lambda a, b: a or b,
-                            [ig in root for ig in ignore_if])
-        print files
-    #     if not ignore:
-    #         for fl in files:
-    #             name, extension = os.path.splitext(fl)
-    #             if extension == '.epub':
-    #                 mobi = os.path.join(to_dir, name + '.mobi')
-    #                 if not os.path.exists(mobi):
-    #                     os.system('ebook-convert ' +
-    #                               os.path.join(root, fl) + ' ' + mobi)
+        for fl in files:
+            name, extension = os.path.splitext(fl)
+            if extension == '.epub':
+                mobi = os.path.join(to_dir, name + '.mobi')
+                print mobi
+                # if not os.path.exists(mobi):
+                #     os.system('ebook-convert ' +
+                #               os.path.join(root, fl) + ' ' + mobi)
 
 if __name__ == '__main__':
     import sys
     from_dir, to_dir = '.', '.'
     if len(sys.argv) > 1:  from_dir = sys.argv[1]
     if len(sys.argv) == 3: to_dir = sys.argv[2]
-    print from_dir
-    print to_dir
-    # epub2mobi(from_dir, to_dir, ignore_if=['Technical'])
+    epub2mobi(from_dir, to_dir)
