@@ -21,15 +21,12 @@ def epub2mobi(from_dir, to_dir, ignore_if=None):
 
     if not os.path.exists(to_dir):
         os.makedirs(to_dir)
+
     for root, dirs, files in os.walk(from_dir):
-        print root
-        print dirs
-        print files
-        print ''
-    #     ignore = False
-    #     if ignore_if is not None:
-    #         ignore = reduce(lambda a, b: a or b,
-    #                         [ig in root for ig in ignore_if])
+        ignore = False
+        if ignore_if is not None:
+            ignore = reduce(lambda a, b: a or b,
+                            [ig in root for ig in ignore_if])
     #     if not ignore:
     #         for fl in files:
     #             name, extension = os.path.splitext(fl)
