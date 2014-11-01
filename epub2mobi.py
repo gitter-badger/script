@@ -14,8 +14,8 @@ def epub2mobi(from_dir, to_dir, ignore_if=None):
     Requires ebook-convert, coming from calibre (http://calibre-ebook.com).
     """
 
-    print "from_dir: %s" % from_dir
-    print "to_dir: %s" % to_dir
+    print "from_dir:  %s" % from_dir
+    print "to_dir:    %s" % to_dir
     print "ignore_if: %s" % ignore_if
 
     # if not os.path.exists(to_dir):
