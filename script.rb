@@ -92,6 +92,10 @@ class Script
     system "source #{BASH_ALIASES}"
   end
 
+  def history
+    puts 'historic scripts...'
+  end
+
   private
 
   def create_script(script)
@@ -190,10 +194,15 @@ if __FILE__ == $0
     opts.on('--refresh', 'Refresh script Bash aliases') do
       options[:refresh] = true
     end
+
+    opts.on('--history', 'List recent script activity') do
+      options[:history] = true
+    end
   end
   option_parser.parse!
 
   s = Script.new
+
   if options[:clean]
     s.clean
   elsif options[:fetch]
@@ -204,6 +213,8 @@ if __FILE__ == $0
     s.list(options[:list_pattern])
   elsif options[:refresh]
     s.refresh_aliases
+  elsif options[:history]
+    s.history
   else
     puts option_parser
   end
