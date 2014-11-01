@@ -14,12 +14,13 @@ def epub2mobi(from_dir, to_dir, ignore_if=None):
     Requires ebook-convert, coming from calibre (http://calibre-ebook.com).
     """
 
+    print "Converting EPUB to MOBI..."
     print "from_dir:  %s" % from_dir
     print "to_dir:    %s" % to_dir
     print "ignore_if: %s" % ignore_if
 
-    # if not os.path.exists(to_dir):
-    #     os.makedirs(to_dir)
+    if not os.path.exists(to_dir):
+        os.makedirs(to_dir)
     # for root, dirs, files in os.walk(from_dir):
     #     ignore = False
     #     if ignore_if is not None:
