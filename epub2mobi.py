@@ -28,7 +28,7 @@ def epub2mobi(from_dir, to_dir):
             if extension == '.epub':
                 mobi = os.path.join(to_dir, name + '.mobi')
                 if not os.path.exists(mobi):
-                    os.system('ebook-convert ' + os.path.join(root, fl) + ' ' + mobi)
+                    os.system("ebook-convert %s %s" % (os.path.join(root, fl), mobi))
 
 if __name__ == '__main__':
     import sys
