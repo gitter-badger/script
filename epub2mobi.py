@@ -19,17 +19,19 @@ def epub2mobi(from_dir='.', to_dir=None):
     print "to_dir:    %s" % to_dir
     print ""
 
-    # if not os.path.exists(to_dir):
-    #     os.makedirs(to_dir)
+    if not os.path.exists(to_dir):
+        os.makedirs(to_dir)
 
-    # for root, dirs, files in os.walk(from_dir):
-    #     for fl in files:
-    #         name, extension = os.path.splitext(fl)
-    #         if extension == '.epub':
-    #             mobi = os.path.join(root, name + '.mobi')
-    #             # mobi = os.path.join(to_dir, name + '.mobi')
-    #             if not os.path.exists(mobi):
-    #                 os.system("ebook-convert '%s' '%s'" % (os.path.join(root, fl), mobi))
+    for root, dirs, files in os.walk(from_dir):
+        for fl in files:
+            name, extension = os.path.splitext(fl)
+            if extension == '.epub':
+                if to_dir == None:
+                    mobi = os.path.join(root, name + '.mobi')
+                else:
+                    mobi = os.path.join(to_dir, name + '.mobi')
+                if not os.path.exists(mobi):
+                    os.system("ebook-convert '%s' '%s'" % (os.path.join(root, fl), mobi))
 
 if __name__ == '__main__':
     import sys
