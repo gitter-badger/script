@@ -27,6 +27,7 @@ def epub2mobi(from_dir, to_dir, ignore_if=None):
         if ignore_if is not None:
             ignore = reduce(lambda a, b: a or b,
                             [ig in root for ig in ignore_if])
+        print files
     #     if not ignore:
     #         for fl in files:
     #             name, extension = os.path.splitext(fl)
@@ -41,4 +42,4 @@ if __name__ == '__main__':
     from_dir, to_dir = '.', '.'
     if len(sys.argv) > 1:  from_dir = sys.argv[1]
     if len(sys.argv) == 3: to_dir = sys.argv[2]
-    epub2mobi(from_dir, to_dir, ignore_if=['ninios'])
+    epub2mobi(from_dir, to_dir, ignore_if=['Dad'])
