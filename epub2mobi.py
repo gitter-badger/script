@@ -19,8 +19,9 @@ def epub2mobi(from_dir='.', to_dir=None):
     print "to_dir:    %s" % to_dir
     print ""
 
-    if not os.path.exists(to_dir):
-        os.makedirs(to_dir)
+    if not to_dir == None:
+        if not os.path.exists(to_dir):
+            os.makedirs(to_dir)
 
     for root, dirs, files in os.walk(from_dir):
         for fl in files:
