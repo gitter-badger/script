@@ -66,8 +66,9 @@ class Canvas
 
   def history
     files = `cd #{CANVAS}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
-    print files.class
-    print files
+    files = files.split("\n")
+    puts files.class
+    puts files
   end
 
   private
