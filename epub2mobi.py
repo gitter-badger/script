@@ -42,4 +42,4 @@ if __name__ == '__main__':
     from_dir, to_dir = '.', '.'
     if len(sys.argv) > 1:  from_dir = sys.argv[1]
     if len(sys.argv) == 3: to_dir = sys.argv[2]
-    epub2mobi(from_dir, to_dir, ignore_if=['Au'])
+    epub2mobi(from_dir, to_dir, ignore_if=['Dragonlance', 'Technical'])
