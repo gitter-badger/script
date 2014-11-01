@@ -7,7 +7,9 @@
 class ChessGame
   def play
     board = Array.new(8, Array.new(8, 1))
-    puts board.inspect
+    board.each do |row|
+      puts row.inspect
+    end
   end
 end
 
