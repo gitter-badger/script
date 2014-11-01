@@ -5,7 +5,7 @@
 
 import os
 
-def epub2mobi(from_dir, to_dir):
+def epub2mobi(from_dir='.', to_dir=None):
     """
     Look for .epub files in from_dir, convert them to .mobi and store
     them in the flat directory to_dir unless their path includes any string
@@ -19,21 +19,22 @@ def epub2mobi(from_dir, to_dir):
     print "to_dir:    %s" % to_dir
     print ""
 
-    if not os.path.exists(to_dir):
-        os.makedirs(to_dir)
+    # if not os.path.exists(to_dir):
+    #     os.makedirs(to_dir)
 
-    for root, dirs, files in os.walk(from_dir):
-        for fl in files:
-            name, extension = os.path.splitext(fl)
-            if extension == '.epub':
-                mobi = os.path.join(root, name + '.mobi')
-                # mobi = os.path.join(to_dir, name + '.mobi')
-                if not os.path.exists(mobi):
-                    os.system("ebook-convert '%s' '%s'" % (os.path.join(root, fl), mobi))
+    # for root, dirs, files in os.walk(from_dir):
+    #     for fl in files:
+    #         name, extension = os.path.splitext(fl)
+    #         if extension == '.epub':
+    #             mobi = os.path.join(root, name + '.mobi')
+    #             # mobi = os.path.join(to_dir, name + '.mobi')
+    #             if not os.path.exists(mobi):
+    #                 os.system("ebook-convert '%s' '%s'" % (os.path.join(root, fl), mobi))
 
 if __name__ == '__main__':
     import sys
-    from_dir, to_dir = '.', '.'
+    from_dir = '.'
+    to_dir   = None
     if len(sys.argv) > 1:  from_dir = sys.argv[1]
     if len(sys.argv) == 3: to_dir = sys.argv[2]
     epub2mobi(from_dir, to_dir)
