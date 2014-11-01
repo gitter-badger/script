@@ -65,7 +65,9 @@ class Canvas
   end
 
   def history
-    puts 'historic canvases...'
+    files = `git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+    print files.class
+    print files
   end
 
   private
