@@ -6,7 +6,7 @@
 # > represent the board 8x8 64 square array
 class ChessGame
   def play
-    board = Array.new(8, '0')
+    board = Array.new(8, Array.new(8, 1))
     puts board
   end
 end
