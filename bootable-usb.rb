@@ -13,22 +13,34 @@ class BootableUSB
     print_current_tablespace(device)
     exit unless confirm_operation
 
-    ## > Partition Device
+    ## > handle persistence percent
+    `echo -e "o\nn\np\n1\n\n\nw" | sudo fdisk #{device}`
     # /dev/sdX1 ntfs Village    ~80% GiB boot
     # /dev/sdX2 ext4 casper-rw  ~20% GiB
 
+    ## > format partitions
+    `sudo mkfs --type ntfs #{device}1`
+    # `sudo mkfs --type ext4 #{device}2`
+
+    ## > label partitions
+    `sudo ntfslabel #{device}1 Village`
+    # `sudo e2label #{device}2 casper-rw`
+
     ## > Extract ISO
-    # sudo mkdir /mnt/ubuntu
-    # sudo mount -o loop ubuntu.iso /mnt/ubuntu
+    `sudo rm -r /mnt/tmpiso`
+    `sudo mkdir /mnt/tmpiso`
+    `sudo mount -o loop #{iso} /mnt/tmpiso`
 
     ## > Copy ISO to Device
-    # rsync -aP /mnt/ubuntu/* /media/raist/Village
-    # sudo unlink /media/raist/Village/ubuntu
+    ## En handle auto reattch device
+    `rsync -aP /mnt/tmpiso/* /media/raist/Village`
+    `sudo unlink /media/raist/Village/ubuntu`
+    `sudo rm -r /mnt/tmpiso`
 
     ## > Setup GRUB bootloader
-    # rm /media/raist/Village/boot/grub/loopback.cfg
-    # cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg
-    # sudo grub-install --no-floppy --root-directory=/media/raist/Village/ /dev/sdX
+    `rm /media/raist/Village/boot/grub/loopback.cfg`
+    `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
+    `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
   end
 
   private
@@ -36,6 +48,7 @@ class BootableUSB
   def validate_files(device, iso, peristence)
     raise "No such file at '#{device}'" unless File.exist?(device)
     raise "No such file at '#{iso}'" unless File.exist?(iso)
+    # > ensure it is not SDXY just SDX
     raise "Not a block device '#{device}'" unless Kernel.test('b', device)
     raise "Not an ISO file '#{iso}'" unless File.extname(iso) == '.iso'
   end
