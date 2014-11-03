@@ -9,7 +9,10 @@ class BootableUSB
 
   def build(device, iso, quiet=false)
     validate_args(device, iso)
+    print_block_devices
+    print_current_tablespace(device)
     exit unless confirm_operation
+    puts 'continue'
   end
 
   private
@@ -19,6 +22,18 @@ class BootableUSB
     raise "No such file at '#{iso}'" unless File.exist?(iso)
     raise "Not a block device '#{device}'" unless Kernel.test('b', device)
     raise "Not an ISO file '#{iso}'" unless File.extname(iso) == '.iso'
+  end
+
+  def print_block_devices
+    puts ""
+    puts `lsblk`
+    puts ""
+  end
+
+  def print_current_tablespace(device)
+    puts "Target device partition table: "
+    puts `sudo fdisk -l #{device}`
+    puts ""
   end
 
   def confirm_operation
