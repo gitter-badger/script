@@ -9,6 +9,7 @@ class BootableUSB
 
   def build(device, iso, quiet=false)
     validate_args(device, iso)
+    exit unless confirm_operation
   end
 
   private
@@ -18,6 +19,17 @@ class BootableUSB
     raise "No such file at '#{iso}'" unless File.exist?(iso)
     raise "Not a block device '#{device}'" unless Kernel.test('b', device)
     raise "Not an ISO file '#{iso}'" unless File.extname(iso) == '.iso'
+  end
+
+  def confirm_operation
+    puts "This operation will completely wipe the device."
+    puts "Are you sure you want to continue? (y|n)"
+    answer = $stdin.gets until answer
+    if /y/i.match(answer)
+      return true
+    else
+      return false
+    end
   end
 end
 
