@@ -7,7 +7,6 @@ if __FILE__ == $0
   if File.exist?('.git')
     puts "Creating a git commit within #{Dir.pwd}"
     message = gets.chomp until message
-    puts message
     system <<-CMD
       git add -A
       git commit -m '#{message}'
