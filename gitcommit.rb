@@ -10,7 +10,7 @@ if __FILE__ == $0
     puts message
     system <<-CMD
       git add -A
-      git commit -m #{message}
+      git commit -m '#{message}'
     CMD
   else
     raise "No git repository found at '#{Dir.pwd}'"
