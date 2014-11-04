@@ -6,51 +6,65 @@
 class BootableUSB
 
   def build(device, iso, peristence=0, quiet=false)
-    validate_files(device, iso)
+    device     = validate_device(device)
+    iso        = validate_iso(iso)
     peristence = validate_pct(peristence)
 
     print_block_devices
     print_current_tablespace(device)
     exit unless confirm_operation
 
-    ## > handle persistence percent
-    `echo -e "o\nn\np\n1\n\n\nw" | sudo fdisk #{device}`
+    sectors = get_sector_count(device)
+
+    secondary_table = sectors * ( peristence / 100 )
+    primary_table = sectors - secondary_table
+    puts "total     #{sectors}"
+    puts "initial   #{primary_table}"
+    puts "secondary #{secondary_table}"
+
+    ## > handle peristence percent
+    # `echo -e "o\nn\np\n1\n\n\nw" | sudo fdisk #{device}`
     # /dev/sdX1 ntfs Village    ~80% GiB boot
     # /dev/sdX2 ext4 casper-rw  ~20% GiB
 
-    ## > format partitions
-    `sudo mkfs --type ntfs #{device}1`
-    # `sudo mkfs --type ext4 #{device}2`
+    # ## > format partitions
+    # `sudo mkfs --type ntfs #{device}1`
+    # # `sudo mkfs --type ext4 #{device}2`
 
-    ## > label partitions
-    `sudo ntfslabel #{device}1 Village`
-    # `sudo e2label #{device}2 casper-rw`
+    # ## > label partitions
+    # `sudo ntfslabel #{device}1 Village`
+    # # `sudo e2label #{device}2 casper-rw`
 
-    ## > Extract ISO
-    `sudo rm -r /mnt/tmpiso`
-    `sudo mkdir /mnt/tmpiso`
-    `sudo mount -o loop #{iso} /mnt/tmpiso`
+    # ## > Extract ISO
+    # `sudo rm -r /mnt/tmpiso`
+    # `sudo mkdir /mnt/tmpiso`
+    # `sudo mount -o loop #{iso} /mnt/tmpiso`
 
-    ## > Copy ISO to Device
-    ## En handle auto reattch device
-    `rsync -aP /mnt/tmpiso/* /media/raist/Village`
-    `sudo unlink /media/raist/Village/ubuntu`
-    `sudo rm -r /mnt/tmpiso`
+    # ## > Copy ISO to Device
+    # ## En handle auto reattch device
+    # `rsync -aP /mnt/tmpiso/* /media/raist/Village`
+    # `sudo unlink /media/raist/Village/ubuntu`
+    # `sudo rm -r /mnt/tmpiso`
 
-    ## > Setup GRUB bootloader
-    `rm /media/raist/Village/boot/grub/loopback.cfg`
-    `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
-    `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
+    # ## > Setup GRUB bootloader
+    # `rm /media/raist/Village/boot/grub/loopback.cfg`
+    # `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
+    # `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
   end
 
   private
 
-  def validate_files(device, iso, peristence)
+  def validate_device(device)
     raise "No such file at '#{device}'" unless File.exist?(device)
-    raise "No such file at '#{iso}'" unless File.exist?(iso)
-    # > ensure it is not SDXY just SDX
     raise "Not a block device '#{device}'" unless Kernel.test('b', device)
+    device = device.gsub(/\d*/, '')
+    device
+  end
+
+  def validate_iso(iso)
+    raise "No such file at '#{iso}'" unless File.exist?(iso)
     raise "Not an ISO file '#{iso}'" unless File.extname(iso) == '.iso'
+    iso
   end
 
   def validate_pct(peristence)
@@ -83,6 +97,15 @@ class BootableUSB
 
   def is_numeric?(s)
     !!Float(s) rescue false
+  end
+
+  def get_sector_count(device)
+    input = `sudo fdisk -l #{device}`
+    matches = /total\s(\d*?)\ssectors/.match(input)
+    if matches
+      sectors = matches[1]
+      return sectors.to_i
+    end
   end
 end
 
