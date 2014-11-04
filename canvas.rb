@@ -64,6 +64,13 @@ class Canvas
     canvas_dict
   end
 
+  def history
+    files = `cd #{CANVAS}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+    files = files.split("\n")
+    puts "7-Day Canvas Activity:"
+    puts files
+  end
+
   private
 
   def get_canvases(pattern)
@@ -157,10 +164,15 @@ if __FILE__ == $0
       options[:list] = true
       options[:list_pattern] = regexp
     end
+
+    opts.on('--history', 'List recent canvas activity') do
+      options[:history] = true
+    end
   end
   option_parser.parse!
 
   c = Canvas.new
+
   if options[:clean]
     c.clean
   elsif options[:fetch]
@@ -169,6 +181,8 @@ if __FILE__ == $0
     c.add(options[:add])
   elsif options[:list]
     c.list(options[:list_pattern])
+  elsif options[:history]
+    c.history
   else
     puts option_parser
   end
