@@ -177,12 +177,11 @@ $0
   def get_description(script)
     scripts = get_sync_scripts
     scripts.select! { |s| /#{script}/i.match(s[:filename])}
-    scripts.empty?
-    # if scripts
-    #   return scripts[0][:description]
-    # else
-    #   return '...script does not exist (script --refresh) at your convenience'
-    # end
+    if scripts.empty?
+      return scripts[0][:description]
+    else
+      return '...script does not exist (script --refresh) at your convenience'
+    end
   end
 
   def get_shebang(ext)
