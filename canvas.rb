@@ -86,7 +86,25 @@ $0
     files = `cd #{CANVAS}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
     files = files.split("\n")
     puts "7-Day Canvas Activity:"
-    puts files
+
+    canvases = {}
+    files.each do |f|
+      filename = f[1..-1].strip
+      canvases[filename] = f[0]
+    end
+
+    added_canvases    = canvases.select { |s,a| a == "A"}
+    modified_canvases = canvases.select { |s,a| a == "M"}
+    deleted_canvases  = canvases.select { |s,a| a == "D"}
+    puts ""
+    puts "#{added_canvases.count} canves(es) added: "
+    added_canvases.each { |c,a| puts "  #{c}" }
+    puts ""
+    puts "#{modified_canvases.count} canves(es) modified: "
+    modified_canvases.each { |c,a| puts "  #{c}" }
+    puts ""
+    puts "#{deleted_canvases.count} canves(es) deleted: "
+    deleted_canvases.each { |c,a| puts "  #{c}" }
   end
 
   def get_sync_canvases
