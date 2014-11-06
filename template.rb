@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 # template.rb
 # Author: Andy Bettisworth
-# Detemplateion: Get templates from ~/.sync/.template
+# Description: Get templates from ~/.sync/.template
 
 require 'optparse'
 
