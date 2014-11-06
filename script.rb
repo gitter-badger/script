@@ -78,9 +78,8 @@ class Script
     script_list.select! { |s| pattern.match(s) } if pattern
 
     script_list.each do |script|
-      # desc = get_description(script)
-      # puts "#{script[:alias]}         #{desc}"
-      puts "#{script[:alias]}"
+      desc = get_description(script[:filename])
+      puts "#{script[:alias]}         #{desc}"
     end
   end
 
@@ -165,6 +164,12 @@ class Script
     puts "modified_at:  #{scripts[0][:modified_at]}"
     puts "description:  #{scripts[0][:description]}"
     puts "dependencies: #{scripts[0][:dependencies]}"
+  end
+
+  def get_description(script)
+    scripts = get_sync_scripts
+    scripts.select! { |s| /#{script}/i.match(s[:filename])}
+    scripts[0][:description]
   end
 
   def get_sync_scripts
