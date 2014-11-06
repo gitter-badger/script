@@ -103,13 +103,13 @@ $0
 
       canvas[:filename] = file
 
-      created_at = /created at:(?<created_at>.*)/i.match(s)
+      created_at = /created at:(?<created_at>.*)/i.match(c)
       script[:created_at] = created_at[:created_at].strip if created_at
 
-      modified_at = /modified at:(?<modified_at>.*)/i.match(s)
+      modified_at = /modified at:(?<modified_at>.*)/i.match(c)
       script[:modified_at] = modified_at[:modified_at].strip if modified_at
 
-      description = /description:(?<description>.*)/i.match(s)
+      description = /description:(?<description>.*)/i.match(c)
       script[:description] = description[:description].strip if description
 
       canvas_list << canvas
