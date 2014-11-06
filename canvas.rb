@@ -94,6 +94,7 @@ $0
 
     Dir.foreach(CANVAS) do |file|
       next if File.directory?(File.join(CANVAS, file))
+      next if File.extname(file) == '.pyc'
       canvas = {}
 
       file_head = File.open(File.join(CANVAS, file)).readlines
