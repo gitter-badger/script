@@ -216,7 +216,7 @@ $0
       script = {}
 
       file_head = File.open(File.join(SCRIPT, file)).readlines
-      s = file_head[0..11].join("\n")
+      s = file_head[0..11].join('')
 
       script[:shebang] = file_head[0].strip
       script[:filename] = file

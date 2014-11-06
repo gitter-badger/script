@@ -99,17 +99,16 @@ $0
       file_head = File.open(File.join(CANVAS, file)).readlines
       c = file_head[0..11].join('')
 
-      puts c
-      # canvas[:filename] = file
+      canvas[:filename] = file
 
-      # created_at = /created at:(?<created_at>.*)/i.match(c)
-      # canvas[:created_at] = created_at[:created_at].strip if created_at
+      created_at = /created at:(?<created_at>.*)/i.match(c.to_s)
+      canvas[:created_at] = created_at[:created_at].strip if created_at
 
-      # modified_at = /modified at:(?<modified_at>.*)/i.match(c)
-      # canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
+      modified_at = /modified at:(?<modified_at>.*)/i.match(c.to_s)
+      canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
 
-      # description = /description:(?<description>.*)/i.match(c)
-      # canvas[:description] = description[:description].strip if description
+      description = /description:(?<description>.*)/i.match(c.to_s)
+      canvas[:description] = description[:description].strip if description
 
       canvas_list << canvas
     end
