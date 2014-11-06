@@ -116,12 +116,20 @@ $0
     files = files.split("\n")
     puts "7-Day Script Activity:"
 
+    scripts = {}
     files.each do |f|
-      scripts = {}
       filename = f[1..-1].strip
       scripts[filename] = f[0]
-      puts scripts
     end
+
+    added_scripts    = scripts.select { |s,a| a == "A"}
+    modified_scripts = scripts.select { |s,a| a == "M"}
+    deleted_scripts  = scripts.select { |s,a| a == "D"}
+    puts "#{added_scripts.count} scripts were added: "
+    puts "#{modified_scripts.count} scripts were modified: "
+    puts "#{deleted_scripts.count} scripts were deleted: "
+
+    # > print output
   end
 
   def info(script)
