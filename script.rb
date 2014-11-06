@@ -125,11 +125,15 @@ $0
     added_scripts    = scripts.select { |s,a| a == "A"}
     modified_scripts = scripts.select { |s,a| a == "M"}
     deleted_scripts  = scripts.select { |s,a| a == "D"}
-    puts "#{added_scripts.count} scripts were added: "
-    puts "#{modified_scripts.count} scripts were modified: "
-    puts "#{deleted_scripts.count} scripts were deleted: "
-
-    # > print output
+    puts ""
+    puts "#{added_scripts.count} script(s) added: "
+    added_scripts.each { |a| puts a }
+    puts ""
+    puts "#{modified_scripts.count} script(s) modified: "
+    modified_scripts.each { |m| puts m }
+    puts ""
+    puts "#{deleted_scripts.count} script(s) deleted: "
+    deleted_scripts.each { |d| puts d }
   end
 
   def info(script)
