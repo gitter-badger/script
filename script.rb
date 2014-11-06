@@ -172,7 +172,12 @@ class Script
   def get_script_info(script)
     scripts = get_sync_scripts
     scripts.select! { |s| /#{script}/i.match(s[:filename]) }
-    puts scripts
+    puts "filename:     #{scripts[:filename]}"
+    puts "author:       #{scripts[:author]}"
+    puts "created_at:   #{scripts[:created_at]}"
+    puts "modified_at:  #{scripts[:modified_at]}"
+    puts "description:  #{scripts[:description]}"
+    puts "dependencies: #{scripts[:dependencies]}"
   end
 
   def get_sync_scripts
