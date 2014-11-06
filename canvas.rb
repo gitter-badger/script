@@ -202,7 +202,7 @@ if __FILE__ == $0
   option_parser.parse!
 
   c = Canvas.new
-  puts c.get_sync_canvases
+  c.get_sync_canvases
 
   if options[:list]
     c.list(options[:list_pattern])
