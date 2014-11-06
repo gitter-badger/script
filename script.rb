@@ -66,15 +66,10 @@ class Script
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
     script_dict = get_scripts(pattern)
-    if script_dict
-      script_dict.each do |name, desc|
-        puts "#{name  }         #{desc}"
-      end
-      return script_dict
-    else
-      puts pattern
-      # get_possible_scripts(pattern)
+    script_dict.each do |name, desc|
+      puts "#{name  }         #{desc}"
     end
+    script_dict
   end
 
   def refresh_aliases
@@ -139,6 +134,7 @@ class Script
   end
 
   def fetch(target)
+    puts target
     system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
 
