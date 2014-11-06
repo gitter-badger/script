@@ -150,11 +150,13 @@ $0
     puts 'Describe this script: '
     description = gets
     description ||= '...'
+
     header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(script)))
     header = header.gsub!('$1', script)
     hedaer = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
     hedaer = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
     hedaer = header.gsub!('$4', description)
+
     File.new("#{DESKTOP}/#{script}", 'w+') << header
   end
 

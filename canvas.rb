@@ -128,7 +128,14 @@ $0
     puts 'Describe this canvas: '
     description = gets
     description ||= '...'
-    File.new("#{DESKTOP}/#{canvas}", 'w+') <<  BOILERPLATE.gsub('$1', canvas).gsub('$2', description)
+
+    header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(canvas)))
+    header = header.gsub!('$1', canvas)
+    hedaer = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
+    hedaer = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
+    hedaer = header.gsub!('$4', description)
+
+    File.new("#{DESKTOP}/#{canvas}", 'w+') << header
   end
 
   def fetch(canvas)
@@ -140,6 +147,11 @@ $0
       canvas = 'canvas_' + canvas
     end
     canvas
+  end
+
+  def get_shebang(ext)
+    shebang = SHEBANGS[ext]
+    shebang
   end
 
   def default_extension(canvas)
