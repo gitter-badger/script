@@ -1,3 +1,8 @@
+#!/usr/bin/python
+# django_object_csv.py
+# Author: Andy Bettisworth
+# Description: Generate CSV from Django model objects and their attributes
+
 import csv
 import logging
 
