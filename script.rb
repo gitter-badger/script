@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby -w
 # script.rb
 # Author: Andy Bettisworth
+# Created At: 2014 1005 193820
+# Modified At: 2014 1105 193823
 # Description: Script Management Class
 
 require 'optparse'
@@ -23,7 +25,9 @@ class Script
 #!/usr/bin/env ruby -w
 # $1
 # Author: Andy Bettisworth
-# Description: $2
+# Created At: $2
+# Modified At: $3
+# Description: $4
   TXT
 
   def add(script)
@@ -109,22 +113,11 @@ class Script
     puts 'Describe this script: '
     description = gets
     description ||= '...'
-    File.new("#{DESKTOP}/#{script}", 'w+') <<  BOILERPLATE.gsub('$1', script).gsub('$2', description)
-  end
-
-  def get_scripts(pattern)
-    script_dict = {}
-    script_list = get_bash_aliases
-    script_list.select! { |s| pattern.match(s) } if pattern
-    script_list.each do |s|
-      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
-      begin
-        script_dict[s] = d[0].gsub(/# description: /i, '')
-      rescue
-        script_dict[s] = ''
-      end
-    end
-    script_dict
+    header = BOILERPLATE.gsub('$1', script)
+    hedaer = header.gsub('$2', Time)
+    hedaer = header.gsub('$3', Time.now.strftime('%Y %m%d %H%M%S'))
+    hedaer = header.gsub('$4', Time.now.strftime('%Y %m%d %H%M%S'))
+    File.new("#{DESKTOP}/#{script}", 'w+') << header
   end
 
   def fetch(target)
@@ -151,6 +144,57 @@ class Script
     end
   end
 
+  def get_scripts(pattern)
+    script_dict = {}
+
+    script_list = get_bash_aliases
+    script_list.select! { |s| pattern.match(s) } if pattern
+    script_list.each do |s|
+      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
+      begin
+        script_dict[s] = d[0].gsub(/# description: /i, '')
+      rescue
+        script_dict[s] = ''
+      end
+    end
+
+    script_dict
+  end
+
+  def get_sync_scripts
+    script_list = []
+
+    Dir.foreach("#{SCRIPT}") do |file|
+      next if File.directory?(file) || file == '.git'
+      script = {}
+
+      file_head = File.open(File.join(SCRIPT, file)).readlines
+      s = file_head[0..11].join("\n")
+
+      script[:shebang] = file_head[0].strip
+      script[:filename] = file
+
+      author = /author:(?<author>.*)/i.match(s)
+      script[:author] = author[:author].strip if author
+
+      created_at = /created at:(?<created_at>.*)/i.match(s)
+      script[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(s)
+      script[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(s)
+      script[:description] = description[:description].strip if description
+
+      dependencies = s.scan(/require.*?\s\'(?<dependency>.*)\'/i)
+      script[:dependencies] = dependencies.flatten if dependencies
+
+      script_list << script
+    end
+
+    script_list
+  end
+
   def get_bash_aliases
     script_list = []
 
@@ -160,10 +204,12 @@ class Script
       found_script = SCRIPT_REGEXP.match(line)
       if found_script
         script = {}
-        script[:alias] = found_script[:alias]
-        script[:binary] = found_script[:binary]
+
+        script[:alias]    = found_script[:alias]
+        script[:binary]   = found_script[:binary]
         script[:pathname] = "#{found_script[:pathname]}/#{found_script[:filename]}"
         script[:filename] = found_script[:filename]
+
         script_list << script
       end
     end
@@ -219,21 +265,20 @@ if __FILE__ == $0
   option_parser.parse!
 
   s = Script.new
-  puts s.get_bash_aliases
 
-  # if options[:clean]
-  #   s.clean
-  # elsif options[:fetch]
-  #   s.fetch_all(ARGV)
-  # elsif options[:add]
-  #   s.add(options[:add])
-  # elsif options[:list]
-  #   s.list(options[:list_pattern])
-  # elsif options[:refresh]
-  #   s.refresh_aliases
-  # elsif options[:history]
-  #   s.history
-  # else
-  #   puts option_parser
-  # end
+  if options[:clean]
+    s.clean
+  elsif options[:fetch]
+    s.fetch_all(ARGV)
+  elsif options[:add]
+    s.add(options[:add])
+  elsif options[:list]
+    s.list(options[:list_pattern])
+  elsif options[:refresh]
+    s.refresh_aliases
+  elsif options[:history]
+    s.history
+  else
+    puts option_parser
+  end
 end
