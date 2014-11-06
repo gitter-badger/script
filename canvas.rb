@@ -6,17 +6,44 @@
 require 'optparse'
 
 class Canvas
-  DESKTOP = "#{ENV['HOME']}/Desktop"
-  CANVAS  = "#{ENV['HOME']}/.sync/.canvas"
+  DESKTOP     = "#{ENV['HOME']}/Desktop"
+  CANVAS      = "#{ENV['HOME']}/.sync/.canvas"
+  ALIAS_CMD = {
+    '.rb'  => 'ruby',
+    '.py'  => 'python',
+    '.exp' => 'expect',
+    '.sh'  => 'bash'
+  }
+  SHEBANGS = {
+    '.rb'  => '#!/usr/bin/env ruby -w',
+    '.py'  => '#!/usr/bin/env python',
+    '.exp' => '#!/usr/bin/env expect',
+    '.sh'  => '#!/bin/bash'
+  }
+  BOILERPLATE = <<-TXT
+$0
+# $1
+# Author: Andy Bettisworth
+# Created At: $2
+# Modified At: $3
+# Description: $4
+  TXT
 
   attr_accessor :canvas_list
 
-  BOILERPLATE = <<-TXT
-#!/usr/bin/env ruby -w
-# $1
-# Author: Andy Bettisworth
-# Description: $2
-  TXT
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
+
+    canvas_list = get_sync_canvases
+    canvas_list.select! { |c| pattern.match(c[:filename]) } if pattern
+
+    canvas_list.each do |canvas|
+      space = 21 - canvas[:filename].length if canvas[:filename].length < 21
+      space ||= 1
+      puts "#{canvas[:filename].gsub('canvas_', '')} #{' ' * space} #{canvas[:description]}"
+    end
+    canvas_list
+  end
 
   def add(canvas)
     raise 'CanvasExistsError: A canvas by that name already exists.' if canvas_exist?(canvas)
@@ -55,15 +82,6 @@ class Canvas
     sync
   end
 
-  def list(regexp)
-    pattern = Regexp.new(regexp) if regexp
-    canvas_dict = get_canvases(pattern)
-    canvas_dict.each do |name, desc|
-      puts "#{name.gsub('canvas_', '')}          #{desc}"
-    end
-    canvas_dict
-  end
-
   def history
     files = `cd #{CANVAS}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
     files = files.split("\n")
@@ -73,21 +91,31 @@ class Canvas
 
   private
 
-  def get_canvases(pattern)
-    canvas_dict = {}
-    canvas_list = Dir.entries(CANVAS).delete_if do |c|
-      File.directory?(File.join(CANVAS, c))
+  def get_sync_canvases
+    canvas_list = []
+
+    Dir.foreach(CANVAS) do |file|
+      next if File.directory?(File.join(CANVAS, file))
+      canvas = {}
+
+      file_head = File.open(File.join(CANVAS, file)).readlines
+      c = file_head[0..11].join("\n")
+
+      canvas[:filename] = file
+
+      created_at = /created at:(?<created_at>.*)/i.match(s)
+      script[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(s)
+      script[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(s)
+      script[:description] = description[:description].strip if description
+
+      canvas_list << canvas
     end
-    canvas_list.select! { |s| pattern.match(s) } if pattern
-    canvas_list.each do |c|
-      d = File.open(File.join(CANVAS, c)).readlines.select! { |l| /description:/i.match(l) }
-      begin
-        canvas_dict[c] = d[0].gsub(/# description: /i, '')
-      rescue
-        canvas_dict[c] = ''
-      end
-    end
-    canvas_dict.sort
+
+    canvas_list
   end
 
   def create_canvas(canvas)
@@ -172,6 +200,7 @@ if __FILE__ == $0
   option_parser.parse!
 
   c = Canvas.new
+  puts c.get_sync_canvases
 
   if options[:list]
     c.list(options[:list_pattern])

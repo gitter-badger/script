@@ -24,9 +24,6 @@ class Script
     '.exp' => '#!/usr/bin/env expect',
     '.sh'  => '#!/bin/bash'
   }
-
-  attr_accessor :script_list
-
   BOILERPLATE = <<-TXT
 $0
 # $1
@@ -35,6 +32,22 @@ $0
 # Modified At: $3
 # Description: $4
   TXT
+
+  attr_accessor :script_list
+
+  def list(regexp)
+    pattern = Regexp.new(regexp) if regexp
+
+    script_list = get_bash_aliases
+    script_list.select! { |s| pattern.match(s[:alias]) } if pattern
+
+    script_list.each do |script|
+      space = 21 - script[:alias].length if script[:alias].length < 21
+      space ||= 1
+      desc = get_description(script[:filename])
+      puts "#{script[:filename]} #{' ' * space} #{desc}"
+    end
+  end
 
   def add(script)
     raise 'ScriptExistsError: A script by that name already exists.' if script_exist?(script)
@@ -61,6 +74,13 @@ $0
     end
   end
 
+  def info(script)
+    script = default_extension(script)
+    if script_exist?(script)
+      get_script_info(script)
+    end
+  end
+
   def clean
     all_scripts = []
 
@@ -75,20 +95,6 @@ $0
     end
 
     sync_script
-  end
-
-  def list(regexp)
-    pattern = Regexp.new(regexp) if regexp
-
-    script_list = get_bash_aliases
-    script_list.select! { |s| pattern.match(s[:alias]) } if pattern
-
-    script_list.each do |script|
-      space = 21 - script[:alias].length if script[:alias].length < 21
-      space ||= 1
-      desc = get_description(script[:filename])
-      puts "#{script[:filename]} #{' ' * space} #{desc}"
-    end
   end
 
   def refresh_aliases
@@ -136,12 +142,7 @@ $0
     deleted_scripts.each { |s,a| puts "  #{s}" }
   end
 
-  def info(script)
-    script = default_extension(script)
-    if script_exist?(script)
-      get_script_info(script)
-    end
-  end
+  private
 
   def create_script(script)
     script = default_extension(script)
@@ -210,8 +211,8 @@ $0
   def get_sync_scripts
     script_list = []
 
-    Dir.foreach("#{SCRIPT}") do |file|
-      next if File.directory?(file) || file == '.git'
+    Dir.foreach(SCRIPT) do |file|
+      next if File.directory?(File.join(SCRIPT, file))
       script = {}
 
       file_head = File.open(File.join(SCRIPT, file)).readlines
