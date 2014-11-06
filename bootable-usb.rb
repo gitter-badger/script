@@ -16,20 +16,29 @@ class BootableUSB
 
     sectors = get_sector_count(device)
 
-    secondary_table = sectors * ( peristence / 100 )
-    primary_table = sectors - secondary_table
-    puts "total     #{sectors}"
-    puts "initial   #{primary_table}"
-    puts "secondary #{secondary_table}"
+    secondary_table = (sectors * ( peristence / 100.0 )).to_i
+    primary_table = (sectors - 1) - secondary_table
 
-    ## > handle peristence percent
-    # `echo -e "o\nn\np\n1\n\n\nw" | sudo fdisk #{device}`
-    # /dev/sdX1 ntfs Village    ~80% GiB boot
-    # /dev/sdX2 ext4 casper-rw  ~20% GiB
+    # part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
+    # part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
+    # part_cmd += 'w'
+
+    # puts %Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}
+    # cmd = IO.popen(%Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}).read
+
+
+    # cmd = %Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}
+    # if result
+    #   puts 'Sucessful partition'
+    # else
+    #   puts 'Failed partition'
+    # end
 
     # ## > format partitions
     # `sudo mkfs --type ntfs #{device}1`
     # # `sudo mkfs --type ext4 #{device}2`
+    # /dev/sdX1 ntfs Village    ~80% GiB boot
+    # /dev/sdX2 ext4 casper-rw  ~20% GiB
 
     # ## > label partitions
     # `sudo ntfslabel #{device}1 Village`
@@ -69,7 +78,7 @@ class BootableUSB
 
   def validate_pct(peristence)
     peristence = 0 unless is_numeric?(peristence)
-    peristence
+    peristence.to_i
   end
 
   def print_block_devices

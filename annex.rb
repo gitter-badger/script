@@ -187,10 +187,10 @@ class Annex
       cd #{local}
       git checkout master
       git merge annex
-      git pull github master
+      git pull --no-edit github master
       git push github master
       git checkout annex
-      git merge master
+      git merge --no-edit master
     CMD
   end
 end
