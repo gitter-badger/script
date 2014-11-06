@@ -256,8 +256,17 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: script [options] [SCRIPT]"
 
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
+      options[:list] = true
+      options[:list_pattern] = regexp
+    end
+
     opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
       options[:add] = s
+    end
+
+    opts.on('--info SCRIPT', 'Show script information') do |script|
+      options[:info] = script
     end
 
     opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
@@ -268,11 +277,6 @@ if __FILE__ == $0
       options[:clean] = true
     end
 
-    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
-      options[:list] = true
-      options[:list_pattern] = regexp
-    end
-
     opts.on('--refresh', 'Refresh script Bash aliases') do
       options[:refresh] = true
     end
@@ -281,9 +285,6 @@ if __FILE__ == $0
       options[:history] = true
     end
 
-    opts.on('--info SCRIPT', 'Show script information') do |script|
-      options[:info] = script
-    end
   end
   option_parser.parse!
 
