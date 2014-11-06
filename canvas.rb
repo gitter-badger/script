@@ -38,7 +38,7 @@ $0
     canvas_list.select! { |c| pattern.match(c[:filename]) } if pattern
 
     canvas_list.each do |canvas|
-      space = 21 - canvas[:filename].length if canvas[:filename].length < 21
+      space = 31 - canvas[:filename].length if canvas[:filename].length < 31
       space ||= 1
       puts "#{canvas[:filename].gsub('canvas_', '')} #{' ' * space} #{canvas[:description]}"
     end
