@@ -103,6 +103,7 @@ $0
 
       if c.valid_encoding?
       else
+        puts file
         puts 'Not valid'
       end
       # created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
