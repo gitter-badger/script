@@ -96,10 +96,10 @@ $0
       next if File.directory?(File.join(CANVAS, file))
       canvas = {}
 
-      puts file
-      # file_head = File.open(File.join(CANVAS, file)).readlines
-      # c = file_head[0..11].join("\n")
+      file_head = File.open(File.join(CANVAS, file)).readlines
+      c = file_head[0..11].join("\n")
 
+      puts c
       # canvas[:filename] = file
 
       # created_at = /created at:(?<created_at>.*)/i.match(c)
