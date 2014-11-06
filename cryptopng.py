@@ -1,15 +1,11 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
-#
-# CryptoPNG 0.1
-#
-# Reading/writing secret text from/to image. Every 3 bits are encoded to
-# 3x3 pixelgrid. Central pixel keeps the information, each channel of RGB
-# represents one bit. If at least one of a neighbouring pixels color channel
-# is same as color channel of central pixel, value is True, else False.
-#
-# author: Vojtech Smejkal (smejkalv@gmail.com), 2008
-#
+# cryptopng.py
+# Author: Vojtech Smejkal (smejkalv@gmail.com), 2008
+# Description: Reading/writing secret text from/to image.
+#   Every 3 bits are encoded to 3x3 pixelgrid. Central pixel keeps the information,
+#   each channel of RGB represents one bit. If at least one of a neighbouring
+#   pixels color channel is same as color channel of central pixel, value is
+#   True, else False.
 
 ## Write secret text to image
 # cryptopng image <<< "secret message"
