@@ -116,8 +116,6 @@ class Script
     script = default_extension(script)
     if script_exist?(script)
       get_script_info(script)
-    else
-      puts "No such file exists named: '#{script}'"
     end
   end
 
