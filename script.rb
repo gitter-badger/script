@@ -113,6 +113,7 @@ class Script
   end
 
   def info(script)
+    script = default_extension(script)
     if script_exist?(script)
       get_script_info(script)
     else
