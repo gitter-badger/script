@@ -18,11 +18,17 @@ class Script
     '.exp' => 'expect',
     '.sh'  => 'bash'
   }
+  SHEBANGS = {
+    '.rb'  => '#!/usr/bin/env ruby -w',
+    '.py'  => '#!/usr/bin/env python',
+    '.exp' => '#!/usr/bin/env expect',
+    '.sh'  => '#!/bin/bash'
+  }
 
   attr_accessor :script_list
 
   BOILERPLATE = <<-TXT
-#!/usr/bin/env ruby -w
+$0
 # $1
 # Author: Andy Bettisworth
 # Created At: $2
@@ -125,7 +131,8 @@ class Script
     puts 'Describe this script: '
     description = gets
     description ||= '...'
-    header = BOILERPLATE.gsub!('$1', script)
+    header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(script)))
+    header = header.gsub!('$1', script)
     hedaer = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
     hedaer = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
     hedaer = header.gsub!('$4', description)
@@ -171,6 +178,11 @@ class Script
     scripts = get_sync_scripts
     scripts.select! { |s| /#{script}/i.match(s[:filename])}
     scripts[0][:description]
+  end
+
+  def get_shebang(ext)
+    shebang = SHEBANGS[ext]
+    shebang
   end
 
   def get_sync_scripts
