@@ -39,7 +39,11 @@ class Script
       target = default_extension(s)
 
       unless File.exist?("#{SCRIPT}/#{target}")
-        puts "Warning: script not found! '#{target}'"
+        msg = "Warning: script not found '#{target}'!"
+        matches = get_scripts_matches(s)
+        if matches
+          msg += " Possible matches " + matches.inspect.to_s
+        end
         next
       end
 
@@ -99,8 +103,6 @@ class Script
     puts files
   end
 
-  private
-
   def create_script(script)
     script = default_extension(script)
 
@@ -112,15 +114,7 @@ class Script
 
   def get_scripts(pattern)
     script_dict = {}
-    script_list = []
-    File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
-      next if index == 0
-      found_script = SCRIPT_REGEXP.match(line)
-
-      if found_script
-        script_list << found_script[:filename]
-      end
-    end
+    script_list = get_bash_aliases
     script_list.select! { |s| pattern.match(s) } if pattern
     script_list.each do |s|
       d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
@@ -134,7 +128,6 @@ class Script
   end
 
   def fetch(target)
-    puts target
     system("cp #{SCRIPT}/#{target} #{DESKTOP}")
   end
 
@@ -156,6 +149,20 @@ class Script
       puts "Warning: no script found '#{script}'"
       false
     end
+  end
+
+  def get_bash_aliases
+    script_list = []
+
+    File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
+      next if index == 0
+      found_script = SCRIPT_REGEXP.match(line)
+
+      if found_script
+        script_list << found_script[:filename]
+      end
+    end
+    script_list
   end
 
   def sync_script
@@ -207,19 +214,21 @@ if __FILE__ == $0
 
   s = Script.new
 
-  if options[:clean]
-    s.clean
-  elsif options[:fetch]
-    s.fetch_all(ARGV)
-  elsif options[:add]
-    s.add(options[:add])
-  elsif options[:list]
-    s.list(options[:list_pattern])
-  elsif options[:refresh]
-    s.refresh_aliases
-  elsif options[:history]
-    s.history
-  else
-    puts option_parser
-  end
+  puts s.get_bash_aliases
+
+  # if options[:clean]
+  #   s.clean
+  # elsif options[:fetch]
+  #   s.fetch_all(ARGV)
+  # elsif options[:add]
+  #   s.add(options[:add])
+  # elsif options[:list]
+  #   s.list(options[:list_pattern])
+  # elsif options[:refresh]
+  #   s.refresh_aliases
+  # elsif options[:history]
+  #   s.history
+  # else
+  #   puts option_parser
+  # end
 end
