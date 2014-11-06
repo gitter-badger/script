@@ -122,9 +122,9 @@ class Script
     description = gets
     description ||= '...'
     header = BOILERPLATE.gsub('$1', script)
-    hedaer = header.gsub('$2', Time)
+    hedaer = header.gsub('$2', Time.now.strftime('%Y %m%d %H%M%S'))
     hedaer = header.gsub('$3', Time.now.strftime('%Y %m%d %H%M%S'))
-    hedaer = header.gsub('$4', Time.now.strftime('%Y %m%d %H%M%S'))
+    hedaer = header.gsub('$4', description)
     File.new("#{DESKTOP}/#{script}", 'w+') << header
   end
 
