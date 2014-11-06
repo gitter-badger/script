@@ -276,7 +276,7 @@ if __FILE__ == $0
       options[:history] = true
     end
 
-    opts.on('--info', 'Show script information') do |script|
+    opts.on('--info SCRIPT', 'Show script information') do |script|
       options[:info] = script
     end
   end
