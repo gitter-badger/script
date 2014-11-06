@@ -115,7 +115,13 @@ $0
     files = `cd #{SCRIPT}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
     files = files.split("\n")
     puts "7-Day Script Activity:"
-    puts files
+
+    scripts = {}
+    files.each do |f|
+      filename = f[1..-1].strip
+      scripts[filename] = f[0]
+      puts scripts
+    end
   end
 
   def info(script)
