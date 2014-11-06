@@ -81,7 +81,7 @@ class Script
       space = 15 - script[:alias].length if script[:alias].length < 15
       space ||= 1
       desc = get_description(script[:filename])
-      puts "#{script[:alias]} #{' ' * space} #{desc}"
+      puts "#{script[:filename]} #{' ' * space} #{desc}"
     end
   end
 
