@@ -78,7 +78,7 @@ class Script
     script_list.select! { |s| pattern.match(s) } if pattern
 
     script_list.each do |script|
-      space = 15 - script[:alias].length if script[:alias].length <= 15
+      space = 15 - script[:alias].length if script[:alias].length < 15
       desc = get_description(script[:filename])
       puts "#{script[:alias]} #{' ' * space} #{desc}"
     end
