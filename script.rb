@@ -127,13 +127,13 @@ $0
     deleted_scripts  = scripts.select { |s,a| a == "D"}
     puts ""
     puts "#{added_scripts.count} script(s) added: "
-    added_scripts.each { |s,a| puts s }
+    added_scripts.each { |s,a| puts "  #{s}" }
     puts ""
     puts "#{modified_scripts.count} script(s) modified: "
-    modified_scripts.each { |s,a| puts s }
+    modified_scripts.each { |s,a| puts "  #{s}" }
     puts ""
     puts "#{deleted_scripts.count} script(s) deleted: "
-    deleted_scripts.each { |s,a| puts s }
+    deleted_scripts.each { |s,a| puts "  #{s}" }
   end
 
   def info(script)
