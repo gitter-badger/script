@@ -97,7 +97,7 @@ $0
       canvas = {}
 
       file_head = File.open(File.join(CANVAS, file)).readlines
-      c = file_head[0..11].join("\n")
+      c = file_head[0..11].join('')
 
       puts c
       # canvas[:filename] = file
