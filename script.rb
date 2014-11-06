@@ -73,11 +73,15 @@ class Script
 
   def list(regexp)
     pattern = Regexp.new(regexp) if regexp
-    script_dict = get_scripts(pattern)
-    script_dict.each do |name, desc|
-      puts "#{name  }         #{desc}"
+
+    script_list = get_bash_aliases
+    script_list.select! { |s| pattern.match(s) } if pattern
+
+    script_list.each do |script|
+      # desc = get_description(script)
+      # puts "#{script[:alias]}         #{desc}"
+      puts "#{script[:alias]}"
     end
-    script_dict
   end
 
   def refresh_aliases
@@ -150,23 +154,6 @@ class Script
       puts "Warning: no script found '#{script}'"
       false
     end
-  end
-
-  def get_scripts(pattern)
-    script_dict = {}
-
-    script_list = get_bash_aliases
-    script_list.select! { |s| pattern.match(s) } if pattern
-    script_list.each do |s|
-      d = File.open(File.join(SCRIPT, s)).readlines.select! { |l| /description:/i.match(l) }
-      begin
-        script_dict[s] = d[0].gsub(/# description: /i, '')
-      rescue
-        script_dict[s] = ''
-      end
-    end
-
-    script_dict
   end
 
   def get_script_info(script)
@@ -292,18 +279,18 @@ if __FILE__ == $0
 
   if options[:clean]
     s.clean
-  elsif options[:fetch]
-    s.fetch_all(ARGV)
-  elsif options[:add]
-    s.add(options[:add])
   elsif options[:list]
     s.list(options[:list_pattern])
+  elsif options[:add]
+    s.add(options[:add])
+  elsif options[:info]
+    s.info(options[:info])
+  elsif options[:fetch]
+    s.fetch_all(ARGV)
   elsif options[:refresh]
     s.refresh_aliases
   elsif options[:history]
     s.history
-  elsif options[:info]
-    s.info(options[:info])
   else
     puts option_parser
   end
