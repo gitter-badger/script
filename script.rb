@@ -317,9 +317,7 @@ if __FILE__ == $0
 
   s = Script.new
 
-  if options[:clean]
-    s.clean
-  elsif options[:list]
+  if options[:list]
     s.list(options[:list_pattern])
   elsif options[:add]
     s.add(options[:add])
@@ -327,6 +325,8 @@ if __FILE__ == $0
     s.fetch_all(ARGV)
   elsif options[:info]
     s.info(options[:info])
+  elsif options[:clean]
+    s.clean
   elsif options[:refresh]
     s.refresh_aliases
   elsif options[:history]

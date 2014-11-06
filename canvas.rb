@@ -146,7 +146,12 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: canvas [FILE]"
+    opts.banner = "USAGE: canvas [options] [CANVAS]"
+
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
+      options[:list] = true
+      options[:list_pattern] = regexp
+    end
 
     opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
       options[:add] = c
@@ -160,11 +165,6 @@ if __FILE__ == $0
       options[:clean] = true
     end
 
-    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
-      options[:list] = true
-      options[:list_pattern] = regexp
-    end
-
     opts.on('--history', 'List recent canvas activity') do
       options[:history] = true
     end
@@ -173,14 +173,14 @@ if __FILE__ == $0
 
   c = Canvas.new
 
-  if options[:clean]
-    c.clean
-  elsif options[:fetch]
-    c.fetch_all(ARGV)
+  if options[:list]
+    c.list(options[:list_pattern])
   elsif options[:add]
     c.add(options[:add])
-  elsif options[:list]
-    c.list(options[:list_pattern])
+  elsif options[:fetch]
+    c.fetch_all(ARGV)
+  elsif options[:clean]
+    c.clean
   elsif options[:history]
     c.history
   else
