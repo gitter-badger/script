@@ -81,7 +81,7 @@ $0
     pattern = Regexp.new(regexp) if regexp
 
     script_list = get_bash_aliases
-    script_list.select! { |s| pattern.match(s) } if pattern
+    script_list.select! { |s| pattern.match(s[:alias]) } if pattern
     puts script_list
     puts script_list.class
 
