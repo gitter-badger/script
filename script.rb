@@ -107,6 +107,14 @@ class Script
     puts files
   end
 
+  def info(script)
+    if script_exist?(script)
+      get_script_info(script)
+    else
+      puts "No such file exists named: '#{script}'"
+    end
+  end
+
   def create_script(script)
     script = default_extension(script)
 
@@ -159,6 +167,12 @@ class Script
     end
 
     script_dict
+  end
+
+  def get_script_info(script)
+    scripts = get_sync_scripts
+    scripts.select! { |s| /#{script}/i.match(s[:filename]) }
+    puts scripts
   end
 
   def get_sync_scripts
@@ -261,6 +275,10 @@ if __FILE__ == $0
     opts.on('--history', 'List recent script activity') do
       options[:history] = true
     end
+
+    opts.on('--info', 'Show script information') do |script|
+      options[:info] = script
+    end
   end
   option_parser.parse!
 
@@ -278,6 +296,8 @@ if __FILE__ == $0
     s.refresh_aliases
   elsif options[:history]
     s.history
+  elsif options[:info]
+    s.info(options[:info])
   else
     puts option_parser
   end
