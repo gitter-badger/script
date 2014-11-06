@@ -101,14 +101,18 @@ $0
 
       canvas[:filename] = file
 
-      created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
-      canvas[:created_at] = created_at[:created_at].strip if created_at
+      if c.valid_encoding?
+      else
+        puts 'Not valid'
+      end
+      # created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
+      # canvas[:created_at] = created_at[:created_at].strip if created_at
 
-      modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
-      canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
+      # modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
+      # canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
 
-      description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
-      canvas[:description] = description[:description].strip if description
+      # description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
+      # canvas[:description] = description[:description].strip if description
 
       canvas_list << canvas
     end
