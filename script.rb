@@ -116,8 +116,8 @@ $0
     files = files.split("\n")
     puts "7-Day Script Activity:"
 
-    scripts = {}
     files.each do |f|
+      scripts = {}
       filename = f[1..-1].strip
       scripts[filename] = f[0]
       puts scripts
