@@ -82,15 +82,13 @@ $0
 
     script_list = get_bash_aliases
     script_list.select! { |s| pattern.match(s[:alias]) } if pattern
-    puts script_list
-    puts script_list.class
 
-    # script_list.each do |script|
-    #   space = 21 - script[:alias].length if script[:alias].length < 21
-    #   space ||= 1
-    #   desc = get_description(script[:filename])
-    #   puts "#{script[:filename]} #{' ' * space} #{desc}"
-    # end
+    script_list.each do |script|
+      space = 21 - script[:alias].length if script[:alias].length < 21
+      space ||= 1
+      desc = get_description(script[:filename])
+      puts "#{script[:filename]} #{' ' * space} #{desc}"
+    end
   end
 
   def refresh_aliases
