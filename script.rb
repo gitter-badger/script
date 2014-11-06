@@ -259,12 +259,12 @@ if __FILE__ == $0
       options[:add] = s
     end
 
-    opts.on('--info SCRIPT', 'Show script information') do |script|
-      options[:info] = script
-    end
-
     opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
       options[:fetch] = true
+    end
+
+    opts.on('--info SCRIPT', 'Show script information') do |script|
+      options[:info] = script
     end
 
     opts.on('--clean', 'Move script(s) off Desktop') do
@@ -290,10 +290,10 @@ if __FILE__ == $0
     s.list(options[:list_pattern])
   elsif options[:add]
     s.add(options[:add])
-  elsif options[:info]
-    s.info(options[:info])
   elsif options[:fetch]
     s.fetch_all(ARGV)
+  elsif options[:info]
+    s.info(options[:info])
   elsif options[:refresh]
     s.refresh_aliases
   elsif options[:history]
