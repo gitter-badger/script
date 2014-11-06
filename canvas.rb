@@ -89,8 +89,6 @@ $0
     puts files
   end
 
-  private
-
   def get_sync_canvases
     canvas_list = []
 
