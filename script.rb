@@ -9,7 +9,7 @@ class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
   SCRIPT        = "#{ENV['HOME']}/.sync/.script"
   BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
-  SCRIPT_REGEXP = /\/.*\/(?<filename>.*?)'$/
+  SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
   ALIAS_CMD = {
     '.rb'  => 'ruby',
     '.py'  => 'python',
@@ -156,12 +156,18 @@ class Script
 
     File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
       next if index == 0
-      found_script = SCRIPT_REGEXP.match(line)
 
+      found_script = SCRIPT_REGEXP.match(line)
       if found_script
-        script_list << found_script[:filename]
+        script = {}
+        script[:alias] = found_script[:alias]
+        script[:binary] = found_script[:binary]
+        script[:pathname] = "#{found_script[:pathname]}/#{found_script[:filename]}"
+        script[:filename] = found_script[:filename]
+        script_list << script
       end
     end
+
     script_list
   end
 
@@ -213,7 +219,6 @@ if __FILE__ == $0
   option_parser.parse!
 
   s = Script.new
-
   puts s.get_bash_aliases
 
   # if options[:clean]
