@@ -100,21 +100,20 @@ $0
       file_head = File.open(File.join(CANVAS, file)).readlines
       c = file_head[0..11].join('')
 
-      canvas[:filename] = file
-
       if c.valid_encoding?
+        canvas[:filename] = file
+
+        created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
+        canvas[:created_at] = created_at[:created_at].strip if created_at
+
+        modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
+        canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+        description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
+        canvas[:description] = description[:description].strip if description
       else
-        puts file
-        puts 'Not valid'
+        puts "ERROR: Not valid UTF-8 encoding in '#{file}'"
       end
-      # created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
-      # canvas[:created_at] = created_at[:created_at].strip if created_at
-
-      # modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
-      # canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
-
-      # description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
-      # canvas[:description] = description[:description].strip if description
 
       canvas_list << canvas
     end
