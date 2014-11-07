@@ -11,11 +11,15 @@ if __FILE__ == $0
 
   option_parser = OptionParser.new do |opts|
     opts.banner = <<-MSG
-USAGE: django-dependencies
+USAGE:    django-dependencies
 REQUIRES: current directory is a Django project
     MSG
   end
   option_parser.parse!
 
-  puts option_parser
+  if File.exist?('./manage.py')
+    puts 'is django project'
+  else
+    puts option_parser
+  end
 end
