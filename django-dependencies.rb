@@ -10,7 +10,7 @@ class DjangoDependencies
     cmds = get_cmds
 
     cmds.each do |cmd,mod|
-      `./manage.py --verbosity 0 #{cmd}`
+      `./manage.py #{cmd} --verbosity 0`
 
       # if $? == 0
       #   puts "Success: #{cmd}"
