@@ -10,16 +10,17 @@ class DjangoDependencies
     cmds = get_cmds
 
     cmds.each do |cmd,mod|
-      result = `./manage.py #{cmd} > /dev/null`
+      puts cmd
+      # `./manage.py #{cmd}`
 
-      if $? == 0
-        puts "Success: #{cmd}"
-      else
-        puts 'rescue'
-        # missing_lib = /No\smodule\snamed\s(?<module>.*?)\n/.match(result)
-        # puts missing_lib[0][:module]
-          # > try install module
-      end
+      # if $? == 0
+      #   puts "Success: #{cmd}"
+      # else
+      #   puts 'rescue'
+      #   # missing_lib = /No\smodule\snamed\s(?<module>.*?)\n/.match(result)
+      #   # puts missing_lib[0][:module]
+      #     # > try install module
+      # end
     end
   end
 
