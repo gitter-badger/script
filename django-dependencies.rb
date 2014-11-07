@@ -18,7 +18,7 @@ class DjangoDependencies
         missing_lib = /no\smodule\snamed\s(?<modname>.*)/i.match(output)
         if missing_lib
           missing_lib = missing_lib[:modname].strip
-          puts "Missing '#{missing_lib}'"
+          puts "Attempting to install module #{missing_lib}..."
           try_install(missing_lib)
         end
       end
@@ -27,6 +27,11 @@ class DjangoDependencies
 
   def try_install(lib)
     `sudo pip install #{lib}`
+    if $? == 0
+      puts 'Successful'
+    else
+      puts 'Failed'
+    end
   end
 
   def get_cmds
