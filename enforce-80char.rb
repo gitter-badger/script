@@ -41,7 +41,7 @@ class Enforce80Char
         full_line   += "#{line[start_char..end_char]}\n"
         token_char   = end_char
       end
-      full_line += line[(end_char + 1)..(end_char + (remainder - 1))]
+      full_line += line[(token_char + 1)..(token_char + (remainder - 1))]
       return full_line
     else
       return line
