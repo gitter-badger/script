@@ -8,7 +8,10 @@
 class DjangoDependencies
   def start
     cmds = get_cmds
-    puts cmds
+
+    cmds.each do |cmd,mod|
+      puts "#{mod} #{cmd}"
+    end
     # > get list of management cmds [Array]
     # > loop cmds
       # > try execute
