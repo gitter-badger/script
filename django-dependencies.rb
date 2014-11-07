@@ -7,9 +7,9 @@
 
 class DjangoDependencies
   def start
-    cmds = `./manage.py`
-    puts cmds
-    puts cmds.class
+    mgmt_blob = `./manage.py`.split("\n")
+    puts mgmt_blob
+    puts mgmt_blob.class
     # > get list of management cmds [Array]
     # > loop cmds
       # > try execute
