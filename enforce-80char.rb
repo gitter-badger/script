@@ -18,6 +18,6 @@ if __FILE__ == $0
   if options[:quiet]
     puts 'success'
   else
-    option_parser
+    puts option_parser
   end
 end
