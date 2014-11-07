@@ -7,21 +7,28 @@
 
 class DjangoDependencies
   def start
-    mgmt_arr = `./manage.py`.split("\n")[21..-1]
-    cmds = {}
-    app_module = ''
-    mgmt_arr.each do |e|
-      app_module = e.gsub("\[", '').gsub("\]", '') if /\[.*?\]/.match(e)
-      unless /\[.*?\]/.match(e)
-        cmds[e.strip] = app_module
-      end
-    end
+    cmds = get_cmds
     puts cmds
     # > get list of management cmds [Array]
     # > loop cmds
       # > try execute
       # > rescue 'no module named'
         # > try install module
+  end
+
+  def get_cmds
+    mgmt_arr = `./manage.py`.split("\n")[21..-1]
+    cmds = {}
+    app_module = ''
+
+    mgmt_arr.each do |e|
+      app_module = e.gsub("\[", '').gsub("\]", '') if /\[.*?\]/.match(e)
+      unless /\[.*?\]/.match(e)
+        cmds[e.strip] = app_module
+      end
+    end
+
+    cmds
   end
 end
 
