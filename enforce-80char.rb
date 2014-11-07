@@ -11,12 +11,12 @@ require 'tempfile'
 class Enforce80Char
   def convert(file)
     if File.exist?(file)
-      tmp = Tempfile.new("#{file}.tmp")
+      tmp = Tempfile.new(file)
       File.open(file, 'r') do |f|
         f.each_line { |line| tmp.puts "#{line.length} #{line}" }
       end
       tmp.close
-      FileUtils.mv("#{file}.tmp", file)
+      FileUtils.mv(tmp.path, file)
     else
       puts "File does not exist at '#{file}'"
     end
