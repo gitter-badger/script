@@ -15,4 +15,7 @@ USAGE: django-dependencies
 REQUIRES: current directory is a Django project
     MSG
   end
+  option_parser.parse!
+
+  puts option_parser
 end
