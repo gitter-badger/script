@@ -10,13 +10,14 @@ class DjangoDependencies
     cmds = get_cmds
 
     cmds.each do |cmd,mod|
-      puts "#{mod} #{cmd}"
-    end
-    # > get list of management cmds [Array]
-    # > loop cmds
-      # > try execute
-      # > rescue 'no module named'
+      begin
+        result = `./manage.py #{cmd}`
+      rescue
+        missing_lib = /No\smodule\snamed\s(.*?)\n/.match(result)
+        puts missing_lib
+      end
         # > try install module
+    end
   end
 
   def get_cmds
