@@ -5,3 +5,14 @@
 # Modified At: 2014 1106 124502
 # Description: resolves dependencies required within the management commands of a django project
 
+
+if __FILE__ == $0
+  require 'optparse'
+
+  option_parser = OptionParser.new do |opts|
+    opts.banner = <<-MSG
+USAGE: django-dependencies
+REQUIRES: current directory is a Django project
+    MSG
+  end
+end
