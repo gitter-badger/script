@@ -5,12 +5,18 @@
 # Modified At: 2014 1106 120459
 # Description: automatically will add newlines to lines extending beyond 80 characters
 
+require 'fileutils'
+require 'tempfile'
+
 class Enforce80Char
   def convert(file)
     if File.exist?(file)
-      File.foreach(file) do |line|
-        line.puts "#{line.length} #{line}"
+      tmp = Tempfile("#{file}.tmp")
+      File.open(file, 'r') do |f|
+        f.each_line { |line| tmp.puts "#{line.length} #{line}" }
       end
+      tmp.close
+      FileUtils.mv("#{file}.tmp", file)
     else
       puts "File does not exist at '#{file}'"
     end
