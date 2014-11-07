@@ -13,7 +13,14 @@ class Enforce80Char
     if File.exist?(file)
       tmp = Tempfile.new(file)
       File.open(file, 'r') do |f|
-        f.each_line { |line| tmp.puts "#{line.length} #{line}" }
+        f.each_line do |line|
+          if line.count > 80
+            tmp.puts line[0..80]
+            tmp.puts "# #{line[80..-1]}"
+          else
+            tmp.puts line
+          end
+        end
       end
       tmp.close
       FileUtils.mv(tmp.path, file)
