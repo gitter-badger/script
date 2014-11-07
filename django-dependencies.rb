@@ -12,7 +12,7 @@ class DjangoDependencies
     app_module = ''
     mgmt_arr.each do |e|
       app_module = e.gsub("\[", '').gsub("\]", '') if /\[.*?\]/.match(e)
-      cmds[e.strip] = app_module if /[^\[.*?\]]/.match(e)
+      cmds[e.strip] = app_module if /[^\[]/.match(e)
       # En keys are unique and only hold one cmd
     end
     puts cmds
