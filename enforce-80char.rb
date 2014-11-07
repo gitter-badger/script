@@ -15,8 +15,7 @@ class Enforce80Char
       File.open(file, 'r') do |f|
         f.each_line do |line|
           if line.size > 80
-            tmp.puts line[0..80]
-            tmp.puts "# #{line[80..-1]}"
+            tmp.puts get_line(line)
           else
             tmp.puts line
           end
@@ -26,6 +25,26 @@ class Enforce80Char
       FileUtils.mv(tmp.path, file)
     else
       puts "File does not exist at '#{file}'"
+    end
+  end
+
+  def get_line(line)
+    if line.size > 80
+      line_count = line.size / 80
+      remainder  = line.size % 80
+      full_line = ''
+      token_char = 0
+      line_count.times do |i|
+        start_char   = i * 80
+        start_char  += 1 if start_char != 0
+        end_char     = (i+1) * 80
+        full_line   += "#{line[start_char..end_char]}\n"
+        token_char   = end_char
+      end
+      full_line += line[(end_char + 1)..(end_char + (remainder - 1))]
+      return full_line
+    else
+      return line
     end
   end
 end
