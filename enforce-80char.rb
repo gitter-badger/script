@@ -10,7 +10,7 @@ if __FILE__ == $0
   require 'optparse'
 
   options = {}
-  option_parser = OptParse.new do |opts|
+  option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: enforce-80char [options] FILE"
   end
   option_parser.parse!
