@@ -5,6 +5,16 @@
 # Modified At: 2014 1106 124502
 # Description: resolves dependencies required within the management commands of a django project
 
+class DjangoDependencies
+  def start
+    puts 'start'
+    # > get list of management cmds [Array]
+    # > loop cmds
+      # > try execute
+      # > rescue 'no module named'
+        # > try install module
+  end
+end
 
 if __FILE__ == $0
   require 'optparse'
@@ -17,8 +27,10 @@ REQUIRES: current directory is a Django project
   end
   option_parser.parse!
 
+  getter = DjangoDependencies.new
+
   if File.exist?('./manage.py')
-    puts 'is django project'
+    getter.start
   else
     puts option_parser
   end
