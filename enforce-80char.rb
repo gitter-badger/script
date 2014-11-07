@@ -11,7 +11,7 @@ require 'tempfile'
 class Enforce80Char
   def convert(file)
     if File.exist?(file)
-      tmp = Tempfile("#{file}.tmp")
+      tmp = Tempfile.new("#{file}.tmp")
       File.open(file, 'r') do |f|
         f.each_line { |line| tmp.puts "#{line.length} #{line}" }
       end
