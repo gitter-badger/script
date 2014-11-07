@@ -8,9 +8,8 @@
 class Enforce80Char
   def convert(file)
     if File.exist?(file)
-      lines = File.open(file).readlines
-      lines.each do |line|
-        puts "#{line.length} #{line}"
+      File.foreach(file) do |line|
+        line.puts "#{line.length} #{line}"
       end
     else
       puts "File does not exist at '#{file}'"
