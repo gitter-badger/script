@@ -13,8 +13,9 @@ class DjangoDependencies
       begin
         result = system("./manage.py #{cmd}")
       rescue
-        missing_lib = /No\smodule\snamed\s(?<module>.*?)\n/.match(result)
-        puts missing_lib[0][:module]
+        puts 'rescue'
+        # missing_lib = /No\smodule\snamed\s(?<module>.*?)\n/.match(result)
+        # puts missing_lib[0][:module]
       end
         # > try install module
     end
