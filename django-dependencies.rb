@@ -12,7 +12,7 @@ class DjangoDependencies
     app_module = ''
     mgmt_arr.each do |e|
       app_module = e.gsub("\[", '').gsub("\]", '') if /\[.*?\]/.match(e)
-      if /\[.*?\]/.match(e)
+      unless /\[.*?\]/.match(e)
         cmds[e.strip] = app_module
       end
     end
