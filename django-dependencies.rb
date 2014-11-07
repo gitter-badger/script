@@ -12,7 +12,7 @@ class DjangoDependencies
     app_module = ''
     mgmt_arr.each do |e|
       app_module = e.gsub("\[", '').gsub("\]", '') if /\[.*?\]/.match(e)
-      cmds[app_module] = if /[^\[.*?\]]/.match(e)
+      cmds[app_module] = e.strip if /[^\[.*?\]]/.match(e)
     end
     puts cmds
     # > get list of management cmds [Array]
