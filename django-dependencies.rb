@@ -15,8 +15,8 @@ class DjangoDependencies
       if $? == 0
         puts "Success: [#{mod}] #{cmd}"
       else
-        missing_lib = /No\smodule\snamed\s.*/.match(output)
-        puts missing_lib if missing_lib
+        missing_lib = /No\smodule\snamed\s(?<mod>.*?)/.match(output)
+        puts missing_lib[0][:mod] if missing_lib
           # > try install module
       end
     end
