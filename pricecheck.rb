@@ -13,6 +13,7 @@ class PriceChecker
     request = Vacuum.new
     puts "Searching for '#{item}'..."
     result = request.item_search(query: item)
+    puts result
   end
 end
 
