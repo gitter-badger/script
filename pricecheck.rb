@@ -11,7 +11,7 @@ require 'vacuum'
 class PriceChecker
   def check(item, market='amazon.com')
     request = Vacuum.new
-    puts "Searching for '#{item}'..."
+    puts "Searching for '#{item}' on Amazon.com..."
     result = request.item_search(query: item)
     puts result
   end
