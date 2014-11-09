@@ -33,10 +33,10 @@ class AmazonQuery
     exit_if_no_param(param)
     exit_if_no_connection
 
-    params[0]['SearchIndex'] = index
+    param[0]['SearchIndex'] = index
 
     puts "Searching in '#{index}' on Amazon.com..."
-    result = @request.item_search(query: params[0])
+    result = @request.item_search(query: param[0])
     puts result.to_h
   end
 
