@@ -76,39 +76,39 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: amazon-query SEARCH_INDEX [options]"
 
-    opts.on('--actor ACTOR', '') do |actor|
+    opts.on('--actor ACTOR', 'Name of an actor associated with the item.') do |actor|
       options[:actor] = actor
     end
 
-    opts.on('--artist ARTIST', '') do |artist|
+    opts.on('--artist ARTIST', 'Name of an artist associated with the item.') do |artist|
       options[:artist] = artist
     end
 
-    opts.on('--audience-rating AUDIENCE_RATING', '') do |audience_rating|
+    opts.on('--audience-rating AUDIENCE_RATING', 'Movie ratings based on MPAA ratings or age, depending upon the locale.') do |audience_rating|
       options[:audience_rating] = audience_rating
     end
 
-    opts.on('--author AUTHOR', '') do |author|
+    opts.on('--author AUTHOR', 'Name of an author associated with the item.') do |author|
       options[:author] = author
     end
 
-    opts.on('--brand BRAND', '') do |brand|
+    opts.on('--brand BRAND', 'Name of a brand associated with the item.') do |brand|
       options[:brand] = brand
     end
 
-    opts.on('--browse_node BROWSE_NODE', '') do |browse_node|
+    opts.on('--browse_node BROWSE_NODE', 'Browse nodes are positive integers that identify product categories.') do |browse_node|
       options[:browse_node] = browse_node
     end
 
-    opts.on('--composer COMPOSER', '') do |composer|
+    opts.on('--composer COMPOSER', 'Name of an composer associated with the item.') do |composer|
       options[:composer] = composer
     end
 
-    opts.on('--conductor CONDUCTOR', '') do |conductor|
+    opts.on('--conductor CONDUCTOR', 'Name of a conductor associated with the item.') do |conductor|
       options[:conductor] = conductor
     end
 
-    opts.on('--director DIRECTOR', '') do |director|
+    opts.on('--director DIRECTOR', 'Name of a director associated with the item.') do |director|
       options[:director] = director
     end
 
@@ -116,27 +116,27 @@ if __FILE__ == $0
       options[:keywords] = keys
     end
 
-    opts.on('--manufacturer MANUFACTURER', '') do |manufacturer|
+    opts.on('--manufacturer MANUFACTURER', 'Name of a manufacturer associated with the item.') do |manufacturer|
       options[:manufacturer] = manufacturer
     end
 
-    opts.on('--music_label MUSIC_LABEL', '') do |music_label|
+    opts.on('--music_label MUSIC_LABEL', 'Name of an music label associated with the item.') do |music_label|
       options[:music_label] = music_label
     end
 
-    opts.on('--orchestra ORCHESTRA', '') do |orchestra|
+    opts.on('--orchestra ORCHESTRA', 'Name of an orchestra associated with the item.') do |orchestra|
       options[:orchestra] = orchestra
     end
 
-    opts.on('--power POWER', '') do |power|
+    opts.on('--power POWER', "Performs a book search using a complex query string.\nRequires SearchIndex: Books") do |power|
       options[:power] = power
     end
 
-    opts.on('--publisher PUBLISHER', '') do |publisher|
+    opts.on('--publisher PUBLISHER', 'Name of a publisher associated with the item.') do |publisher|
       options[:publisher] = publisher
     end
 
-    opts.on('--title TITLE', '') do |title|
+    opts.on('--title TITLE', 'The title associated with the item.') do |title|
       options[:title] = title
     end
 
