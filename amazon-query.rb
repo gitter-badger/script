@@ -28,7 +28,8 @@ class AmazonQuery
     )
   end
 
-  def send(index, keyword=nil)
+  def send(index, *param)
+    exit_if_no_param
     exit_if_no_connection
 
     params = {
@@ -43,6 +44,19 @@ class AmazonQuery
 
   private
 
+  def exit_if_no_param(param)
+    unless param.count > 0
+      STDERR.puts <<-MSG
+Your request should have atleast 1 of the following parameters:
+
+Keywords, Title, Power, BrowseNode, Artist, Author, Actor, Director,
+AudienceRating, Manufacturer, MusicLabel, Composer, Publisher, Brand,
+Conductor, Orchestra, TextStream, Cuisine, City, Neighborhood
+      MSG
+      exit 4
+    end
+  end
+
   def exit_if_no_connection
     # > check conn or exit 3
   end
@@ -55,6 +69,10 @@ if __FILE__ == $0
 
     opts.on('-k KEYWORD', '--keyword KEYWORD', 'Search by word or phrase') do |key|
       options[:keyword] = key
+    end
+
+    opts.on('-r RESPONSE_GROUP', '--response-group RESPONSE_GROUP', 'Specifies the types of values to return') do |group|
+      options[:response_group] = group
     end
   end
   option_parser.parse!
