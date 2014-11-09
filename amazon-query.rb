@@ -30,16 +30,34 @@ class AmazonQuery
   end
 
   def send(index, *param)
+    exit_if_no_index(index)
     exit_if_no_param(param)
     exit_if_no_connection
 
-    # > build params based on whats included
+    if options[:actor]
+    if options[:artist]
+    if options[:audience_rating]
+    if options[:author]
+    if options[:brand]
+    if options[:browse_node]
+    if options[:composer]
+    if options[:conductor]
+    if options[:director]
+    if options[:keywords]
+    if options[:manufacturer]
+    if options[:music_label]
+    if options[:orchestra]
+    if options[:power]
+    if options[:publisher]
+    if options[:title]
+
+    params['SearchIndex'] = index
     # params = {
     #   'SearchIndex'   => index,
     #   'Keywords'      => keyword
     # }
 
-    # puts "Searching for '#{keyword}' in '#{index}' on Amazon.com..."
+    # puts "Searching in '#{index}' on Amazon.com..."
     # result = @request.item_search(query: params)
     # puts result.to_h
   end
@@ -51,9 +69,11 @@ class AmazonQuery
       STDERR.puts <<-MSG
 Your request should have atleast 1 of the following parameters:
 
-:keywords, :title, :power, :browse_node, :artist, :author, :actor, :director,
-audience_rating, :manufacturer, :music_label, :composer, :publisher, :brand,
-conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
+Actor, Artist, AudiencRating, Author, Brand, BrowseNode, Composer, Conductor,
+Director, Keywords, Manufacturer, MusicLabel, Orchestra, Power, Publisher, Title,
+TextStream, Cuisine, City, Neighborhood
+
+USAGE: send(SEARCH_INDEX, {parameters})
       MSG
       exit 4
     end
@@ -175,18 +195,16 @@ if __FILE__ == $0
 
     unless param.count > 0
       STDERR.puts <<-MSG
-Your request should have atleast 1 of the following parameters:
-
---keywords, --title, --power, --browse_node, --artist, --author, --actor, --director,
---audience_rating, --manufacturer, --music_label, --composer, --publisher, --brand,
---conductor, --orchestra, --text_stream, --cuisine, --city, --neighborhood
+Your request should have atleast 1 search parameter:
 
       MSG
       STDERR.puts option_parser
       exit 2
     end
 
-    req.send(ARGV.join(' '), param)
+    puts param
+
+    # req.send(ARGV.join(' '), param)
   else
     STDERR.puts <<-MSG
 Missing valid SearchIndex. Possible indices include:
