@@ -34,14 +34,14 @@ class AmazonQuery
     exit_if_no_connection
 
     # > build params based on whats included
-    params = {
-      'SearchIndex'   => index,
-      'Keywords'      => keyword
-    }
+    # params = {
+    #   'SearchIndex'   => index,
+    #   'Keywords'      => keyword
+    # }
 
-    puts "Searching for '#{keyword}' in '#{index}' on Amazon.com..."
-    result = @request.item_search(query: params)
-    puts result.to_h
+    # puts "Searching for '#{keyword}' in '#{index}' on Amazon.com..."
+    # result = @request.item_search(query: params)
+    # puts result.to_h
   end
 
   private
@@ -146,6 +146,10 @@ if __FILE__ == $0
 
     opts.on('-r RESPONSE_GROUP', '--response-group RESPONSE_GROUP', 'Specifies the types of values to return') do |group|
       options[:response_group] = group
+    end
+
+    opts.on('--xml', 'Return output in raw XML format') do
+      options[:xml] = true
     end
   end
   option_parser.parse!
