@@ -60,12 +60,11 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
 
   def exit_if_no_connection
     stdout, stderr, status = Open3.capture3('ping -c 3 example.com')
-    # unless status == 0
-      STDERR.puts status
-      STDERR.puts stderr
-      STDERR.puts 'Unable to make an internet connection. Did you forget the internet is required?'
-      exit 3
-    # end
+    unless status.success?
+      STDERR.puts 'Unable to make an internet connection.'
+      STDERR.puts stderr.gsub(/ping: /, '')
+      exit 2
+    end
   end
 end
 
@@ -106,6 +105,6 @@ Wireless, WirelessAccessories
 
     MSG
     STDERR.puts option_parser
-    exit 2
+    exit 1
   end
 end
