@@ -30,8 +30,8 @@ class AmazonQuery
   end
 
   def send(index, *param)
-    exit_if_no_connection
     exit_if_no_param(param)
+    exit_if_no_connection
 
     params = {
       'SearchIndex'   => index,
@@ -87,11 +87,26 @@ if __FILE__ == $0
   req = AmazonQuery.new
 
   if ARGV.count > 0
-    if options[:keyword]
-      req.send(ARGV.join(' '), options[:keyword])
-    else
-      req.send(ARGV.join(' '))
-    end
+    param = {}
+
+    param[:actor] = options[:actor] if options[:actor]
+    param[:artist] = options[:artist] if options[:artist]
+    param[:audience_rating] = options[:audience_rating] if options[:audience_rating]
+    param[:author] = options[:author] if options[:author]
+    param[:brand] = options[:brand] if options[:brand]
+    param[:browse_node] = options[:browse_node] if options[:browse_node]
+    param[:composer] = options[:composer] if options[:composer]
+    param[:conductor] = options[:conductor] if options[:conductor]
+    param[:director] = options[:director] if options[:director]
+    param[:keywords] = options[:keywords] if options[:keywords]
+    param[:manufacturer] = options[:manufacturer] if options[:manufacturer]
+    param[:music_label] = options[:music_label] if options[:music_label]
+    param[:orchestra] = options[:orchestra] if options[:orchestra]
+    param[:power] = options[:power] if options[:power]
+    param[:publisher] = options[:publisher] if options[:publisher]
+    param[:title] = options[:title] if options[:title]
+
+    req.send(ARGV.join(' '), param)
   else
     STDERR.puts <<-MSG
 Missing valid SearchIndex. Possible indices include:
