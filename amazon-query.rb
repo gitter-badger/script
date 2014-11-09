@@ -10,12 +10,35 @@ require 'optparse'
 require 'vacuum'
 
 class AmazonQuery
-  def send(item, market='amazon.com')
-    request = Vacuum.new
-    request.associate_tag = 'wurde'
+  LOCALE = [
+    'BR',
+    'CA',
+    'CN',
+    'DE',
+    'ES',
+    'FR',
+    'GB',
+    'IN',
+    'IT',
+    'JP',
+    'US'
+  ]
 
+  attr_accessor :request
+
+  def initialize(locale=nil)
+    if locale in LOCALE
+      @request = Vacuum.new(locale)
+      @request.associate_tag = 'wurde'
+    else
+      @request = Vacuum.new
+      @request.associate_tag = 'wurde'
+    end
+  end
+
+  def send(item, keyword=nil)
     puts "Searching for '#{item}' on Amazon.com..."
-    result = request.item_search(query: item)
+    result = @request.item_search(query: item)
     puts result.to_h
   end
 end
@@ -34,7 +57,11 @@ if __FILE__ == $0
   req = AmazonQuery.new
 
   if ARGV.count > 0
-    req.send(ARGV.join(' '))
+    if options[:keyword]
+      req.send(ARGV.join(' '), options[:keyword])
+    else
+      req.send(ARGV.join(' '))
+    end
   else
     STDERR.puts option_parser
     exit 2
