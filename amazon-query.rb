@@ -84,7 +84,7 @@ if __FILE__ == $0
       options[:artist] = artist
     end
 
-    opts.on('--audience-rating AUDIENCE_RATING', 'Movie ratings based on MPAA ratings or age, depending upon the locale.') do |audience_rating|
+    opts.on('--audience-rating RATING', 'Movie ratings based on MPAA ratings or age, depending upon the locale.') do |audience_rating|
       options[:audience_rating] = audience_rating
     end
 
