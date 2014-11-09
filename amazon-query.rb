@@ -10,19 +10,7 @@ require 'optparse'
 require 'vacuum'
 
 class AmazonQuery
-  LOCALE = [
-    'BR',
-    'CA',
-    'CN',
-    'DE',
-    'ES',
-    'FR',
-    'GB',
-    'IN',
-    'IT',
-    'JP',
-    'US'
-  ]
+  LOCALE = ['BR','CA','CN','DE','ES','FR','GB','IN','IT','JP','US']
 
   attr_accessor :request
 
@@ -41,6 +29,8 @@ class AmazonQuery
   end
 
   def send(index, keyword=nil)
+    exit_if_no_connection
+
     params = {
       'SearchIndex'   => index,
       'Keywords'      => keyword
@@ -49,6 +39,12 @@ class AmazonQuery
     puts "Searching for '#{keyword}' in '#{index}' on Amazon.com..."
     result = @request.item_search(query: params)
     puts result.to_h
+  end
+
+  private
+
+  def exit_if_no_connection
+    # > check conn or exit 3
   end
 end
 
