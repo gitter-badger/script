@@ -47,9 +47,7 @@ class AmazonQuery
   private
 
   def exit_if_no_param(param)
-    puts param.count
-    puts param[0].count
-    unless param.count > 0 or param[0].count > 0
+    unless param.count > 0 and param[0].count > 0
       STDERR.puts <<-MSG
 Your request should have atleast 1 of the following parameters:
 
