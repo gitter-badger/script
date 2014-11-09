@@ -157,22 +157,22 @@ if __FILE__ == $0
   if ARGV.count > 0
     param = {}
 
-    param[:actor] = options[:actor] if options[:actor]
-    param[:artist] = options[:artist] if options[:artist]
-    param[:audience_rating] = options[:audience_rating] if options[:audience_rating]
-    param[:author] = options[:author] if options[:author]
-    param[:brand] = options[:brand] if options[:brand]
-    param[:browse_node] = options[:browse_node] if options[:browse_node]
-    param[:composer] = options[:composer] if options[:composer]
-    param[:conductor] = options[:conductor] if options[:conductor]
-    param[:director] = options[:director] if options[:director]
-    param[:keywords] = options[:keywords] if options[:keywords]
-    param[:manufacturer] = options[:manufacturer] if options[:manufacturer]
-    param[:music_label] = options[:music_label] if options[:music_label]
-    param[:orchestra] = options[:orchestra] if options[:orchestra]
-    param[:power] = options[:power] if options[:power]
-    param[:publisher] = options[:publisher] if options[:publisher]
-    param[:title] = options[:title] if options[:title]
+    param['Actor'] = options[:actor] if options[:actor]
+    param['Artist'] = options[:artist] if options[:artist]
+    param['AudiencRating'] = options[:audience_rating] if options[:audience_rating]
+    param['Author'] = options[:author] if options[:author]
+    param['Brand'] = options[:brand] if options[:brand]
+    param['Browse_node'] = options[:browse_node] if options[:browse_node]
+    param['Composer'] = options[:composer] if options[:composer]
+    param['Conductor'] = options[:conductor] if options[:conductor]
+    param['Director'] = options[:director] if options[:director]
+    param['Keywords'] = options[:keywords] if options[:keywords]
+    param['Manufacturer'] = options[:manufacturer] if options[:manufacturer]
+    param['Music_label'] = options[:music_label] if options[:music_label]
+    param['Orchestra'] = options[:orchestra] if options[:orchestra]
+    param['Power'] = options[:power] if options[:power]
+    param['Publisher'] = options[:publisher] if options[:publisher]
+    param['Title'] = options[:title] if options[:title]
 
     unless param.count > 0
       STDERR.puts <<-MSG
