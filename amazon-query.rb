@@ -128,7 +128,7 @@ if __FILE__ == $0
       options[:orchestra] = orchestra
     end
 
-    opts.on('--power POWER', "Performs a book search using a complex query string.\nRequires SearchIndex: Books") do |power|
+    opts.on('--power POWER', "Performs a book search using a complex query string. Requires SearchIndex: Books") do |power|
       options[:power] = power
     end
 
