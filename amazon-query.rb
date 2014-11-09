@@ -30,36 +30,14 @@ class AmazonQuery
   end
 
   def send(index, *param)
-    exit_if_no_index(index)
     exit_if_no_param(param)
     exit_if_no_connection
 
-    if options[:actor]
-    if options[:artist]
-    if options[:audience_rating]
-    if options[:author]
-    if options[:brand]
-    if options[:browse_node]
-    if options[:composer]
-    if options[:conductor]
-    if options[:director]
-    if options[:keywords]
-    if options[:manufacturer]
-    if options[:music_label]
-    if options[:orchestra]
-    if options[:power]
-    if options[:publisher]
-    if options[:title]
+    params[0]['SearchIndex'] = index
 
-    params['SearchIndex'] = index
-    # params = {
-    #   'SearchIndex'   => index,
-    #   'Keywords'      => keyword
-    # }
-
-    # puts "Searching in '#{index}' on Amazon.com..."
-    # result = @request.item_search(query: params)
-    # puts result.to_h
+    puts "Searching in '#{index}' on Amazon.com..."
+    result = @request.item_search(query: params[0])
+    puts result.to_h
   end
 
   private
@@ -73,7 +51,7 @@ Actor, Artist, AudiencRating, Author, Brand, BrowseNode, Composer, Conductor,
 Director, Keywords, Manufacturer, MusicLabel, Orchestra, Power, Publisher, Title,
 TextStream, Cuisine, City, Neighborhood
 
-USAGE: send(SEARCH_INDEX, {parameters})
+USAGE: send(SEARCH_INDEX, {'parameter' => 'value', ..})
       MSG
       exit 4
     end
@@ -203,7 +181,6 @@ Your request should have atleast 1 search parameter:
     end
 
     puts param
-
     # req.send(ARGV.join(' '), param)
   else
     STDERR.puts <<-MSG
