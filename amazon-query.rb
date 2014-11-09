@@ -59,6 +59,7 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
   end
 
   def exit_if_no_connection
+    STDOUT.puts 'Testing internet connection...'
     command = 'ping -c 3 example.com'
     stdout, stderr, status = Open3.capture3(command)
     unless status.success?
@@ -66,6 +67,7 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
       STDERR.puts stderr.gsub(/ping: /, '')
       exit 2
     end
+    STDOUT.puts 'Success!'
   end
 end
 
@@ -74,8 +76,68 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: amazon-query SEARCH_INDEX [options]"
 
-    opts.on('-k KEYWORD', '--keyword KEYWORD', 'Search by word or phrase') do |key|
-      options[:keyword] = key
+    opts.on('--actor ACTOR', '') do |actor|
+      options[:actor] = actor
+    end
+
+    opts.on('--artist ARTIST', '') do |artist|
+      options[:artist] = artist
+    end
+
+    opts.on('--audience-rating AUDIENCE_RATING', '') do |audience_rating|
+      options[:audience_rating] = audience_rating
+    end
+
+    opts.on('--author AUTHOR', '') do |author|
+      options[:author] = author
+    end
+
+    opts.on('--brand BRAND', '') do |brand|
+      options[:brand] = brand
+    end
+
+    opts.on('--browse_node BROWSE_NODE', '') do |browse_node|
+      options[:browse_node] = browse_node
+    end
+
+    opts.on('--composer COMPOSER', '') do |composer|
+      options[:composer] = composer
+    end
+
+    opts.on('--conductor CONDUCTOR', '') do |conductor|
+      options[:conductor] = conductor
+    end
+
+    opts.on('--director DIRECTOR', '') do |director|
+      options[:director] = director
+    end
+
+    opts.on('-k KEYWORDS', '--keywords KEYWORDS', 'Search by word or phrase') do |keys|
+      options[:keywords] = keys
+    end
+
+    opts.on('--manufacturer MANUFACTURER', '') do |manufacturer|
+      options[:manufacturer] = manufacturer
+    end
+
+    opts.on('--music_label MUSIC_LABEL', '') do |music_label|
+      options[:music_label] = music_label
+    end
+
+    opts.on('--orchestra ORCHESTRA', '') do |orchestra|
+      options[:orchestra] = orchestra
+    end
+
+    opts.on('--power POWER', '') do |power|
+      options[:power] = power
+    end
+
+    opts.on('--publisher PUBLISHER', '') do |publisher|
+      options[:publisher] = publisher
+    end
+
+    opts.on('--title TITLE', '') do |title|
+      options[:title] = title
     end
 
     opts.on('-r RESPONSE_GROUP', '--response-group RESPONSE_GROUP', 'Specifies the types of values to return') do |group|
