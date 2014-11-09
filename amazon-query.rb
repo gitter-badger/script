@@ -44,7 +44,7 @@ class AmazonQuery
 end
 
 if __FILE__ == $0
-  options = []
+  options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: amazon-query SEARCH_INDEX [options]"
 
