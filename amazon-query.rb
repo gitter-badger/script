@@ -29,14 +29,23 @@ class AmazonQuery
   def initialize(locale=nil)
     if LOCALE.include?(locale)
       @request = Vacuum.new(locale)
-      @request.associate_tag = 'wurde'
     else
       @request = Vacuum.new
-      @request.associate_tag = 'wurde'
     end
+
+    @request.configure(
+        aws_access_key_id:     'AKIAJ642JMWDFLXV6JVA',
+        aws_secret_access_key: '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',
+        associate_tag:         'wurde'
+    )
   end
 
-  def send(item, keyword=nil)
+  def send(index, keyword=nil)
+    params = {
+      'SearchIndex'   => index,
+      'Keywords'      => keyword
+    }
+
     puts "Searching for '#{item}' on Amazon.com..."
     result = @request.item_search(query: item)
     puts result.to_h
