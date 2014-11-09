@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby
 # amazon-query.rb
 # Author: Andy Bettisworth
 # Created At: 2014 1107 174313
@@ -62,7 +62,7 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
     command = 'ping -c 3 example.com'
     stdout, stderr, status = Open3.capture3(command)
     unless status.success?
-      STDERR.puts "Unable to make an internet connection executing #{command}"
+      STDERR.puts "Unable to make an internet connection executing '#{command}'"
       STDERR.puts stderr.gsub(/ping: /, '')
       exit 2
     end
