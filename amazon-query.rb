@@ -1,32 +1,36 @@
 #!/usr/bin/env ruby -w
-# pricecheck.rb
+# amazon-query.rb
 # Author: Andy Bettisworth
 # Created At: 2014 1107 174313
 # Modified At: 2014 1107 174313
-# Description: get prices from real world marketplaces
+# Description: Query Amazon Product API
+# http://docs.aws.amazon.com/AWSECommerceService/latest/DG/Welcome.html
 
 require 'optparse'
 require 'vacuum'
 
-class PriceChecker
-  def check(item, market='amazon.com')
+class AmazonQuery
+  def send(item, market='amazon.com')
     request = Vacuum.new
+    request.associate_tag = 'wurde'
+
     puts "Searching for '#{item}' on Amazon.com..."
     result = request.item_search(query: item)
-    puts result
+    puts result.to_h
   end
 end
 
 if __FILE__ == $0
+  options = []
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: pricecheck ITEM"
+    opts.banner = "USAGE: amazon-query [options] SEARCH_INDEX"
   end
   option_parser.parse!
 
-  mkt = PriceChecker.new
+  req = AmazonQuery.new
 
   if ARGV.count > 0
-    mkt.check(ARGV.join(' '))
+    req.send(ARGV.join(' '))
   else
     puts option_parser
     exit 2
