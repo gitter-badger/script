@@ -22,9 +22,9 @@ class AmazonQuery
     end
 
     @request.configure(
-        aws_access_key_id:     'AKIAJ642JMWDFLXV6JVA',
-        aws_secret_access_key: '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',
-        associate_tag:         'wurde'
+      aws_access_key_id:     'AKIAJ642JMWDFLXV6JVA',
+      aws_secret_access_key: 'wNrAENBs0tl/aRj4TN43Gqv48MwS/ZhOd5cv9i8v',
+      associate_tag:         'wurde'
     )
   end
 
@@ -49,16 +49,19 @@ class AmazonQuery
       STDERR.puts <<-MSG
 Your request should have atleast 1 of the following parameters:
 
-Keywords, Title, Power, BrowseNode, Artist, Author, Actor, Director,
-AudienceRating, Manufacturer, MusicLabel, Composer, Publisher, Brand,
-Conductor, Orchestra, TextStream, Cuisine, City, Neighborhood
+:keywords, :title, :power, :BrowseNode, :Artist, :Author, :Actor, :Director,
+AudienceRating, :manufacturer, :MusicLabel, :Composer, :Publisher, :Brand,
+Conductor, :Orchestra, :TextStream, :Cuisine, :City, :Neighborhood
       MSG
       exit 4
     end
   end
 
   def exit_if_no_connection
-    # > check conn or exit 3
+    unless system('ping -c 3 example.com')
+      STDERR.puts 'Unable to make an internet connection. Did you forget the internet is required?'
+      exit 3
+    end
   end
 end
 
