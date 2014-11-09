@@ -22,13 +22,29 @@ proc exit_if_not_file { iso } {
   }
 }
 
+proc exit_if_not_enough_space { device iso } {
+  set partition_table [exec sudo fdisk -l $device]
+  regexp {total\s(\d*)} $partition_table -> sector_count
+  regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
+
+  set device_size [expr "$sector_count * $sector_size"]
+  set iso_size [file size $iso]
+
+  set remainder [expr "$device_size - $iso_size"]
+
+  if {$remainder <= 0} {
+    puts stderr "Not enough space on device $device"
+    exit 4
+  }
+}
+
 if { [string length $device] != 0 && \
      [string length $iso] != 0} {
   exit_if_not_device $device
   exit_if_not_file $iso
+  exit_if_not_enough_space $device $iso
 
   # > exec cont
-  puts "Continuing"
 } else {
   puts stderr $usage
   exit 2
