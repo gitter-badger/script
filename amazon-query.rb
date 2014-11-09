@@ -180,8 +180,7 @@ Your request should have atleast 1 search parameter:
       exit 2
     end
 
-    puts param
-    # req.send(ARGV.join(' '), param)
+    req.send(ARGV.join(' '), param)
   else
     STDERR.puts <<-MSG
 Missing valid SearchIndex. Possible indices include:
