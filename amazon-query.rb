@@ -46,8 +46,8 @@ class AmazonQuery
       'Keywords'      => keyword
     }
 
-    puts "Searching for '#{item}' on Amazon.com..."
-    result = @request.item_search(query: item)
+    puts "Searching for '#{keyword}' in '#{index}' on Amazon.com..."
+    result = @request.item_search(query: params)
     puts result.to_h
   end
 end
