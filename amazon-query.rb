@@ -62,7 +62,7 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
     command = 'ping -c 3 example.com'
     stdout, stderr, status = Open3.capture3(command)
     unless status.success?
-      STDERR.puts "Unable to make an internet connection executing #{commpand}"
+      STDERR.puts "Unable to make an internet connection executing #{command}"
       STDERR.puts stderr.gsub(/ping: /, '')
       exit 2
     end
