@@ -23,7 +23,11 @@ end
 if __FILE__ == $0
   options = []
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: amazon-query [options] SEARCH_INDEX"
+    opts.banner = "USAGE: amazon-query SEARCH_INDEX [options]"
+
+    opts.on('-k KEYWORD', '--keyword KEYWORD', 'Search by word or phrase') do |key|
+      options[:keyword] = key
+    end
   end
   option_parser.parse!
 
@@ -32,7 +36,7 @@ if __FILE__ == $0
   if ARGV.count > 0
     req.send(ARGV.join(' '))
   else
-    puts option_parser
+    STDERR.puts option_parser
     exit 2
   end
 end
