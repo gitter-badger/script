@@ -35,9 +35,12 @@ class AmazonQuery
 
     param[0]['SearchIndex'] = index
 
-    puts "Searching in '#{index}' on Amazon.com..."
-    result = @request.item_search(query: param[0])
-    puts result.to_h
+    puts param[0]
+    puts param[0].class
+
+    # puts "Searching in '#{index}' on Amazon.com..."
+    # result = @request.item_search(query: param[0])
+    # puts result.to_h
   end
 
   private
