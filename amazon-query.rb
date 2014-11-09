@@ -30,8 +30,8 @@ class AmazonQuery
   end
 
   def send(index, *param)
-    exit_if_no_param(param)
     exit_if_no_connection
+    exit_if_no_param(param)
 
     params = {
       'SearchIndex'   => index,
@@ -60,12 +60,12 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
 
   def exit_if_no_connection
     stdout, stderr, status = Open3.capture3('ping -c 3 example.com')
-    unless status == 0
+    # unless status == 0
       STDERR.puts status
       STDERR.puts stderr
       STDERR.puts 'Unable to make an internet connection. Did you forget the internet is required?'
       exit 3
-    end
+    # end
   end
 end
 
