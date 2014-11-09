@@ -6,8 +6,9 @@
 # Description: Query Amazon Product API
 # http://docs.aws.amazon.com/AWSECommerceService/latest/DG/Welcome.html
 
-require 'optparse'
 require 'vacuum'
+require 'optparse'
+require 'open3'
 
 class AmazonQuery
   LOCALE = ['BR','CA','CN','DE','ES','FR','GB','IN','IT','JP','US']
@@ -58,7 +59,10 @@ conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
   end
 
   def exit_if_no_connection
-    unless system('ping -c 3 example.com')
+    stdout, stderr, status = Open3.capture3('ping -c 3 example.com')
+    unless status == 0
+      STDERR.puts status
+      STDERR.puts stderr
       STDERR.puts 'Unable to make an internet connection. Did you forget the internet is required?'
       exit 3
     end
