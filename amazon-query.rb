@@ -173,6 +173,19 @@ if __FILE__ == $0
     param[:publisher] = options[:publisher] if options[:publisher]
     param[:title] = options[:title] if options[:title]
 
+    unless param.count > 0
+      STDERR.puts <<-MSG
+Your request should have atleast 1 of the following parameters:
+
+--keywords, --title, --power, --browse_node, --artist, --author, --actor, --director,
+--audience_rating, --manufacturer, --music_label, --composer, --publisher, --brand,
+--conductor, --orchestra, --text_stream, --cuisine, --city, --neighborhood
+
+      MSG
+      STDERR.puts option_parser
+      exit 2
+    end
+
     req.send(ARGV.join(' '), param)
   else
     STDERR.puts <<-MSG
