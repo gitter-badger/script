@@ -78,8 +78,7 @@ Marketplace, Merchants, Miscellaneous, MobileApps, MP3Downloads, Music, MusicalI
 MusicTracks, OfficeProducts, OutdoorLiving, PCHardware, PetSupplies, Photo, Shoes,
 Software, SportingGoods, Tools, Toys, UnboxVideo, VHS, Video, VideoGames, Watches,
 Wireless, WirelessAccessories
-
-    <<MSG
+    MSG
     STDERR.puts option_parser
     exit 2
   end
