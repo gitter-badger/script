@@ -27,7 +27,7 @@ class AmazonQuery
   attr_accessor :request
 
   def initialize(locale=nil)
-    if locale in LOCALE
+    if LOCALE.include?(locale)
       @request = Vacuum.new(locale)
       @request.associate_tag = 'wurde'
     else
