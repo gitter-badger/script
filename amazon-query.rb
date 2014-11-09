@@ -29,7 +29,7 @@ class AmazonQuery
   end
 
   def send(index, *param)
-    exit_if_no_param
+    exit_if_no_param(param)
     exit_if_no_connection
 
     params = {
