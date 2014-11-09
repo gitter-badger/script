@@ -29,15 +29,22 @@ class AmazonQuery
     )
   end
 
-  def send(index, *param)
+  def send(index, xml=false, *param)
     exit_if_no_param(param)
     exit_if_no_connection
 
     param[0]['SearchIndex'] = index
 
     puts "Searching in '#{index}' on Amazon.com..."
-    result = @request.item_search(query: param[0])
-    puts result.to_h
+    response = @request.item_search(query: param[0])
+
+    if xml
+      puts response.body
+      return response.body
+    else
+      puts response.to_h
+      return response.to_h
+    end
   end
 
   private
@@ -180,7 +187,7 @@ Your request should have atleast 1 search parameter:
       exit 2
     end
 
-    req.send(ARGV.join(' '), param)
+    req.send(ARGV.join(' '), options[:xml], param)
   else
     STDERR.puts <<-MSG
 Missing valid SearchIndex. Possible indices include:
