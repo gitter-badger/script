@@ -33,6 +33,7 @@ class AmazonQuery
     exit_if_no_param(param)
     exit_if_no_connection
 
+    # > build params based on whats included
     params = {
       'SearchIndex'   => index,
       'Keywords'      => keyword
@@ -46,6 +47,9 @@ class AmazonQuery
   private
 
   def exit_if_no_param(param)
+    puts "Printing param"
+    puts param.inspect
+    puts param.count
     unless param.count > 0
       STDERR.puts <<-MSG
 Your request should have atleast 1 of the following parameters:
