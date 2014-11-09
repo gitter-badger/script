@@ -49,9 +49,9 @@ class AmazonQuery
       STDERR.puts <<-MSG
 Your request should have atleast 1 of the following parameters:
 
-:keywords, :title, :power, :BrowseNode, :Artist, :Author, :Actor, :Director,
-AudienceRating, :manufacturer, :MusicLabel, :Composer, :Publisher, :Brand,
-Conductor, :Orchestra, :TextStream, :Cuisine, :City, :Neighborhood
+:keywords, :title, :power, :browse_node, :artist, :author, :actor, :director,
+audience_rating, :manufacturer, :music_label, :composer, :publisher, :brand,
+conductor, :orchestra, :text_stream, :cuisine, :city, :neighborhood
       MSG
       exit 4
     end
