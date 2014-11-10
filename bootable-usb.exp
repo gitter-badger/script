@@ -50,34 +50,12 @@ if { [string length $device] != 0 && \
   exit 2
 }
 
-# def build(device, iso, peristence=0, quiet=false)
-#   device     = validate_device(device)
-#   iso        = validate_iso(iso)
-#   peristence = validate_pct(peristence)
-
-#   print_block_devices
-#   print_current_tablespace(device)
-#   exit unless confirm_operation
-
-#   sectors = get_sector_count(device)
-
 #   secondary_table = (sectors * ( peristence / 100.0 )).to_i
 #   primary_table = (sectors - 1) - secondary_table
 
 #   # part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
 #   # part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
 #   # part_cmd += 'w'
-
-#   # puts %Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}
-#   # cmd = IO.popen(%Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}).read
-
-
-#   # cmd = %Q{echo -e "#{part_cmd}" | sudo fdisk #{device}}
-#   # if result
-#   #   puts 'Sucessful partition'
-#   # else
-#   #   puts 'Failed partition'
-#   # end
 
 #   # ## > format partitions
 #   # `sudo mkfs --type ntfs #{device}1`
