@@ -46,8 +46,12 @@ proc get_mount_point { device } {
 
 proc unmount_device { mount_point } {
   set device_tree [exec lsblk]
-  regexp {"$mount_point\(\\d\)"} $device_tree -> myvar
-  puts $myvar
+  set match_tuple [regexp -all -inline "$mount_point\(\\d\)" $device_tree]
+  set match_count [expr {[llength $match_tuple] / 2}]
+
+  foreach {group0 group1} $match_tuple {
+    exec sudo umount /dev/$group0
+  }
 }
 
 if { [string length $device] != 0 && \
