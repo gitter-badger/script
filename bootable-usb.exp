@@ -4,8 +4,8 @@
 # Description: Create a bootable USB with your preferred *nix flavour ISO
 
 set usage "USAGE: bootable-usb.exp \[options\] DEVICE ISO"
-
 set timeout -1
+
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 
@@ -97,6 +97,31 @@ proc format_partition { device } {
   # /dev/sdX2 ext4 casper-rw  ~20% GiB
 }
 
+proc label_partition { binary partition label}
+  # > label
+  return 0
+}
+
+proc extract_iso { iso } {
+  # `sudo rm -r /mnt/tmpiso`
+  # `sudo mkdir /mnt/tmpiso`
+  # `sudo mount -o loop #{iso} /mnt/tmpiso`
+}
+
+proc copy_iso_to_device { device iso } {
+  # > handle auto reattch device
+  # `rsync -aP /mnt/tmpiso/* /media/raist/Village`
+  # `sudo unlink /media/raist/Village/ubuntu`
+  # `sudo rm -r /mnt/tmpiso`
+}
+
+proc setup_grub_bootloader {
+  # `rm /media/raist/Village/boot/grub/loopback.cfg`
+  # `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
+  # `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
+  return 0
+}
+
 if { [string length $device] != 0 && \
      [string length $iso] != 0} {
   exit_if_not_file $device
@@ -113,33 +138,20 @@ if { [string length $device] != 0 && \
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
 
   partition_device $device
+  # > check if a secondary partition
   format_partition $device
+  # > part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
+  # > part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
+  # > part_cmd += 'w'
+
+  label_partition ntfslabel $primary_part Village
+  # > check if a secondary partition
+  label_partition e2label $secondary_part casper-rw
+
+  extract_iso $iso
+  copy_iso_to_device $device $iso
+  setup_grub_bootloader
 } else {
   puts stderr $usage
   exit 2
 }
-
-#   # part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
-#   # part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
-#   # part_cmd += 'w'
-
-#   # ## > label partitions
-#   # `sudo ntfslabel #{device}1 Village`
-#   # # `sudo e2label #{device}2 casper-rw`
-
-#   # ## > Extract ISO
-#   # `sudo rm -r /mnt/tmpiso`
-#   # `sudo mkdir /mnt/tmpiso`
-#   # `sudo mount -o loop #{iso} /mnt/tmpiso`
-
-#   # ## > Copy ISO to Device
-#   # ## En handle auto reattch device
-#   # `rsync -aP /mnt/tmpiso/* /media/raist/Village`
-#   # `sudo unlink /media/raist/Village/ubuntu`
-#   # `sudo rm -r /mnt/tmpiso`
-
-#   # ## > Setup GRUB bootloader
-#   # `rm /media/raist/Village/boot/grub/loopback.cfg`
-#   # `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
-#   # `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
-# end
