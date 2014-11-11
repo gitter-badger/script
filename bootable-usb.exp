@@ -15,9 +15,9 @@ proc exit_if_not_device { device } {
   }
 }
 
-proc exit_if_not_file { iso } {
-  if { ![file exists $iso] } {
-    puts stderr "Missing ISO file argument"
+proc exit_if_not_file { my_file } {
+  if { ![file exists $my_file] } {
+    puts stderr "No such file found for $my_file"
     exit 3
   }
 }
@@ -38,13 +38,29 @@ proc exit_if_not_enough_space { device iso } {
   }
 }
 
+proc unmount_device { device } {
+  regexp {\/dev\/(*)} $device -> mount_point
+  puts $mount_point
+
+  #set device_tree [exec lsblk]
+  #regexp {$mount_point} device_tree ->
+}
+
 if { [string length $device] != 0 && \
      [string length $iso] != 0} {
+  exit_if_not_file $device
   exit_if_not_device $device
   exit_if_not_file $iso
   exit_if_not_enough_space $device $iso
 
-  # > exec cont
+  unmount_device $device
+
+  #spawn sudo fdisk $device
+  #expect -re "password*"
+  #expect_user -re "(.*)\n"
+  #send $expect_out(1,string)
+  #send_user "Creating a blank partition on $device...\n"
+  #send "o\nn\np\n1\n\n\nw\n"
 } else {
   puts stderr $usage
   exit 2
