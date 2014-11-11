@@ -5,6 +5,7 @@
 
 set usage "USAGE: bootable-usb.exp \[options\] DEVICE ISO"
 
+set timeout -1
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 
@@ -38,12 +39,15 @@ proc exit_if_not_enough_space { device iso } {
   }
 }
 
-proc unmount_device { device } {
-  regexp {\/dev\/(*)} $device -> mount_point
-  puts $mount_point
+proc get_mount_point { device } {
+  regexp {\/dev\/(\w*)} $device -> mount_point
+  return $mount_point
+}
 
-  #set device_tree [exec lsblk]
-  #regexp {$mount_point} device_tree ->
+proc unmount_device { mount_point } {
+  set device_tree [exec lsblk]
+  regexp {"$mount_point\(\\d\)"} $device_tree -> myvar
+  puts $myvar
 }
 
 if { [string length $device] != 0 && \
@@ -53,7 +57,8 @@ if { [string length $device] != 0 && \
   exit_if_not_file $iso
   exit_if_not_enough_space $device $iso
 
-  unmount_device $device
+  set mount_point [get_mount_point $device]
+  unmount_device $mount_point
 
   #spawn sudo fdisk $device
   #expect -re "password*"
