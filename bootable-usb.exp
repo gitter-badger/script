@@ -72,18 +72,28 @@ proc unmount_device { mount_point } {
 
   foreach {group0 group1} $match_tuple {
     if {[catch {exec sudo umount /dev/$group0} fid]} {
-      puts "/dev/$group0"
+      puts "Unmounted partition at /dev/$group0"
     }
   }
 }
 
-proc partition_device { device } {
-  send_user "Creating a blank partition on $device...\n"
+proc partition_device { device primary_sectors secondary_sectors } {
+  send_user "Creating blank partitions on $device...\n"
+
   spawn sudo fdisk $device
   expect -re "password*"
   expect_user -re "(.*)\n"
-  send $expect_out(1,string)
-  send "o\nn\np\n1\n\n\nw\n"
+
+  if { $secondary_sectors == 0 } {
+    set part_cmd "o\nn\np\n1\n\n$primary_sectors\nw"
+    puts $part_cmd
+
+    #send $expect_out(1,string)
+    #send "o\nn\np\n1\n\n\nw\n"
+  } else {
+    set part_cmd "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\nw"
+    puts $part_cmd
+  }
 }
 
 proc format_partition { device } {
@@ -135,15 +145,9 @@ if { [string length $device] != 0 && \
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
 
   unmount_device $mount_point
-  # partition_device $device
-  # > check if a secondary partition
+  partition_device $device $primary_sectors $secondary_sectors
   # format_partition $device
-  # > part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
-  # > part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
-  # > part_cmd += 'w'
-
   # label_partition ntfslabel $primary_part Village
-  # > check if a secondary partition
   # label_partition e2label $secondary_part casper-rw
 
   # extract_iso $iso
