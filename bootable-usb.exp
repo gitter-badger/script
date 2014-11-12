@@ -3,22 +3,21 @@
 # Author: Andy Bettisworth
 # Description: Create a bootable USB with your preferred *nix flavour ISO
 
-set usage "USAGE: bootable-usb.exp \[options\] DEVICE ISO"
 set timeout -1
-
+set usage "USAGE: bootable-usb.exp \[options\] DEVICE ISO"
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
+
+proc exit_if_not_file { target } {
+  if { ![file exists $target] } {
+    puts stderr "No such file found for $target"
+    exit 2
+  }
+}
 
 proc exit_if_not_device { device } {
   if { [file type $device] != "blockSpecial" } {
     puts stderr "Missing block device argument"
-    exit 3
-  }
-}
-
-proc exit_if_not_file { my_file } {
-  if { ![file exists $my_file] } {
-    puts stderr "No such file found for $my_file"
     exit 3
   }
 }
