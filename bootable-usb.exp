@@ -43,6 +43,28 @@ proc get_mount_point { device } {
   return $mount_point
 }
 
+proc get_sector_count { mount_point } {
+  set partition_table [exec sudo fdisk -l /dev/$mount_point]
+  regexp {total\s(\d*)} $partition_table -> sector_count
+  return $sector_count
+}
+
+proc get_persistence_percentage {} {
+  puts "What percentage should go towards persistence? \[0..40\]"
+  expect_user -re "(.*)\n"
+  return $expect_out(1,string)
+}
+
+proc get_secondary_sectors { sector_count persistence } {
+  set sectors [format {%0.0f} [expr $sector_count * ( $persistence / 100.0 )]]
+  return $sectors
+}
+
+proc get_primary_sectors { sector_count secondary_sectors } {
+  set sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
+  return $sectors
+}
+
 proc unmount_device { mount_point } {
   set device_tree [exec lsblk]
   set match_tuple [regexp -all -inline "$mount_point\(\\d\)" $device_tree]
@@ -53,28 +75,6 @@ proc unmount_device { mount_point } {
       puts "/dev/$group0"
     }
   }
-}
-
-proc get_sector_count { $mount_point } {
-  # > fdisk -l
-  # > regexp sector count
-  return 0
-}
-
-proc get_persistence_percentage {
-  return 0
-}
-
-proc get_secondary_sectors { sector_count persistence } {
-  #set sectors [expr $sector_count * ( $persistence / 100.0 )]
-  #return $sectors
-  return 0
-}
-
-proc get_primary_sectors { sector_count secondary_sectors } {
-  #set sectors = ($sector_count - 1) - $secondary_sectors
-  #return $sectors
-  return 0
 }
 
 proc partition_device { device } {
@@ -96,7 +96,7 @@ proc format_partition { device } {
   # /dev/sdX2 ext4 casper-rw  ~20% GiB
 }
 
-proc label_partition { binary partition label}
+proc label_partition { binary partition label } {
   # > label
   return 0
 }
@@ -114,7 +114,7 @@ proc copy_iso_to_device { device iso } {
   # `sudo rm -r /mnt/tmpiso`
 }
 
-proc setup_grub_bootloader {
+proc setup_grub_bootloader {} {
   # `rm /media/raist/Village/boot/grub/loopback.cfg`
   # `cp ~/.sync/.preseed/grub.cfg /media/raist/Village/boot/grub/grub.cfg`
   # `sudo grub-install --no-floppy --root-directory=/media/raist/Village/ #{device}`
@@ -129,27 +129,26 @@ if { [string length $device] != 0 && \
   exit_if_not_enough_space $device $iso
 
   set mount_point [get_mount_point $device]
-  unmount_device $mount_point
-
   set sector_count [get_sector_count $mount_point]
   set pct [get_persistence_percentage]
   set secondary_sectors [get_secondary_sectors $sector_count $pct]
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
 
-  partition_device $device
+  unmount_device $mount_point
+  # partition_device $device
   # > check if a secondary partition
-  format_partition $device
+  # format_partition $device
   # > part_cmd = 'o\nn\np\n1\n\n' + primary_table.to_s + '\n'
   # > part_cmd += 'n\np\n2\n\n\n' if secondary_table != 0
   # > part_cmd += 'w'
 
-  label_partition ntfslabel $primary_part Village
+  # label_partition ntfslabel $primary_part Village
   # > check if a secondary partition
-  label_partition e2label $secondary_part casper-rw
+  # label_partition e2label $secondary_part casper-rw
 
-  extract_iso $iso
-  copy_iso_to_device $device $iso
-  setup_grub_bootloader
+  # extract_iso $iso
+  # copy_iso_to_device $device $iso
+  # setup_grub_bootloader
 } else {
   puts stderr $usage
   exit 2
