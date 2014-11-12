@@ -6,7 +6,7 @@
 # Description: set the current window's title
 
 if ARGV.count > 0
-  `wmctrl -r :SELECT: -N "#{ARGV.join(' ')}"`
+  `wmctrl -r :ACTIVE: -N "#{ARGV.join(' ')}"`
 else
   STDERR.puts 'USAGE: wmtitle.rb TITLE'
   exit 1
