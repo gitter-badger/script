@@ -28,6 +28,9 @@ Setup for Collaboration
 Typical Workflow
 --------------
 
+Match all script names containing 'git'. Great for getting the exact name before
+calling --fetch.
+
 ```
 script --list git
 
@@ -35,25 +38,28 @@ script --list git
 #=> gitcommit.rb      Simple bundling of commands to execute a git commit
 ```
 
-This command matches against all names containing 'git'. Often I use this before
-calling a --fetch to find a specific script I know exists but can't quite remember
-what I called it.
+Copy specific canvas(es) to the Desktop for easy text editor access. Note how
+by not including a file extension the default is set to ruby (.rb).
 
 ```
 script --fetch gitcommit regexp
 ```
 
-With the select canvases now available on the Desktop I proceed to open all
-in my text editor of choice Sublime. When done, I clean off the Desktop adding a
-summary commit message for any changes made.
+When done, I clean off the Desktop and add a commit message that servers as a
+summation of changes made within those canvases.
 
 ```
 script --clean
-script --history
 ```
 
 The history option prints a canvas list of added, modified, and deleted
 within the last 7 days.
+
+```
+script --history
+```
+
+Create a new script and automatically add it to ~/.bash_aliases.
 
 ```
 script --new
