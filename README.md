@@ -13,7 +13,7 @@ Setup for Collaboration
 
         git clone https://github.com/<user>/script.git
 
-    Where "<user>" is your GitHub username.
+    Where "user" is your GitHub username.
 
 3. Add an upstream remote link to this repository.
 
