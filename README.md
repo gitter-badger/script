@@ -45,8 +45,7 @@ Default extension is ruby (.rb).
 script --fetch gitcommit regexp
 ```
 
-When done, I clean off the Desktop and add a commit message that servers as a
-summation of changes made within those canvases.
+Clean the Desktop and include a commit message to summarize changes.
 
 ```
 script --clean
