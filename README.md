@@ -5,17 +5,17 @@ Script is a collaborative repository dedicated to command-line applications of v
 Setup for Collaboration
 --------------
 
-1. Fork this repository to your GitHub account.
+1. Fork this repository to your GitHub account:
 
     [Getting Started (click me)](https://github.com/wurde/script/fork)
 
-2. At the command prompt, clone your forked repository locally.
+2. At the command prompt, clone your forked repository locally:
 
         git clone https://github.com/<user>/script.git
 
     Where "user" is your GitHub username.
 
-3. Add an upstream remote link to this repository.
+3. Add an upstream remote link to this repository:
 
         git remote add upstream https://github.com/wurde/script.git
 
