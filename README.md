@@ -38,8 +38,8 @@ script --list git
 #=> gitcommit.rb      Simple bundling of commands to execute a git commit
 ```
 
-Copy specific canvas(es) to the Desktop for easy text editor access. Note how
-by not including a file extension the default is set to ruby (.rb).
+Copy specific canvas(es) to the Desktop for easy text editor access.
+File extensions default to ruby (.rb).
 
 ```
 script --fetch gitcommit regexp
