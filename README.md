@@ -51,7 +51,7 @@ Clean the Desktop and include a commit message to summarize changes.
 script --clean
 ```
 
-The history option prints a canvas list of added, modified, and deleted
+Print history of canvas(es) recently added, modified, and deleted
 within the last 7 days.
 
 ```
