@@ -7,22 +7,22 @@ Setup for Collaboration
 
 1. Fork this repository to your GitHub account.
 
-'''
+```
 https://github.com/wurde/script/fork
-'''
+```
 
 2. At the command prompt, clone your forked repository locally.
 
-'''
+```
     git clone https://github.com/<user>/script.git
     Replace <user> with your GitHub username.
-'''
+```
 
 3. Add an upstream remote link to this repository.
 
-'''
+```
     git remote add upstream https://github.com/wurde/script.git
-'''
+```
 
 4. Have fun. To share your code, simply open a pull request.
 
