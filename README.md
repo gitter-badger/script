@@ -21,6 +21,10 @@ Setup for Collaboration
 
 4. Have fun. To share your code, simply open a pull request.
 
+5. At anytime pull in the most recent upstream changes:
+
+        git pull upstream master
+
 Typical Workflow
 --------------
 
