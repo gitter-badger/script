@@ -1,19 +1,26 @@
-SCRIPT
+Script
+--------------
+Script is a collaborative repository dedicated to command-line applications of varying programming languages.
 
-summary...
-==============
-
-Collaborative Setup
+Setup For Collaboration
 --------------
 
-Fork repository to your own GitHub account.
+1. Fork this repository to your GitHub account.
+
+2. At the command prompt, clone your forked repository locally.
 
 ```
-git clone https://github.com/<user>/script.git
-git remote add upstream https://github.com/wurde/script.git
+    git clone https://github.com/<user>/script.git
+```
+    Replace <user> with your GitHub username.
+
+3. Add an upstream remote to this repository.
+
+```
+    git remote add upstream https://github.com/wurde/script.git
 ```
 
-To share your code, simply open a pull request.
+4. Have fun. To share your code, simply open a pull request.
 
 Typical Workflow
 --------------
@@ -39,9 +46,6 @@ summary commit message for any changes made.
 
 ```
 script --clean
-```
-
-```
 script --history
 ```
 
@@ -57,6 +61,7 @@ source ~/.bashrc
 Complete Options
 --------------
 
+```
 USAGE: script [options] [SCRIPT]
     -l, --list [REGXP]               List all matching scripts
     -n, --new SCRIPT                 Create a script
@@ -65,3 +70,4 @@ USAGE: script [options] [SCRIPT]
         --clean                      Move script(s) off Desktop
         --refresh                    Refresh script Bash aliases
         --history                    List recent script activity
+```
