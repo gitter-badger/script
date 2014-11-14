@@ -7,9 +7,7 @@ Setup for Collaboration
 
 1. Fork this repository to your GitHub account.
 
-        <a href="https://github.com/wurde/script/fork">
-          https://github.com/wurde/script/fork
-        </a>
+    * [Fork This Repo](https://github.com/wurde/script/fork)
 
 2. At the command prompt, clone your forked repository locally.
 
