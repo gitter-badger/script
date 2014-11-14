@@ -1,6 +1,6 @@
 Script
 --------------
-Script is a collaborative repository dedicated to command-line applications of varying programming languages.
+Script is a collaborative repository dedicated to command-line applications of various languages.
 
 Setup For Collaboration
 --------------
@@ -9,16 +9,12 @@ Setup For Collaboration
 
 2. At the command prompt, clone your forked repository locally.
 
-```
     git clone https://github.com/<user>/script.git
-```
     Replace <user> with your GitHub username.
 
 3. Add an upstream remote to this repository.
 
-```
     git remote add upstream https://github.com/wurde/script.git
-```
 
 4. Have fun. To share your code, simply open a pull request.
 
@@ -58,7 +54,7 @@ script --refresh
 source ~/.bashrc
 ```
 
-Complete Options
+All Available Options
 --------------
 
 ```
