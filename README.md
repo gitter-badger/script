@@ -61,7 +61,7 @@ script --history
 Create a new script and automatically add it to ~/.bash_aliases.
 
 ```
-script --new
+script --new bootable-usb.exp
 script --refresh
 source ~/.bashrc
 ```
