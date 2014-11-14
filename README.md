@@ -42,7 +42,7 @@ Copy specific canvas(es) to the Desktop for easy text editor access.
 Default extension is ruby (.rb).
 
 ```
-script --fetch gitcommit regexp
+script --fetch gitcommit regexp portscan.py
 ```
 
 Clean the Desktop and include a commit message to summarize changes.
