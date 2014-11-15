@@ -116,7 +116,7 @@ $0
         next if file == '.' or file == '..'
         canvas = {}
         canvas = get_canvas_info("#{lang}/#{file}")
-        puts "#{canvas[:filename]   canvas[:description]}"
+        puts "#{canvas[:filename]}   #{canvas[:description]}"
         canvas_list << canvas
       end
     end
