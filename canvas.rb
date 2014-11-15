@@ -141,9 +141,11 @@ $0
   end
 
   def get_lang_dir
-    lang_dir = Dir.foreach(CANVAS) do |lang|
+    lang_dir = []
+    Dir.foreach(CANVAS) do |lang|
       next unless File.directory?(File.join(CANVAS, lang))
       next if lang == '.' or lang == '..' or lang == 'git'
+      lang_dir << File.join(CANVAS, lang)
     end
     lang_dir
   end
