@@ -55,6 +55,7 @@ $0
   def clean
     lang_dir = get_lang_dir
     canvases = get_canvases(lang_dir)
+    canvases.collect! { |c| c[:filename] }
     clean_off_desktop(canvases)
     sync
   end
@@ -250,8 +251,7 @@ $0
     canvases.flatten!
     Dir.foreach("#{DESKTOP}") do |file|
       next if File.directory?(file)
-      puts file
-      # puts file if canvases.include?(file)
+      puts file if canvases.include?(file)
       # system("mv #{DESKTOP}/#{file.to_s} #{CANVAS}") if canvases.include?(file)
     end
   end
