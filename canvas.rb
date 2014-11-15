@@ -233,7 +233,7 @@ $0
     if canvases.count <= 1
       return canvases[0]
     else
-      return canvases.flatten
+      return canvases.flatten!
     end
   end
 
