@@ -205,7 +205,8 @@ $0
   end
 
   def ask_for_canvas
-    puts "What canvas do you want? (ex: expect.rb, canvas_matplotlib.py)"
+    puts "What canvas do you want? [fiber matplotlib.py expect.rb]"
+    puts "Note default extension is Ruby (.rb)"
     canvases = gets.split(/\s.*?/).flatten
     canvases.each { |c| @canvas_list << c }
   end
