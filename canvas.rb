@@ -248,8 +248,7 @@ $0
 
   def clean_off_desktop(*canvases)
     canvases.flatten!
-
-    # > ensure target lang dir
+    puts canvases
     # Dir.foreach("#{DESKTOP}") do |file|
     #   next if File.directory?(file)
     #   system("mv #{DESKTOP}/#{file.to_s} #{CANVAS}") if canvases.include?(file)
