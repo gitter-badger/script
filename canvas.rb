@@ -229,6 +229,7 @@ $0
         ''
       end
     end
+    canvases.flatten!
 
     if canvases.count <= 1
       return canvases[0]
