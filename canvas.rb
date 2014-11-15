@@ -31,12 +31,10 @@ $0
 
   attr_accessor :canvas_list
 
-  def list(regexp, lang_regexp=false)
-    pattern = Regexp.new(regexp) if regexp
-
+  def list(canvas_regexp, lang_regexp=false)
     lang_dir = get_lang_dir(lang_regexp)
     canvases = get_canvases(lang_dir)
-    print_canvas_list(canvases)
+    print_canvas_list(canvases, canvas_regexp)
     canvas_list
   end
 
@@ -153,7 +151,8 @@ $0
     canvas
   end
 
-  def print_canvas_list(canvases)
+  def print_canvas_list(canvases, canvas_regexp=false)
+    pattern = Regexp.new(canvas_regexp) if canvas_regexp
     canvases.select! { |c| pattern.match(c[:filename]) } if pattern
 
     canvases.each do |canvas|
