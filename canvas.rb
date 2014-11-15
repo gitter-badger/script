@@ -48,8 +48,8 @@ $0
     canvases = ask_for_canvas if canvases.flatten.empty?
     canvases = set_default_ext(canvases)
     canvases = set_default_prefix(canvases)
+    canvases = get_canvas_location(canvases)
     puts canvases
-    # canvases = get_canvas_location(canvases)
     # move_canvas_to_desktop(canvases)
 
     # @canvas_list.each_with_index do |target_canvas, index|
@@ -209,6 +209,20 @@ $0
         canvas = 'canvas_' + canvas
       end
       canvas
+    end
+
+    if canvases.count <= 1
+      return canvases[0]
+    else
+      return canvases
+    end
+  end
+
+  def get_canvas_location(*canvases)
+    canvases.flatten!
+    canvases.collect! do |canvas|
+      lang = ALIAS_CMD[File.extname(canvas)]
+      "#{CANVAS}/#{lang}"
     end
 
     if canvases.count <= 1
