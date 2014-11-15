@@ -34,7 +34,7 @@ $0
   def list(regexp, lang=false)
     pattern = Regexp.new(regexp) if regexp
 
-    lang_dir = get_lang_dir(lang)
+    lang_dir = get_lang_dir(lang_regexp)
     canvas_list = get_canvases(lang_dir)
     canvas_list.select! { |c| pattern.match(c[:filename]) } if pattern
 
@@ -126,7 +126,7 @@ $0
   end
 
   # > use lang arg to filter options, if provided
-  def get_lang_dir(lang)
+  def get_lang_dir(lang_regexp)
     lang_dir = []
     Dir.foreach(CANVAS) do |lang|
       next unless File.directory?(File.join(CANVAS, lang))
