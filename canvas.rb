@@ -31,11 +31,12 @@ $0
 
   attr_accessor :canvas_list
 
-  def list(canvas_regexp, lang_regexp=false)
+  def list(canvas_regexp=false, lang_regexp=false)
     lang_dir = get_lang_dir(lang_regexp)
     canvases = get_canvases(lang_dir)
-    print_canvas_list(canvases, canvas_regexp)
-    canvas_list
+    canvases = filter_canvases(canvases, canvas_regexp)
+    print_canvas_list(canvases)
+    canvases
   end
 
   def add(canvas)
@@ -153,10 +154,13 @@ $0
     canvas
   end
 
-  def print_canvas_list(canvases, canvas_regexp=false)
+  def filter_canvases(canvases, canvas_regexp=false)
     pattern = Regexp.new(canvas_regexp) if canvas_regexp
     canvases.select! { |c| pattern.match(c[:filename]) } if pattern
+    canvases
+  end
 
+  def print_canvas_list(canvases)
     canvases.each do |canvas|
       space = 31 - canvas[:filename].length if canvas[:filename].length < 31
       space ||= 1
@@ -237,7 +241,8 @@ if __FILE__ == $0
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all canvases, with optional pattern matching') do |regexp|
       options[:list] = true
-      options[:list_pattern] = regexp
+      options[:canvas_pattern] = regexp
+      options[:lang_pattern] = regexp
     end
 
     opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
@@ -261,7 +266,7 @@ if __FILE__ == $0
   c = Canvas.new
 
   if options[:list]
-    c.list(options[:list_pattern])
+    c.list(options[:canvas_pattern], options[:lang_pattern])
   elsif options[:add]
     c.add(options[:add])
   elsif options[:fetch]
