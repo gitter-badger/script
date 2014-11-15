@@ -112,7 +112,7 @@ $0
     canvas_list = []
 
     lang_dir.each do |lang|
-      Dir.foreach(CANVAS) do |file|
+      Dir.foreach(lang) do |file|
         puts file
         # canvas = {}
         # canvas = get_canvas_info(file)
