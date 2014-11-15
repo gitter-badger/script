@@ -136,10 +136,10 @@ $0
     lang_dir
   end
 
-  def get_canvas_info(file)
+  def get_canvas_info(filepath)
     canvas = {}
 
-    file_head = File.open(File.join(CANVAS, file)).readlines
+    file_head = File.open(filepath).readlines
     c = file_head[0..11].join('')
 
     if c.valid_encoding?
