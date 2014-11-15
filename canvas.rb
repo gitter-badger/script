@@ -230,7 +230,7 @@ $0
     canvases.flatten!
     canvases.each do |canvas|
       if File.exist?(canvas)
-        system("cp #{canvases[index]} #{DESKTOP}")
+        system("cp #{canvas} #{DESKTOP}")
       else
         raise "CanvasNotExistError: #{File.basename(canvas)}"
       end
