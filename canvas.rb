@@ -47,14 +47,12 @@ $0
   def fetch_all(*canvases)
     canvases = ask_for_canvas if canvases.flatten.empty?
     canvases = set_default_ext(canvases)
+    canvases = set_default_prefix(canvases)
     puts canvases
-    puts canvases.class
-    # canvases = set_default_prefix(canvases)
     # canvases = get_canvas_location(canvases)
     # move_canvas_to_desktop(canvases)
 
     # @canvas_list.each_with_index do |target_canvas, index|
-    #   @canvas_list[index] = default_extension(target_canvas)
     #   @canvas_list[index] = default_prefix(@canvas_list[index])
 
     #   if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
@@ -172,8 +170,8 @@ $0
   end
 
   def create_canvas(canvas)
+    canvas = set_default_ext(canvas)
     canvas = default_prefix(canvas)
-    canvas = default_extension(canvas)
 
     puts 'Describe this canvas: '
     description = gets
@@ -204,27 +202,29 @@ $0
     end
   end
 
-  def fetch(canvas)
-    system("cp #{CANVAS}/#{canvas} #{DESKTOP}")
+  def set_default_prefix(*canvases)
+    canvases.flatten!
+    canvases.collect! do |canvas|
+      unless /canvas_/.match(canvas)
+        canvas = 'canvas_' + canvas
+      end
+      canvas
+    end
+
+    if canvases.count <= 1
+      return canvases[0]
+    else
+      return canvases
+    end
   end
 
-  def default_prefix(canvas)
-    unless /canvas_/.match(canvas)
-      canvas = 'canvas_' + canvas
-    end
-    canvas
+  def fetch(canvas)
+    system("cp #{CANVAS}/#{canvas} #{DESKTOP}")
   end
 
   def get_shebang(ext)
     shebang = SHEBANGS[ext]
     shebang
-  end
-
-  def default_extension(canvas)
-    if File.extname(canvas) == ""
-      canvas += '.rb'
-    end
-    canvas
   end
 
   def ask_for_canvas
