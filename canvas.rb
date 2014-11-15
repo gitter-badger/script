@@ -45,10 +45,16 @@ $0
   end
 
   def fetch_all(*canvases)
-    # > remove instance variable
-    @canvas_list = canvases.flatten
-    ask_for_canvas while @canvas_list.empty?
-    puts @canvas_list
+    canvases = ask_for_canvas if canvases.empty?
+    puts ask_for_canvas
+    # canvases = set_default_ext(canvases)
+    # canvases = set_default_prefix(canvases)
+    # canvases = get_canvas_location(canvases)
+    # move_canvas_to_desktop(canvases)
+
+    # @canvas_list = canvases.flatten
+    # ask_for_canvas while @canvas_list.empty?
+    # puts @canvas_list
 
     # @canvas_list.each_with_index do |target_canvas, index|
     #   @canvas_list[index] = default_extension(target_canvas)
