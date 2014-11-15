@@ -35,14 +35,8 @@ $0
     pattern = Regexp.new(regexp) if regexp
 
     lang_dir = get_lang_dir(lang_regexp)
-    canvas_list = get_canvases(lang_dir)
-    canvas_list.select! { |c| pattern.match(c[:filename]) } if pattern
-
-    canvas_list.each do |canvas|
-      space = 31 - canvas[:filename].length if canvas[:filename].length < 31
-      space ||= 1
-      puts "#{canvas[:filename].gsub('canvas_', '')} #{' ' * space} #{canvas[:description]}"
-    end
+    canvases = get_canvases(lang_dir)
+    print_canvas_list(canvases)
     canvas_list
   end
 
@@ -117,7 +111,6 @@ $0
         next if file == '.' or file == '..'
         canvas = {}
         canvas = get_canvas_info("#{target_lang}/#{file}")
-        puts "#{canvas[:filename]}   #{canvas[:description]}"
         canvas_list << canvas
       end
     end
@@ -158,6 +151,16 @@ $0
     end
 
     canvas
+  end
+
+  def print_canvas_list(canvases)
+    canvases.select! { |c| pattern.match(c[:filename]) } if pattern
+
+    canvases.each do |canvas|
+      space = 31 - canvas[:filename].length if canvas[:filename].length < 31
+      space ||= 1
+      puts "#{canvas[:filename].gsub('canvas_', '')} #{' ' * space} #{canvas[:description]}"
+    end
   end
 
   def create_canvas(canvas)
