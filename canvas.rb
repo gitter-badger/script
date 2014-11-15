@@ -222,7 +222,12 @@ $0
     canvases.flatten!
     canvases.collect! do |canvas|
       lang = ALIAS_CMD[File.extname(canvas)]
-      "#{CANVAS}/#{lang}/#{canvas}"
+
+      if lang
+        "#{CANVAS}/#{lang}/#{canvas}"
+      else
+        nil
+      end
     end
 
     if canvases.count <= 1
