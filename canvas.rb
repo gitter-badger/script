@@ -232,7 +232,7 @@ $0
       if File.exist?(canvas)
         system("cp #{canvas} #{DESKTOP}")
       else
-        raise "CanvasNotExistError: #{File.basename(canvas)}"
+        puts "No such canvas: '#{File.basename(canvas)}'"
       end
     end
   end
