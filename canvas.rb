@@ -31,7 +31,7 @@ $0
 
   attr_accessor :canvas_list
 
-  def list(regexp, lang=false)
+  def list(regexp, lang_regexp=false)
     pattern = Regexp.new(regexp) if regexp
 
     lang_dir = get_lang_dir(lang_regexp)
