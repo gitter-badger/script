@@ -143,7 +143,7 @@ $0
     c = file_head[0..11].join('')
 
     if c.valid_encoding?
-      canvas[:filename] = file
+      canvas[:filename] = File.basename(filepath)
 
       created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
       canvas[:created_at] = created_at[:created_at].strip if created_at
