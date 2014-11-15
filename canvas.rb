@@ -46,7 +46,7 @@ $0
 
   def fetch_all(*canvases)
     canvases = ask_for_canvas if canvases.empty?
-    puts ask_for_canvas
+    puts canvases
     # canvases = set_default_ext(canvases)
     # canvases = set_default_prefix(canvases)
     # canvases = get_canvas_location(canvases)
