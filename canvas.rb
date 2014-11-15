@@ -250,7 +250,8 @@ $0
     canvases.flatten!
     Dir.foreach("#{DESKTOP}") do |file|
       next if File.directory?(file)
-      puts file if canvases.include?(file)
+      puts file
+      # puts file if canvases.include?(file)
       # system("mv #{DESKTOP}/#{file.to_s} #{CANVAS}") if canvases.include?(file)
     end
   end
