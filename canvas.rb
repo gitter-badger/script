@@ -226,14 +226,14 @@ $0
       if lang
         "#{CANVAS}/#{lang}/#{canvas}"
       else
-        nil
+        ''
       end
     end
 
     if canvases.count <= 1
       return canvases[0]
     else
-      return canvases.flatten!
+      return canvases
     end
   end
 
