@@ -31,10 +31,11 @@ $0
 
   attr_accessor :canvas_list
 
-  def list(regexp)
+  def list(regexp, lang=false)
     pattern = Regexp.new(regexp) if regexp
 
-    canvas_list = get_canvases
+    lang_dir = get_lang_dir(lang)
+    canvas_list = get_canvases(lang_dir)
     canvas_list.select! { |c| pattern.match(c[:filename]) } if pattern
 
     canvas_list.each do |canvas|
@@ -107,40 +108,23 @@ $0
     deleted_canvases.each { |c,a| puts "  #{c}" }
   end
 
-  def get_canvases
+  def get_canvases(lang_dir)
     canvas_list = []
 
-    lang_dir = get_lang_dir
-    puts lang_dir
-    #   next if File.directory?(File.join(CANVAS, file))
-    #   next if File.extname(file) == '.pyc' # > get Array from .gitignore
-    #   canvas = {}
-
-    #   file_head = File.open(File.join(CANVAS, file)).readlines
-    #   c = file_head[0..11].join('')
-
-    #   if c.valid_encoding?
-    #     canvas[:filename] = file
-
-    #     created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
-    #     canvas[:created_at] = created_at[:created_at].strip if created_at
-
-    #     modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
-    #     canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
-
-    #     description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
-    #     canvas[:description] = description[:description].strip if description
-    #   else
-    #     puts "ERROR: Not valid UTF-8 encoding in '#{file}'"
-    #   end
-
-    #   canvas_list << canvas
-    # end
+    lang_dir.each do |lang|
+      Dir.foreach(CANVAS) do |file|
+        puts file
+        # canvas = {}
+        # canvas = get_canvas_info(file)
+        # canvas_list << canvas
+      end
+    end
 
     canvas_list
   end
 
-  def get_lang_dir
+  # > use lang arg to filter options, if provided
+  def get_lang_dir(lang)
     lang_dir = []
     Dir.foreach(CANVAS) do |lang|
       next unless File.directory?(File.join(CANVAS, lang))
@@ -148,6 +132,30 @@ $0
       lang_dir << File.join(CANVAS, lang)
     end
     lang_dir
+  end
+
+  def get_canvas_info(file)
+    canvas = {}
+
+    file_head = File.open(File.join(CANVAS, file)).readlines
+    c = file_head[0..11].join('')
+
+    if c.valid_encoding?
+      canvas[:filename] = file
+
+      created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:description] = description[:description].strip if description
+    else
+      puts "ERROR: Not valid UTF-8 encoding in '#{file}'"
+    end
+
+    canvas
   end
 
   def create_canvas(canvas)
