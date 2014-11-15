@@ -46,15 +46,11 @@ $0
 
   def fetch_all(*canvases)
     canvases = ask_for_canvas if canvases.flatten.empty?
+    canvases = set_default_ext(canvases)
     puts canvases
-    # canvases = set_default_ext(canvases)
     # canvases = set_default_prefix(canvases)
     # canvases = get_canvas_location(canvases)
     # move_canvas_to_desktop(canvases)
-
-    # @canvas_list = canvases.flatten
-    # ask_for_canvas while @canvas_list.empty?
-    # puts @canvas_list
 
     # @canvas_list.each_with_index do |target_canvas, index|
     #   @canvas_list[index] = default_extension(target_canvas)
@@ -189,6 +185,22 @@ $0
     hedaer = header.gsub!('$4', description)
 
     File.new("#{DESKTOP}/#{canvas}", 'w+') << header
+  end
+
+  def set_default_ext(*canvases)
+    canvases.flatten!
+    canvases.collect! do |canvas|
+      if File.extname(canvas) == ""
+        canvas += '.rb'
+      end
+      canvas
+    end
+
+    if canvases.count <= 1
+      return canvases[0]
+    else
+      return canvases
+    end
   end
 
   def fetch(canvas)
