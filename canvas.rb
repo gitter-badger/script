@@ -114,7 +114,7 @@ $0
     lang_dir.each do |lang|
       Dir.foreach(lang) do |file|
         next unless File.directory?(File.join(lang, file))
-        next if lang == '.' or lang == '..' or lang == '.git'
+        next if file == '.' or file == '..' or file == '.git'
         puts file
         # canvas = {}
         # canvas = get_canvas_info(file)
