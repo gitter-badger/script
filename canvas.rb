@@ -101,7 +101,7 @@ $0
   end
 
   # > use lang arg to filter options, if provided
-  def get_lang_dir(lang_regexp)
+  def get_lang_dir(lang_regexp=false)
     lang_dir = []
     Dir.foreach(CANVAS) do |lang|
       next unless File.directory?(File.join(CANVAS, lang))
