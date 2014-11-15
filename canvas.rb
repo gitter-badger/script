@@ -44,19 +44,21 @@ $0
   end
 
   def fetch_all(*canvases)
+    # > remove instance variable
     @canvas_list = canvases.flatten
     ask_for_canvas while @canvas_list.empty?
+    puts @canvas_list
 
-    @canvas_list.each_with_index do |target_canvas, index|
-      @canvas_list[index] = default_extension(target_canvas)
-      @canvas_list[index] = default_prefix(@canvas_list[index])
+    # @canvas_list.each_with_index do |target_canvas, index|
+    #   @canvas_list[index] = default_extension(target_canvas)
+    #   @canvas_list[index] = default_prefix(@canvas_list[index])
 
-      if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
-        fetch(@canvas_list[index])
-      else
-        raise "CanvasNotExistError: #{CANVAS}/#{@canvas_list[index]}"
-      end
-    end
+    #   if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
+    #     fetch(@canvas_list[index])
+    #   else
+    #     raise "CanvasNotExistError: #{CANVAS}/#{@canvas_list[index]}"
+    #   end
+    # end
   end
 
   def clean
