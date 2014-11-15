@@ -38,14 +38,14 @@ script --list git
 #=> gitcommit.rb      Simple bundling of commands to execute a git commit
 ```
 
-Copy specific canvas(es) to the Desktop for easy text editor access.
+Copy specific canvas(es) to the desktop for easy text editor access.
 Default extension is ruby (.rb).
 
 ```
 script --fetch gitcommit regexp portscan.py
 ```
 
-Clean the Desktop and include a commit message to summarize changes.
+Clean the desktop and include a commit message to summarize changes.
 
 ```
 script --clean
