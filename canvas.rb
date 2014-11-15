@@ -112,10 +112,11 @@ $0
     canvas_list = []
 
     lang_dir.each do |lang|
-      Dir.foreach(lang) do |file|
+      target_lang = lang
+      Dir.foreach(target_lang) do |file|
         next if file == '.' or file == '..'
         canvas = {}
-        canvas = get_canvas_info("#{lang}/#{file}")
+        canvas = get_canvas_info("#{target_lang}/#{file}")
         puts "#{canvas[:filename]}   #{canvas[:description]}"
         canvas_list << canvas
       end
