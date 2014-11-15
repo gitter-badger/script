@@ -110,11 +110,8 @@ $0
   def get_canvases
     canvas_list = []
 
-    Dir.foreach(CANVAS) do |lang|
-      next unless File.directory?(File.join(CANVAS, lang))
-      puts lang
-    end
-
+    lang_dir = get_lang_dir
+    puts lang_dir
     #   next if File.directory?(File.join(CANVAS, file))
     #   next if File.extname(file) == '.pyc' # > get Array from .gitignore
     #   canvas = {}
@@ -141,6 +138,14 @@ $0
     # end
 
     canvas_list
+  end
+
+  def get_lang_dir
+    lang_dir = Dir.foreach(CANVAS) do |lang|
+      next unless File.directory?(File.join(CANVAS, lang))
+      next if lang == '.' or lang == '..' or lang == 'git'
+    end
+    lang_dir
   end
 
   def create_canvas(canvas)
