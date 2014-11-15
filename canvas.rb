@@ -111,7 +111,7 @@ $0
     canvas_list = []
 
     Dir.foreach(CANVAS) do |lang|
-      next unless File.directory?(File.join(CANVAS, file))
+      next unless File.directory?(File.join(CANVAS, lang))
       puts lang
     end
 
