@@ -44,7 +44,7 @@ $0
     create_canvas(canvas)
   end
 
-  def fetch_all(*canvases)
+  def fetch(*canvases)
     canvases = ask_for_canvas if canvases.flatten.empty?
     canvases = set_default_ext(canvases)
     canvases = set_default_prefix(canvases)
@@ -53,18 +53,9 @@ $0
   end
 
   def clean
-    all_canvas = []
-
-    Dir.foreach("#{CANVAS}") do |canvas|
-      next if File.directory?(canvas)
-      all_canvas << canvas
-    end
-
-    Dir.foreach("#{DESKTOP}") do |open_canvas|
-      next if File.directory?(open_canvas)
-      system("mv #{DESKTOP}/#{open_canvas.to_s} #{CANVAS}") if all_canvas.include?(open_canvas)
-    end
-
+    lang_dir = get_lang_dir
+    canvases = get_canvases(lang_dir)
+    clean_off_desktop(canvases)
     sync
   end
 
@@ -255,6 +246,16 @@ $0
     return if File.exist?("#{CANVAS}/#{canvas}") ? true : false
   end
 
+  def clean_off_desktop(*canvases)
+    canvases.flatten!
+
+    # > ensure target lang dir
+    # Dir.foreach("#{DESKTOP}") do |file|
+    #   next if File.directory?(file)
+    #   system("mv #{DESKTOP}/#{file.to_s} #{CANVAS}") if canvases.include?(file)
+    # end
+  end
+
   def sync
     puts 'Enter a commit message:'
     commit_msg = gets.strip
@@ -306,7 +307,7 @@ if __FILE__ == $0
   elsif options[:add]
     c.add(options[:add])
   elsif options[:fetch]
-    c.fetch_all(ARGV)
+    c.fetch(ARGV)
   elsif options[:clean]
     c.clean
   elsif options[:history]
