@@ -49,18 +49,7 @@ $0
     canvases = set_default_ext(canvases)
     canvases = set_default_prefix(canvases)
     canvases = get_canvas_location(canvases)
-    puts canvases
-    # move_canvas_to_desktop(canvases)
-
-    # @canvas_list.each_with_index do |target_canvas, index|
-    #   @canvas_list[index] = default_prefix(@canvas_list[index])
-
-    #   if File.exist?("#{CANVAS}/#{@canvas_list[index]}")
-    #     fetch(@canvas_list[index])
-    #   else
-    #     raise "CanvasNotExistError: #{CANVAS}/#{@canvas_list[index]}"
-    #   end
-    # end
+    move_canvas_to_desktop(canvases)
   end
 
   def clean
@@ -229,7 +218,6 @@ $0
         ''
       end
     end
-    canvases.flatten!
 
     if canvases.count <= 1
       return canvases[0]
@@ -238,8 +226,15 @@ $0
     end
   end
 
-  def fetch(canvas)
-    system("cp #{CANVAS}/#{canvas} #{DESKTOP}")
+  def move_canvas_to_desktop(*canvases)
+    canvases.flatten!
+    canvases.each do |canvas|
+      if File.exist?(canvas)
+        system("cp #{canvases[index]} #{DESKTOP}")
+      else
+        raise "CanvasNotExistError: #{File.basename(canvas)}"
+      end
+    end
   end
 
   def get_shebang(ext)
