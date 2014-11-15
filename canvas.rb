@@ -48,6 +48,7 @@ $0
     canvases = ask_for_canvas if canvases.flatten.empty?
     canvases = set_default_ext(canvases)
     puts canvases
+    puts canvases.class
     # canvases = set_default_prefix(canvases)
     # canvases = get_canvas_location(canvases)
     # move_canvas_to_desktop(canvases)
