@@ -232,7 +232,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: canvas [options] [CANVAS]"
 
-    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all canvases, with optional pattern matching') do |regexp|
       options[:list] = true
       options[:list_pattern] = regexp
     end
