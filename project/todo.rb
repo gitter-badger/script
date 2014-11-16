@@ -88,8 +88,7 @@ class TaskManager
     raise 'No tasks exist for this project' unless tasks_exist?
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list.select! { |k| !k[:completed_at] }
-    # list = list.sort_by { |k,v| k[:filename]}
-    puts list
+    puts list.sort_by! { |k| k[:id] }
     list
   end
 
