@@ -263,7 +263,15 @@ $0
   end
 
   def canvas_exist?(canvas)
-    return if File.exist?("#{CANVAS}/#{canvas}") ? true : false
+    lang_dir = get_lang_dir
+    canvases = get_canvases(lang_dir)
+    canvases.select! { |s| s[:filename] == canvas }
+
+    if canvases.count >= 1
+      true
+    else
+      false
+    end
   end
 
   def clean_off_desktop(*canvases)
