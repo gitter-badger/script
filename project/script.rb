@@ -255,14 +255,12 @@ $0
   end
 
   def print_script_info(script)
-    scripts = get_sync_scripts
-    scripts.select! { |s| /#{script}/i.match(s[:filename]) }
-    puts "filename:     #{scripts[0][:filename]}"
-    puts "author:       #{scripts[0][:author]}"
-    puts "created_at:   #{scripts[0][:created_at]}"
-    puts "modified_at:  #{scripts[0][:modified_at]}"
-    puts "description:  #{scripts[0][:description]}"
-    puts "dependencies: #{scripts[0][:dependencies]}"
+    puts "filename:     #{script[:filename]}"
+    puts "author:       #{script[:author]}"
+    puts "created_at:   #{script[:created_at]}"
+    puts "modified_at:  #{script[:modified_at]}"
+    puts "description:  #{script[:description]}"
+    puts "dependencies: #{script[:dependencies]}"
   end
 
   def print_script_list(scripts)
