@@ -28,7 +28,6 @@ class TaskManager
   def add_task(*description)
     description = ask_for_description if description.flatten.empty?
     description = description.join(' ') if description.is_a? Array
-    puts description
 
     id = get_next_id
     task = [{
