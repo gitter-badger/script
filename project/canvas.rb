@@ -54,7 +54,6 @@ $0
   def info(canvas)
     canvas = set_default_ext(canvas)
     canvas = set_default_prefix(canvas)
-    canvas = get_canvas_location(canvas)
 
     if canvas_exist?(canvas)
       canvas = get_canvas_info(canvas)
@@ -278,6 +277,7 @@ $0
   end
 
   def canvas_exist?(canvas)
+    puts canvas
     canvas = set_default_ext(canvas)
     canvas = set_default_prefix(canvas)
 
