@@ -40,8 +40,6 @@ class TaskManager
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
 
     wm = SetWMTitle.new
-    puts task[0][:description]
-    puts ""
     wm.set(task[0][:description])
   end
 
@@ -137,6 +135,8 @@ if __FILE__ == $0
   mgmt = TaskManager.new
 
   if options[:new]
+    puts ARGV
+    puts ARGV.count
     mgmt.add_task(ARGV)
     exit
   elsif options[:list]
