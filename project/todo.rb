@@ -112,11 +112,11 @@ if __FILE__ == $0
       options[:add] = task
     end
 
-    opts.on('-l', '--list', 'List active tasks') do
+    opts.on('-l', '--list', 'List any uncomplete tasks') do
       options[:list] = true
     end
 
-    opts.on('--history', 'Show task history including active tasks') do
+    opts.on('--history', 'Show all tasks') do
       options[:history] = true
     end
 
