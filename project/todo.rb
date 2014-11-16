@@ -108,11 +108,11 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: todo [options]'
 
-    opts.on('-a TASK', '--add TASK', 'Add a task') do |task|
+    opts.on('-a TASK', '--add TASK', 'Add a new task') do |task|
       options[:add] = task
     end
 
-    opts.on('-l', '--list', 'List any uncomplete tasks') do
+    opts.on('-l', '--list', 'List uncomplete tasks') do
       options[:list] = true
     end
 
@@ -120,7 +120,7 @@ if __FILE__ == $0
       options[:history] = true
     end
 
-    opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
+    opts.on('-c ID', '--complete ID', 'Complete a specific task') do |id|
       options[:complete] = id
     end
   end
