@@ -31,7 +31,7 @@ $0
 # $1
 # Author: Andy Bettisworth
 # Created At: $2
-# Modified At: $3
+2014 1116 160336: $3
 # Description: $4
   TXT
   CATEGORIES = [
@@ -93,14 +93,14 @@ $0
     scripts_out = get_script_location(scripts_out)
 
     if scripts_out.is_a? Array
-      # scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+      scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
       update_modified_at(scripts_out)
     else
-      # system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
+      system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
       update_modified_at(scripts_out)
     end
 
-    # commit_changes
+    commit_changes
   end
 
   def refresh_aliases
@@ -443,11 +443,10 @@ $0
 
   def update_modified_at(*scripts)
     scripts.flatten!
-    puts scripts
-
-    # > set current datetime
-    # > open script file
-    # > write and close
+    scripts.each do |script|
+      now = Time.now.strftime('%Y %m%d %H%M%S')
+      # File.write(f = script, File.read(f).gsub(/2014 1116 160336/i, now))
+    end
   end
 
   def commit_changes
