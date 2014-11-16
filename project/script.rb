@@ -46,6 +46,10 @@ $0
     'security',
     'trade'
   ]
+  DEPENDENCIES = {
+    '.rb' => 'require'
+    '.py' => 'import'
+  }
 
   def list(script_regexp=false)
     categories = get_app_categories
@@ -243,6 +247,8 @@ $0
       description = /description:(?<description>.*)/i.match(s.force_encoding('UTF-8'))
       script[:description] = description[:description].strip if description
 
+      # > change regexp based on file extension (.py => import)
+      puts DEPENDENCIES[File.extname(filepath)]
       dependencies = s.scan(/require.*?\s\'(?<dependency>.*)\'/i)
       script[:dependencies] = dependencies.flatten if dependencies
     else
