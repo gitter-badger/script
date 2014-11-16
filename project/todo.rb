@@ -25,8 +25,10 @@ class TaskManager
     raise "No known project #{@project}" unless project_exist?
   end
 
-  def add_task(description)
+  def add_task(*description)
+    description = ask_for_description while description.flatten.empty?
     description = description.join(' ') if description.is_a? Array
+    puts description
 
     id = get_next_id
     task = [{
@@ -77,6 +79,12 @@ class TaskManager
     File.exist?("#{@project_path}/tasks.yaml")
   end
 
+  def ask_for_description
+    puts "Describe the task:\n"
+    description = gets.strip until description
+    description
+  end
+
   def get_active_tasks
     raise 'No tasks exist for this project' unless tasks_exist?
     list = YAML.load_file("#{@project_path}/tasks.yaml")
@@ -114,8 +122,8 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: todo [options]'
 
-    opts.on('-n TASK', '--new TASK', 'Add a new task') do |task|
-      options[:new] = task
+    opts.on('-n', '--new', 'Add a new task') do
+      options[:new] = true
     end
 
     opts.on('-l', '--list', 'List uncomplete tasks') do
@@ -135,8 +143,6 @@ if __FILE__ == $0
   mgmt = TaskManager.new
 
   if options[:new]
-    puts ARGV
-    puts ARGV.count
     mgmt.add_task(ARGV)
     exit
   elsif options[:list]
