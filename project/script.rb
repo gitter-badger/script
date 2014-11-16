@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2014 1005 193820
 # Modified At: 2014 1105 193823
-# Description: Script Management Class
+# Description: Script for CLI Application management
 
 require 'optparse'
 require 'pathname'
@@ -77,19 +77,12 @@ $0
   end
 
   def clean
-    all_scripts = []
-
-    Dir.foreach("#{SCRIPT}") do |script|
-      next if File.directory?(script)
-      all_scripts << script
-    end
-
-    Dir.foreach("#{DESKTOP}") do |open_script|
-      next if File.directory?(open_script)
-      system("mv #{DESKTOP}/#{open_script} #{SCRIPT}") if all_scripts.include?(open_script)
-    end
-
-    sync_script
+    categories  = get_app_categories
+    scripts     = get_scripts(categories)
+    scripts_out = get_open_scripts(scripts)
+    scripts_out = get_script_location(scripts_out)
+    scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+    commit_changes
   end
 
   def refresh_aliases
@@ -110,6 +103,11 @@ $0
     new_bash_aliases.close
 
     system "source #{BASH_ALIASES}"
+  end
+
+  def sync
+    commit_changes
+    # > sync_github
   end
 
   def history
@@ -136,6 +134,8 @@ $0
     puts "#{deleted_scripts.count} script(s) deleted: "
     deleted_scripts.each { |s,a| puts "  #{s}" }
   end
+
+  private
 
   def create_script(script)
     puts 'Which application category does this script belong to?'
@@ -347,6 +347,17 @@ $0
     script_list
   end
 
+  def get_open_scripts(scripts)
+    open_scripts = []
+
+    Dir.foreach("#{DESKTOP}") do |entry|
+      next if File.directory?(entry)
+      open_scripts << entry if script_exist?(entry)
+    end
+
+    open_scripts
+  end
+
   def get_app_categories
     categories = []
 
@@ -415,7 +426,7 @@ $0
     script_list
   end
 
-  def sync_script
+  def commit_changes
     puts 'Enter a commit message:'
     commit_msg = gets.strip
     commit_msg = "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
@@ -460,6 +471,10 @@ if __FILE__ == $0
       options[:refresh] = true
     end
 
+    opts.on('--sync', 'Commit recent changes and attempt GitHub sync') do
+      options[:sync] = true
+    end
+
     opts.on('--history', 'List recent script activity') do
       options[:history] = true
     end
@@ -481,6 +496,8 @@ if __FILE__ == $0
     s.clean
   elsif options[:refresh]
     s.refresh_aliases
+  elsif options[:sync]
+    s.sync
   elsif options[:history]
     s.history
   else
