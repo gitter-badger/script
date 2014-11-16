@@ -72,7 +72,11 @@ $0
   def info(script)
     script = set_default_ext(script)
     if script_exist?(script)
-      get_script_info(script)
+      script = get_script_info(script)
+      print_script_info(script)
+    else
+      STDERR.puts "NoSuchScriptError: Did not find script '#{script}'"
+      exit 1
     end
   end
 

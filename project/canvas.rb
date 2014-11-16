@@ -54,7 +54,11 @@ $0
   def info(canvas)
     canvas = set_default_ext(canvas)
     if canvas_exist?(canvas)
-      get_canvas_info(canvas)
+      canvas = get_canvas_info(canvas)
+      print_canvas_info(canvas)
+    else
+      STDERR.puts "NoSuchCanvasError: Did not find canvas '#{canvas}'"
+      exit 1
     end
   end
 
@@ -154,6 +158,15 @@ $0
       space ||= 1
       puts "#{canvas[:filename].gsub('canvas_', '')} #{' ' * space} #{canvas[:description]}"
     end
+  end
+
+  def print_canvas_info(canvas)
+    puts "filename:     #{canvas[:filename]}"
+    puts "author:       #{canvas[:author]}"
+    puts "created_at:   #{canvas[:created_at]}"
+    puts "modified_at:  #{canvas[:modified_at]}"
+    puts "description:  #{canvas[:description]}"
+    puts "dependencies: #{canvas[:dependencies]}"
   end
 
   def create_canvas(canvas)
