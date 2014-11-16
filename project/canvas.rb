@@ -209,7 +209,10 @@ $0
     canvas = set_default_prefix(canvas)
 
     binary = ALIAS_CMD[File.extname(canvas)]
-    raise "Unknown extension '#{File.extname(canvas)}'" unless binary
+    unless binary
+      STDERR.puts "Unknown extension '#{File.extname(canvas)}'"
+      exit 1
+    end
 
     # puts 'Describe this canvas: '
     # description = gets
