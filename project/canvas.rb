@@ -373,7 +373,7 @@ if __FILE__ == $0
   elsif options[:clean]
     c.clean
   elsif options[:sync]
-    s.sync
+    c.sync
   elsif options[:history]
     c.history
   else
