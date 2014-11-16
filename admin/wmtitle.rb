@@ -6,10 +6,8 @@
 # Description: set the current window's title
 
 class SetWMTitle
-  def set(title)
-    if args.count > 0
-      `wmctrl -r :ACTIVE: -N "#{title}"`
-    end
+  def set(title='')
+    `wmctrl -r :ACTIVE: -N "#{title}"`
   end
 end
 
