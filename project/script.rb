@@ -459,7 +459,7 @@ if __FILE__ == $0
       options[:list_pattern] = regexp
     end
 
-    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a script') do |s|
+    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a new script') do |s|
       options[:add] = s
     end
 
@@ -467,11 +467,11 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--info SCRIPT', 'Show script information') do |script|
+    opts.on('--info SCRIPT', 'Show script header information') do |script|
       options[:info] = script
     end
 
-    opts.on('--clean', 'Move script(s) off Desktop') do
+    opts.on('--clean', 'Move script(s) off Desktop and commit changes') do
       options[:clean] = true
     end
 
@@ -479,7 +479,7 @@ if __FILE__ == $0
       options[:refresh] = true
     end
 
-    opts.on('--sync', 'Commit recent changes and attempt GitHub sync') do
+    opts.on('--sync', 'Commit any changes and attempt a GitHub sync') do
       options[:sync] = true
     end
 

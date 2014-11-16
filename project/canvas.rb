@@ -337,13 +337,13 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "USAGE: canvas [options] [CANVAS]"
 
-    opts.on('-l [REGXP]', '--list [REGXP]', 'List all canvases, with optional pattern matching') do |regexp|
+    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
       options[:list] = true
       options[:canvas_pattern] = regexp
       options[:lang_pattern] = regexp
     end
 
-    opts.on('-n CANVAS', '--new CANVAS', 'Create a canvas') do |c|
+    opts.on('-n CANVAS', '--new CANVAS', 'Create a new canvas') do |c|
       options[:add] = c
     end
 
@@ -351,15 +351,15 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--info SCRIPT', 'Show script information') do |script|
+    opts.on('--info SCRIPT', 'Show script header information') do |script|
       options[:info] = script
     end
 
-    opts.on('--clean', 'Move canvas(es) off Desktop') do
+    opts.on('--clean', 'Move canvas(es) off Desktop and commit changes') do
       options[:clean] = true
     end
 
-    opts.on('--sync', 'Commit recent changes and attempt GitHub sync') do
+    opts.on('--sync', 'Commit any changes and attempt a GitHub sync') do
       options[:sync] = true
     end
 
