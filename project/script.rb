@@ -463,7 +463,7 @@ if __FILE__ == $0
       options[:add] = s
     end
 
-    opts.on('-f', '--fetch', 'Copy script(s) to Desktop') do
+    opts.on('-f', '--fetch', 'Copy script(s) to the Desktop') do
       options[:fetch] = true
     end
 
