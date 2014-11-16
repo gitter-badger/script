@@ -64,9 +64,8 @@ class TaskManager
     list = get_all_tasks
     raise "No such task #{id}" unless id.to_i <= largest_task_id(list)
     list.select! { |t| t[:id].to_s == id }
-    puts list.inspect
-    # wm = SetWMTitle.new
-    # wm.set(list[0][:description])
+    wm = SetWMTitle.new
+    wm.set(list[0][:description])
   end
 
   def complete_task(id)
