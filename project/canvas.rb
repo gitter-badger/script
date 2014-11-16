@@ -70,7 +70,12 @@ $0
     canvases = get_canvases(lang_dir)
     canvases.collect! { |c| c[:filename] }
     clean_off_desktop(canvases)
-    sync
+    commit_changes
+  end
+
+  def sync
+    commit_changes
+    # > sync_github
   end
 
   def history
@@ -97,6 +102,8 @@ $0
     puts "#{deleted_canvases.count} canves(es) deleted: "
     deleted_canvases.each { |c,a| puts "  #{c}" }
   end
+
+  private
 
   def get_canvases(lang_dir)
     canvas_list = []
@@ -301,7 +308,7 @@ $0
     end
   end
 
-  def sync
+  def commit_changes
     puts 'Enter a commit message:'
     commit_msg = gets.strip
     commit_msg = "canvas clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
@@ -343,6 +350,10 @@ if __FILE__ == $0
       options[:clean] = true
     end
 
+    opts.on('--sync', 'Commit recent changes and attempt GitHub sync') do
+      options[:sync] = true
+    end
+
     opts.on('--history', 'List recent canvas activity') do
       options[:history] = true
     end
@@ -361,6 +372,8 @@ if __FILE__ == $0
     c.info(options[:info])
   elsif options[:clean]
     c.clean
+  elsif options[:sync]
+    s.sync
   elsif options[:history]
     c.history
   else
