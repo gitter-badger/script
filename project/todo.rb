@@ -21,7 +21,7 @@ class TaskManager
       @project_path = "#{PROJECT}/#{@project}"
     end
 
-    raise "No known project #{@project}" unless project_exist?(@project)
+    raise "No known project #{@project}" unless project_exist?
   end
 
   def add_task(description)
@@ -63,11 +63,16 @@ class TaskManager
 
   private
 
-  def project_exist?(project)
-    File.exist?("#{PROJECT}/#{project}")
+  def project_exist?
+    File.exist?(@project_path)
+  end
+
+  def tasks_exist?
+    File.exist?("#{@project_path}/tasks.yaml")
   end
 
   def get_active_tasks
+    raise 'No tasks exist for this project' unless tasks_exist?
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list.select! { |k| !k[:completed_at] }
     list
