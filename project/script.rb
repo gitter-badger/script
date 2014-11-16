@@ -446,6 +446,7 @@ $0
     scripts.each do |script|
       now = Time.now.strftime('%Y %m%d %H%M%S')
       # File.write(f = script, File.read(f).gsub(/2014 1116 160336/i, now))
+      puts File.readlines(script)[0..11]
     end
   end
 
