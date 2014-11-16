@@ -337,6 +337,12 @@ $0
     return branches.include?(branch)
   end
 
+  def remote_exist?(repository, branch)
+    Dir.chdir repository
+    remotes = `git remote -v`
+    return remotes.include?(branch)
+  end
+
   def sync_github(repo_path)
     raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
     raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
