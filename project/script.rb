@@ -81,7 +81,12 @@ $0
     scripts     = get_scripts(categories)
     scripts_out = get_open_scripts(scripts)
     scripts_out = get_script_location(scripts_out)
-    scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+    if scripts_out.is_a? Array
+      scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+    else
+      puts scripts_out
+      # system("mv #{DESKTOP}/#{File.basename(s)} #{scripts_out}")
+    end
     commit_changes
   end
 
