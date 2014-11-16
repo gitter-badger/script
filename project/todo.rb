@@ -7,18 +7,24 @@ require 'optparse'
 require 'yaml'
 
 class TaskManager
-  PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
+  PROJECT = "#{ENV['HOME']}/.sync/.project"
 
   attr_accessor :project
   attr_accessor :project_path
 
-  def initialize
-    @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
-    @project_path = "#{PROJECT_PATH}/#{@project}"
+  def initialize(pathname=false)
+    unless pathname
+      @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
+      @project_path = "#{PROJECT}/#{@project}"
+    else
+      @project = pathname
+      @project_path = "#{PROJECT}/#{@project}"
+    end
+
+    raise "No known project #{@project}" unless project_exist?(@project)
   end
 
   def add_task(description)
-    raise "No known project #{@project}" unless project_exist?(@project)
     id = get_next_id
     task = [{
       id: id,
@@ -32,7 +38,6 @@ class TaskManager
   end
 
   def list
-    raise "No known project #{@project}" unless project_exist?(@project)
     list = get_active_tasks
     list.each_with_index do |todo, index|
       puts "[#{todo[:id]}] #{todo[:description]}"
@@ -40,7 +45,6 @@ class TaskManager
   end
 
   def history
-    raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
     list.each_with_index do |todo, index|
       task = "[#{todo[:id]}] #{todo[:description]} "
@@ -50,7 +54,6 @@ class TaskManager
   end
 
   def complete_task(id)
-    raise "No known project #{@project}" unless project_exist?(@project)
     list = get_all_tasks
     raise "No such task #{id}" unless id.to_i <= largest_task_id(list)
     list.each {|t| t[:completed_at] = Time.now if t[:id] == id.to_i }
@@ -61,7 +64,7 @@ class TaskManager
   private
 
   def project_exist?(project)
-    File.exist?("#{PROJECT_PATH}/#{project}")
+    File.exist?("#{PROJECT}/#{project}")
   end
 
   def get_active_tasks
@@ -76,7 +79,7 @@ class TaskManager
   end
 
   def todo_commit(msg)
-    `cd #{PROJECT_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+    `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 
   def largest_task_id(list)
@@ -85,7 +88,7 @@ class TaskManager
   end
 
   def get_next_id
-    if File.exist?("#{PROJECT_PATH}/#{@project}/tasks.yaml")
+    if File.exist?("#{PROJECT}/#{@project}/tasks.yaml")
       list = get_all_tasks
       return largest_task_id(list) + 1
     else
@@ -94,42 +97,44 @@ class TaskManager
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: todo [options]'
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: todo [options]'
 
-  opts.on('-a TASK', '--add TASK', 'Add a task') do |task|
-    options[:add] = task
+    opts.on('-a TASK', '--add TASK', 'Add a task') do |task|
+      options[:add] = task
+    end
+
+    opts.on('-l', '--list', 'List active tasks') do
+      options[:list] = true
+    end
+
+    opts.on('--history', 'Show task history including active tasks') do
+      options[:history] = true
+    end
+
+    opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
+      options[:complete] = id
+    end
   end
+  option_parser.parse!
 
-  opts.on('-l', '--list', 'List active tasks') do
-    options[:list] = true
-  end
+  mgmt = TaskManager.new
 
-  opts.on('--history', 'Show task history including active tasks') do
-    options[:history] = true
-  end
-
-  opts.on('-c ID', '--complete ID', 'Complete a task') do |id|
-    options[:complete] = id
+  if options[:add]
+    mgmt.add_task(options[:add])
+    exit
+  elsif options[:list]
+    mgmt.list
+    exit
+  elsif options[:history]
+    mgmt.history
+    exit
+  elsif options[:complete]
+    mgmt.complete_task(options[:complete])
+    exit
+  else
+    puts option_parser
   end
 end
-option_parser.parse!
-
-mgmt = TaskManager.new
-
-if options[:add]
-  mgmt.add_task(options[:add])
-  exit
-elsif options[:list]
-  mgmt.list
-  exit
-elsif options[:history]
-  mgmt.history
-  exit
-elsif options[:complete]
-  mgmt.complete_task(options[:complete])
-  exit
-end
-
-puts option_parser
