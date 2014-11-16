@@ -448,6 +448,12 @@ $0
     CMD
   end
 
+  def branch_exist?(repository, branch)
+    Dir.chdir repository
+    branches = `git branch`
+    return branches.include?(branch)
+  end
+
   def sync_github(repo_path)
     raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
     raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
