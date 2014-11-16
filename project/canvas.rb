@@ -211,6 +211,7 @@ $0
     binary = ALIAS_CMD[File.extname(canvas)]
     unless binary
       STDERR.puts "Unknown extension '#{File.extname(canvas)}'"
+      STDERR.puts "Possible extensions include: #{ALIAS_CMD.keys.join(' ')}"
       exit 1
     end
 
