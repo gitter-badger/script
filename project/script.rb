@@ -57,7 +57,7 @@ $0
   end
 
   def add(script)
-    script = default_extension(script)
+    script = set_default_ext(script)
     raise 'ScriptExistsError: A script by that name already exists.' if script_exist?(script)
     create_script(script)
   end
@@ -70,7 +70,7 @@ $0
   end
 
   def info(script)
-    script = default_extension(script)
+    script = set_default_ext(script)
     if script_exist?(script)
       get_script_info(script)
     end
@@ -192,11 +192,6 @@ $0
     puts "What script do you want? (ex: annex.rb, polygot.py, passwd.sh, install_vmware.exp)"
     scripts = gets.split(/\s.*?/).flatten
     scripts
-  end
-
-  def default_extension(script)
-    script += '.rb' if File.extname(script) == ""
-    script
   end
 
   def script_exist?(script)

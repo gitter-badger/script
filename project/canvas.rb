@@ -52,7 +52,7 @@ $0
   end
 
   def info(canvas)
-    canvas = default_extension(canvas)
+    canvas = set_default_ext(canvas)
     puts canvas
     # if canvas_exist?(canvas)
     #   get_canvas_info(canvas)
