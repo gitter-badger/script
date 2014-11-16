@@ -26,7 +26,7 @@ class TaskManager
   end
 
   def add_task(*description)
-    description = ask_for_description while description.flatten.empty?
+    description = ask_for_description if description.flatten.empty?
     description = description.join(' ') if description.is_a? Array
     puts description
 
