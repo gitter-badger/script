@@ -47,7 +47,7 @@ $0
     'trade'
   ]
   DEPENDENCIES = {
-    '.rb' => 'require'
+    '.rb' => 'require',
     '.py' => 'import'
   }
 
@@ -247,9 +247,9 @@ $0
       description = /description:(?<description>.*)/i.match(s.force_encoding('UTF-8'))
       script[:description] = description[:description].strip if description
 
-      # > change regexp based on file extension (.py => import)
-      puts DEPENDENCIES[File.extname(filepath)]
-      dependencies = s.scan(/require.*?\s\'(?<dependency>.*)\'/i)
+      dep_keyword   = DEPENDENCIES[File.extname(filepath)]
+      dep_keyword ||= 'require'
+      dependencies = s.scan(/#{dep_keyword}.*?\s\'(?<dependency>.*)\'/i)
       script[:dependencies] = dependencies.flatten if dependencies
     else
       STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
