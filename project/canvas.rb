@@ -29,8 +29,6 @@ $0
 # Description: $4
   TXT
 
-  attr_accessor :canvas_list
-
   def list(canvas_regexp=false, lang_regexp=false)
     lang_dir = get_lang_dir(lang_regexp)
     canvases = get_canvases(lang_dir)
@@ -51,6 +49,14 @@ $0
     canvases = set_default_prefix(canvases)
     canvases = get_canvas_location(canvases)
     move_canvas_to_desktop(canvases)
+  end
+
+  def info(canvas)
+    canvas = default_extension(canvas)
+    puts canvas
+    # if canvas_exist?(canvas)
+    #   get_canvas_info(canvas)
+    # end
   end
 
   def clean
@@ -291,6 +297,10 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
+    opts.on('--info SCRIPT', 'Show script information') do |script|
+      options[:info] = script
+    end
+
     opts.on('--clean', 'Move canvas(es) off Desktop') do
       options[:clean] = true
     end
@@ -309,6 +319,8 @@ if __FILE__ == $0
     c.add(options[:add])
   elsif options[:fetch]
     c.fetch(ARGV)
+  elsif options[:info]
+    c.info(options[:info])
   elsif options[:clean]
     c.clean
   elsif options[:history]
