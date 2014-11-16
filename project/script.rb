@@ -72,6 +72,7 @@ $0
   def info(script)
     script = set_default_ext(script)
     if script_exist?(script)
+      script = get_script_location(script)
       script = get_script_info(script)
       print_script_info(script)
     else
