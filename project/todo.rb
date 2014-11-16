@@ -38,7 +38,7 @@ class TaskManager
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
 
     wm = SetWMTitle.new
-    wm(task[0][:description])
+    wm.set(task[0][:description])
   end
 
   def list
