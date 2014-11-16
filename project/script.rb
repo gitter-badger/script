@@ -247,7 +247,8 @@ $0
       description = /description:(?<description>.*)/i.match(s.force_encoding('UTF-8'))
       script[:description] = description[:description].strip if description
 
-      dependencies = s.scan(DEPENDENCIES[File.extname(filepath)])
+      dep_regexp = DEPENDENCIES[File.extname(filepath)]
+      dependencies = s.scan(dep_regexp) if dep_regexp
       script[:dependencies] = dependencies.flatten if dependencies
     else
       STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
