@@ -107,7 +107,7 @@ $0
       Dir.foreach("#{CANVAS}/#{target_lang}") do |file|
         next if file == '.' or file == '..'
         canvas = {}
-        canvas = get_canvas_info("#{CANVAS}#{target_lang}/#{file}")
+        canvas = get_canvas_info("#{CANVAS}/#{target_lang}/#{file}")
         canvas_list << canvas
       end
     end
