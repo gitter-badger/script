@@ -104,7 +104,7 @@ $0
 
     lang_dir.each do |lang|
       target_lang = lang
-      Dir.foreach("#{CANVAS}#{target_lang}") do |file|
+      Dir.foreach("#{CANVAS}/#{target_lang}") do |file|
         next if file == '.' or file == '..'
         canvas = {}
         canvas = get_canvas_info("#{CANVAS}#{target_lang}/#{file}")
@@ -115,17 +115,16 @@ $0
     canvas_list
   end
 
-  # > use lang arg to filter options, if provided
   def get_lang_dir(lang_regexp=false)
-    lang_dir = []
+    language = []
 
-    Dir.foreach(CANVAS) do |lang|
-      next unless File.directory?(File.join(CANVAS, lang))
-      next if lang == '.' or lang == '..' or lang == '.git'
-      lang_dir << File.join(CANVAS, lang)
+    Dir.foreach(CANVAS) do |entry|
+      next unless File.directory?(File.join(CANVAS, entry))
+      next if entry == '.' or entry == '..' or entry == '.git'
+      language << entry
     end
 
-    lang_dir
+    language
   end
 
   def get_canvas_info(filepath)
