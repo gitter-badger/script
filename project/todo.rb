@@ -26,6 +26,8 @@ class TaskManager
   end
 
   def add_task(description)
+    description = description.join(' ') if description.is_a? Array
+
     id = get_next_id
     task = [{
       id: id,
@@ -135,7 +137,7 @@ if __FILE__ == $0
   mgmt = TaskManager.new
 
   if options[:add]
-    mgmt.add_task(options[:add])
+    mgmt.add_task(ARGV)
     exit
   elsif options[:list]
     mgmt.list
