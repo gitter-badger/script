@@ -68,9 +68,18 @@ $0
   def clean
     lang_dir = get_lang_dir
     canvases = get_canvases(lang_dir)
-    canvases.collect! { |c| c[:filename] }
-    clean_off_desktop(canvases)
-    commit_changes
+
+    canvases_out = get_open_canvases(canvases)
+    canvases_out = get_canvas_location(canvases_out)
+
+    puts canvases_out
+    # if canvases_out.is_a? Array
+    #   canvases_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+    # else
+    #   system("mv #{DESKTOP}/#{File.basename(canvases_out)} #{canvases_out}")
+    # end
+
+    # commit_changes
   end
 
   def sync
@@ -119,6 +128,17 @@ $0
     end
 
     canvas_list
+  end
+
+  def get_open_canvases(canvases)
+    open_canvases = []
+
+    Dir.foreach("#{DESKTOP}") do |entry|
+      next if File.directory?(entry)
+      open_canvases << entry if canvas_exist?(entry)
+    end
+
+    open_canvases
   end
 
   def get_lang_dir(lang_regexp=false)
@@ -284,7 +304,6 @@ $0
   end
 
   def canvas_exist?(canvas)
-    puts canvas
     canvas = set_default_ext(canvas)
     canvas = set_default_prefix(canvas)
 
@@ -296,15 +315,6 @@ $0
       true
     else
       false
-    end
-  end
-
-  def clean_off_desktop(*canvases)
-    canvases.flatten!
-    Dir.foreach("#{DESKTOP}") do |file|
-      next if File.directory?(file)
-      location = get_canvas_location(file)
-      system("mv #{DESKTOP}/#{file.to_s} #{location}") if canvases.include?(file)
     end
   end
 

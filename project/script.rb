@@ -57,7 +57,6 @@ $0
   end
 
   def add(script)
-    script = set_default_ext(script)
     raise 'ScriptExistsError: A script by that name already exists.' if script_exist?(script)
     create_script(script)
   end
@@ -71,6 +70,7 @@ $0
 
   def info(script)
     script = set_default_ext(script)
+
     if script_exist?(script)
       script = get_script_location(script)
       script = get_script_info(script)
@@ -84,13 +84,16 @@ $0
   def clean
     categories  = get_app_categories
     scripts     = get_scripts(categories)
+
     scripts_out = get_open_scripts(scripts)
     scripts_out = get_script_location(scripts_out)
+
     if scripts_out.is_a? Array
       scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
     else
       system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
     end
+
     commit_changes
   end
 
@@ -200,6 +203,8 @@ $0
   end
 
   def script_exist?(script)
+    script = set_default_ext(script)
+
     categories = get_app_categories
     scripts = get_scripts(categories)
     scripts.select! { |s| s[:filename] == script }
