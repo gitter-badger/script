@@ -208,16 +208,19 @@ $0
     canvas = set_default_ext(canvas)
     canvas = default_prefix(canvas)
 
+    # > handle unknown extension
+
     puts 'Describe this canvas: '
     description = gets
     description ||= '...'
 
     header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(canvas)))
     header = header.gsub!('$1', canvas)
-    hedaer = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
-    hedaer = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
-    hedaer = header.gsub!('$4', description)
+    header = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
+    header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
+    header = header.gsub!('$4', description)
 
+    File.new("#{CANVAS}/#{language}/#{canvas}", 'w+') << header
     File.new("#{DESKTOP}/#{canvas}", 'w+') << header
   end
 
