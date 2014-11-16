@@ -240,7 +240,8 @@ $0
       dependencies = s.scan(/require.*?\s\'(?<dependency>.*)\'/i)
       script[:dependencies] = dependencies.flatten if dependencies
     else
-      puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      exit 1
     end
 
     script

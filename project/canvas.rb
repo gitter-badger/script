@@ -53,9 +53,13 @@ $0
 
   def info(canvas)
     canvas = set_default_ext(canvas)
+    canvas = set_default_prefix(canvas)
+    canvas = get_canvas_location(canvas)
+
     if canvas_exist?(canvas)
       canvas = get_canvas_info(canvas)
-      print_canvas_info(canvas)
+      puts canvas
+      # print_canvas_info(canvas)
     else
       STDERR.puts "NoSuchCanvasError: Did not find canvas '#{canvas}'"
       exit 1
@@ -97,15 +101,17 @@ $0
 
   def get_canvases(lang_dir)
     canvas_list = []
+
     lang_dir.each do |lang|
       target_lang = lang
-      Dir.foreach(target_lang) do |file|
+      Dir.foreach("#{CANVAS}#{target_lang}") do |file|
         next if file == '.' or file == '..'
         canvas = {}
-        canvas = get_canvas_info("#{target_lang}/#{file}")
+        canvas = get_canvas_info("#{CANVAS}#{target_lang}/#{file}")
         canvas_list << canvas
       end
     end
+
     canvas_list
   end
 
@@ -125,10 +131,15 @@ $0
   def get_canvas_info(filepath)
     canvas = {}
 
+    dirname  = File.dirname(filepath)
+    top_path = File.expand_path('..', dirname)
+    language = dirname.gsub("#{top_path}/", '')
+
     file_head = File.open(filepath).readlines
     c = file_head[0..11].join('')
 
     if c.valid_encoding?
+      canvas[:language] = language
       canvas[:filename] = File.basename(filepath)
 
       created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
@@ -140,7 +151,8 @@ $0
       description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
       canvas[:description] = description[:description].strip if description
     else
-      puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      exit 1
     end
 
     canvas
@@ -166,7 +178,6 @@ $0
     puts "created_at:   #{canvas[:created_at]}"
     puts "modified_at:  #{canvas[:modified_at]}"
     puts "description:  #{canvas[:description]}"
-    puts "dependencies: #{canvas[:dependencies]}"
   end
 
   def create_canvas(canvas)
@@ -219,14 +230,19 @@ $0
   end
 
   def get_canvas_location(*canvases)
+    lang_dir    = get_lang_dir
+    canvas_list = get_canvases(lang_dir)
+
     canvases.flatten!
     canvases.collect! do |canvas|
-      lang = ALIAS_CMD[File.extname(canvas)]
+      canvas = set_default_ext(canvas)
+      canvas = set_default_prefix(canvas)
+      cl = canvas_list.select { |c| c[:filename] == canvas }
 
-      if lang
-        "#{CANVAS}/#{lang}/#{canvas}"
+      if cl.count >= 1
+        "#{CANVAS}/#{cl[0][:language]}/#{canvas}"
       else
-        ''
+        canvas
       end
     end
 
@@ -263,7 +279,9 @@ $0
   end
 
   def canvas_exist?(canvas)
+    canvas = set_default_ext(canvas)
     canvas = set_default_prefix(canvas)
+
     lang_dir = get_lang_dir
     canvases = get_canvases(lang_dir)
     canvases.select! { |c| c[:filename] == canvas }
