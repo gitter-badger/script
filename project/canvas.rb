@@ -265,8 +265,9 @@ $0
   def canvas_exist?(canvas)
     lang_dir = get_lang_dir
     canvases = get_canvases(lang_dir)
-    canvases.select! { |s| s[:filename] == canvas }
-    puts "#{canvas} #{canvases.count}"
+    puts canvases.count
+    # canvases.select! { |c| c[:filename] == canvas }
+    # puts "#{canvas} #{canvases.count}"
 
     if canvases.count >= 1
       true
