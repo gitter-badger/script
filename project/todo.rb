@@ -38,6 +38,8 @@ class TaskManager
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
 
     wm = SetWMTitle.new
+    puts task[0][:description]
+    puts ""
     wm.set(task[0][:description])
   end
 

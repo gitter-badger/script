@@ -6,9 +6,9 @@
 # Description: set the current window's title
 
 class SetWMTitle
-  def set(*args)
+  def set(title)
     if args.count > 0
-      `wmctrl -r :ACTIVE: -N "#{args.join(' ')}"`
+      `wmctrl -r :ACTIVE: -N "#{title}"`
     end
   end
 end
@@ -16,7 +16,7 @@ end
 if __FILE__ == $0
   if ARGV.count > 0
     wm = SetWMTitle.new
-    wm.set(ARGV)
+    wm.set(ARGV.join(' '))
   else
     STDERR.puts 'USAGE: wmtitle.rb TITLE'
     exit 1
