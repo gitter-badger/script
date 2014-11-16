@@ -25,6 +25,13 @@ class TaskManager
     raise "No known project #{@project}" unless project_exist?
   end
 
+  def list
+    list = get_active_tasks
+    list.each_with_index do |todo, index|
+      puts "[#{todo[:id]}] #{todo[:description]}"
+    end
+  end
+
   def add_task(*description)
     description = ask_for_description if description.flatten.empty?
     description = description.join(' ') if description.is_a? Array
@@ -42,13 +49,6 @@ class TaskManager
 
     wm = SetWMTitle.new
     wm.set(task[0][:description])
-  end
-
-  def list
-    list = get_active_tasks
-    list.each_with_index do |todo, index|
-      puts "[#{todo[:id]}] #{todo[:description]}"
-    end
   end
 
   def history
@@ -88,6 +88,8 @@ class TaskManager
     raise 'No tasks exist for this project' unless tasks_exist?
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list.select! { |k| !k[:completed_at] }
+    puts list.class
+    # list = list.sort_by { |k,v| k[:filename]}
     list
   end
 
@@ -121,37 +123,37 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: todo [options]'
 
-    opts.on('-n', '--new', 'Add a new task') do
-      options[:new] = true
-    end
-
     opts.on('-l', '--list', 'List uncomplete tasks') do
       options[:list] = true
     end
 
-    opts.on('--history', 'Show all tasks') do
-      options[:history] = true
+    opts.on('-n', '--new', 'Add a new task') do
+      options[:new] = true
     end
 
     opts.on('-c ID', '--complete ID', 'Complete a specific task') do |id|
       options[:complete] = id
+    end
+
+    opts.on('--history', 'Show all tasks') do
+      options[:history] = true
     end
   end
   option_parser.parse!
 
   mgmt = TaskManager.new
 
-  if options[:new]
-    mgmt.add_task(ARGV)
-    exit
-  elsif options[:list]
+  if options[:list]
     mgmt.list
     exit
-  elsif options[:history]
-    mgmt.history
+  elsif options[:new]
+    mgmt.add_task(ARGV)
     exit
   elsif options[:complete]
     mgmt.complete_task(options[:complete])
+    exit
+  elsif options[:history]
+    mgmt.history
     exit
   else
     puts option_parser
