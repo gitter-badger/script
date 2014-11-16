@@ -63,11 +63,7 @@ class TaskManager
   def focus_task(id)
     list = get_all_tasks
     raise "No such task #{id}" unless id.to_i <= largest_task_id(list)
-    # list.select! { |t| t[:id] == id }
-    list.each do |t|
-      puts t[:id].class
-    end
-    puts id.class
+    list.select! { |t| t[:id] == id.to_s }
     puts list.inspect
     # wm = SetWMTitle.new
     # wm.set(list[0][:description])
