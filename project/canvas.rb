@@ -206,7 +206,7 @@ $0
 
   def create_canvas(canvas)
     canvas = set_default_ext(canvas)
-    canvas = default_prefix(canvas)
+    canvas = set_default_prefix(canvas)
 
     # > handle unknown extension
     binary = ALIAS_CMD[File.extname(canvas)]
