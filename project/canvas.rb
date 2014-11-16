@@ -20,7 +20,7 @@ class Canvas
     '.exp' => '#!/usr/bin/env expect',
     '.sh'  => '#!/bin/bash'
   }
-  BOILERPLATE = <<-TXT
+    BOILERPLATE = <<-TXT
 $0
 # $1
 # Author: Andy Bettisworth
@@ -35,6 +35,7 @@ $0
     lang_dir = get_lang_dir(lang_regexp)
     canvases = get_canvases(lang_dir)
     canvases = filter_canvases(canvases, canvas_regexp)
+    canvases = canvases.sort_by { |k,v| k[:filename]}
     print_canvas_list(canvases)
     canvases
   end
@@ -45,7 +46,7 @@ $0
   end
 
   def fetch(*canvases)
-    canvases = ask_for_canvas if canvases.flatten.empty?
+    canvases = ask_for_canvas while canvases.flatten.empty?
     canvases = set_default_ext(canvases)
     canvases = set_default_prefix(canvases)
     canvases = get_canvas_location(canvases)
@@ -87,7 +88,6 @@ $0
 
   def get_canvases(lang_dir)
     canvas_list = []
-
     lang_dir.each do |lang|
       target_lang = lang
       Dir.foreach(target_lang) do |file|
@@ -97,18 +97,19 @@ $0
         canvas_list << canvas
       end
     end
-
     canvas_list
   end
 
   # > use lang arg to filter options, if provided
   def get_lang_dir(lang_regexp=false)
     lang_dir = []
+
     Dir.foreach(CANVAS) do |lang|
       next unless File.directory?(File.join(CANVAS, lang))
       next if lang == '.' or lang == '..' or lang == '.git'
       lang_dir << File.join(CANVAS, lang)
     end
+
     lang_dir
   end
 
@@ -130,7 +131,7 @@ $0
       description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
       canvas[:description] = description[:description].strip if description
     else
-      puts "ERROR: Not valid UTF-8 encoding in '#{file}'"
+      puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
     end
 
     canvas

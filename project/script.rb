@@ -6,6 +6,8 @@
 # Description: Script Management Class
 
 require 'optparse'
+require 'pathname'
+require 'open3'
 
 class Script
   DESKTOP       = "#{ENV['HOME']}/Desktop"
@@ -32,46 +34,39 @@ $0
 # Modified At: $3
 # Description: $4
   TXT
+  CATEGORIES = [
+    'admin',
+    'comm',
+    'environ',
+    'fun',
+    'health',
+    'nav',
+    'project',
+    'search',
+    'security',
+    'trade'
+  ]
 
-  attr_accessor :script_list
-
-  def list(regexp)
-    pattern = Regexp.new(regexp) if regexp
-
-    script_list = get_bash_aliases
-    script_list.select! { |s| pattern.match(s[:alias]) } if pattern
-
-    script_list.each do |script|
-      space = 21 - script[:alias].length if script[:alias].length < 21
-      space ||= 1
-      desc = get_description(script[:filename])
-      puts "#{script[:filename]} #{' ' * space} #{desc}"
-    end
+  def list(script_regexp=false)
+    categories = get_app_categories
+    scripts = get_scripts(categories)
+    scripts = filter_scripts(scripts, script_regexp)
+    scripts = scripts.sort_by { |k,v| k[:filename]}
+    print_script_list(scripts)
+    scripts
   end
 
   def add(script)
+    script = default_extension(script)
     raise 'ScriptExistsError: A script by that name already exists.' if script_exist?(script)
     create_script(script)
   end
 
-  def fetch_all(*scripts)
-    @script_list = scripts.flatten
-    ask_for_script while @script_list.empty?
-
-    @script_list.each_with_index do |s, i|
-      target = default_extension(s)
-
-      unless File.exist?("#{SCRIPT}/#{target}")
-        msg = "Warning: script not found '#{target}'!"
-        matches = get_scripts_matches(s)
-        if matches
-          msg += " Possible matches " + matches.inspect.to_s
-        end
-        next
-      end
-
-      fetch(target)
-    end
+  def fetch(*scripts)
+    scripts = ask_for_script while scripts.flatten.empty?
+    scripts = set_default_ext(scripts)
+    scripts = get_script_location(scripts)
+    move_script_to_desktop(scripts)
   end
 
   def info(script)
@@ -98,21 +93,21 @@ $0
   end
 
   def refresh_aliases
-    bash_aliases = File.open(BASH_ALIASES, 'w+')
-    bash_aliases.puts '## Create aliases for ~/.sync/.script/*'
+    new_bash_aliases = File.open(BASH_ALIASES, 'w+')
 
-    script_list = Dir["#{ENV['HOME']}/.sync/.script/*"].delete_if { |s| File.directory?(s) }
-    script_list.each do |script|
-      next if /_spec/.match(script)
-      extension = File.extname(script)
-      name = File.basename(script, extension)
-      alias_cmd = "alias #{name}="
+    categories = get_app_categories
+    scripts = get_scripts(categories)
+    scripts = scripts.sort_by { |k,v| k[:filename]}
+    scripts.each do |script|
+      extension   = File.extname(script[:filename])
+      name        = File.basename(script[:filename], extension)
+      alias_cmd   = "alias #{name}="
       exec_binary = "'#{ALIAS_CMD[extension]} "
-      script_path = "#{script}'"
-      str_alias = alias_cmd + exec_binary + script_path
-      bash_aliases.puts str_alias
+      script_path = "#{SCRIPT}/#{script[:category]}/#{script[:filename]}'"
+      str_alias   = alias_cmd + exec_binary + script_path
+      new_bash_aliases.puts str_alias
     end
-    bash_aliases.close
+    new_bash_aliases.close
 
     system "source #{BASH_ALIASES}"
   end
@@ -142,10 +137,15 @@ $0
     deleted_scripts.each { |s,a| puts "  #{s}" }
   end
 
-  private
-
   def create_script(script)
-    script = default_extension(script)
+    puts 'Which application category does this script belong to?'
+    puts CATEGORIES.join(', ')
+    category = ''
+    until CATEGORIES.include?(category) do
+      category = gets.strip
+      break if CATEGORIES.include?(category)
+      puts "Error: '#{category}' is not one of the available categories."
+    end
 
     puts 'Describe this script: '
     description = gets
@@ -153,21 +153,41 @@ $0
 
     header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(script)))
     header = header.gsub!('$1', script)
-    hedaer = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
-    hedaer = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
-    hedaer = header.gsub!('$4', description)
+    header = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
+    header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
+    header = header.gsub!('$4', description)
 
+    File.new("#{SCRIPT}/#{category}/#{script}", 'w+') << header
     File.new("#{DESKTOP}/#{script}", 'w+') << header
   end
 
-  def fetch(target)
-    system("cp #{SCRIPT}/#{target} #{DESKTOP}")
+  def set_default_ext(*scripts)
+    scripts.flatten!
+    scripts.collect! do |script|
+      if File.extname(script) == ""
+        script += '.rb'
+      end
+      script
+    end
+
+    if scripts.count <= 1
+      return scripts[0]
+    else
+      return scripts
+    end
+  end
+
+  def filter_nonexistent(*scripts)
+    targets = scripts.flatten
+    targets.select! { |s| script_exist?(s) }
+    raise "No matching scripts for #{scripts.inspect}" if targets.count < 1
+    targets
   end
 
   def ask_for_script
     puts "What script do you want? (ex: annex.rb, polygot.py, passwd.sh, install_vmware.exp)"
     scripts = gets.split(/\s.*?/).flatten
-    scripts.each { |s| @script_list << s }
+    scripts
   end
 
   def default_extension(script)
@@ -176,15 +196,60 @@ $0
   end
 
   def script_exist?(script)
-    if File.exist?("#{SCRIPT}/#{script}")
+    categories = get_app_categories
+    scripts = get_scripts(categories)
+    scripts.select! { |s| s[:filename] == script }
+
+    if scripts.count >= 1
       true
     else
-      puts "Warning: no script found '#{script}'"
       false
     end
   end
 
-  def get_script_info(script)
+  def get_script_info(filepath)
+    script = {}
+
+    dirname  = File.dirname(filepath)
+    top_path = File.expand_path('..', dirname)
+    category = dirname.gsub("#{top_path}/", '')
+
+    file_head = File.open(filepath).readlines
+    s = file_head[0..11].join('')
+
+    if s.valid_encoding?
+      script[:category] = category
+      script[:shebang] = file_head[0].strip
+      script[:filename] = File.basename(filepath)
+
+      author = /author:(?<author>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:author] = author[:author].strip if author
+
+      created_at = /created at:(?<created_at>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:description] = description[:description].strip if description
+
+      dependencies = s.scan(/require.*?\s\'(?<dependency>.*)\'/i)
+      script[:dependencies] = dependencies.flatten if dependencies
+    else
+      puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+    end
+
+    script
+  end
+
+  def filter_scripts(scripts, script_regexp=false)
+    pattern = Regexp.new(script_regexp) if script_regexp
+    scripts.select! { |s| pattern.match(s[:filename]) } if pattern
+    scripts
+  end
+
+  def print_script_info(script)
     scripts = get_sync_scripts
     scripts.select! { |s| /#{script}/i.match(s[:filename]) }
     puts "filename:     #{scripts[0][:filename]}"
@@ -193,6 +258,14 @@ $0
     puts "modified_at:  #{scripts[0][:modified_at]}"
     puts "description:  #{scripts[0][:description]}"
     puts "dependencies: #{scripts[0][:dependencies]}"
+  end
+
+  def print_script_list(scripts)
+    scripts.each do |script|
+      space = 31 - script[:filename].length if script[:filename].length < 31
+      space ||= 1
+      puts "#{script[:filename]} #{' ' * space} (#{script[:category]}) #{script[:description]}"
+    end
   end
 
   def get_description(script)
@@ -208,6 +281,82 @@ $0
   def get_shebang(ext)
     shebang = SHEBANGS[ext]
     shebang
+  end
+
+  def get_script_location(*scripts)
+    categories   = get_app_categories
+    scripts_list = get_scripts(categories)
+
+    scripts.flatten!
+    scripts.collect! do |script|
+      sl = scripts_list.select { |s| s[:filename] == script }
+
+      if sl.count >= 1
+        "#{SCRIPT}/#{sl[0][:category]}/#{script}"
+      else
+        script
+      end
+    end
+
+    if scripts.count <= 1
+      return scripts[0]
+    else
+      return scripts
+    end
+  end
+
+  def move_script_to_desktop(*scripts)
+    scripts.flatten!
+    scripts.each do |script|
+      if File.exist?(script)
+        system("cp #{script} #{DESKTOP}")
+      else
+        msg = "Warning: script not found '#{script}'!\n"
+        extname = File.extname(script)
+        matches = get_scripts_matches(File.basename(script, extname))
+        matches = matches.collect! { |s| s[:filename] }
+        if matches.count > 0
+          msg += "Possible matches include: \n\t"
+          msg += matches.join("\n\t")
+        end
+        puts msg
+      end
+    end
+  end
+
+  def get_scripts_matches(script)
+    categories   = get_app_categories
+    scripts_list = get_scripts(categories)
+    scripts_list.select! { |s| /#{script}/.match(s[:filename]) }
+    scripts_list
+  end
+
+  def get_scripts(categories)
+    script_list = []
+
+    categories.each do |category|
+      target_category = category
+      Dir.foreach("#{SCRIPT}/#{target_category}") do |file|
+        next if file == '.' or file == '..'
+        script = {}
+        script = get_script_info("#{SCRIPT}/#{target_category}/#{file}")
+        script_list << script
+      end
+    end
+
+    script_list
+  end
+
+  def get_app_categories
+    categories = []
+
+    Dir.foreach(SCRIPT) do |entry|
+      next unless File.directory?(File.join(SCRIPT, entry))
+      next if entry == '.' or entry == '..' or entry == '.git'
+      categories << entry
+    end
+
+    categories
   end
 
   def get_sync_scripts
@@ -307,7 +456,7 @@ if __FILE__ == $0
       options[:clean] = true
     end
 
-    opts.on('--refresh', 'Refresh script Bash aliases') do
+    opts.on('--refresh', 'Refresh the list of ~/bash_aliases') do
       options[:refresh] = true
     end
 
@@ -325,7 +474,7 @@ if __FILE__ == $0
   elsif options[:add]
     s.add(options[:add])
   elsif options[:fetch]
-    s.fetch_all(ARGV)
+    s.fetch(ARGV)
   elsif options[:info]
     s.info(options[:info])
   elsif options[:clean]
