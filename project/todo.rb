@@ -79,6 +79,7 @@ class TaskManager
   end
 
   def get_all_tasks
+    raise 'No tasks exist for this project' unless tasks_exist?
     list = YAML.load_file("#{@project_path}/tasks.yaml")
     list
   end
@@ -93,7 +94,7 @@ class TaskManager
   end
 
   def get_next_id
-    if File.exist?("#{PROJECT}/#{@project}/tasks.yaml")
+    if tasks_exist?
       list = get_all_tasks
       return largest_task_id(list) + 1
     else
