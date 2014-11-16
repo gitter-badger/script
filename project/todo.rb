@@ -60,10 +60,19 @@ class TaskManager
     end
   end
 
+  def focus_task(id)
+    list = get_all_tasks
+    raise "No such task #{id}" unless id.to_i <= largest_task_id(list)
+    list.select! { |t| t[:id] == id }
+    puts list.inspect
+    # wm = SetWMTitle.new
+    # wm.set(list[0][:description])
+  end
+
   def complete_task(id)
     list = get_all_tasks
     raise "No such task #{id}" unless id.to_i <= largest_task_id(list)
-    list.each {|t| t[:completed_at] = Time.now if t[:id] == id.to_i }
+    list.each { |t| t[:completed_at] = Time.now if t[:id] == id.to_i }
     File.open("#{@project_path}/tasks.yaml", 'w') { |f| YAML.dump(list, f) }
     todo_commit("Completed task from project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
   end
@@ -130,6 +139,10 @@ if __FILE__ == $0
       options[:new] = true
     end
 
+    opts.on('-f ID', '--focus ID', 'Set a specific task as current focus') do |id|
+      options[:focus] = id
+    end
+
     opts.on('-c ID', '--complete ID', 'Complete a specific task') do |id|
       options[:complete] = id
     end
@@ -147,6 +160,9 @@ if __FILE__ == $0
     exit
   elsif options[:new]
     mgmt.add_task(ARGV)
+    exit
+  elsif options[:focus]
+    mgmt.focus_task(options[:focus])
     exit
   elsif options[:complete]
     mgmt.complete_task(options[:complete])
