@@ -179,12 +179,12 @@ class Annex
     CMD
   end
 
-  def sync_github(local)
-    raise "MissingBranch: No branch named 'master'" unless branch_exist?(local, 'master')
-    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(local, 'annex')
-    raise "MissingBranch: No remote named 'github'" unless remote_exist?(local, 'github')
+  def sync_github(repo_path)
+    raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
+    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
+    raise "MissingBranch: No remote named 'github'" unless remote_exist?(repo_path, 'github')
     system <<-CMD
-      cd #{local}
+      cd #{repo_path}
       git checkout master
       git merge annex
       git pull --no-edit github master

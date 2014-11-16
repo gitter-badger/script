@@ -83,7 +83,7 @@ $0
 
   def sync
     commit_changes
-    # > sync_github
+    sync_github(CANVAS)
   end
 
   def history
@@ -328,6 +328,21 @@ $0
       git checkout annex;
       git add -A;
       git commit -m "#{commit_msg}";
+    CMD
+  end
+
+  def sync_github(repo_path)
+    raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
+    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
+    raise "MissingBranch: No remote named 'github'" unless remote_exist?(repo_path, 'github')
+    system <<-CMD
+      cd #{repo_path}
+      git checkout master
+      git merge annex
+      git pull --no-edit github master
+      git push github master
+      git checkout annex
+      git merge --no-edit master
     CMD
   end
 end
