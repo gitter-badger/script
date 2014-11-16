@@ -5,6 +5,7 @@
 
 require 'optparse'
 require 'yaml'
+require_relative '../admin/wmtitle'
 
 class TaskManager
   PROJECT = "#{ENV['HOME']}/.sync/.project"
@@ -35,6 +36,9 @@ class TaskManager
     file = File.open("#{@project_path}/tasks.yaml", 'a+') << task.to_yaml.gsub("---\n", '')
     file.close
     todo_commit("Added task to project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
+
+    wm = SetWMTitle.new
+    wm(task[0][:description])
   end
 
   def list
