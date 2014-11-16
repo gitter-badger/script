@@ -56,9 +56,9 @@ $0
     canvas = set_default_prefix(canvas)
 
     if canvas_exist?(canvas)
+      canvas = get_canvas_location(canvas)
       canvas = get_canvas_info(canvas)
-      puts canvas
-      # print_canvas_info(canvas)
+      print_canvas_info(canvas)
     else
       STDERR.puts "NoSuchCanvasError: Did not find canvas '#{canvas}'"
       exit 1
