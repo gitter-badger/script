@@ -116,8 +116,8 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: todo [options]'
 
-    opts.on('-a TASK', '--add TASK', 'Add a new task') do |task|
-      options[:add] = task
+    opts.on('-n TASK', '--new TASK', 'Add a new task') do |task|
+      options[:new] = task
     end
 
     opts.on('-l', '--list', 'List uncomplete tasks') do
@@ -136,7 +136,7 @@ if __FILE__ == $0
 
   mgmt = TaskManager.new
 
-  if options[:add]
+  if options[:new]
     mgmt.add_task(ARGV)
     exit
   elsif options[:list]
