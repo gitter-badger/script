@@ -84,8 +84,7 @@ $0
     if scripts_out.is_a? Array
       scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
     else
-      puts scripts_out
-      # system("mv #{DESKTOP}/#{File.basename(s)} #{scripts_out}")
+      system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
     end
     commit_changes
   end
