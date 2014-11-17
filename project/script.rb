@@ -94,10 +94,8 @@ $0
 
     if scripts_out.is_a? Array
       scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
-      # update_modified_at(scripts_out)
     else
       system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
-      # update_modified_at(scripts_out)
     end
 
     commit_changes
@@ -439,19 +437,6 @@ $0
     end
 
     script_list
-  end
-
-  def update_modified_at(*scripts)
-    scripts.flatten!
-    scripts.each do |script|
-      now = Time.now.strftime('%Y %m%d %H%M%S')
-      # File.write(f = script, File.read(f).gsub(/2014 1116 160336/i, now))
-      File.open(script, 'r+') do |file|
-        file.each_with_index do |line, index|
-          puts "[#{index}] #{line}"
-        end
-      end
-    end
   end
 
   def commit_changes
