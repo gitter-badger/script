@@ -92,7 +92,7 @@ $0
     scripts_out = get_open_scripts(scripts)
     scripts_out = get_script_location(scripts_out)
 
-    if scripts_out.size > 0
+    if scripts_out
       if scripts_out.is_a? Array
         scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
       else
