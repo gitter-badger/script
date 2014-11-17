@@ -92,13 +92,15 @@ $0
     scripts_out = get_open_scripts(scripts)
     scripts_out = get_script_location(scripts_out)
 
-    if scripts_out.is_a? Array and scripts_out.size > 0
-      scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
-    else
-      system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
-    end
+    if scripts_out.size > 0
+      if scripts_out.is_a? Array
+        scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+      else
+        system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
+      end
 
-    commit_changes
+      commit_changes
+    end
   end
 
   def refresh_aliases
