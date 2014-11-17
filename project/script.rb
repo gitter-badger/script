@@ -94,10 +94,10 @@ $0
 
     if scripts_out.is_a? Array
       scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
-      update_modified_at(scripts_out)
+      # update_modified_at(scripts_out)
     else
       system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
-      update_modified_at(scripts_out)
+      # update_modified_at(scripts_out)
     end
 
     commit_changes
