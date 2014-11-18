@@ -85,9 +85,8 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     spawn sudo fdisk /dev/$mount_point
     sleep .1
     expect "?assword*:" { interact -o "\r" return ; exp_continue }
-    send_user "Continue..."
-    # expect_user -re "(.*)\n"
-    # expect "Command*:" { send $part_cmd }
+    sleep .1
+    expect "?ommand*:" { send $part_cmd }
   } else {
     send_user "Creating partitions on /dev/$mount_point...\n"
     set part_cmd "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\nw"
@@ -149,6 +148,7 @@ if { [string length $device] != 0 && \
 
   unmount_device $mount_point
   partition_device $mount_point $primary_sectors $secondary_sectors
+  send_user "Completed partition."
   # format_partition $device
   # label_partition ntfslabel $primary_part Village
   # label_partition e2label $secondary_part casper-rw
