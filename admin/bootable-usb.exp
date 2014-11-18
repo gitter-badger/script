@@ -78,32 +78,24 @@ proc unmount_device { mount_point } {
 }
 
 proc partition_device { mount_point primary_sectors secondary_sectors } {
-  send_user "Creating blank partitions on /dev/$mount_point...\n"
-
   if { $secondary_sectors == 0 } {
+    send_user "Creating single partition on /dev/$mount_point...\n"
     set part_cmd "o\nn\np\n1\n\n$primary_sectors\nw"
 
     spawn sudo fdisk /dev/$mount_point
-    expect -re "password*"
-    expect_user -re "(.*)\n"
-    expect "Command*:" { send $part_cmd }
-
-    #if {[catch {exec echo $part_cmd | $device }]} {
-    #  puts stderr "Failed to create partition"
-    #  exit 5
-    #}
+    sleep .1
+    expect "?assword*:" { interact -o "\r" return ; exp_continue }
+    send_user "Continue..."
+    # expect_user -re "(.*)\n"
+    # expect "Command*:" { send $part_cmd }
   } else {
+    send_user "Creating partitions on /dev/$mount_point...\n"
     set part_cmd "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\nw"
 
     spawn sudo fdisk /dev/$mount_point
     expect -re "password*"
     expect_user -re "(.*)\n"
-    expect "Command*:" { send $part_cmd }
-
-    #if {[catch {exec echo $part_cmd | $device }]} {
-    #  puts stderr "Failed to create partition"
-    #  exit 5
-    #}
+    # expect "Command*:" { send $part_cmd }
   }
 }
 
