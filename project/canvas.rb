@@ -72,13 +72,15 @@ $0
     canvases_out = get_open_canvases(canvases)
     canvases_out = get_canvas_location(canvases_out)
 
-    if canvases_out.is_a? Array
-      canvases_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
-    else
-      system("mv #{DESKTOP}/#{File.basename(canvases_out)} #{canvases_out}")
-    end
+    if canvases_out
+      if canvases_out.is_a? Array
+        canvases_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+      else
+        system("mv #{DESKTOP}/#{File.basename(canvases_out)} #{canvases_out}")
+      end
 
-    commit_changes
+      commit_changes
+    end
   end
 
   def sync
