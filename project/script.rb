@@ -169,6 +169,7 @@ $0
     description = gets
     description ||= '...'
 
+    script = set_default_ext(script)
     header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(script)))
     header = header.gsub!('$1', script)
     header = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
