@@ -45,11 +45,11 @@ class Enforce80Char
         # > check if first line had a preceding hashtag
         #   > if yes, include #
         #   > if no, do not include #
+        puts "line: #{line[start_char..end_char]}"
         full_line   += "# #{line[start_char..end_char]}\n"
         token_char   = end_char
       end
       full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
-      puts full_line
       return full_line
     else
       return line
