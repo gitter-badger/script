@@ -3,21 +3,26 @@
 # Author: Andy Bettisworth
 # Description: Create a bootable USB with your preferred *nix flavour ISO
 
+exp_internal 1
 set timeout -1
-set usage "USAGE: bootable-usb.exp \[options\] DEVICE ISO"
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 
+proc usage {} {
+  send_error "USAGE: bootable-usb.exp \[options\] DEVICE ISO\n"
+  exit 1
+}
+
 proc exit_if_not_file { target } {
   if { ![file exists $target] } {
-    puts stderr "No such file found for $target"
+    send_error "No such file found for $target"
     exit 2
   }
 }
 
 proc exit_if_not_device { device } {
   if { [file type $device] != "blockSpecial" } {
-    puts stderr "Missing block device argument"
+    send_error "Missing block device argument"
     exit 3
   }
 }
@@ -33,7 +38,7 @@ proc exit_if_not_enough_space { device iso } {
   set remainder [expr "$device_size - $iso_size"]
 
   if {$remainder <= 0} {
-    puts stderr "Not enough space on device $device"
+    send_error "Not enough space on device $device"
     exit 4
   }
 }
@@ -80,21 +85,41 @@ proc unmount_device { mount_point } {
 proc partition_device { mount_point primary_sectors secondary_sectors } {
   if { $secondary_sectors == 0 } {
     send_user "Creating single partition on /dev/$mount_point...\n"
-    set part_cmd "o\nn\np\n1\n\n$primary_sectors\nw"
 
-    spawn sudo fdisk /dev/$mount_point
-    sleep .1
-    expect "?assword*:" { interact -o "\r" return ; exp_continue }
-    sleep .1
-    expect "?ommand*:" { send $part_cmd }
+    ## "o\nn\np\n1\n\n\na\n1\nw\n"
+    expect "?ommand*: " { send "o\r" }
+    expect "?ommand*: " { send "n\r" }
+    expect "?elect*: " { send "p\r" }
+    expect "?artition number*: " { send "1\r" }
+    expect "?irst sector*: " { send "\r" }
+    expect "?ast sector*: " { send "\r" }
+    expect "?ommand*: " { send "a\r" }
+    expect "?artition number*: " { send "1\r" }
+    expect "?ommand*: " { send "w\r" }
+    exec sync
+
+    send_user "Successful partitioning of $mount_point\n"
   } else {
     send_user "Creating partitions on /dev/$mount_point...\n"
-    set part_cmd "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\nw"
 
-    spawn sudo fdisk /dev/$mount_point
-    expect -re "password*"
-    expect_user -re "(.*)\n"
-    # expect "Command*:" { send $part_cmd }
+    ## "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\na\n1\nw\n"
+    expect "?ommand*: " { send "o\r" }
+    expect "?ommand*: " { send "n\r" }
+    expect "?elect*: " { send "p\r" }
+    expect "?artition number*: " { send "1\r" }
+    expect "?irst sector*: " { send "\r" }
+    expect "?ast sector*: " { send "$primary_sectors\r" }
+    expect "?ommand*: " { send "n\r" }
+    expect "?elect*: " { send "p\r" }
+    expect "?artition number*: " { send "2\r" }
+    expect "?irst sector*: " { send "\r" }
+    expect "?ast sector*: " { send "\r" }
+    expect "?ommand*: " { send "a\r" }
+    expect "?artition number*: " { send "1\r" }
+    expect "?ommand*: " { send "w\r" }
+    exec sync
+
+    send_user "Successful partitioning of $mount_point\n"
   }
 }
 
@@ -148,7 +173,7 @@ if { [string length $device] != 0 && \
 
   unmount_device $mount_point
   partition_device $mount_point $primary_sectors $secondary_sectors
-  send_user "Completed partition."
+  send_user "Completed partition.\n"
   # format_partition $device
   # label_partition ntfslabel $primary_part Village
   # label_partition e2label $secondary_part casper-rw
@@ -158,6 +183,5 @@ if { [string length $device] != 0 && \
   # setup_grub_bootloader
   # exec sync
 } else {
-  puts stderr $usage
-  exit 2
+  usage
 }
