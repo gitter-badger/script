@@ -5,9 +5,7 @@
 
 require 'optparse'
 require 'yaml'
-require_relative 'get_naics'
-
-## > Add naics_code
+require_relative '../search/get_naics'
 
 class FeatureManager
   PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
@@ -119,28 +117,32 @@ class FeatureManager
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: feature [options]'
 
-  opts.on('-a', '--add', 'Add a feature') do
-    options[:add] = true
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: feature [options]'
+
+    opts.on('-n', '--new', 'Create a new feature') do
+      options[:new] = true
+    end
+
+    opts.on('-l', '--list', 'List project features') do
+      options[:list] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-l', '--list', 'List project features') do
-    options[:list] = true
+  mgmt = FeatureManager.new
+
+  if options[:new]
+    mgmt.add
+    exit
+  elsif options[:list]
+    mgmt.list
+    exit
+  else
+    STDERR.puts option_parser
+    exit 1
   end
 end
-option_parser.parse!
-
-mgmt = FeatureManager.new
-
-if options[:add]
-  mgmt.add
-  exit
-elsif options[:list]
-  mgmt.list
-  exit
-end
-
-puts option_parser
