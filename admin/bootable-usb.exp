@@ -3,7 +3,6 @@
 # Author: Andy Bettisworth
 # Description: Create a bootable USB with your preferred *nix flavour ISO
 
-exp_internal 1
 set timeout -1
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
@@ -83,6 +82,11 @@ proc unmount_device { mount_point } {
 }
 
 proc partition_device { mount_point primary_sectors secondary_sectors } {
+  spawn sudo fdisk /dev/$mount_point
+  expect "?assword*: " {
+    expect_user "*\n" { send $expect_out(0,string) }
+  }
+
   if { $secondary_sectors == 0 } {
     send_user "Creating single partition on /dev/$mount_point...\n"
 
@@ -173,7 +177,6 @@ if { [string length $device] != 0 && \
 
   unmount_device $mount_point
   partition_device $mount_point $primary_sectors $secondary_sectors
-  send_user "Completed partition.\n"
   # format_partition $device
   # label_partition ntfslabel $primary_part Village
   # label_partition e2label $secondary_part casper-rw
