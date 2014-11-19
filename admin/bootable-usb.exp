@@ -156,19 +156,22 @@ proc extract_iso { iso } {
   exec sudo mount -o loop $iso /mnt/tmpiso
 }
 
-proc remount_device { mount_point primary_sectors secondary_sectors } {
+proc mount_device { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
-    [catch {exec mount ${mount_point}1 } fid]
+    exec sudo mkdir -p /media/raist/Village
+    exec sudo mount /dev/${mount_point}1 /media/raist/Village
   } else {
-    if{[catch {exec mount ${mount_point}1 } fid]
-    [catch {exec mount ${mount_point}2 } fid]
+    exec sudo mkdir -p /media/raist/Village
+    exec sudo mkdir -p /media/raist/casper-rw
+    exec sudo mount /dev/${mount_point}1 /media/raist/Village
+    exec sudo mount /dev/${mount_point}2 /media/raist/casper-rw
   }
 }
 
 proc copy_iso_to_device { mount_point iso } {
   send_user "Extracting ISO files to device...\n"
 
-  exec rsync -apP /mnt/tmpiso /media/raist/Village
+  exec rsync -apP "/mnt/tmpiso/*" /media/raist/Village
   exec sudo unlink /media/raist/Village/ubuntu
   exec sudo rm -r /mnt/tmpiso
 }
@@ -180,25 +183,25 @@ proc setup_grub_bootloader {} {
 }
 
 if { [string length $device] != 0 && \
-     [string length $iso] != 0} {
+     [string length $iso] != 0 } {
   exit_if_not_file $device
   exit_if_not_device $device
   exit_if_not_file $iso
   exit_if_not_enough_space $device $iso
 
   set mount_point [get_mount_point $device]
-  #set sector_count [get_sector_count $mount_point]
-  #set pct [get_persistence_percentage]
-  #set secondary_sectors [get_secondary_sectors $sector_count $pct]
-  #set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
+  set sector_count [get_sector_count $mount_point]
+  set pct [get_persistence_percentage]
+  set secondary_sectors [get_secondary_sectors $sector_count $pct]
+  set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
 
-  #unmount_device $mount_point
-  #partition_device $mount_point $primary_sectors $secondary_sectors
-  #format_partition $mount_point $primary_sectors $secondary_sectors
+  unmount_device $mount_point
+  # partition_device $mount_point $primary_sectors $secondary_sectors
+  # format_partition $mount_point $primary_sectors $secondary_sectors
 
-  extract_iso $iso
-  remount_device $mount_point $primary_sectors $secondary_sectors
-  copy_iso_to_device $mount_point $iso
+  # extract_iso $iso
+  mount_device $mount_point $secondary_sectors
+  # copy_iso_to_device $mount_point $iso
   # setup_grub_bootloader
   exec sync
 } else {
