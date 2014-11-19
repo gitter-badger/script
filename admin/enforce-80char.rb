@@ -49,6 +49,7 @@ class Enforce80Char
         token_char   = end_char
       end
       full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
+      puts full_line
       return full_line
     else
       return line
