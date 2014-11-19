@@ -26,7 +26,7 @@ class Enforce80Char
       end
 
       tmp.close
-      # FileUtils.mv(tmp.path, file)
+      FileUtils.mv(tmp.path, file)
     else
       puts "File does not exist at '#{file}'"
     end
@@ -50,7 +50,6 @@ class Enforce80Char
         token_char   = end_char
       end
       full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
-      puts full_line
       return full_line
     else
       return line
