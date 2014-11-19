@@ -42,15 +42,11 @@ class Enforce80Char
         start_char   = i * 80
         start_char  += 1 if start_char != 0
         end_char     = (i+1) * 80
-        # > check if first line had a preceding hashtag
-        #   > if yes, include #
-        #   > if no, do not include #
         if /^#/.match(line[start_char..end_char])
-          puts "True #{line[start_char..end_char]}"
+          full_line   += "#{line[start_char..end_char]}\n"
         else
-          puts "False #{line[start_char..end_char]}"
+          full_line   += "# #{line[start_char..end_char]}\n"
         end
-        full_line   += "# #{line[start_char..end_char]}\n"
         token_char   = end_char
       end
       full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
