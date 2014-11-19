@@ -31,7 +31,7 @@ $0
 # $1
 # Author: Andy Bettisworth
 # Created At: $2
-2014 1116 160336: $3
+# Modified At: $3
 # Description: $4
   TXT
   CATEGORIES = [
