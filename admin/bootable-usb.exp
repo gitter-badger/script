@@ -91,6 +91,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     send_user "Creating single partition on /dev/$mount_point...\n"
 
     ## "o\nn\np\n1\n\n\na\n1\nw\n"
+    log_user 0
     expect "?ommand*: " { send "o\r" }
     expect "?ommand*: " { send "n\r" }
     expect "?elect*: " { send "p\r" }
@@ -101,12 +102,14 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     expect "?artition number*: " { send "1\r" }
     expect "?ommand*: " { send "w\r" }
     exec sync
+    log_user 1
 
     send_user "Successful partitioning of $mount_point\n"
   } else {
     send_user "Creating partitions on /dev/$mount_point...\n"
 
     ## "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\na\n1\nw\n"
+    log_user 0
     expect "?ommand*: " { send "o\r" }
     expect "?ommand*: " { send "n\r" }
     expect "?elect*: " { send "p\r" }
@@ -122,6 +125,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     expect "?artition number*: " { send "1\r" }
     expect "?ommand*: " { send "w\r" }
     exec sync
+    log_user 1
 
     send_user "Successful partitioning of $mount_point\n"
   }
