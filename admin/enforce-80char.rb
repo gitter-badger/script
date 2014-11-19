@@ -46,9 +46,9 @@ class Enforce80Char
         #   > if yes, include #
         #   > if no, do not include #
         if /^#/.match(line[start_char..end_char])
-          puts "True"
+          puts "True #{line[start_char..end_char]}"
         else
-          puts "False"
+          puts "False #{line[start_char..end_char]}"
         end
         full_line   += "# #{line[start_char..end_char]}\n"
         token_char   = end_char
