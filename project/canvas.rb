@@ -210,8 +210,8 @@ $0
     canvas = set_default_ext(canvas)
     canvas = set_default_prefix(canvas)
 
-    binary = ALIAS_CMD[File.extname(canvas)]
-    unless binary
+    language = ALIAS_CMD[File.extname(canvas)]
+    unless language
       STDERR.puts "Unknown extension '#{File.extname(canvas)}'"
       STDERR.puts "Possible extensions include: #{ALIAS_CMD.keys.join(' ')}"
       exit 1
