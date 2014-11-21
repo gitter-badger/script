@@ -6,6 +6,7 @@
 require 'optparse'
 require 'yaml'
 require_relative '../search/get_naics'
+# > NOT FOUND /home/raist/.sync/.template/1_features/naics_codes.yaml
 
 class FeatureManager
   PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
@@ -15,8 +16,8 @@ class FeatureManager
     3 => 'environment',
     4 => 'health',
     5 => 'search',
-    6 => 'navigation',
-    7 => 'security',
+    6 => 'security',
+    7 => 'navigation',
     8 => 'trade',
     9 => 'project'
   }
@@ -107,9 +108,6 @@ class FeatureManager
     classification = 0
     classification = gets.to_i until classification != 0
     classification
-  end
-
-  def get_naics_code
   end
 
   def todo_commit(msg)
