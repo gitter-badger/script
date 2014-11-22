@@ -141,12 +141,15 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
   }
 }
 
-# > Add hide flag
 proc format_partition { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
     send_user "Formatting /dev/${mount_point}1 NTFS...\n"
 
-    exec sudo mkntfs -L Village /dev/${mount_point}1
+    log_user 1
+    if {[catch {exec sudo mkntfs -L Village /dev/${mount_point}1} fid]} {
+    }
+    log_user 0
+
     exec sync
   } else {
     send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
