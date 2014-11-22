@@ -217,14 +217,13 @@ if { [string length $device] != 0 && \
   set secondary_sectors [get_secondary_sectors $sector_count $pct]
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
 
-  unmount_device $mount_point
-  partition_device $mount_point $primary_sectors $secondary_sectors
-  format_partition $mount_point $secondary_sectors
+  # unmount_device $mount_point
+  # partition_device $mount_point $primary_sectors $secondary_sectors
+  # format_partition $mount_point $secondary_sectors
 
-  puts "SUCCESS!"
   mount_iso $iso
   mount_device $mount_point $secondary_sectors
-  # copy_iso_to_device $mount_point $iso
+  copy_iso_to_device $mount_point $iso
   # setup_grub_bootloader
   exec sync
 } else {
