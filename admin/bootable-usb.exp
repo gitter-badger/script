@@ -140,9 +140,14 @@ proc format_partition { mount_point secondary_sectors } {
   } else {
     send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
 
-    # exec sudo mkntfs -L Village /dev/${mount_point}1
-    # exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2
-    # exec sync
+    log_user 1
+    if {[catch {exec sudo mkntfs -L Village /dev/${mount_point}1} fid]} {
+    }
+    if {[catch {exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2} fid]} {
+    }
+    log_user 0
+
+    exec sync
   }
 }
 
@@ -218,7 +223,7 @@ if { [string length $device] != 0 && \
 
   puts "SUCCESS!"
   mount_iso $iso
-  # mount_device $mount_point $secondary_sectors
+  mount_device $mount_point $secondary_sectors
   # copy_iso_to_device $mount_point $iso
   # setup_grub_bootloader
   exec sync
