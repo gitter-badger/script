@@ -213,7 +213,7 @@ proc copy_iso_to_device { user mount_point iso } {
 }
 
 proc setup_grub_bootloader { user mount_point } {
-  exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ $mount_point
+  exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point
 }
 
 if { [string length $device] != 0 && \
@@ -238,6 +238,7 @@ if { [string length $device] != 0 && \
   copy_iso_to_device $user $mount_point $iso
   setup_grub_bootloader $user $mount_point
   unmount_device $user $mount_point
+
   exec sync
 } else {
   usage
