@@ -7,7 +7,6 @@ set timeout -1
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 set user $env(USER)
-set home $env(HOME)
 
 proc usage {} {
   send_error "Usage: bootable-usb.exp \[options\] DEVICE ISO\n"
@@ -28,8 +27,8 @@ proc exit_if_not_device { device } {
   }
 }
 
-proc exit_if_not_enough_space { device iso } {
-  set partition_table [exec sudo fdisk -l $device]
+proc exit_if_not_enough_space { mount_point iso } {
+  set partition_table [exec sudo fdisk -l ${mount_point}1]
   regexp {total\s(\d*)} $partition_table -> sector_count
   regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
@@ -39,7 +38,7 @@ proc exit_if_not_enough_space { device iso } {
   set remainder [expr "$device_size - $iso_size"]
 
   if {$remainder <= 0} {
-    send_error "Not enough space on device $device"
+    send_error "Not enough space on ${mount_point}1 for $iso \nby $remainder"
     exit 4
   }
 }
@@ -71,7 +70,7 @@ proc get_primary_sectors { sector_count secondary_sectors } {
   return $sectors
 }
 
-proc unmount_device { mount_point } {
+proc unmount_device { user mount_point } {
   set device_tree [exec lsblk]
   set match_tuple [regexp -all -inline "$mount_point\(\\d\)" $device_tree]
   set match_count [expr {[llength $match_tuple] / 2}]
@@ -80,6 +79,15 @@ proc unmount_device { mount_point } {
     if {[catch {exec sudo umount /dev/$group0} fid]} {
       puts "Unmounted partition at /dev/$group0"
     }
+  }
+
+  if {[catch {exec sudo umount /media/$user/Village} fid]} {
+  }
+  if {[catch {exec sudo rm -r /media/$user/Village} fid]} {
+  }
+  if {[catch {exec sudo umount /media/$user/casper-rw} fid]} {
+  }
+  if {[catch {exec sudo rm -r /media/$user/casper-rw} fid]} {
   }
 }
 
@@ -133,6 +141,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
   }
 }
 
+# > Add hide flag
 proc format_partition { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
     send_user "Formatting /dev/${mount_point}1 NTFS...\n"
@@ -200,9 +209,7 @@ proc copy_iso_to_device { user mount_point iso } {
   exec sudo rm -r /mnt/tmpiso
 }
 
-proc setup_grub_bootloader { home user mount_point } {
-  exec rm /media/$user/Village/boot/grub/loopback.cfg
-  exec cp $home/.sync/.preseed/grub.cfg /media/$user/Village/boot/grub/grub.cfg
+proc setup_grub_bootloader { user mount_point } {
   exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ $mount_point
 }
 
@@ -211,23 +218,25 @@ if { [string length $device] != 0 && \
   exit_if_not_file $device
   exit_if_not_device $device
   exit_if_not_file $iso
-  exit_if_not_enough_space $device $iso
 
   set mount_point [get_mount_point $device]
   set sector_count [get_sector_count $mount_point]
   set pct [get_persistence_percentage]
   set secondary_sectors [get_secondary_sectors $sector_count $pct]
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
+  exit_if_not_enough_space $mount_point $iso
 
-  unmount_device $mount_point
-  partition_device $mount_point $primary_sectors $secondary_sectors
-  format_partition $mount_point $secondary_sectors
+  puts "SUCCESS"
+  # unmount_device $user $mount_point
+  # partition_device $mount_point $primary_sectors $secondary_sectors
+  # format_partition $mount_point $secondary_sectors
 
-  mount_iso /mnt/tmpiso $iso
-  mount_device $user $mount_point $secondary_sectors
-  copy_iso_to_device $user $mount_point $iso
-  setup_grub_bootloader $home $user $mount_point
-  exec sync
+  # mount_iso /mnt/tmpiso $iso
+  # mount_device $user $mount_point $secondary_sectors
+  # copy_iso_to_device $user $mount_point $iso
+  # setup_grub_bootloader $user $mount_point
+  # unmount_device $user $mount_point
+  # exec sync
 } else {
   usage
 }
