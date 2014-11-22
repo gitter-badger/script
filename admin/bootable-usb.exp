@@ -7,6 +7,7 @@ set timeout -1
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 set user $env(USER)
+set home $env(HOME)
 
 proc usage {} {
   send_error "Usage: bootable-usb.exp \[options\] DEVICE ISO\n"
@@ -199,9 +200,9 @@ proc copy_iso_to_device { user mount_point iso } {
   exec sudo rm -r /mnt/tmpiso
 }
 
-proc setup_grub_bootloader { user mount_point } {
+proc setup_grub_bootloader { home user mount_point } {
   exec rm /media/$user/Village/boot/grub/loopback.cfg
-  exec cp ~/.sync/.preseed/grub.cfg /media/$user/Village/boot/grub/grub.cfg
+  exec cp $home/.sync/.preseed/grub.cfg /media/$user/Village/boot/grub/grub.cfg
   exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ $mount_point
 }
 
@@ -225,7 +226,7 @@ if { [string length $device] != 0 && \
   mount_iso /mnt/tmpiso $iso
   mount_device $user $mount_point $secondary_sectors
   # copy_iso_to_device $user $mount_point $iso
-  setup_grub_bootloader $user $mount_point
+  setup_grub_bootloader $home $user $mount_point
   exec sync
 } else {
   usage
