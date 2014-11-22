@@ -152,19 +152,17 @@ proc format_partition { mount_point secondary_sectors } {
   }
 }
 
-proc mount_iso { iso } {
+proc mount_iso { iso_mount iso } {
   send_user "Mounting ISO $iso...\n"
 
-  if {[catch {exec sudo umount /mnt/tmpiso} fid]} {
+  if {[catch {exec sudo umount $iso_mount} fid]} {
   }
-  if {[catch {exec sudo rm -r /mnt/tmpiso} fid]} {
+  if {[catch {exec sudo rm -r $iso_mount} fid]} {
   }
 
-  send_user "In proc: "
-  send_user $user
-
-  # exec sudo mkdir -p /mnt/tmpiso
-  # exec sudo mount -o ro,loop $iso /mnt/tmpiso
+  puts $iso_mount
+  # exec sudo mkdir -p $iso_mount
+  # exec sudo mount -o ro,loop $iso $iso_mount
 }
 
 proc mount_device { mount_point secondary_sectors } {
@@ -225,7 +223,7 @@ if { [string length $device] != 0 && \
   # partition_device $mount_point $primary_sectors $secondary_sectors
   # format_partition $mount_point $secondary_sectors
 
-  mount_iso $iso
+  mount_iso /mnt/tmpiso $iso
   # mount_device $mount_point $secondary_sectors
   # copy_iso_to_device $mount_point $iso
   # setup_grub_bootloader
