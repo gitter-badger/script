@@ -226,17 +226,16 @@ if { [string length $device] != 0 && \
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
   exit_if_not_enough_space $mount_point $primary_sectors $iso
 
-  puts "SUCCESS"
-  # unmount_device $user $mount_point
-  # partition_device $mount_point $primary_sectors $secondary_sectors
-  # format_partition $mount_point $secondary_sectors
+  unmount_device $user $mount_point
+  partition_device $mount_point $primary_sectors $secondary_sectors
+  format_partition $mount_point $secondary_sectors
 
-  # mount_iso /mnt/tmpiso $iso
-  # mount_device $user $mount_point $secondary_sectors
-  # copy_iso_to_device $user $mount_point $iso
-  # setup_grub_bootloader $user $mount_point
-  # unmount_device $user $mount_point
-  # exec sync
+  mount_iso /mnt/tmpiso $iso
+  mount_device $user $mount_point $secondary_sectors
+  copy_iso_to_device $user $mount_point $iso
+  setup_grub_bootloader $user $mount_point
+  unmount_device $user $mount_point
+  exec sync
 } else {
   usage
 }
