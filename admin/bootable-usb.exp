@@ -28,23 +28,18 @@ proc exit_if_not_device { device } {
 }
 
 proc exit_if_not_enough_space { mount_point primary_sectors iso } {
-  set partition_table [exec sudo fdisk -l $mount_point]
-  # regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
+  set partition_table [exec sudo fdisk -l /dev/$mount_point]
+  regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
-  send_user $mount_point
-  send_user $primary_sectors
-  send_user $iso
-  send_user $partition_table
+  set device_size [expr "$primary_sectors * $sector_size"]
+  set iso_size [file size $iso]
 
-  # set device_size [expr "$primary_sectors * $sector_size"]
-  # set iso_size [file size $iso]
+  set remainder [expr "$device_size - $iso_size"]
 
-  # set remainder [expr "$device_size - $iso_size"]
-
-  # if {$remainder <= 0} {
-  #   send_error "Not enough space on $mount_point for $iso \nby $remainder"
-  #   exit 4
-  # }
+  if {$remainder <= 0} {
+    send_error "Not enough space on $mount_point for $iso \nby $remainder"
+    exit 4
+  }
 }
 
 proc get_mount_point { device } {
