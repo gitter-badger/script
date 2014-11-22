@@ -28,7 +28,7 @@ proc exit_if_not_device { device } {
 }
 
 proc exit_if_not_enough_space { mount_point sector_count iso } {
-  set partition_table [exec sudo fdisk -l ${mount_point}1]
+  set partition_table [exec sudo fdisk -l $mount_point]
   regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
   set device_size [expr "$sector_count * $sector_size"]
