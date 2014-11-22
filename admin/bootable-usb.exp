@@ -140,8 +140,6 @@ proc format_partition { mount_point secondary_sectors } {
   } else {
     send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
 
-    puts ${mount_point}1
-    puts ${mount_point}2
     # exec sudo mkntfs -L Village /dev/${mount_point}1
     # exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2
     # exec sync
@@ -155,6 +153,7 @@ proc mount_iso { iso } {
   }
   if {[catch {exec sudo rm -r /mnt/tmpiso} fid]} {
   }
+
   exec sudo mkdir -p /mnt/tmpiso
   exec sudo mount -o ro,loop $iso /mnt/tmpiso
 }
