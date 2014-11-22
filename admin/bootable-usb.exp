@@ -3,13 +3,12 @@
 # Author: Andy Bettisworth
 # Description: Create a bootable USB with your preferred *nix flavour ISO
 
-exp_internal 1
 set timeout -1
 set device [lindex $argv 0]
 set iso [lindex $argv 1]
 
 proc usage {} {
-  send_error "USAGE: bootable-usb.exp \[options\] DEVICE ISO\n"
+  send_error "Usage: bootable-usb.exp \[options\] DEVICE ISO\n"
   exit 1
 }
 
@@ -132,7 +131,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
   }
 }
 
-proc format_partition { mount_point primary_sectors secondary_sectors } {
+proc format_partition { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
     send_user "Formatting /dev/${mount_point}1 NTFS...\n"
 
@@ -198,12 +197,13 @@ if { [string length $device] != 0 && \
 
   unmount_device $mount_point
   partition_device $mount_point $primary_sectors $secondary_sectors
-  format_partition $mount_point $primary_sectors $secondary_sectors
+  format_partition $mount_point $secondary_sectors
 
-  extract_iso $iso
-  mount_device $mount_point $secondary_sectors
-  copy_iso_to_device $mount_point $iso
-  setup_grub_bootloader
+  puts "SUCCESS!"
+  # extract_iso $iso
+  # mount_device $mount_point $secondary_sectors
+  # copy_iso_to_device $mount_point $iso
+  # setup_grub_bootloader
   exec sync
 } else {
   usage
