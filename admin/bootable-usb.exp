@@ -154,7 +154,7 @@ proc mount_iso { iso } {
   if {[catch {exec sudo rm -r /mnt/tmpiso} fid]} {
   }
   exec sudo mkdir -p /mnt/tmpiso
-  exec sudo mount -o ro loop $iso /mnt/tmpiso
+  exec sudo mount -o ro,loop $iso /mnt/tmpiso
 }
 
 proc mount_device { mount_point secondary_sectors } {
