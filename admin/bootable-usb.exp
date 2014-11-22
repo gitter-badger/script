@@ -27,9 +27,8 @@ proc exit_if_not_device { device } {
   }
 }
 
-proc exit_if_not_enough_space { mount_point iso } {
+proc exit_if_not_enough_space { mount_point sector_count iso } {
   set partition_table [exec sudo fdisk -l ${mount_point}1]
-  regexp {total\s(\d*)} $partition_table -> sector_count
   regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
   set device_size [expr "$sector_count * $sector_size"]
@@ -224,7 +223,7 @@ if { [string length $device] != 0 && \
   set pct [get_persistence_percentage]
   set secondary_sectors [get_secondary_sectors $sector_count $pct]
   set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
-  exit_if_not_enough_space $mount_point $iso
+  exit_if_not_enough_space $mount_point $primary_sectors $iso
 
   puts "SUCCESS"
   # unmount_device $user $mount_point
