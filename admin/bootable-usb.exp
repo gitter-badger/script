@@ -149,12 +149,12 @@ proc format_partition { mount_point secondary_sectors } {
 }
 
 proc mount_iso { iso } {
-  send_user "Mounting ISO...\n"
+  send_user "Mounting ISO $iso...\n"
 
   if {[catch {exec sudo rm -r /mnt/tmpiso} fid]} {
   }
   exec sudo mkdir -p /mnt/tmpiso
-  exec sudo mount -o loop $iso /mnt/tmpiso
+  exec sudo mount -o ro loop $iso /mnt/tmpiso
 }
 
 proc mount_device { mount_point secondary_sectors } {
