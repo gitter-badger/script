@@ -27,13 +27,16 @@ proc exit_if_not_device { device } {
   }
 }
 
-proc exit_if_not_enough_space { mount_point sector_count iso } {
+proc exit_if_not_enough_space { mount_point primary_sectors iso } {
   set partition_table [exec sudo fdisk -l $mount_point]
   # regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
+  send_user $mount_point
+  send_user $primary_sectors
+  send_user $iso
   send_user $partition_table
 
-  # set device_size [expr "$sector_count * $sector_size"]
+  # set device_size [expr "$primary_sectors * $sector_size"]
   # set iso_size [file size $iso]
 
   # set remainder [expr "$device_size - $iso_size"]
