@@ -54,7 +54,7 @@ proc get_sector_count { mount_point } {
 }
 
 proc get_persistence_percentage {} {
-  puts "What percentage should go towards persistence? \[0..40\]"
+  puts "What percentage should go towards persistence? \[10..40\]"
   expect_user -re "(.*)\n"
   return $expect_out(1,string)
 }
@@ -140,13 +140,15 @@ proc format_partition { mount_point secondary_sectors } {
   } else {
     send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
 
-    exec sudo mkntfs -L Village /dev/${mount_point}1
-    exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2
-    exec sync
+    puts ${mount_point}1
+    puts ${mount_point}2
+    # exec sudo mkntfs -L Village /dev/${mount_point}1
+    # exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2
+    # exec sync
   }
 }
 
-proc extract_iso { iso } {
+proc mount_iso { iso } {
   send_user "Mounting ISO...\n"
 
   if {[catch {exec sudo rm -r /mnt/tmpiso} fid]} {
@@ -157,9 +159,23 @@ proc extract_iso { iso } {
 
 proc mount_device { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
+    if {[catch {exec sudo umount /media/raist/Village} fid]} {
+    }
+    if {[catch {exec sudo rm -r /media/raist/Village} fid]} {
+    }
+
     exec sudo mkdir -p /media/raist/Village
     exec sudo mount /dev/${mount_point}1 /media/raist/Village
   } else {
+    if {[catch {exec sudo umount /media/raist/Village} fid]} {
+    }
+    if {[catch {exec sudo rm -r /media/raist/Village} fid]} {
+    }
+    if {[catch {exec sudo umount /media/raist/casper-rw} fid]} {
+    }
+    if {[catch {exec sudo rm -r /media/raist/casper-rw} fid]} {
+    }
+
     exec sudo mkdir -p /media/raist/Village
     exec sudo mkdir -p /media/raist/casper-rw
     exec sudo mount /dev/${mount_point}1 /media/raist/Village
@@ -200,7 +216,7 @@ if { [string length $device] != 0 && \
   format_partition $mount_point $secondary_sectors
 
   puts "SUCCESS!"
-  # extract_iso $iso
+  mount_iso $iso
   # mount_device $mount_point $secondary_sectors
   # copy_iso_to_device $mount_point $iso
   # setup_grub_bootloader
