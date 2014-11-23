@@ -65,11 +65,11 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: preseed [option]"
 
-    opts.on('--sync', 'Sync local files with those available on USB') do
+    opts.on('--sync', 'Sync local files with those available on USB [config install media]') do
       options[:sync] = true
     end
 
-    opts.on('--seed', 'Seed local files if USB has install preseed') do
+    opts.on('--seed', 'Seed local files if USB has [install] preseed') do
       options[:seed] = true
     end
   end
@@ -78,9 +78,9 @@ if __FILE__ == $0
   p =  Preseed.new
 
   if options[:sync]
-    p.sync
+    # p.sync
   elsif options[:seed]
-    p.seed
+    # p.seed
   else
     puts option_parser
   end
