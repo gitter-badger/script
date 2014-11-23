@@ -8,11 +8,11 @@ require 'optparse'
 
 class Preseed
   PRESEED_DIR  = "/media/#{ENV['USER']}/Village/preseed"
-  USB_PRESEED  = "#{PRESEED_DIR}/.seed-install/.sync"
   SYNC_CONFIG  = "#{PRESEED_DIR}/.seed-config"
   SYNC_INSTALL = "#{PRESEED_DIR}/.seed-install"
   SYNC_MEDIA   = "#{PRESEED_DIR}/seed-media"
-  LOCAL_SYNC   = "#{ENV['HOME']}/.sync/.preseed/seed-install/.sync"
+  LOCAL_SEED   = "#{ENV['HOME']}/.sync/.preseed/.seed-install/.sync"
+  USB_SEED     = "#{PRESEED_DIR}/.seed-install/.sync"
   REPOS        = [
     ".app",
     ".canvas.git",
@@ -25,18 +25,19 @@ class Preseed
   ]
 
   def initialize
-    require_usb
+    raise 'Elligible USB not found.' unless File.exist?(PRESEED_DIR)
   end
 
-  def start
-    sync_preseed
+  def sync
+    sync_with_remote(SYNC_CONFIG, 'origin')
+    sync_with_remote(SYNC_INSTALL, 'origin')
+    sync_with_remote(SYNC_MEDIA, 'origin')
+  end
+
+  def seed
   end
 
   private
-
-  def require_usb
-    raise 'Village USB not found!' unless File.exist?(USB_PRESEED)
-  end
 
   def sync_preseed
     REPOS.each do |repository|
@@ -46,17 +47,27 @@ class Preseed
   end
 
   def remove_local_version(repository)
-    puts ""
-    puts "REMOVING #{repository} locally"
-    puts ""
+    puts "Removing local copy #{repository}..."
     system("sudo rm --recursive --verbose #{LOCAL_SYNC}/#{repository}")
   end
 
   def copy_usb_version(repository)
-    puts ""
-    puts "COPYING #{repository} from Village USB"
-    puts ""
+    puts "Copying USB version to local #{repository}..."
     system("cp --recursive --verbose #{USB_SYNC}/#{repository} #{LOCAL_SYNC}")
+  end
+
+  def sync_with_remote(repo_path, remote)
+    raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
+    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
+    system <<-CMD
+      cd #{repo_path}
+      git checkout master
+      git merge annex
+      git pull --no-edit #{remote} master
+      git push #{remote} master
+      git checkout annex
+      git merge --no-edit master
+    CMD
   end
 end
 
@@ -65,22 +76,22 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: preseed [option]"
 
-    opts.on('--sync', 'Sync local files with preseeds available on USB [config install media]') do
+    opts.on('--sync', 'Sync local preseeds with USB [config install media]') do
       options[:sync] = true
     end
 
-    opts.on('--seed', 'Seed local files if USB has [install] preseed') do
+    opts.on('--seed', 'Seed local files if USB has preseed [install]') do
       options[:seed] = true
     end
   end
   option_parser.parse!
 
-  # p =  Preseed.new
+  p =  Preseed.new
 
   if options[:sync]
-    # p.sync
+    p.sync
   elsif options[:seed]
-    # p.seed
+    p.seed
   else
     puts option_parser
   end
