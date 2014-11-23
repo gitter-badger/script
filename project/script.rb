@@ -6,26 +6,22 @@
 # Description: Script for CLI Application management
 
 require 'optparse'
-require 'pathname'
-require 'open3'
 
 class Script
-  DESKTOP       = "#{ENV['HOME']}/Desktop"
-  SCRIPT        = "#{ENV['HOME']}/.sync/.script"
-  BASH_ALIASES  = "#{ENV['HOME']}/.bash_aliases"
-  SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
-  ALIAS_CMD = {
+  HOME     = ENV['HOME']
+  SCRIPT   = "#{HOME}/.sync/.script"
+  BINARIES = {
     '.rb'  => 'ruby',
     '.py'  => 'python',
     '.exp' => 'expect',
     '.sh'  => 'bash'
   }
-  SHEBANGS = {
-    '.rb'  => '#!/usr/bin/env ruby -w',
-    '.py'  => '#!/usr/bin/env python',
-    '.exp' => '#!/usr/bin/env expect',
-    '.sh'  => '#!/bin/bash'
+  DEPENDENCIES = {
+    '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i),
+    '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
   }
+  CATEGORIES = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
+  SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
   BOILERPLATE = <<-TXT
 $0
 # $1
@@ -34,22 +30,6 @@ $0
 # Modified At: $3
 # Description: $4
   TXT
-  CATEGORIES = [
-    'admin',
-    'comm',
-    'environ',
-    'fun',
-    'health',
-    'nav',
-    'project',
-    'search',
-    'security',
-    'trade'
-  ]
-  DEPENDENCIES = {
-    '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i),
-    '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
-  }
 
   def list(script_regexp=false)
     categories = get_app_categories
@@ -94,9 +74,9 @@ $0
 
     if scripts_out
       if scripts_out.is_a? Array
-        scripts_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+        scripts_out.each { |s| system("mv #{HOME}/Desktop/#{File.basename(s)} #{s}") }
       else
-        system("mv #{DESKTOP}/#{File.basename(scripts_out)} #{scripts_out}")
+        system("mv #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
       end
 
       commit_changes
@@ -104,7 +84,7 @@ $0
   end
 
   def refresh_aliases
-    new_bash_aliases = File.open(BASH_ALIASES, 'w+')
+    new_bash_aliases = File.open("#{HOME}/.bash_aliases", 'w+')
 
     categories = get_app_categories
     scripts = get_scripts(categories)
@@ -113,14 +93,14 @@ $0
       extension   = File.extname(script[:filename])
       name        = File.basename(script[:filename], extension)
       alias_cmd   = "alias #{name}="
-      exec_binary = "'#{ALIAS_CMD[extension]} "
+      exec_binary = "'#{BINARIES[extension]} "
       script_path = "#{SCRIPT}/#{script[:category]}/#{script[:filename]}'"
       str_alias   = alias_cmd + exec_binary + script_path
       new_bash_aliases.puts str_alias
     end
     new_bash_aliases.close
 
-    system "source #{BASH_ALIASES}"
+    system "source #{"#{HOME}/.bash_aliases"}"
   end
 
   def sync
@@ -177,7 +157,7 @@ $0
     header = header.gsub!('$4', description)
 
     File.new("#{SCRIPT}/#{category}/#{script}", 'w+') << header
-    File.new("#{DESKTOP}/#{script}", 'w+') << header
+    File.new("#{HOME}/Desktop/#{script}", 'w+') << header
   end
 
   def set_default_ext(*scripts)
@@ -295,7 +275,7 @@ $0
   end
 
   def get_shebang(ext)
-    shebang = SHEBANGS[ext]
+    shebang = "#!/usr/bin/env #{BINARIES[ext]}"
     shebang
   end
 
@@ -325,7 +305,7 @@ $0
     scripts.flatten!
     scripts.each do |script|
       if File.exist?(script)
-        system("cp #{script} #{DESKTOP}")
+        system("cp #{script} #{HOME}/Desktop")
       else
         msg = "Warning: script not found '#{script}'!\n"
         extname = File.extname(script)
@@ -366,7 +346,7 @@ $0
   def get_open_scripts(scripts)
     open_scripts = []
 
-    Dir.foreach("#{DESKTOP}") do |entry|
+    Dir.foreach("#{HOME}/Desktop") do |entry|
       next if File.directory?(entry)
       open_scripts << entry if script_exist?(entry)
     end
@@ -423,7 +403,7 @@ $0
   def get_bash_aliases
     script_list = []
 
-    File.open(BASH_ALIASES).readlines.each_with_index do |line, index|
+    File.open("#{HOME}/.bash_aliases").readlines.each_with_index do |line, index|
       next if index == 0
 
       found_script = SCRIPT_REGEXP.match(line)
@@ -487,7 +467,7 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: script [options] [SCRIPT]"
+    opts.banner = "Usage: script [options] [SCRIPT]"
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
       options[:list] = true
@@ -502,12 +482,12 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--info SCRIPT', 'Show script header information') do |script|
-      options[:info] = script
-    end
-
     opts.on('--clean', 'Move script(s) off Desktop and commit changes') do
       options[:clean] = true
+    end
+
+    opts.on('--info SCRIPT', 'Show script header information') do |script|
+      options[:info] = script
     end
 
     opts.on('--refresh', 'Refresh the list of ~/bash_aliases') do
@@ -521,7 +501,6 @@ if __FILE__ == $0
     opts.on('--history', 'List recent script activity') do
       options[:history] = true
     end
-
   end
   option_parser.parse!
 
@@ -533,10 +512,10 @@ if __FILE__ == $0
     s.add(options[:add])
   elsif options[:fetch]
     s.fetch(ARGV)
-  elsif options[:info]
-    s.info(options[:info])
   elsif options[:clean]
     s.clean
+  elsif options[:info]
+    s.info(options[:info])
   elsif options[:refresh]
     s.refresh_aliases
   elsif options[:sync]

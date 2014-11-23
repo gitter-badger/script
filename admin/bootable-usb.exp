@@ -206,14 +206,19 @@ proc mount_device { user mount_point secondary_sectors } {
 proc copy_iso_to_device { user mount_point iso } {
   send_user "Extracting ISO files to device...\n"
 
-  exec rsync -apP "/mnt/tmpiso/" /media/$user/Village
+  log_user 1
+  exec rsync -aP "/mnt/tmpiso/" /media/$user/Village
+  log_user 0
+
   exec sudo unlink /media/$user/Village/ubuntu
+  exec sudo rm /media/$user/Village/boot/grub/loopback.cfg
   exec sudo umount /mnt/tmpiso
   exec sudo rm -r /mnt/tmpiso
 }
 
 proc setup_grub_bootloader { user mount_point } {
-  exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point
+  if {[catch {exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point} fid]} {
+  }
 }
 
 if { [string length $device] != 0 && \
