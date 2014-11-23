@@ -75,7 +75,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  p =  Preseed.new
+  # p =  Preseed.new
 
   if options[:sync]
     # p.sync
