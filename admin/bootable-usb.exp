@@ -217,7 +217,7 @@ proc copy_iso_to_device { user mount_point iso } {
   log_user 0
 
   exec sudo unlink /media/$user/Village/ubuntu
-  # exec sudo rm /media/$user/Village/boot/grub/loopback.cfg
+  exec sudo rm /media/$user/Village/boot/grub/loopback.cfg
   exec sudo umount /mnt/tmpiso
   exec sudo rm -r /mnt/tmpiso
 }
