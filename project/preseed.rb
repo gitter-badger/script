@@ -80,8 +80,16 @@ if __FILE__ == $0
       options[:sync] = true
     end
 
-    opts.on('--seed', 'Seed local files if USB has preseed [install]') do
-      options[:seed] = true
+    opts.on('--seed-config', 'Add preseed [config] to USB') do
+      options[:seed_config] = true
+    end
+
+    opts.on('--seed-install', 'Add preseed [install] to USB') do
+      options[:seed_install] = true
+    end
+
+    opts.on('--seed-media', 'Add preseed [media] to USB') do
+      options[:seed_media] = true
     end
   end
   option_parser.parse!
