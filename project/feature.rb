@@ -5,9 +5,8 @@
 
 require 'optparse'
 require 'yaml'
-require_relative 'get_naics'
-
-## > Add naics_code
+require_relative '../search/get_naics'
+# > NOT FOUND /home/raist/.sync/.template/1_features/naics_codes.yaml
 
 class FeatureManager
   PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
@@ -17,8 +16,8 @@ class FeatureManager
     3 => 'environment',
     4 => 'health',
     5 => 'search',
-    6 => 'navigation',
-    7 => 'security',
+    6 => 'security',
+    7 => 'navigation',
     8 => 'trade',
     9 => 'project'
   }
@@ -111,36 +110,37 @@ class FeatureManager
     classification
   end
 
-  def get_naics_code
-  end
-
   def todo_commit(msg)
     `cd #{PROJECT_PATH}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
 end
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = 'USAGE: feature [options]'
 
-  opts.on('-a', '--add', 'Add a feature') do
-    options[:add] = true
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'USAGE: feature [options]'
+
+    opts.on('-n', '--new', 'Create a new feature') do
+      options[:new] = true
+    end
+
+    opts.on('-l', '--list', 'List project features') do
+      options[:list] = true
+    end
   end
+  option_parser.parse!
 
-  opts.on('-l', '--list', 'List project features') do
-    options[:list] = true
+  mgmt = FeatureManager.new
+
+  if options[:new]
+    mgmt.add
+    exit
+  elsif options[:list]
+    mgmt.list
+    exit
+  else
+    STDERR.puts option_parser
+    exit 1
   end
 end
-option_parser.parse!
-
-mgmt = FeatureManager.new
-
-if options[:add]
-  mgmt.add
-  exit
-elsif options[:list]
-  mgmt.list
-  exit
-end
-
-puts option_parser
