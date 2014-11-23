@@ -65,7 +65,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: preseed [option]"
 
-    opts.on('--sync', 'Sync local files with those available on USB [config install media]') do
+    opts.on('--sync', 'Sync local files with preseeds available on USB [config install media]') do
       options[:sync] = true
     end
 
