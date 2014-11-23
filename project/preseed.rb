@@ -31,10 +31,10 @@ class Preseed
   def sync
     sync_with_remote(SYNC_CONFIG, 'origin')
     sync_with_remote(SYNC_INSTALL, 'origin')
-    sync_with_remote(SYNC_MEDIA, 'origin')
   end
 
   def seed
+    # > TODO
   end
 
   private
@@ -76,7 +76,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: preseed [option]"
 
-    opts.on('--sync', 'Sync local preseeds with USB [config install media]') do
+    opts.on('--sync', 'Sync local preseeds with USB [config install]') do
       options[:sync] = true
     end
 
