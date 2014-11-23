@@ -260,7 +260,7 @@ proc add_preseed_config { user } {
   set usb_preseed /media/$user/Village/preseed
   set local_preseed /home/$user/.sync/.preseed
 
-  if { ![file exists $local_preseed] } {
+  if { [file exists $local_preseed] } {
     exec rm $usb_preseed/cli.seed
     exec rm $usb_preseed/ltsp.seed
     exec rm $usb_preseed/ubuntu.seed
