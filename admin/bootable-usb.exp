@@ -261,10 +261,6 @@ proc add_preseed_config { user } {
   set local_preseed /home/$user/.sync/.preseed
 
   if { [file exists $local_preseed] } {
-    exec rm $usb_preseed/cli.seed
-    exec rm $usb_preseed/ltsp.seed
-    exec rm $usb_preseed/ubuntu.seed
-
     exec cp $local_preseed/host.seed $usb_preseed
     exec cp $local_preseed/.seed_config.sh $usb_preseed
     exec cp -r $local_preseed/.seed-config $usb_preseed
