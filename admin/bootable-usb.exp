@@ -234,7 +234,7 @@ proc setup_grub_bootloader { user mount_point } {
   }
 }
 
-proc build_grub_menu { user } {
+proc build_grub_menu { user secondary_sectors } {
   set menu /media/$user/Village/boot/grub/grub.cfg
 
   send_user "Enter username: \n"
@@ -248,7 +248,10 @@ proc build_grub_menu { user } {
   regexp {\s(grub\.pbkdf2.*)} $pbkdf2_response -> secret
 
   set header "set default='guest'\nset timeout=1\nset superusers='$username'\npassword_pbkdf2 $username $secret\nexport superusers\n\n"
-  set menuentry1 "menuentry 'guest' --unrestricted {\n\tlinux /casper/vmlinuz boot=casper priority=low pcspkr.blacklist=yes textonly noprompt persistent --\n\tinitrd /casper/initrd.lz\n}\n"
+
+  if { $secondary_sectors != 0 } {
+    set menuentry1 "menuentry 'guest' --unrestricted {\n\tlinux /casper/vmlinuz boot=casper priority=low pcspkr.blacklist=yes textonly noprompt persistent --\n\tinitrd /casper/initrd.lz\n}\n"
+  }
   set menuentry2 "menuentry 'host' --users '' {\n\tlinux /casper/vmlinuz boot=casper priority=low automatic-ubiquity file=/cdrom/preseed/host.seed live-media-path=/casper/ pcspkr.blacklist=yes textonly noprompt noeject ignore_uuid --\n\tinitrd /casper/initrd.lz\n}\n"
 
   exec echo $header >> $menu
@@ -292,7 +295,7 @@ if { [string length $device] != 0 && \
   umount_iso /mnt/tmpiso $iso
   setup_grub_bootloader $user $mount_point
   mount_device $user $mount_point $secondary_sectors
-  build_grub_menu $user
+  build_grub_menu $user $secondary_sectors
   add_preseed_config $user
   umount_device $user $mount_point
 
