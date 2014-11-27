@@ -265,7 +265,7 @@ proc get_include_install {} {
   set answer "n"
   regexp {(y|Y)} $expect_out(1,string) -> answer
 
-  if { $answer == "y" or $answer == "Y" } {
+  if { $answer == "y" || $answer == "Y" } {
     return "yes"
   } else {
     return "no"
