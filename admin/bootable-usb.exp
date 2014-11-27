@@ -259,12 +259,10 @@ proc build_grub_menu { user secondary_sectors } {
   exec echo $menuentry2 >> $menu
 }
 
-proc get_install_space { user mount_point primary_sectors } {
+proc get_install_space { user } {
   set local_preseed /home/$user/.sync/.preseed
-  set partition_table [exec sudo fdisk -l /dev/$mount_point]
-  regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
-  set device_size [expr "$primary_sectors * $sector_size"]
+  regexp {(\d*)} [exec du --summarize /media/$user/Village] -> device_size
   regexp {(\d*)} [exec du --summarize $local_preseed/.seed-install] -> seed_install_size
   puts "device-sector size: $device_size"
   puts "seed-install size: $seed_install_size"
@@ -340,7 +338,7 @@ if { [string length $device] != 0 && \
 #  mount_device $user $mount_point $secondary_sectors
 #  build_grub_menu $user $secondary_sectors
 
-  set enough_install_space [get_install_space $user $mount_point $primary_sectors]
+  set enough_install_space [get_install_space $user]
   puts "enough space? $enough_install_space"
 
   set include_install [get_include_install $enough_install_space]
