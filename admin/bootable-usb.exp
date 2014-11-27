@@ -265,7 +265,7 @@ proc get_install_space { user mount_point primary_sectors } {
   regexp {\(logical/physical\):\s(\d*)} $partition_table -> sector_size
 
   set device_size [expr "$primary_sectors * $sector_size"]
-  set seed_install_size [directory size $local_preseed/.seed-install]
+  set seed_install_size [expr du -hs $local_preseed/.seed-install]
   puts "seed-install size: $seed_install_size"
 
   set remainder [expr "$device_size - $seed_install_size"]
