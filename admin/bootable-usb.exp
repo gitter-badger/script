@@ -310,7 +310,8 @@ proc add_preseed_config { user } {
 #  mount_device $user $mount_point $secondary_sectors
 #  build_grub_menu $user $secondary_sectors
 #
-  get_include_install
+  set include_install [get_include_install]
+  puts $include_install
 #  add_preseed_config $user
 #  umount_device $user $mount_point
 
