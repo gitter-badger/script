@@ -265,10 +265,10 @@ proc get_include_install {} {
   set answer "n"
   regexp {(y|Y)} $expect_out(1,string) -> answer
 
-  if { $answer == 'y' } {
-    return 'yes'
+  if { $answer == "y" } {
+    return "yes"
   } else {
-    return 'no'
+    return "no"
   }
 }
 
