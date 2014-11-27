@@ -248,14 +248,14 @@ proc build_grub_menu { user secondary_sectors } {
   regexp {\s(grub\.pbkdf2.*)} $pbkdf2_response -> secret
 
   set header "set default='guest'\nset timeout=1\nset superusers='$username'\npassword_pbkdf2 $username $secret\nexport superusers\n\n"
+  exec echo $header >> $menu
 
   if { $secondary_sectors != 0 } {
     set menuentry1 "menuentry 'guest' --unrestricted {\n\tlinux /casper/vmlinuz boot=casper priority=low pcspkr.blacklist=yes textonly noprompt persistent --\n\tinitrd /casper/initrd.lz\n}\n"
+    exec echo $menuentry1 >> $menu
   }
-  set menuentry2 "menuentry 'host' --users '' {\n\tlinux /casper/vmlinuz boot=casper priority=low automatic-ubiquity file=/cdrom/preseed/host.seed live-media-path=/casper/ pcspkr.blacklist=yes textonly noprompt noeject ignore_uuid --\n\tinitrd /casper/initrd.lz\n}\n"
 
-  exec echo $header >> $menu
-  exec echo $menuentry1 >> $menu
+  set menuentry2 "menuentry 'host' --users '' {\n\tlinux /casper/vmlinuz boot=casper priority=low automatic-ubiquity file=/cdrom/preseed/host.seed live-media-path=/casper/ pcspkr.blacklist=yes textonly noprompt noeject ignore_uuid --\n\tinitrd /casper/initrd.lz\n}\n"
   exec echo $menuentry2 >> $menu
 }
 
