@@ -268,7 +268,7 @@ proc get_install_space { user } {
   puts "seed-install size: $seed_install_size"
 
   set remainder [expr "$device_size - $seed_install_size"]
-  set r_mb [expr "$remainder / 1024 / 1024"]
+  puts "remainder: $remainder"
 
   if {$remainder <= 0} {
     return "no"
