@@ -260,7 +260,7 @@ proc build_grub_menu { user secondary_sectors } {
 }
 
 proc get_include_install {} {
-  puts "Include seed-install?\n"
+  puts "Include seed-install?"
   expect_user -re "(.*)\n"
   regexp {y|Y} $expect_out(1,string) -> answer
 
