@@ -8,10 +8,6 @@ set device [lindex $argv 0]
 set iso [lindex $argv 1]
 set user $env(USER)
 
-puts $device
-puts $iso
-puts $user
-
 proc usage {} {
   send_error "Usage: bootable-usb.exp \[options\] DEVICE ISO\n"
   exit 1
@@ -314,8 +310,8 @@ proc add_preseed_config { user include_install } {
   }
 }
 
-#if { [string length $device] != 0 && \
-#     [string length $iso] != 0 } {
+if { [string length $device] != 0 && \
+     [string length $iso] != 0 } {
 #  exit_if_not_file $device
 #  exit_if_not_device $device
 #  exit_if_not_file $iso
@@ -344,7 +340,7 @@ proc add_preseed_config { user include_install } {
 #  add_preseed_config $user $include_install
 #  umount_device $user $mount_point
 #
-#  exec sync
-#} else {
-#  usage
-#}
+  exec sync
+} else {
+  usage
+}
