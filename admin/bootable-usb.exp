@@ -312,7 +312,7 @@ proc add_preseed_config { user include_install } {
 
 if { [string length $device] != 0 && \
      [string length $iso] != 0 } {
-  # exit_if_not_file $device
+  exit_if_not_file $device
   exit_if_not_device $device
   exit_if_not_file $iso
 #
