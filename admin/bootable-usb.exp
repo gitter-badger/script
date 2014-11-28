@@ -1,7 +1,7 @@
 #!/usr/bin/env expect
 # bootable-usb.exp
 # Author: Andy Bettisworth
-# Description: Create a bootable USB with your preferred *nix flavour ISO
+# Description: Create a bootable USB any *nix flavour ISO
 
 set timeout -1
 set device [lindex $argv 0]
