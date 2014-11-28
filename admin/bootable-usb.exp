@@ -50,7 +50,7 @@ proc umount_device { user mount_point } {
 
   foreach {group0 group1} $match_tuple {
     if {[catch {exec sudo umount /dev/$group0} fid]} {
-      puts "Unmounted partition at /dev/$group0\n"
+      puts "Unmounted partition at /dev/$group0"
     }
   }
 
