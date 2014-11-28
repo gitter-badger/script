@@ -50,18 +50,14 @@ proc umount_device { user mount_point } {
 
   foreach {group0 group1} $match_tuple {
     if {[catch {exec sudo umount /dev/$group0} fid]} {
-      puts "Unmounted partition at /dev/$group0"
+      puts "Unmounted partition at /dev/$group0\n"
     }
   }
 
-  if {[catch {exec sudo umount /media/$user/Village} fid]} {
-  }
-  if {[catch {exec sudo rm -r /media/$user/Village} fid]} {
-  }
-  if {[catch {exec sudo umount /media/$user/casper-rw} fid]} {
-  }
-  if {[catch {exec sudo rm -r /media/$user/casper-rw} fid]} {
-  }
+  catch {exec sudo umount /media/$user/Village}
+  catch {exec sudo rm -r /media/$user/Village}
+  catch {exec sudo umount /media/$user/casper-rw}
+  catch {exec sudo rm -r /media/$user/casper-rw}
 }
 
 proc partition_device { mount_point primary_sectors secondary_sectors } {
@@ -279,7 +275,7 @@ proc add_preseed_config { user include_install } {
       exec cp -r $local_preseed/.seed-install $usb_preseed
     }
   } else {
-    send_user "WARNING: no preseed files found locally"
+    send_user "WARNING: no preseed files found locally\n"
   }
 }
 
@@ -303,7 +299,7 @@ if { [string length $device] != 0 && \
 #  umount_device $user $mount_point
 #  partition_device $mount_point $primary_sectors $secondary_sectors
 #  format_partition $mount_point $secondary_sectors
-#
+
 #  mount_iso /mnt/tmpiso $iso
 #  mount_device $user $mount_point $secondary_sectors
 #  copy_iso_to_device $user $mount_point $iso
@@ -311,12 +307,12 @@ if { [string length $device] != 0 && \
 #  setup_grub_bootloader $user $mount_point
 #  mount_device $user $mount_point $secondary_sectors
 #  build_grub_menu $user $secondary_sectors
-#
+
 #  set enough_install_space [get_install_space $user]
 #  set include_install [get_include_install $enough_install_space]
 #  add_preseed_config $user $include_install
-#  umount_device $user $mount_point
-#
+
+  umount_device $user $mount_point
   exec sync
 } else {
   usage
