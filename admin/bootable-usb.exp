@@ -8,6 +8,10 @@ set device [lindex $argv 0]
 set iso [lindex $argv 1]
 set user $env(USER)
 
+puts $device
+puts $iso
+puts $user
+
 proc usage {} {
   send_error "Usage: bootable-usb.exp \[options\] DEVICE ISO\n"
   exit 1
@@ -310,37 +314,37 @@ proc add_preseed_config { user include_install } {
   }
 }
 
-if { [string length $device] != 0 && \
-     [string length $iso] != 0 } {
-  exit_if_not_file $device
-  exit_if_not_device $device
-  exit_if_not_file $iso
-
-  set mount_point [get_mount_point $device]
-  set sector_count [get_sector_count $mount_point]
-  set pct [get_persistence_percentage]
-  set secondary_sectors [get_secondary_sectors $sector_count $pct]
-  set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
-  exit_if_not_enough_space $mount_point $primary_sectors $iso
-
-  umount_device $user $mount_point
-  partition_device $mount_point $primary_sectors $secondary_sectors
-  format_partition $mount_point $secondary_sectors
-
-  mount_iso /mnt/tmpiso $iso
-  mount_device $user $mount_point $secondary_sectors
-  copy_iso_to_device $user $mount_point $iso
-  umount_iso /mnt/tmpiso $iso
-  setup_grub_bootloader $user $mount_point
-  mount_device $user $mount_point $secondary_sectors
-  build_grub_menu $user $secondary_sectors
-
-  set enough_install_space [get_install_space $user]
-  set include_install [get_include_install $enough_install_space]
-  add_preseed_config $user $include_install
-  umount_device $user $mount_point
-
-  exec sync
-} else {
-  usage
-}
+#if { [string length $device] != 0 && \
+#     [string length $iso] != 0 } {
+#  exit_if_not_file $device
+#  exit_if_not_device $device
+#  exit_if_not_file $iso
+#
+#  set mount_point [get_mount_point $device]
+#  set sector_count [get_sector_count $mount_point]
+#  set pct [get_persistence_percentage]
+#  set secondary_sectors [get_secondary_sectors $sector_count $pct]
+#  set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
+#  exit_if_not_enough_space $mount_point $primary_sectors $iso
+#
+#  umount_device $user $mount_point
+#  partition_device $mount_point $primary_sectors $secondary_sectors
+#  format_partition $mount_point $secondary_sectors
+#
+#  mount_iso /mnt/tmpiso $iso
+#  mount_device $user $mount_point $secondary_sectors
+#  copy_iso_to_device $user $mount_point $iso
+#  umount_iso /mnt/tmpiso $iso
+#  setup_grub_bootloader $user $mount_point
+#  mount_device $user $mount_point $secondary_sectors
+#  build_grub_menu $user $secondary_sectors
+#
+#  set enough_install_space [get_install_space $user]
+#  set include_install [get_include_install $enough_install_space]
+#  add_preseed_config $user $include_install
+#  umount_device $user $mount_point
+#
+#  exec sync
+#} else {
+#  usage
+#}
