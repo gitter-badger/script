@@ -296,7 +296,7 @@ if { [string length $device] != 0 && \
   set primary_sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
   exit_if_not_enough_space $mount_point $primary_sectors $iso
 
-#  umount_device $user $mount_point
+  umount_device $user $mount_point
 #  partition_device $mount_point $primary_sectors $secondary_sectors
 #  format_partition $mount_point $secondary_sectors
 
