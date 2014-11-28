@@ -15,14 +15,14 @@ proc usage {} {
 
 proc exit_if_not_file { target } {
   if { ![file exists $target] } {
-    send_error "No file found at $target"
+    send_error "No file found at $target\n"
     exit 2
   }
 }
 
 proc exit_if_not_device { device } {
   if { [file type $device] != "blockSpecial" } {
-    send_error "No device found at $device"
+    send_error "No device found at $device\n"
     exit 3
   }
 }
