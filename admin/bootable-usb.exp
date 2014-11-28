@@ -158,14 +158,8 @@ proc umount_device { user mount_point } {
   set match_tuple [regexp -all -inline "$mount_point\(\\d\)" [exec lsblk]]
   set match_count [expr {[llength $match_tuple] / 2}]
 
-  puts "match_tuple: $match_tuple"
-  puts "match_count: $match_count"
-
-  # > duplicate expressions
   foreach {group0 group1} $match_tuple {
-    if {[catch {exec sudo umount /dev/$group0} fid]} {
-      puts "Unmounted partition at /dev/$group0"
-    }
+    catch {exec sudo umount /dev/$group0}
   }
 
   catch {exec sudo umount /media/$user/Village}
