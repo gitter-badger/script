@@ -43,33 +43,6 @@ proc exit_if_not_enough_space { mount_point primary_sectors iso } {
   }
 }
 
-proc get_mount_point { device } {
-  regexp {\/dev\/(\w*)} $device -> mount_point
-  return $mount_point
-}
-
-proc get_sector_count { mount_point } {
-  set partition_table [exec sudo fdisk -l /dev/$mount_point]
-  regexp {total\s(\d*)} $partition_table -> sector_count
-  return $sector_count
-}
-
-proc get_persistence_percentage {} {
-  puts "What percentage should go towards persistence? \[10..40\]"
-  expect_user -re "(.*)\n"
-  return $expect_out(1,string)
-}
-
-proc get_secondary_sectors { sector_count persistence } {
-  set sectors [format {%0.0f} [expr $sector_count * ( $persistence / 100.0 )]]
-  return $sectors
-}
-
-proc get_primary_sectors { sector_count secondary_sectors } {
-  set sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
-  return $sectors
-}
-
 proc umount_device { user mount_point } {
   set device_tree [exec lsblk]
   set match_tuple [regexp -all -inline "$mount_point\(\\d\)" $device_tree]
@@ -315,14 +288,18 @@ if { [string length $device] != 0 && \
   exit_if_not_file $device
   exit_if_not_device $device
   exit_if_not_file $iso
-#
-#  set mount_point [get_mount_point $device]
-#  set sector_count [get_sector_count $mount_point]
-#  set pct [get_persistence_percentage]
-#  set secondary_sectors [get_secondary_sectors $sector_count $pct]
-#  set primary_sectors [get_primary_sectors $sector_count $secondary_sectors]
-#  exit_if_not_enough_space $mount_point $primary_sectors $iso
-#
+
+  regexp {\/dev\/(\w*)} $device -> mount_point
+  regexp {total\s(\d*)} [exec sudo fdisk -l /dev/$mount_point] -> sector_count
+
+  puts "What percentage should go towards persistence? \[10..40\]"
+  expect_user -re "(.*)\n"
+  set persistence $expect_out(1,string)
+
+  set secondary_sectors [format {%0.0f} [expr $sector_count * ( $persistence / 100.0 )]]
+  set primary_sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
+  exit_if_not_enough_space $mount_point $primary_sectors $iso
+
 #  umount_device $user $mount_point
 #  partition_device $mount_point $primary_sectors $secondary_sectors
 #  format_partition $mount_point $secondary_sectors
