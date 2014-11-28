@@ -43,23 +43,6 @@ proc exit_if_not_enough_space { mount_point primary_sectors iso } {
   }
 }
 
-proc umount_device { user mount_point } {
-  set device_tree [exec lsblk]
-  set match_tuple [regexp -all -inline "$mount_point\(\\d\)" $device_tree]
-  set match_count [expr {[llength $match_tuple] / 2}]
-
-  foreach {group0 group1} $match_tuple {
-    if {[catch {exec sudo umount /dev/$group0} fid]} {
-      puts "Unmounted partition at /dev/$group0"
-    }
-  }
-
-  catch {exec sudo umount /media/$user/Village}
-  catch {exec sudo rm -r /media/$user/Village}
-  catch {exec sudo umount /media/$user/casper-rw}
-  catch {exec sudo rm -r /media/$user/casper-rw}
-}
-
 proc partition_device { mount_point primary_sectors secondary_sectors } {
   spawn sudo fdisk /dev/$mount_point
   expect "?assword*: " {
@@ -115,8 +98,7 @@ proc format_partition { mount_point secondary_sectors } {
     send_user "Formatting /dev/${mount_point}1 NTFS...\n"
 
     log_user 1
-    if {[catch {exec sudo mkntfs -L Village /dev/${mount_point}1} fid]} {
-    }
+    catch {exec sudo mkntfs -L Village /dev/${mount_point}1}
     log_user 0
 
     exec sync
@@ -124,16 +106,11 @@ proc format_partition { mount_point secondary_sectors } {
     send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
 
     log_user 1
-    if {[catch {exec sudo mkntfs -L Village /dev/${mount_point}1} fid]} {
-    }
-    if {[catch {exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2} fid]} {
-    }
-    if {[catch {exec sudo parted -s $mount_point set 1 boot on} fid]} {
-    }
-    if {[catch {exec sudo parted -s $mount_point set 1 hidden on} fid]} {
-    }
-    if {[catch {exec sudo parted -s $mount_point set 2 hidden on} fid]} {
-    }
+    catch {exec sudo mkntfs -L Village /dev/${mount_point}1}
+    catch {exec sudo mkfs.ext4 -L casper-rw /dev/${mount_point}2}
+    catch {exec sudo parted -s $mount_point set 1 boot on}
+    catch {exec sudo parted -s $mount_point set 1 hidden on}
+    catch {exec sudo parted -s $mount_point set 2 hidden on}
     log_user 0
 
     exec sync
@@ -143,10 +120,8 @@ proc format_partition { mount_point secondary_sectors } {
 proc mount_iso { iso_mount iso } {
   send_user "Mounting ISO $iso...\n"
 
-  if {[catch {exec sudo umount $iso_mount} fid]} {
-  }
-  if {[catch {exec sudo rm -r $iso_mount} fid]} {
-  }
+  catch {exec sudo umount $iso_mount}
+  catch {exec sudo rm -r $iso_mount}
 
   exec sudo mkdir -p $iso_mount
   exec sudo mount -o ro,loop $iso $iso_mount
@@ -155,36 +130,48 @@ proc mount_iso { iso_mount iso } {
 proc umount_iso { iso_mount iso } {
   send_user "Unmounting ISO $iso...\n"
 
-  if {[catch {exec sudo umount $iso_mount} fid]} {
-  }
-  if {[catch {exec sudo rm -r $iso_mount} fid]} {
-  }
+  catch {exec sudo umount $iso_mount}
+  catch {exec sudo rm -r $iso_mount}
 }
 
 proc mount_device { user mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
-    if {[catch {exec sudo umount /media/$user/Village} fid]} {
-    }
-    if {[catch {exec sudo rm -r /media/$user/Village} fid]} {
-    }
+    catch {exec sudo umount /media/$user/Village}
+    catch {exec sudo rm -r /media/$user/Village}
 
     exec sudo mkdir -p /media/$user/Village
     exec sudo mount /dev/${mount_point}1 /media/$user/Village
   } else {
-    if {[catch {exec sudo umount /media/$user/Village} fid]} {
-    }
-    if {[catch {exec sudo rm -r /media/$user/Village} fid]} {
-    }
-    if {[catch {exec sudo umount /media/$user/casper-rw} fid]} {
-    }
-    if {[catch {exec sudo rm -r /media/$user/casper-rw} fid]} {
-    }
+    catch {exec sudo umount /media/$user/Village}
+    catch {exec sudo rm -r /media/$user/Village}
+    catch {exec sudo umount /media/$user/casper-rw}
+    catch {exec sudo rm -r /media/$user/casper-rw}
 
     exec sudo mkdir -p /media/$user/Village
     exec sudo mkdir -p /media/$user/casper-rw
     exec sudo mount /dev/${mount_point}1 /media/$user/Village
     exec sudo mount /dev/${mount_point}2 /media/$user/casper-rw
   }
+}
+
+proc umount_device { user mount_point } {
+  set match_tuple [regexp -all -inline "$mount_point\(\\d\)" [exec lsblk]]
+  set match_count [expr {[llength $match_tuple] / 2}]
+
+  puts "match_tuple: $match_tuple"
+  puts "match_count: $match_count"
+
+  # > duplicate expressions
+  foreach {group0 group1} $match_tuple {
+    if {[catch {exec sudo umount /dev/$group0} fid]} {
+      puts "Unmounted partition at /dev/$group0"
+    }
+  }
+
+  catch {exec sudo umount /media/$user/Village}
+  catch {exec sudo rm -r /media/$user/Village}
+  catch {exec sudo umount /media/$user/casper-rw}
+  catch {exec sudo rm -r /media/$user/casper-rw}
 }
 
 proc copy_iso_to_device { user mount_point iso } {
@@ -199,8 +186,7 @@ proc copy_iso_to_device { user mount_point iso } {
 }
 
 proc setup_grub_bootloader { user mount_point } {
-  if {[catch {exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point} fid]} {
-  }
+  catch {exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point}
 }
 
 proc build_grub_menu { user secondary_sectors } {
