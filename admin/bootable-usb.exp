@@ -214,6 +214,10 @@ proc get_install_space { user } {
   regexp {(\d*)} [exec du --summarize /media/$user/Village] -> device_size
   regexp {(\d*)} [exec du --summarize $local_preseed/.seed-install] -> seed_install_size
 
+  # > TEST
+  puts "device_size: $device_size"
+  puts "seed_install_size: $seed_install_size"
+
   set remainder [expr "$device_size - $seed_install_size"]
 
   if {$remainder <= 0} {
@@ -277,20 +281,20 @@ if { [string length $device] != 0 && \
   exit_if_not_enough_space $mount_point $primary_sectors $iso
 
   umount_device $user $mount_point
-#  partition_device $mount_point $primary_sectors $secondary_sectors
-#  format_partition $mount_point $secondary_sectors
+  partition_device $mount_point $primary_sectors $secondary_sectors
+  format_partition $mount_point $secondary_sectors
 
-#  mount_iso /mnt/tmpiso $iso
-#  mount_device $user $mount_point $secondary_sectors
-#  copy_iso_to_device $user $mount_point $iso
-#  umount_iso /mnt/tmpiso $iso
-#  setup_grub_bootloader $user $mount_point
-#  mount_device $user $mount_point $secondary_sectors
-#  build_grub_menu $user $secondary_sectors
+  mount_iso /mnt/tmpiso $iso
+  mount_device $user $mount_point $secondary_sectors
+  copy_iso_to_device $user $mount_point $iso
+  umount_iso /mnt/tmpiso $iso
+  setup_grub_bootloader $user $mount_point
+  mount_device $user $mount_point $secondary_sectors
+  build_grub_menu $user $secondary_sectors
 
-#  set enough_install_space [get_install_space $user]
-#  set include_install [get_include_install $enough_install_space]
-#  add_preseed_config $user $include_install
+  set enough_install_space [get_install_space $user]
+  set include_install [get_include_install $enough_install_space]
+  add_preseed_config $user $include_install
 
   umount_device $user $mount_point
   exec sync
