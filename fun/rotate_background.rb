@@ -22,7 +22,7 @@ class DesktopBackground
       rand = current_background_index
 
       until rand != current_background_index
-        rand = Random.rand(1..entry_count - 1)
+        rand = Random.rand(1..entries.length - 1)
       end
       new_pic = entries[rand]
 
