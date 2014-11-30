@@ -246,7 +246,6 @@ proc add_preseed_config { user include_install } {
 
   if { [file exists $local_preseed] } {
     exec cp $local_preseed/.seed-config/host.seed $usb_preseed
-
     exec cp $local_preseed/.seed-config/.seed_config.sh $usb_preseed
     exec cp -r $local_preseed/.seed-config $usb_preseed
 
