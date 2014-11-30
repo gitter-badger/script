@@ -45,7 +45,7 @@ class DesktopBackground
   private
 
   def exit_if_no_images
-    unless Dir.exist?(@images) == false
+    if Dir.exist?(@images) == false
       raise "No directory found at '#{@images}'"
     end
 
