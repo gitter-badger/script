@@ -23,8 +23,8 @@ class AmazonQuery
     end
 
     @request.configure(
-      aws_access_key_id:     'AKIAJ642JMWDFLXV6JVA',
-      aws_secret_access_key: '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',
+      aws_access_key_id:     '42JMWJVA',
+      aws_secret_access_key: 'AENBs0tl',
       associate_tag:         'wurde'
     )
   end
