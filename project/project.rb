@@ -37,7 +37,7 @@ class ProjectManager
       end
       todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
     else
-      puts "Project already exists for #{@project}"
+      puts "Project already exists for #{@project}."
     end
   end
 
@@ -46,9 +46,14 @@ class ProjectManager
     pattern = Regexp.new(regexp) if regexp
     projects = get_projects
     projects.select! { |s| pattern.match(s) } if pattern
-    projects.each do |project|
-      info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-      puts "#{project} - #{info[:description]}"
+
+    if projects.count > 0
+      projects.each do |project|
+        info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+        puts "#{project} - #{info[:description]}"
+      end
+    else
+      puts "No projects exist on this computer."
     end
   end
 
