@@ -4,10 +4,11 @@
 # Description: Manage projects
 
 require 'optparse'
+require 'fileutils'
 require 'yaml'
 
 class ProjectManager
-  PROJECT = "#{ENV['HOME']}/.sync/.project"
+  PROJECT  = "#{ENV['HOME']}/.sync/.project"
   TEMPLATE = "#{ENV['HOME']}/.sync/.template/projects"
 
   attr_accessor :project
@@ -19,6 +20,7 @@ class ProjectManager
   end
 
   def init(template)
+    ensure_project_archive
     unless project_exist?(@project)
       Dir.mkdir("#{PROJECT}/#{@project}")
       puts "Describe this project:\n"
@@ -40,6 +42,7 @@ class ProjectManager
   end
 
   def list(regexp)
+    ensure_project_archive
     pattern = Regexp.new(regexp) if regexp
     projects = get_projects
     projects.select! { |s| pattern.match(s) } if pattern
@@ -50,12 +53,14 @@ class ProjectManager
   end
 
   def fetch(project)
+    ensure_project_archive
     raise "No known project #{project}" unless project_exist?(project)
     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
     `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
   end
 
   def clean
+    ensure_project_archive
     all_projects = get_projects
     desktop_dir = get_desktop_dir
     all_projects.each do |project|
@@ -67,6 +72,7 @@ class ProjectManager
   end
 
   def set_location(path)
+    ensure_project_archive
     raise "No known project #{@project}" unless project_exist?(@project)
     info = YAML.load_file("#{PROJECT}/#{@project}/project.yaml")
     old_path = info[:location]
@@ -77,6 +83,7 @@ class ProjectManager
   end
 
   def info(project)
+    ensure_project_archive
     project = @project if project == '.'
     raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
@@ -108,6 +115,10 @@ class ProjectManager
 
   def todo_commit(msg)
     `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+  end
+
+  def ensure_project_archive
+    FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
   end
 end
 
@@ -175,3 +186,8 @@ if __FILE__ == $0
 
   puts option_parser
 end
+
+
+## TODO
+
+# ERROR: No such file or directory - /home/raist/.sync/.project
