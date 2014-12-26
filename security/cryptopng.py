@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # cryptopng.py
 # Author: Vojtech Smejkal (smejkalv@gmail.com), 2008
 # Description: Reading/writing secret text from/to image.
