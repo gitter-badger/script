@@ -132,7 +132,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: project [options]'
 
-    opts.on('--init [TEMPLATE]', 'Create a new project for current working directory') do |template|
+    opts.on('--init [TEMPLATE]', 'Create a new project for current directory') do |template|
       if template
         options[:init] = template
       else
@@ -195,4 +195,6 @@ end
 
 ## TODO
 
-# ERROR: No such file or directory - /home/raist/.sync/.project
+# fatal: Not a git repository (or any of the parent directories): .git
+# fatal: Not a git repository (or any of the parent directories): .git
+# fatal: Not a git repository (or any of the parent directories): .git
