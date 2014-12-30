@@ -4,10 +4,11 @@
 # Description: Manage projects
 
 require 'optparse'
+require 'fileutils'
 require 'yaml'
 
 class ProjectManager
-  PROJECT = "#{ENV['HOME']}/.sync/.project"
+  PROJECT  = "#{ENV['HOME']}/.sync/.project"
   TEMPLATE = "#{ENV['HOME']}/.sync/.template/projects"
 
   attr_accessor :project
@@ -19,6 +20,7 @@ class ProjectManager
   end
 
   def init(template)
+    ensure_project_archive
     unless project_exist?(@project)
       Dir.mkdir("#{PROJECT}/#{@project}")
       puts "Describe this project:\n"
@@ -35,27 +37,35 @@ class ProjectManager
       end
       todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
     else
-      puts "Project already exists for #{@project}"
+      puts "Project already exists for #{@project}."
     end
   end
 
   def list(regexp)
+    ensure_project_archive
     pattern = Regexp.new(regexp) if regexp
     projects = get_projects
     projects.select! { |s| pattern.match(s) } if pattern
-    projects.each do |project|
-      info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-      puts "#{project} - #{info[:description]}"
+
+    if projects.count > 0
+      projects.each do |project|
+        info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+        puts "#{project} - #{info[:description]}"
+      end
+    else
+      puts "No projects exist on this computer."
     end
   end
 
   def fetch(project)
+    ensure_project_archive
     raise "No known project #{project}" unless project_exist?(project)
     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
     `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
   end
 
   def clean
+    ensure_project_archive
     all_projects = get_projects
     desktop_dir = get_desktop_dir
     all_projects.each do |project|
@@ -67,6 +77,7 @@ class ProjectManager
   end
 
   def set_location(path)
+    ensure_project_archive
     raise "No known project #{@project}" unless project_exist?(@project)
     info = YAML.load_file("#{PROJECT}/#{@project}/project.yaml")
     old_path = info[:location]
@@ -77,6 +88,7 @@ class ProjectManager
   end
 
   def info(project)
+    ensure_project_archive
     project = @project if project == '.'
     raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
@@ -109,6 +121,10 @@ class ProjectManager
   def todo_commit(msg)
     `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   end
+
+  def ensure_project_archive
+    FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
+  end
 end
 
 if __FILE__ == $0
@@ -116,7 +132,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: project [options]'
 
-    opts.on('--init [TEMPLATE]', 'Create a new project for current working directory') do |template|
+    opts.on('--init [TEMPLATE]', 'Create a new project for current directory') do |template|
       if template
         options[:init] = template
       else
@@ -175,3 +191,10 @@ if __FILE__ == $0
 
   puts option_parser
 end
+
+
+## TODO
+
+# fatal: Not a git repository (or any of the parent directories): .git
+# fatal: Not a git repository (or any of the parent directories): .git
+# fatal: Not a git repository (or any of the parent directories): .git
