@@ -103,11 +103,6 @@ $0
     system "source #{"#{HOME}/.bash_aliases"}"
   end
 
-  def sync
-    commit_changes
-    sync_github(SCRIPT)
-  end
-
   def history
     files = `cd #{SCRIPT}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
     files = files.split("\n")
@@ -447,21 +442,6 @@ $0
     remotes = `git remote -v`
     return remotes.include?(branch)
   end
-
-  def sync_github(repo_path)
-    raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
-    raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
-    raise "MissingBranch: No remote named 'github'" unless remote_exist?(repo_path, 'github')
-    system <<-CMD
-      cd #{repo_path}
-      git checkout master
-      git merge annex
-      git pull --no-edit github master
-      git push github master
-      git checkout annex
-      git merge --no-edit master
-    CMD
-  end
 end
 
 if __FILE__ == $0
@@ -494,10 +474,6 @@ if __FILE__ == $0
       options[:refresh] = true
     end
 
-    opts.on('--sync', 'Commit any changes and attempt a GitHub sync') do
-      options[:sync] = true
-    end
-
     opts.on('--history', 'List recent script activity') do
       options[:history] = true
     end
@@ -518,8 +494,6 @@ if __FILE__ == $0
     s.info(options[:info])
   elsif options[:refresh]
     s.refresh_aliases
-  elsif options[:sync]
-    s.sync
   elsif options[:history]
     s.history
   else
