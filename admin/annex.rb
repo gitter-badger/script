@@ -5,7 +5,6 @@
 
 require 'optparse'
 require 'fileutils'
-require 'open3'
 
 class Annex
   GITHUB_REMOTE = "https://www.github.com"
@@ -67,7 +66,7 @@ class Annex
   end
 
   def remote_exist?(remote_repo)
-    # stdout, status = Open3.capture2("wget --server-response --max-redirect=0 #{remote_repo}")
+    system("wget --server-response --max-redirect=0 #{remote_repo}")
 
     # puts status
     # case $?
