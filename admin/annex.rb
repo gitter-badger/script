@@ -32,11 +32,6 @@ class Annex
 
       print_target_repo(repo)
 
-      if local_exist?(local_repo) == false
-        throw_missing_repo(local_repo)
-        next
-      end
-
       if remote_exist?(remote_repo) == false
         throw_missing_repo(remote_repo)
         next
@@ -54,11 +49,6 @@ class Annex
       remote_repo = "#{GITLAB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
-
-      if local_exist?(local_repo) == false
-        throw_missing_repo(local_repo)
-        next
-      end
 
       if remote_exist?(remote_repo) == false
         throw_missing_repo(remote_repo)
@@ -85,12 +75,9 @@ class Annex
     Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
   end
 
-  def local_exist?(local_repo)
-    File.exist?(local_repo)
-  end
-
   def remote_exist?(remote_repo)
     `wget --server-response --max-redirect=0 #{remote_repo}`
+    puts $?
   end
 
   def branch_exist?(repository, branch)
