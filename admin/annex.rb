@@ -27,7 +27,7 @@ class Annex
     puts "Syncing with #{GITHUB_REMOTE}/#{@user}..."
 
     @github_repos.each do |repo|
-      local_repo  = "#{GITHUB_LOCAL}/#{@user}/#{repo}"
+      local_repo  = "#{GITHUB_LOCAL}/#{repo}"
       remote_repo = "#{GITHUB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
@@ -39,7 +39,7 @@ class Annex
     puts "Syncing with #{GITLAB_REMOTE}/#{@user}..."
 
     @gitlab_repos.each do |repo|
-      local_repo  = "#{GITLAB_LOCAL}/#{@user}/#{repo}"
+      local_repo  = "#{GITLAB_LOCAL}/#{repo}"
       remote_repo = "#{GITLAB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
