@@ -42,7 +42,7 @@ class Annex
 
   private
 
-  def sync_changes(local, remote)
+  def sync_changes(local)
     Dir.chdir local_repo
     commit_local
     push_remote
