@@ -25,13 +25,13 @@ class Annex
     @user = user
   end
 
-  def sync_github
+  def github
     puts "Syncing GitHub..."
     # sync_github("#{LOCAL_SYNC}/.canvas")
     # sync_github("#{LOCAL_SYNC}/.script")
   end
 
-  def sync_gitlab
+  def gitlab
     puts "Syncing GitLab..."
     # sync_github("#{LOCAL_SYNC}/.canvas")
     # sync_github("#{LOCAL_SYNC}/.script")
