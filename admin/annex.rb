@@ -1,58 +1,43 @@
 #!/usr/bin/ruby -w
 # annex.rb
 # Author: Andy Bettisworth
-# Description: Annex local ~/.sync files
+# Description: Annex thy code repositories both public and private
 
 require 'optparse'
 require 'fileutils'
 
 class Annex
-  GITHUB = "https://www.github.com/wurde"
-  ANNEX_SYNC = "/media/#{ENV['USER']}/Village/preseed/.seed-install/.sync"
-  LOCAL_SYNC = "#{ENV['HOME']}/.sync"
-  SYNC_REPOSITORIES = [
-    '.canvas',
-    '.script',
-    '.template',
-    '.project',
-    '.preseed'
+  GITHUB = "https://www.github.com"
+  GITLAB = "http://localhost:8080"
+
+  GITHUB_REPOS = [
+    'canvas',
+    'script',
   ]
-  SYNC_APPLICATIONS = [
-    'developer_training',
-    'accreu'
-  ]
-  SYNC_GEMS = [
-    'scrapyard',
-    'tribe_triage',
-    'phantom_assembly',
-    'tandem_feet',
-    'collective_vibration'
+  GITLAB_REPOS = [
+    'schema',
+    'stylesheet',
   ]
 
-  def full
-    require_annex_usb
-    SYNC_REPOSITORIES.each { |r| sync(r) }
-    SYNC_APPLICATIONS.each { |a| sync(a, '.app/') }
-    SYNC_GEMS.each { |g| sync(g, '.gem/') }
+  attr_accessor :user
+
+  def initialize(user='wurde')
+    @user = user
   end
 
-  def slim
-    require_annex_usb
-    sync('.canvas')
-    sync('.script')
-    sync('.project')
+  def sync_github
+    puts "Syncing GitHub..."
+    # sync_github("#{LOCAL_SYNC}/.canvas")
+    # sync_github("#{LOCAL_SYNC}/.script")
   end
 
-  def github
-    sync_github("#{LOCAL_SYNC}/.canvas")
-    sync_github("#{LOCAL_SYNC}/.script")
+  def sync_gitlab
+    puts "Syncing GitLab..."
+    # sync_github("#{LOCAL_SYNC}/.canvas")
+    # sync_github("#{LOCAL_SYNC}/.script")
   end
 
   private
-
-  def require_annex_usb
-    raise 'USBNotFound!' unless File.exist?(ANNEX_SYNC)
-  end
 
   def sync(repo, subdir='')
     local_repo  = "#{LOCAL_SYNC}/#{subdir}#{repo}"
@@ -200,30 +185,23 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: annex [options]'
 
-    opts.on('-f', '--full', 'Annex all sync repositories') do
-      options[:full] = true
-    end
-
-    opts.on('-s', '--slim', 'Annex only a select few repositories') do
-      options[:slim] = true
-    end
-
-    opts.on('--github', 'Annex only a select few github repositories') do
+    opts.on('--github', 'Annex the public github repositories') do
       options[:github] = true
+    end
+
+    opts.on('--gitlab', 'Annex the private gitlab repositories') do
+      options[:gitlab] = true
     end
   end
   option_parser.parse!
 
   update = Annex.new
 
-  if options[:full]
-    update.full
-    exit
-  elsif options[:slim]
-    update.slim
-    exit
-  elsif options[:github]
+  if options[:github]
     update.github
+    exit
+  elsif options[:gitlab]
+    update.gitlab
     exit
   end
 
