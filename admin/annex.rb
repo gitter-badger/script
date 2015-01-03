@@ -50,18 +50,19 @@ class Annex
   private
 
   def sync_changes(local_repo, remote_repo)
-    unless local_exist?(local_repo)
+    if local_exist?(local_repo) == false
       throw_missing_repo(local_repo)
-
-      unless remote_exist?(remote_repo)
-        throw_missing_repo(remote_repo)
-
-      else
-        puts 'syncing!'
-        # commit_local(local_repo)
-        # push_remote(local_repo)
-      end
+      next
     end
+
+    if remote_exist?(remote_repo) == false
+      throw_missing_repo(remote_repo)
+      next
+    end
+
+    puts 'syncing!'
+    # commit_local(local_repo)
+    # push_remote(local_repo)
   end
 
   def get_local_github_repos
