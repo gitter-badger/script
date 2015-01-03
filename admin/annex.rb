@@ -66,7 +66,7 @@ class Annex
   end
 
   def remote_exist?(remote_repo)
-    `wget --server-response --max-redirect=0 #{remote_repo}`
+    response = `wget --server-response --max-redirect=0 #{remote_repo}`
 
     case $?
     when 0
