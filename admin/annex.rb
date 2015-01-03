@@ -27,8 +27,15 @@ class Annex
     puts "Syncing with #{GITHUB_REMOTE}/#{@user}..."
 
     @github_repos.each do |repo|
+      local_repo  = "#{GITHUB_REMOTE}/#{@user}/#{repo}"
+      remote_repo = "#{GITHUB_LOCAL}/#{@user}/#{repo}.git"
+
       print_target_repo(repo)
-      # > CHECK if repo is available on remote
+      print_missing_remote unless remote_exist?(remote_repo)
+      # ensure_branch_exist('annex', local_repo)
+
+      # commit_local(local_repo)
+      # sync_upstream(local_repo)
     end
   end
 
@@ -36,8 +43,15 @@ class Annex
     puts "Syncing with #{GITLAB_REMOTE}/#{@user}..."
 
     @gitlab_repos.each do |repo|
+      local_repo  = "#{GITLAB_REMOTE}/#{@user}/#{repo}"
+      remote_repo = "#{GITLAB_LOCAL}/#{@user}/#{repo}.git"
+
       print_target_repo(repo)
-      # > CHECK if repo is available on remote
+      print_missing_remote unless remote_exist?(remote_repo)
+      # ensure_branch_exist('annex', local_repo)
+
+      # commit_local(local_repo)
+      # sync_upstream(local_repo)
     end
   end
 
@@ -57,6 +71,14 @@ class Annex
 ### #{repo}
 
     MSG
+  end
+
+  def remote_exist?(remote_repo)
+    # > confirm remote exist
+  end
+
+  def print_missing_remote
+    puts 'MissingRemoteError: No remote exists for this repository'
   end
 
   # def sync(repo, subdir='')
