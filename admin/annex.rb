@@ -19,16 +19,16 @@ class Annex
 
   def initialize(user='wurde')
     @user = user
-    @github_repos = get_github_repos
-    @gitlab_repos = get_gitlab_repos
+    @github_repos = get_local_github_repos
+    @gitlab_repos = get_local_gitlab_repos
   end
 
   def github
     puts "Syncing with #{GITHUB_REMOTE}/#{@user}..."
 
     @github_repos.each do |repo|
-      # > GET list of repositories
-      puts repo
+      print_target_repo(repo)
+      # > CHECK if repo is available on remote
     end
   end
 
@@ -36,19 +36,27 @@ class Annex
     puts "Syncing with #{GITLAB_REMOTE}/#{@user}..."
 
     @gitlab_repos.each do |repo|
-      # > GET list of repositories
-      puts repo
+      print_target_repo(repo)
+      # > CHECK if repo is available on remote
     end
   end
 
   private
 
-  def get_github_repos
+  def get_local_github_repos
     Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
   end
 
-  def get_gitlab_repos
+  def get_local_gitlab_repos
     Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+  end
+
+  def print_target_repo(repo)
+    puts <<-MSG
+
+### #{repo}
+
+    MSG
   end
 
   # def sync(repo, subdir='')
