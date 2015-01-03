@@ -480,22 +480,22 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  s = Script.new
+  mgr = Script.new
 
   if options[:list]
-    s.list(options[:list_pattern])
+    mgr.list(options[:list_pattern])
   elsif options[:add]
-    s.add(options[:add])
+    mgr.add(options[:add])
   elsif options[:fetch]
-    s.fetch(ARGV)
+    mgr.fetch(ARGV)
   elsif options[:clean]
-    s.clean
+    mgr.clean
   elsif options[:info]
-    s.info(options[:info])
+    mgr.info(options[:info])
   elsif options[:refresh]
-    s.refresh_aliases
+    mgr.refresh_aliases
   elsif options[:history]
-    s.history
+    mgr.history
   else
     puts option_parser
   end
