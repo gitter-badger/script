@@ -25,67 +25,27 @@ class Annex
   end
 
   def github
-    puts "Syncing with #{GITHUB_REMOTE}/#{@user}..."
-
+    puts "Syncing GitHub #{GITHUB_REMOTE}/#{@user}..."
     @github_repos.each do |repo|
-      local_repo  = "#{GITHUB_LOCAL}/#{repo}"
-      remote_repo = "#{GITHUB_REMOTE}/#{@user}/#{repo}.git"
-
       print_target_repo(repo)
-      next if remote_exist?(remote_repo) == false
-      sync_changes(local_repo, remote_repo)
+      sync_changes("#{GITHUB_LOCAL}/#{repo}")
     end
   end
 
   def gitlab
-    puts "Syncing with #{GITLAB_REMOTE}/#{@user}..."
-
+    puts "Syncing GitLab #{GITLAB_REMOTE}/#{@user}..."
     @gitlab_repos.each do |repo|
-      local_repo  = "#{GITLAB_LOCAL}/#{repo}"
-      remote_repo = "#{GITLAB_REMOTE}/#{@user}/#{repo}.git"
-
       print_target_repo(repo)
-      next if remote_exist?(remote_repo) == false
-      sync_changes(local_repo, remote_repo)
+      sync_changes("#{GITLAB_LOCAL}/#{repo}")
     end
   end
 
   private
 
-  def sync_changes(local_repo, remote_repo)
-    puts '  Success!'
-    # commit_local(local_repo)
-    # push_remote(local_repo)
-  end
-
-  def remote_exist?(remote_repo)
-    puts "  Checking remote #{remote_repo}"
-
-    stdin, stdout, stderr, status = Open3.popen3("wget --server-response --max-redirect=0 #{remote_repo}")
-    stdout.gets(nil)
-    stdout.close
-    stderr.gets(nil)
-    stderr.close
-    exit_code = status.value.exitstatus
-
-    case exit_code
-    when 0
-      return true
-    when 4
-      puts "  NetworkError: oops, something went wrong."
-    when 6
-      puts "  UserPassError: : oops, something went wrong."
-    when 8
-      puts "  ServerError: oops, something went wrong."
-    else
-      puts "  UnknownError: oops, something went wrong."
-    end
-
-    return false
-  end
-
-  def throw_missing_repo(repo)
-    puts "MisingRepositoryError: No git repository available at '#{repo}'"
+  def sync_changes(local, remote)
+    Dir.chdir local_repo
+    commit_local
+    push_remote
   end
 
   def print_target_repo(repo)
@@ -96,20 +56,18 @@ class Annex
     MSG
   end
 
-  def commit_local(local_repo)
-    puts "  saving any open changes on local repo..."
-    Dir.chdir local_repo
+  def commit_local
+    puts "  Saving open changes on local repo..."
 
     system <<-CMD
-      git checkout annex;
+      git checkout -b annex;
       git add -A;
       git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     CMD
   end
 
-  def push_remote(local_repo)
-    puts "  pushing changes to remote repo..."
-    Dir.chdir local_repo
+  def push_remote
+    puts "  Pushing changes to remote repo..."
 
     system <<-CMD
       git checkout master;
