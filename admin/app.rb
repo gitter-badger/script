@@ -8,6 +8,9 @@
 require 'optparse'
 
 class Application
+  GITHUB_LOCAL  = "#{ENV['HOME']}/GitHub"
+  GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
+
   def list(script_regexp=false)
     apps = get_all_apps
     puts apps.inspect
@@ -23,6 +26,14 @@ class Application
     github = get_github_apps
     gitlab = get_gitlab_apps
     github + gitlab
+  end
+
+  def get_github_apps
+    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+  end
+
+  def get_gitlab_apps
+    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
   end
 end
 
