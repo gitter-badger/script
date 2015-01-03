@@ -44,11 +44,11 @@ class Annex
   private
 
   def get_github_repos
-    puts File.entries(GITHUB_LOCAL).inspect
+    Dir.entries(GITHUB_LOCAL).inspect.reject! {|x| x == '.' or x == '..'}
   end
 
   def get_gitlab_repos
-    puts File.entries(GITLAB_LOCAL).inspect
+    Dir.entries(GITLAB_LOCAL).inspect.reject! {|x| x == '.' or x == '..'}
   end
 
   # def sync(repo, subdir='')
