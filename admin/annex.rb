@@ -25,7 +25,7 @@ class Annex
   end
 
   def github
-    puts "Syncing GitHub #{GITHUB_REMOTE}/#{@user}..."
+    puts "Syncing GitHub #{GITHUB_REMOTE}/#{@user}...\n"
     @github_repos.each do |repo|
       print_target_repo(repo)
       sync_changes("#{GITHUB_LOCAL}/#{repo}")
@@ -33,7 +33,7 @@ class Annex
   end
 
   def gitlab
-    puts "Syncing GitLab #{GITLAB_REMOTE}/#{@user}..."
+    puts "Syncing GitLab #{GITLAB_REMOTE}/#{@user}...\n"
     @gitlab_repos.each do |repo|
       print_target_repo(repo)
       sync_changes("#{GITLAB_LOCAL}/#{repo}")
@@ -57,7 +57,7 @@ class Annex
   end
 
   def commit_local
-    puts "  Saving open changes on local repo..."
+    puts "  Saving open changes on local repo...\n"
 
     system <<-CMD
       git checkout -b annex;
