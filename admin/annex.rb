@@ -35,7 +35,7 @@ class Annex
   def gitlab
     puts "Syncing with #{GITLAB_REMOTE}/#{@user}..."
 
-    @github_repos.each do |repo|
+    @gitlab_repos.each do |repo|
       # > GET list of repositories
       puts repo
     end
