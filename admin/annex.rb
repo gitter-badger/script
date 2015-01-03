@@ -57,7 +57,7 @@ class Annex
   end
 
   def commit_local
-    puts "  Saving open changes on local repo...\n"
+    puts "  Saving open changes on local repo...\n\n"
 
     system <<-CMD
       git checkout -b annex;
