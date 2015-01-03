@@ -59,6 +59,8 @@ class Annex
   end
 
   def remote_exist?(remote_repo)
+    puts "  Checking remote #{remote_repo}"
+
     stdin, stdout, stderr, status = Open3.popen3("wget --server-response --max-redirect=0 #{remote_repo}")
     stdout.gets(nil)
     stdout.close
