@@ -67,7 +67,7 @@ class Annex
   end
 
   def remote_exist?(remote_repo)
-    stdout, status = Open3.capture2("wget --server-response --max-redirect=0 #{remote_repo}")
+    # stdout, status = Open3.capture2("wget --server-response --max-redirect=0 #{remote_repo}")
 
     # puts status
     # case $?
