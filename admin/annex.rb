@@ -31,12 +31,7 @@ class Annex
       remote_repo = "#{GITHUB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
-
-      if remote_exist?(remote_repo) == false
-        throw_missing_repo(remote_repo)
-        next
-      end
-
+      next if remote_exist?(remote_repo) == false
       sync_changes(local_repo, remote_repo)
     end
   end
@@ -49,12 +44,7 @@ class Annex
       remote_repo = "#{GITLAB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
-
-      if remote_exist?(remote_repo) == false
-        throw_missing_repo(remote_repo)
-        next
-      end
-
+      next if remote_exist?(remote_repo) == false
       sync_changes(local_repo, remote_repo)
     end
   end
@@ -62,7 +52,7 @@ class Annex
   private
 
   def sync_changes(local_repo, remote_repo)
-    puts 'syncing!'
+    puts '  Success!'
     # commit_local(local_repo)
     # push_remote(local_repo)
   end
@@ -77,7 +67,21 @@ class Annex
 
   def remote_exist?(remote_repo)
     `wget --server-response --max-redirect=0 #{remote_repo}`
-    puts $?
+
+    case $?
+    when 0:
+      return true
+    when 4:
+      puts "Network error."
+    when 6:
+      puts "User/Pass authentication error."
+    when 8:
+      puts "Server-side error."
+    else:
+      puts "Error ocurred."
+    end
+
+    return false
   end
 
   def branch_exist?(repository, branch)
