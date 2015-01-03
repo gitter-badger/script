@@ -5,6 +5,7 @@
 
 require 'optparse'
 require 'fileutils'
+require 'open3'
 
 class Annex
   GITHUB_REMOTE = "https://www.github.com"
@@ -57,18 +58,15 @@ class Annex
     # push_remote(local_repo)
   end
 
-  def get_local_github_repos
-    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
-  end
-
-  def get_local_gitlab_repos
-    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
-  end
-
   def remote_exist?(remote_repo)
-    system("wget --server-response --max-redirect=0 #{remote_repo}")
+    stdin, stdout, stderr, wait_thr = Open3.popen3("wget --server-response --max-redirect=0 #{remote_repo}")
+    stdout.gets(nil)
+    stdout.close
+    stderr.gets(nil)
+    stderr.close
+    exit_code = wait_thr.value
 
-    # puts status
+    puts exit_code
     # case $?
     # when 0
     #   return true
@@ -83,12 +81,6 @@ class Annex
     # end
 
     return false
-  end
-
-  def branch_exist?(repository, branch)
-    Dir.chdir repository
-    branches = `git branch`
-    return branches.include?(branch)
   end
 
   def throw_missing_repo(repo)
@@ -129,6 +121,14 @@ class Annex
       git checkout annex;
       git merge --no-edit master
     CMD
+  end
+
+  def get_local_github_repos
+    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+  end
+
+  def get_local_gitlab_repos
+    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
   end
 end
 
