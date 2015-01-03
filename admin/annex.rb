@@ -31,6 +31,17 @@ class Annex
       remote_repo = "#{GITHUB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
+
+      if local_exist?(local_repo) == false
+        throw_missing_repo(local_repo)
+        next
+      end
+
+      if remote_exist?(remote_repo) == false
+        throw_missing_repo(remote_repo)
+        next
+      end
+
       sync_changes(local_repo, remote_repo)
     end
   end
@@ -43,6 +54,17 @@ class Annex
       remote_repo = "#{GITLAB_REMOTE}/#{@user}/#{repo}.git"
 
       print_target_repo(repo)
+
+      if local_exist?(local_repo) == false
+        throw_missing_repo(local_repo)
+        next
+      end
+
+      if remote_exist?(remote_repo) == false
+        throw_missing_repo(remote_repo)
+        next
+      end
+
       sync_changes(local_repo, remote_repo)
     end
   end
@@ -50,16 +72,6 @@ class Annex
   private
 
   def sync_changes(local_repo, remote_repo)
-    if local_exist?(local_repo) == false
-      throw_missing_repo(local_repo)
-      next
-    end
-
-    if remote_exist?(remote_repo) == false
-      throw_missing_repo(remote_repo)
-      next
-    end
-
     puts 'syncing!'
     # commit_local(local_repo)
     # push_remote(local_repo)
