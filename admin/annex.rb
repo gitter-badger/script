@@ -7,38 +7,27 @@ require 'optparse'
 require 'fileutils'
 
 class Annex
-  GITHUB = "https://www.github.com"
-  GITLAB = "http://localhost:8080"
+  GITHUB_REMOTE = "https://www.github.com"
+  GITLAB_REMOTE = "http://localhost:8080"
 
-  GITHUB_REPOS = [
-    'canvas',
-    'script',
-  ]
-  GITLAB_REPOS = [
-    'seed-config',
-    'seed-install',
-    'schema',
-    'feature',
-    'accreu',
-    'canvas',
-    'collective_vibration',
-    'phantom_assembly',
-    'script',
-    'scrapyard',
-    'tandem_feet',
-    'tribe_triage',
-  ]
+  GITHUB_LOCAL  = "#{ENV['HOME']}/GitHub"
+  GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
 
   attr_accessor :user
+  attr_accessor :github_repos
+  attr_accessor :gitlab_repos
 
   def initialize(user='wurde')
     @user = user
+    @github_repos = get_github_repos
+    @gitlab_repos = get_gitlab_repos
   end
 
   def github
     puts "Syncing with #{GITHUB}/#{@user}..."
 
-    GITHUB_REPOS.each do |repo|
+    @github_repos.each do |repo|
+      # > GET list of repositories
       puts repo
     end
   end
@@ -46,12 +35,21 @@ class Annex
   def gitlab
     puts "Syncing with #{GITLAB}/#{@user}..."
 
-    GITLAB_REPOS.each do |repo|
+    @github_repos.each do |repo|
+      # > GET list of repositories
       puts repo
     end
   end
 
   private
+
+  def get_github_repos
+    puts File.entries(GITHUB_LOCAL).inspect
+  end
+
+  def get_gitlab_repos
+    puts File.entries(GITLAB_LOCAL).inspect
+  end
 
   # def sync(repo, subdir='')
   #   local_repo  = "#{LOCAL_SYNC}/#{subdir}#{repo}"
@@ -65,38 +63,6 @@ class Annex
 
   #   commit_local(local_repo)
   #   sync_upstream(local_repo)
-  # end
-
-  # def ensure_local_repo_exists(path)
-  #   unless File.exist?(path)
-  #     create_repo(path)
-  #     Dir.chdir path
-  #     system <<-CMD
-  #       touch .keep;
-  #       git init;
-  #       git add -A;
-  #       git commit -m 'init';
-  #       git checkout -b annex;
-  #     CMD
-  #   end
-  # end
-
-  # def ensure_annex_repo_exists(path)
-  #   unless File.exist?(path)
-  #     create_repo(path)
-  #     Dir.chdir path
-  #     system 'git init --bare;'
-  #   end
-  # end
-
-  # def create_repo(path)
-  #   puts <<-MSG
-
-  # No repository found at #{path}
-  # Creating repository...
-
-  #   MSG
-  #   FileUtils.mkdir_p path
   # end
 
   # def ensure_branch_exists(repo, branch)

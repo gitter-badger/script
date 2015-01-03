@@ -9,7 +9,7 @@ require 'optparse'
 
 class Script
   HOME     = ENV['HOME']
-  SCRIPT   = "#{HOME}/.sync/.script"
+  SCRIPT   = "#{HOME}/GitHub/script"
   BINARIES = {
     '.rb'  => 'ruby',
     '.py'  => 'python',
