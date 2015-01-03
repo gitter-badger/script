@@ -57,7 +57,11 @@ class Annex
   end
 
   def commit_local
-    puts "  Saving open changes on local repo...\n\n"
+    puts <<-MSG
+
+  Saving open changes on local repo...
+
+  MSG
 
     system <<-CMD
       git checkout -b annex;
@@ -67,7 +71,11 @@ class Annex
   end
 
   def push_remote
-    puts "  Pushing changes to remote repo..."
+    puts <<-MSG
+
+  Pushing changes to remote repo...
+
+  MSG
 
     system <<-CMD
       git checkout master;
