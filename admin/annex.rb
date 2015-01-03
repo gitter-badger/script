@@ -69,15 +69,15 @@ class Annex
     `wget --server-response --max-redirect=0 #{remote_repo}`
 
     case $?
-    when 0:
+    when 0
       return true
-    when 4:
+    when 4
       puts "Network error."
-    when 6:
+    when 6
       puts "User/Pass authentication error."
-    when 8:
+    when 8
       puts "Server-side error."
-    else:
+    else
       puts "Error ocurred."
     end
 
