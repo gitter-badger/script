@@ -78,7 +78,6 @@ class Annex
 
   def remote_exist?(remote_repo)
     `wget --server-response --max-redirect=0 #{remote_repo}`
-    return $? == 0 ? true : false
   end
 
   def branch_exist?(repository, branch)
@@ -88,8 +87,7 @@ class Annex
   end
 
   def throw_missing_repo(repo)
-    puts "No git repository found for '#{repo}'"
-    exit 1
+    puts "MisingRepositoryError: No git repository available at '#{repo}'"
   end
 
   def print_target_repo(repo)
