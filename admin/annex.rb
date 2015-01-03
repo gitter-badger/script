@@ -68,6 +68,9 @@ class Annex
 
     puts exit_code
     puts exit_code.class
+
+    puts exit_code.exitstatus
+    puts exit_code.exitstatusclass
     # case $?
     # when 0
     #   return true
