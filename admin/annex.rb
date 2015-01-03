@@ -15,8 +15,18 @@ class Annex
     'script',
   ]
   GITLAB_REPOS = [
+    'seed-config',
+    'seed-install',
     'schema',
-    'stylesheet',
+    'feature',
+    'accreu',
+    'canvas',
+    'collective_vibration',
+    'phantom_assembly',
+    'script',
+    'scrapyard',
+    'tandem_feet',
+    'tribe_triage',
   ]
 
   attr_accessor :user
@@ -26,15 +36,19 @@ class Annex
   end
 
   def github
-    puts "Syncing GitHub..."
-    # sync_github("#{LOCAL_SYNC}/.canvas")
-    # sync_github("#{LOCAL_SYNC}/.script")
+    puts "Syncing with #{GITHUB}/#{@user}..."
+
+    GITHUB_REPOS.each do |repo|
+      puts repo
+    end
   end
 
   def gitlab
-    puts "Syncing GitLab..."
-    # sync_github("#{LOCAL_SYNC}/.canvas")
-    # sync_github("#{LOCAL_SYNC}/.script")
+    puts "Syncing with #{GITLAB}/#{@user}..."
+
+    GITLAB_REPOS.each do |repo|
+      puts repo
+    end
   end
 
   private
