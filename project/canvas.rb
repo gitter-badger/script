@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby -w
 # canvas.rb
 # Author: Andy Bettisworth
-# Description: Canvas Management Class
+# Description: Canvas Management CLI Application
 
 require 'optparse'
 
 class Canvas
   DESKTOP     = "#{ENV['HOME']}/Desktop"
-  CANVAS      = "#{ENV['HOME']}/.sync/.canvas"
+  CANVAS      = "#{ENV['HOME']}/GitHub/canvas"
   ALIAS_CMD = {
     '.rb'  => 'ruby',
     '.py'  => 'python',
