@@ -64,25 +64,20 @@ class Annex
     stdout.close
     stderr.gets(nil)
     stderr.close
-    exit_code = status.value
+    exit_code = status.value.exitstatus
 
-    puts exit_code
-    puts exit_code.class
-
-    puts exit_code.exitstatus
-    puts exit_code.exitstatus.class
-    # case $?
-    # when 0
-    #   return true
-    # when 4
-    #   puts "Network error."
-    # when 6
-    #   puts "User/Pass authentication error."
-    # when 8
-    #   puts "Server-side error."
-    # else
-    #   puts "Error ocurred."
-    # end
+    case $?
+    when 0
+      return true
+    when 4
+      puts "Network error."
+    when 6
+      puts "User/Pass authentication error."
+    when 8
+      puts "Server-side error."
+    else
+      puts "Error ocurred."
+    end
 
     return false
   end
