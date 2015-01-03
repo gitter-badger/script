@@ -66,17 +66,17 @@ class Annex
     stderr.close
     exit_code = status.value.exitstatus
 
-    case $?
+    case exit_code
     when 0
       return true
     when 4
-      puts "Network error."
+      puts "  NetworkError: oops, something went wrong."
     when 6
-      puts "User/Pass authentication error."
+      puts "  UserPassError: : oops, something went wrong."
     when 8
-      puts "Server-side error."
+      puts "  ServerError: oops, something went wrong."
     else
-      puts "Error ocurred."
+      puts "  UnknownError: oops, something went wrong."
     end
 
     return false
