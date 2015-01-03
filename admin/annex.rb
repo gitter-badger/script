@@ -59,14 +59,15 @@ class Annex
   end
 
   def remote_exist?(remote_repo)
-    stdin, stdout, stderr, wait_thr = Open3.popen3("wget --server-response --max-redirect=0 #{remote_repo}")
+    stdin, stdout, stderr, status = Open3.popen3("wget --server-response --max-redirect=0 #{remote_repo}")
     stdout.gets(nil)
     stdout.close
     stderr.gets(nil)
     stderr.close
-    exit_code = wait_thr.value
+    exit_code = status.value
 
     puts exit_code
+    puts exit_code.class
     # case $?
     # when 0
     #   return true
