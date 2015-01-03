@@ -70,7 +70,7 @@ class Annex
     puts exit_code.class
 
     puts exit_code.exitstatus
-    puts exit_code.exitstatusclass
+    puts exit_code.exitstatus.class
     # case $?
     # when 0
     #   return true
