@@ -36,8 +36,7 @@ GitLab Applications (private)
   def fetch(*apps)
     apps = ask_for_app while apps.flatten.empty?
     apps = get_app_location(apps)
-    puts apps.inspect
-    # move_apps_to_desktop(apps)
+    move_apps_to_desktop(apps)
   end
 
   private
@@ -52,17 +51,18 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(app)
 
       if is_github and is_gitlab
-        app = ''
+        app = nil
       elsif is_github
         app = "#{GITHUB_LOCAL}/#{app}"
       elsif is_gitlab
         app = "#{GITLAB_LOCAL}/#{app}"
       else
-        app = ''
+        app = nil
       end
 
       app
     end
+
     apps.compact!
   end
 
