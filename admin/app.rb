@@ -66,11 +66,13 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     apps.flatten!
-    puts "Looping #{apps.inspect}"
     apps.collect! do |app|
-      puts "Searching for #{app}"
-    #   is_github = true if github_apps.include?(app)
-    #   is_gitlab = true if gitlab_apps.include?(app)
+      is_github = true if github_apps.include?(app)
+      is_gitlab = true if gitlab_apps.include?(app)
+
+      puts "searching #{app}"
+      puts "github: #{is_github}"
+      puts "gitlab: #{is_gitlab}"
 
     #   if is_github and is_gitlab
     #     puts "  Duplicate repositories in both GitLab and GitHub for '#{app}'"
