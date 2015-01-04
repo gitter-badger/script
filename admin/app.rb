@@ -42,6 +42,8 @@ GitLab Applications (private)
   def clean
     puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
+    puts open_apps
+    puts open_apps.class
     if open_apps
       if open_apps.is_a? Array
         open_apps.each do |app|
