@@ -64,15 +64,15 @@ GitLab Applications (private)
       puts "github: #{is_github}"
       puts "gitlab: #{is_gitlab}"
 
-      # if is_github and is_gitlab
-      #   puts "  WARNING: found #{entry} in both GitHub and GitLab"
-      # elsif is_github
-      #   open_apps << "#{GITHUB_LOCAL}/#{entry}"
-      # elsif is_gitlab
-      #   open_apps << "#{GITLAB_LOCAL}/#{entry}"
-      # else
-      #   puts "  WARNING: could not find an application named #{entry}"
-      # end
+      if is_github and is_gitlab
+        puts "  WARNING: found #{entry} in both GitHub and GitLab"
+      elsif is_github
+        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+      elsif is_gitlab
+        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+      else
+        puts "  WARNING: could not find an application named #{entry}"
+      end
     end
     puts open_apps.inspect
 
