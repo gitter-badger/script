@@ -41,6 +41,7 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
+    puts "Open applications: #{open_apps.inspect}"
 
     if open_apps
       if open_apps.is_a? Array
