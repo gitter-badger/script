@@ -12,12 +12,24 @@ class Application
   GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
 
   def list(app_regexp=false)
-    apps = get_all_apps
-    apps = filter_apps(apps, app_regexp)
-    puts apps.inspect
-    # scripts = scripts.sort_by { |k,v| k[:filename]}
-    # print_script_list(scripts)
-    # apps
+    github_apps = get_github_apps
+    gitlab_apps = get_gitlab_apps
+
+    # apps = filter_apps(apps, app_regexp)
+
+    puts <<-MSG
+
+GitHub Applications (public)
+
+    MSG
+    github_apps.each {|a| puts "  #{a}"}
+
+    puts <<-MSG
+
+GitLab Applications (private)
+
+    MSG
+    gitlab_apps.each {|a| puts "  #{a}"}
   end
 
   private
@@ -25,12 +37,6 @@ class Application
   def filter_apps(apps, app_regexp=false)
     pattern = Regexp.new(app_regexp) if app_regexp
     apps.select! { |a| pattern.match(a[:filename]) } if pattern
-    apps
-  end
-
-  def get_all_apps
-    apps = get_github_apps
-    apps += get_gitlab_apps
     apps
   end
 
