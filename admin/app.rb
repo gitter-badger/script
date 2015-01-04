@@ -11,21 +11,27 @@ class Application
   GITHUB_LOCAL  = "#{ENV['HOME']}/GitHub"
   GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
 
-  def list(script_regexp=false)
+  def list(app_regexp=false)
     apps = get_all_apps
+    apps = filter_apps(apps, app_regexp)
     puts apps.inspect
-    # scripts = filter_scripts(scripts, script_regexp)
     # scripts = scripts.sort_by { |k,v| k[:filename]}
     # print_script_list(scripts)
-    # scripts
+    # apps
   end
 
   private
 
+  def filter_apps(apps, app_regexp=false)
+    pattern = Regexp.new(app_regexp) if app_regexp
+    apps.select! { |a| pattern.match(a[:filename]) } if pattern
+    apps
+  end
+
   def get_all_apps
-    github = get_github_apps
-    gitlab = get_gitlab_apps
-    github + gitlab
+    apps = get_github_apps
+    apps += get_gitlab_apps
+    apps
   end
 
   def get_github_apps
