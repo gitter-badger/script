@@ -63,7 +63,7 @@ GitLab Applications (private)
       app
     end
 
-    apps.compact!
+    apps
   end
 
   def move_apps_to_desktop(*apps)
@@ -72,7 +72,7 @@ GitLab Applications (private)
       if File.exist?(app)
         system("cp #{app} #{HOME}/Desktop")
       else
-        puts "NotFoundError: could not find '#{app}'"
+        puts "NotFoundError: could not find '#{File.basename(app)}'"
       end
     end
   end
