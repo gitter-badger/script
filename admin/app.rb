@@ -48,13 +48,13 @@ GitLab Applications (private)
         open_apps.each do |app|
           system <<-CMD
             rm --recursive --force #{app};
-            mv #{HOME}/Desktop/#{File.basename(app)} #{app};
+            mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
           CMD
         end
       else
         system <<-CMD
           rm --recursive --force #{open_apps};
-          mv #{HOME}/Desktop/#{File.basename(open_apps)} #{open_apps};
+          mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
         CMD
       end
     end
