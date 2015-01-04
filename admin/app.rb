@@ -42,6 +42,7 @@ GitLab Applications (private)
   def clean
     puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
+    puts "open_apps: #{open_apps}"
     # if open_apps
     #   if open_apps.is_a? Array
     #     open_apps.each do |app|
@@ -68,35 +69,27 @@ GitLab Applications (private)
 
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
-    all_dir     = Dir.entries("#{ENV['HOME']}/Desktop")
 
-    puts "github_apps: #{github_apps}"
-    puts "gitlab_apps: #{gitlab_apps}"
-    puts "all_dir: #{all_dir}"
+    all_dir = Dir.entries("#{ENV['HOME']}/Desktop")
+    all_dir.delete('.')
+    all_dir.delete('..')
 
-    # Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
-    #   next if entry == '.' or entry == '..'
+    all_dir.each do |entry|
+      is_github = true if github_apps.include?(entry)
+      is_gitlab = true if gitlab_apps.include?(entry)
 
-    #   if File.directory?(entry)
-    #     is_github = true if github_apps.include?(entry)
-    #     is_gitlab = true if gitlab_apps.include?(entry)
-    #     puts "github: #{is_github} gitlab:#{is_gitlab}"
-
-    #     if is_github and is_gitlab
-    #       puts "  WARNING: repo found in both GitHub and GitLab"
-    #       next
-    #     elsif is_github
-    #       puts "  Found GitHub #{entry}..."
-    #       open_apps << "#{GITHUB_LOCAL}/#{entry}"
-    #     elsif is_gitlab
-    #       puts "  Found GitLab #{entry}..."
-    #       open_apps << "#{GITLAB_LOCAL}/#{entry}"
-    #     else
-    #       puts "  WARNING: repo not found"
-    #       next
-    #     end
-    #   end
-    # end
+      if is_github and is_gitlab
+        puts "  WARNING: repo found in both GitHub and GitLab"
+      elsif is_github
+        puts "  Found GitHub #{entry}..."
+        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+      elsif is_gitlab
+        puts "  Found GitLab #{entry}..."
+        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+      else
+        puts "  WARNING: repo not found"
+      end
+    end
 
     open_apps
   end
