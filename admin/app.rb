@@ -52,14 +52,18 @@ GitLab Applications (private)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
+    puts github_apps.inspect
+    puts gitlab_apps.inspect
+
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
-      puts "start #{entry}"
       next unless File.directory?(entry)
       next if entry == '.' or entry == '..'
 
-      puts "finish #{entry}"
-      # is_github = true if github_apps.include?(entry)
-      # is_gitlab = true if gitlab_apps.include?(entry)
+      is_github = true if github_apps.include?(entry)
+      is_gitlab = true if gitlab_apps.include?(entry)
+
+      puts "github: #{is_github}"
+      puts "gitlab: #{is_gitlab}"
 
       # if is_github and is_gitlab
       #   puts "  WARNING: found #{entry} in both GitHub and GitLab"
