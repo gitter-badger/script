@@ -84,7 +84,6 @@ GitLab Applications (private)
       elsif is_gitlab
         puts "  Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
-      else
       end
     end
 
