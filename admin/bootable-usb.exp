@@ -209,10 +209,10 @@ proc build_grub_menu { user secondary_sectors } {
 }
 
 proc get_install_space { user } {
-  set local_preseed /home/$user/.sync/.preseed
+  set gitlab_path /home/$user/GitLab
 
   regexp {(\d*)} [exec sh -c {df -P /media/raist/Village/ | tail -1 | awk '{print $4}'}] -> device_size
-  regexp {(\d*)} [exec du --summarize $local_preseed/.seed-install] -> seed_install_size
+  regexp {(\d*)} [exec du --summarize $gitlab_path/seed-install] -> seed_install_size
 
   set remainder [expr "$device_size - $seed_install_size"]
 
