@@ -42,24 +42,23 @@ GitLab Applications (private)
   def clean
     puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
-    puts "open_apps: #{open_apps}"
-    # if open_apps
-    #   if open_apps.is_a? Array
-    #     open_apps.each do |app|
-    #       puts "  Updating #{app}..."
-    #       system <<-CMD
-    #         rm --recursive --force #{app};
-    #         mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
-    #       CMD
-    #     end
-    #   else
-    #     puts "  Updating #{open_apps}..."
-    #     system <<-CMD
-    #       rm --recursive --force #{open_apps};
-    #       mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
-    #     CMD
-    #   end
-    # end
+    if open_apps
+      if open_apps.is_a? Array
+        open_apps.each do |app|
+          puts "  Updating #{app}..."
+          system <<-CMD
+            rm --recursive --force #{app};
+            mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
+          CMD
+        end
+      else
+        puts "  Updating #{open_apps}..."
+        system <<-CMD
+          rm --recursive --force #{open_apps};
+          mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
+        CMD
+      end
+    end
   end
 
   private
@@ -79,7 +78,6 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(entry)
 
       if is_github and is_gitlab
-        puts "  WARNING: repo found in both GitHub and GitLab"
       elsif is_github
         puts "  Found GitHub #{entry}..."
         open_apps << "#{GITHUB_LOCAL}/#{entry}"
@@ -87,7 +85,6 @@ GitLab Applications (private)
         puts "  Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
       else
-        puts "  WARNING: repo not found"
       end
     end
 
