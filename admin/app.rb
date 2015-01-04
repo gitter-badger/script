@@ -40,25 +40,6 @@ GitLab Applications (private)
     # move_apps_to_desktop(apps)
   end
 
-  def clean
-    github_apps = get_github_apps
-    gitlab_apps = get_gitlab_apps
-
-    github_apps_out = get_open_apps(github_apps)
-    gitlab_apps_out = get_open_apps(gitlab_apps)
-    # > .. = get_app_location(..)
-
-    # if scripts_out
-    #   if scripts_out.is_a? Array
-    #     scripts_out.each { |s| system("mv #{HOME}/Desktop/#{File.basename(s)} #{s}") }
-    #   else
-    #     system("mv #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
-    #   end
-
-    #   # > commit_changes
-    # end
-  end
-
   private
 
   def get_app_location(*apps)
@@ -71,20 +52,18 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(app)
 
       if is_github and is_gitlab
-        app = nil
+        app = ''
       elsif is_github
-       app = "#{GITHUB_LOCAL}/#{app}"
+        app = "#{GITHUB_LOCAL}/#{app}"
       elsif is_gitlab
         app = "#{GITLAB_LOCAL}/#{app}"
       else
-        app = nil
+        app = ''
       end
 
       app
     end
-    apps = apps.flatten
-
-    apps
+    apps.compact!
   end
 
   def move_apps_to_desktop(*apps)
