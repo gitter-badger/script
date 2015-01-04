@@ -73,17 +73,12 @@ GitLab Applications (private)
         puts <<-MSG
 
   Fetching the application '#{File.basename(app)}'...
-
         MSG
         `cp --recursive --no-clobber #{app} #{ENV['HOME']}/Desktop`
       else
         puts "NotFoundError: could not find '#{File.basename(app)}'"
       end
-      puts <<-MSG
-
-  Success!
-
-      MSG
+      puts '  Success!'
     end
   end
 
