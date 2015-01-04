@@ -75,14 +75,16 @@ GitLab Applications (private)
       puts "gitlab: #{is_gitlab}"
 
       if is_github and is_gitlab
-        return nil
+        app = nil
       elsif is_github
-        return "#{GITHUB_LOCAL}/#{app}"
+       app = "#{GITHUB_LOCAL}/#{app}"
       elsif is_gitlab
-        return "#{GITLAB_LOCAL}/#{app}"
+        app = "#{GITLAB_LOCAL}/#{app}"
       else
-        return nil
+        app = nil
       end
+
+      app
     end
     apps.flatten!
 
