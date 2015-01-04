@@ -82,6 +82,7 @@ GitLab Applications (private)
 
       app
     end
+    apps = apps.flatten
 
     apps
   end
