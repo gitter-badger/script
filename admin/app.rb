@@ -82,9 +82,8 @@ GitLab Applications (private)
 
       app
     end
-    apps.flatten!
 
-    apps
+    apps.flatten!
   end
 
   def move_apps_to_desktop(*apps)
