@@ -76,7 +76,7 @@ $0
       if scripts_out.is_a? Array
         scripts_out.each { |s| system("mv #{HOME}/Desktop/#{File.basename(s)} #{s}") }
       else
-        system("mv #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
+        system("mv -f #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
       end
 
       commit_changes
