@@ -51,12 +51,14 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(app)
 
       if is_github and is_gitlab
+        puts "  WARNING: found #{app} in both GitHub and GitLab"
         app = nil
       elsif is_github
         app = "#{GITHUB_LOCAL}/#{app}"
       elsif is_gitlab
         app = "#{GITLAB_LOCAL}/#{app}"
       else
+        puts "  WARNING: could not find #{app}"
         app = nil
       end
 
