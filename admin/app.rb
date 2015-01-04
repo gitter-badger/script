@@ -74,17 +74,17 @@ GitLab Applications (private)
       puts "github: #{is_github}"
       puts "gitlab: #{is_gitlab}"
 
-    #   if is_github and is_gitlab
-    #     puts "  Duplicate repositories in both GitLab and GitHub for '#{app}'"
-    #     next
-    #   elsif is_github
-    #     return "#{GITHUB_LOCAL}/#{app}"
-    #   elsif is_gitlab
-    #     return "#{GITLAB_LOCAL}/#{app}"
-    #   else
-    #     next
-    #   end
+      if is_github and is_gitlab
+        return nil
+      elsif is_github
+        return "#{GITHUB_LOCAL}/#{app}"
+      elsif is_gitlab
+        return "#{GITLAB_LOCAL}/#{app}"
+      else
+        return nil
+      end
     end
+    apps.flatten!
 
     apps
   end
