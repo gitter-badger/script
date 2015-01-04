@@ -41,7 +41,6 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
-    puts open_apps.inspect
   end
 
   private
@@ -75,6 +74,7 @@ GitLab Applications (private)
       #   puts "  WARNING: could not find an application named #{entry}"
       # end
     end
+    puts open_apps.inspect
 
     open_apps
   end
