@@ -75,7 +75,7 @@ GitLab Applications (private)
   Fetching the application '#{File.basename(app)}'...
 
         MSG
-        `cp -r #{app} #{ENV['HOME']}/Desktop`
+        `cp --recursive --no-clobber --verbose #{app} #{ENV['HOME']}/Desktop`
       else
         puts "NotFoundError: could not find '#{File.basename(app)}'"
       end
