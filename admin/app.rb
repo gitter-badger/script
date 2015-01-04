@@ -66,7 +66,7 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     apps.flatten!
-    apps.each do |app|
+    apps.collect! do |app|
       is_github = true if github_apps.include?(app)
       is_gitlab = true if gitlab_apps.include?(app)
 
@@ -81,6 +81,8 @@ GitLab Applications (private)
         next
       end
     end
+
+    apps
   end
 
   def move_apps_to_desktop(*apps)
