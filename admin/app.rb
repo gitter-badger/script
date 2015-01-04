@@ -41,7 +41,7 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
-    puts open_github_apps.inspect
+    puts open_apps.inspect
   end
 
   private
