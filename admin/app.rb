@@ -41,6 +41,20 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
+
+    if open_apps
+      if open_apps.is_a? Array
+        open_apps.each do |a|
+          puts a
+          # system("rm --recursive --force #{a}")
+          # system("mv #{HOME}/Desktop/#{File.basename(a)} #{a}")
+        end
+      else
+        puts open_apps
+        # system("rm --recursive --force #{open_apps}")
+        # system("mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps}")
+      end
+    end
   end
 
   private
@@ -59,16 +73,13 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(entry)
 
       if is_github and is_gitlab
-        puts "  WARNING: found #{entry} in both GitHub and GitLab"
       elsif is_github
         open_apps << "#{GITHUB_LOCAL}/#{entry}"
       elsif is_gitlab
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
       else
-        puts "  WARNING: could not find an application named #{entry}"
       end
     end
-    puts open_apps.inspect
 
     open_apps
   end
