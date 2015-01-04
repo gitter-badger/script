@@ -42,25 +42,25 @@ GitLab Applications (private)
   def clean
     puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
-    puts open_apps
+    puts "open: '#{open_apps}'"
     puts open_apps.class
-    if open_apps
-      if open_apps.is_a? Array
-        open_apps.each do |app|
-          puts "  Updating #{app}..."
-          system <<-CMD
-            rm --recursive --force #{app};
-            mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
-          CMD
-        end
-      else
-        puts "  Updating #{open_apps}..."
-        system <<-CMD
-          rm --recursive --force #{open_apps};
-          mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
-        CMD
-      end
-    end
+    # if open_apps
+    #   if open_apps.is_a? Array
+    #     open_apps.each do |app|
+    #       puts "  Updating #{app}..."
+    #       system <<-CMD
+    #         rm --recursive --force #{app};
+    #         mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
+    #       CMD
+    #     end
+    #   else
+    #     puts "  Updating #{open_apps}..."
+    #     system <<-CMD
+    #       rm --recursive --force #{open_apps};
+    #       mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
+    #     CMD
+    #   end
+    # end
   end
 
   private
