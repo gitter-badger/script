@@ -76,6 +76,7 @@ GitLab Applications (private)
       is_gitlab = true if gitlab_apps.include?(entry)
 
       if is_github and is_gitlab
+        next
       elsif is_github
         puts "Found GitHub #{entry}..."
         open_apps << "#{GITHUB_LOCAL}/#{entry}"
@@ -83,6 +84,7 @@ GitLab Applications (private)
         puts "Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
       else
+        next
       end
     end
 
