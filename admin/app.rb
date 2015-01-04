@@ -59,6 +59,14 @@ if __FILE__ == $0
       options[:list] = true
       options[:list_pattern] = regexp
     end
+
+    opts.on('-f', '--fetch', 'Copy application(s) to the Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('--clean', 'Move application(s) off Desktop and commit changes') do
+      options[:clean] = true
+    end
   end
   option_parser.parse!
 
@@ -66,18 +74,10 @@ if __FILE__ == $0
 
   if options[:list]
     mgr.list(options[:list_pattern])
-  # elsif options[:add]
-  #   mgr.add(options[:add])
-  # elsif options[:fetch]
-  #   mgr.fetch(ARGV)
-  # elsif options[:clean]
-  #   mgr.clean
-  # elsif options[:info]
-  #   mgr.info(options[:info])
-  # elsif options[:refresh]
-  #   mgr.refresh_aliases
-  # elsif options[:history]
-  #   mgr.history
+  elsif options[:fetch]
+    mgr.fetch(ARGV)
+  elsif options[:clean]
+    mgr.clean
   else
     puts option_parser
   end
