@@ -72,24 +72,26 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
-      puts "entry: '#{entry}' #{entry.class}"
-      next unless File.directory?(entry)
       next if entry == '.' or entry == '..'
 
-      is_github = true if github_apps.include?(entry)
-      is_gitlab = true if gitlab_apps.include?(entry)
-      puts "github: #{is_github} gitlab:#{is_gitlab}"
+      if File.directory?(entry)
+        is_github = true if github_apps.include?(entry)
+        is_gitlab = true if gitlab_apps.include?(entry)
+        puts "github: #{is_github} gitlab:#{is_gitlab}"
 
-      if is_github and is_gitlab
-        next
-      elsif is_github
-        puts "  Found GitHub #{entry}..."
-        open_apps << "#{GITHUB_LOCAL}/#{entry}"
-      elsif is_gitlab
-        puts "  Found GitLab #{entry}..."
-        open_apps << "#{GITLAB_LOCAL}/#{entry}"
-      else
-        next
+        if is_github and is_gitlab
+          puts "  WARNING: repo found in both GitHub and GitLab"
+          next
+        elsif is_github
+          puts "  Found GitHub #{entry}..."
+          open_apps << "#{GITHUB_LOCAL}/#{entry}"
+        elsif is_gitlab
+          puts "  Found GitLab #{entry}..."
+          open_apps << "#{GITLAB_LOCAL}/#{entry}"
+        else
+          puts "  WARNING: repo not found"
+          next
+        end
       end
     end
 
