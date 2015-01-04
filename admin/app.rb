@@ -54,6 +54,7 @@ GitLab Applications (private)
 
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
       next unless File.directory?(entry)
+      next if entry == '.' or entry == '..'
 
       is_github = true if github_apps.include?(entry)
       is_gitlab = true if gitlab_apps.include?(entry)
