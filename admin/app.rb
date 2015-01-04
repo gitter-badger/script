@@ -35,8 +35,8 @@ GitLab Applications (private)
 
   def fetch(*apps)
     apps = ask_for_app while apps.flatten.empty?
-    puts apps
-    # > apps = get_app_location(apps)
+    apps = get_app_location(apps)
+    puts apps.inspect
     # move_apps_to_desktop(apps)
   end
 
@@ -60,6 +60,20 @@ GitLab Applications (private)
   end
 
   private
+
+  def get_app_location(*apps)
+    github_apps = get_github_apps
+    gitlab_apps = get_gitlab_apps
+
+    apps.flatten!
+    apps.each do |app|
+      is_github = true if app in github_apps
+      is_gitlab = true if app in gitlab_apps
+
+      puts "github: #{is_github}"
+      puts "gitlab: #{is_gitlab}"
+    end
+  end
 
   def move_apps_to_desktop(*apps)
     apps.flatten!
