@@ -83,6 +83,7 @@ GitLab Applications (private)
       else
       end
     end
+    puts "list #{open_apps.inspect}"
 
     open_apps
   end
