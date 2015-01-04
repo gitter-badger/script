@@ -44,15 +44,17 @@ GitLab Applications (private)
 
     if open_apps
       if open_apps.is_a? Array
-        open_apps.each do |a|
-          puts a
-          # system("rm --recursive --force #{a}")
-          # system("mv #{HOME}/Desktop/#{File.basename(a)} #{a}")
+        open_apps.each do |app|
+          system <<-CMD
+            rm --recursive --force #{app};
+            mv #{HOME}/Desktop/#{File.basename(app)} #{app};
+          CMD
         end
       else
-        puts open_apps
-        # system("rm --recursive --force #{open_apps}")
-        # system("mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps}")
+        system <<-CMD
+          rm --recursive --force #{open_apps};
+          mv #{HOME}/Desktop/#{File.basename(open_apps)} #{open_apps};
+        CMD
       end
     end
   end
@@ -120,7 +122,10 @@ GitLab Applications (private)
 
   Fetching the application '#{File.basename(app)}'...
         MSG
-        `cp --recursive --no-clobber #{app} #{ENV['HOME']}/Desktop`
+        system <<-CMD
+          rm --recursive --force #{ENV['HOME']}/Desktop/#{File.basename(app)};
+          cp --recursive #{app} #{ENV['HOME']}/Desktop;
+        CMD
       else
         puts "NotFoundError: could not find '#{File.basename(app)}'"
       end
