@@ -40,6 +40,7 @@ GitLab Applications (private)
   end
 
   def clean
+    puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
     if open_apps
       if open_apps.is_a? Array
