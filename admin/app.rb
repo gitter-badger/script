@@ -15,7 +15,8 @@ class Application
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
-    # apps = filter_apps(apps, app_regexp)
+    github_apps = filter_apps(github_apps, app_regexp)
+    gitlab_apps = filter_apps(gitlab_apps, app_regexp)
 
     puts <<-MSG
 
@@ -36,7 +37,7 @@ GitLab Applications (private)
 
   def filter_apps(apps, app_regexp=false)
     pattern = Regexp.new(app_regexp) if app_regexp
-    apps.select! { |a| pattern.match(a[:filename]) } if pattern
+    apps.select! { |a| pattern.match(a) } if pattern
     apps
   end
 
