@@ -67,6 +67,7 @@ GitLab Applications (private)
 
     apps.flatten!
     apps.collect! do |app|
+      puts "Searching for #{app}"
       is_github = true if github_apps.include?(app)
       is_gitlab = true if gitlab_apps.include?(app)
 
