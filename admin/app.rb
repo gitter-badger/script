@@ -70,7 +70,7 @@ GitLab Applications (private)
     apps.flatten!
     apps.each do |app|
       if File.exist?(app)
-        system("cp #{app} #{HOME}/Desktop")
+        system("cp #{app} #{ENV['HOME']}/Desktop")
       else
         puts "NotFoundError: could not find '#{File.basename(app)}'"
       end
