@@ -75,6 +75,9 @@ GitLab Applications (private)
       is_github = true if github_apps.include?(entry)
       is_gitlab = true if gitlab_apps.include?(entry)
 
+      puts "is_github #{is_github}"
+      puts "is_gitlab #{is_gitlab}"
+
       if is_github and is_gitlab
         next
       elsif is_github
