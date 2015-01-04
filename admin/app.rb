@@ -67,8 +67,8 @@ GitLab Applications (private)
 
     apps.flatten!
     apps.each do |app|
-      is_github = true if app in github_apps
-      is_gitlab = true if app in gitlab_apps
+      is_github = true if github_apps.include?(app)
+      is_gitlab = true if gitlab_apps.include?(app)
 
       puts "github: #{is_github}"
       puts "gitlab: #{is_gitlab}"
