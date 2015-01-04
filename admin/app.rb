@@ -41,8 +41,6 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
-    puts "Open applications: #{open_apps.inspect}"
-
     if open_apps
       if open_apps.is_a? Array
         open_apps.each do |app|
@@ -69,23 +67,19 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
-      puts "entry: #{entry}"
       next unless File.directory?(entry)
       next if entry == '.' or entry == '..'
 
       is_github = true if github_apps.include?(entry)
       is_gitlab = true if gitlab_apps.include?(entry)
 
-      puts "is_github #{is_github}"
-      puts "is_gitlab #{is_gitlab}"
-
       if is_github and is_gitlab
         next
       elsif is_github
-        puts "Found GitHub #{entry}..."
+        puts "  Found GitHub #{entry}..."
         open_apps << "#{GITHUB_LOCAL}/#{entry}"
       elsif is_gitlab
-        puts "Found GitLab #{entry}..."
+        puts "  Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
       else
         next
