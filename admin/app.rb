@@ -39,7 +39,38 @@ GitLab Applications (private)
     move_apps_to_desktop(apps)
   end
 
+  def clean
+    open_apps = get_open_apps
+    puts open_github_apps.inspect
+  end
+
   private
+
+  def get_open_apps
+    open_apps = []
+
+    github_apps = get_github_apps
+    gitlab_apps = get_gitlab_apps
+
+    Dir.foreach("#{HOME}/Desktop") do |entry|
+      next unless File.directory?(entry)
+
+      is_github = true if github_apps.include?(entry)
+      is_gitlab = true if gitlab_apps.include?(entry)
+
+      if is_github and is_gitlab
+        puts "  WARNING: found #{entry} in both GitHub and GitLab"
+      elsif is_github
+        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+      elsif is_gitlab
+        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+      else
+        puts "  WARNING: could not find an application named #{entry}"
+      end
+    end
+
+    open_apps
+  end
 
   def get_app_location(*apps)
     github_apps = get_github_apps
