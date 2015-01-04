@@ -166,7 +166,7 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: BLAH app [options] [APPLICATION]"
+    opts.banner = "Usage: app [options] [APPLICATION]"
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching applications') do |regexp|
       options[:list] = true
