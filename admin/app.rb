@@ -77,6 +77,8 @@ GitLab Applications (private)
         return "#{GITHUB_LOCAL}/#{app}"
       elsif is_gitlab
         return "#{GITLAB_LOCAL}/#{app}"
+      else
+        next
       end
     end
   end
