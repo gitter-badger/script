@@ -72,6 +72,7 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
+      puts "entry: #{entry}"
       next unless File.directory?(entry)
       next if entry == '.' or entry == '..'
 
