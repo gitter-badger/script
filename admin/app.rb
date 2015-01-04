@@ -35,8 +35,9 @@ GitLab Applications (private)
 
   def fetch(*apps)
     apps = ask_for_app while apps.flatten.empty?
-    apps = get_app_location(apps)
     puts apps.inspect
+    # apps = get_app_location(apps)
+    # puts apps.inspect
     # move_apps_to_desktop(apps)
   end
 
