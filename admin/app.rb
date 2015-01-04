@@ -35,8 +35,7 @@ GitLab Applications (private)
 
   def fetch(*apps)
     apps = ask_for_app while apps.flatten.empty?
-    puts apps.inspect
-    # apps = get_app_location(apps)
+    apps = get_app_location(apps)
     # puts apps.inspect
     # move_apps_to_desktop(apps)
   end
@@ -66,23 +65,25 @@ GitLab Applications (private)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
+    print apps.inspect
     apps.flatten!
-    apps.collect! do |app|
-      puts "Searching for #{app}"
-      is_github = true if github_apps.include?(app)
-      is_gitlab = true if gitlab_apps.include?(app)
+    print apps.inspect
+    # apps.collect! do |app|
+    #   puts "Searching for #{app}"
+    #   is_github = true if github_apps.include?(app)
+    #   is_gitlab = true if gitlab_apps.include?(app)
 
-      if is_github and is_gitlab
-        puts "  Duplicate repositories in both GitLab and GitHub for '#{app}'"
-        next
-      elsif is_github
-        return "#{GITHUB_LOCAL}/#{app}"
-      elsif is_gitlab
-        return "#{GITLAB_LOCAL}/#{app}"
-      else
-        next
-      end
-    end
+    #   if is_github and is_gitlab
+    #     puts "  Duplicate repositories in both GitLab and GitHub for '#{app}'"
+    #     next
+    #   elsif is_github
+    #     return "#{GITHUB_LOCAL}/#{app}"
+    #   elsif is_gitlab
+    #     return "#{GITLAB_LOCAL}/#{app}"
+    #   else
+    #     next
+    #   end
+    # end
 
     apps
   end
