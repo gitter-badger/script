@@ -65,11 +65,10 @@ GitLab Applications (private)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
-    print apps.inspect
     apps.flatten!
-    print apps.inspect
-    # apps.collect! do |app|
-    #   puts "Searching for #{app}"
+    puts "Looping #{apps.inspect}"
+    apps.collect! do |app|
+      puts "Searching for #{app}"
     #   is_github = true if github_apps.include?(app)
     #   is_gitlab = true if gitlab_apps.include?(app)
 
@@ -83,7 +82,7 @@ GitLab Applications (private)
     #   else
     #     next
     #   end
-    # end
+    end
 
     apps
   end
