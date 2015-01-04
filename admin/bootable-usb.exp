@@ -193,7 +193,7 @@ proc build_grub_menu { user secondary_sectors } {
   send_user "Enter password: \n"
   expect_user -re "(.*)\n"
   set password $expect_out(1,string)
-  set pbkdf2_response [exec echo "$password\n$password" | grub-mkpasswd-pbkdf2 --salt=1000]
+  set pbkdf2_response [exec echo "$password\n$password" | grub-mkpasswd-pbkdf2]
   regexp {\s(grub\.pbkdf2.*)} $pbkdf2_response -> secret
 
   set header "set default='guest'\nset timeout=1\nset superusers='$username'\npassword_pbkdf2 $username $secret\nexport superusers\n\n"
