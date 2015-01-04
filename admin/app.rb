@@ -52,7 +52,7 @@ GitLab Applications (private)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
-    Dir.foreach("#{HOME}/Desktop") do |entry|
+    Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
       next unless File.directory?(entry)
 
       is_github = true if github_apps.include?(entry)
