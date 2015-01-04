@@ -64,6 +64,7 @@ GitLab Applications (private)
 
       app
     end
+    apps = apps.compact
 
     apps
   end
