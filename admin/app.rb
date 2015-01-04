@@ -44,12 +44,14 @@ GitLab Applications (private)
     if open_apps
       if open_apps.is_a? Array
         open_apps.each do |app|
+          puts "  Updating #{app}..."
           system <<-CMD
             rm --recursive --force #{app};
             mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
           CMD
         end
       else
+        puts "  Updating #{open_apps}..."
         system <<-CMD
           rm --recursive --force #{open_apps};
           mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
