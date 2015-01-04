@@ -33,7 +33,50 @@ GitLab Applications (private)
     gitlab_apps.each {|a| puts "  #{a}"}
   end
 
+  def fetch(*apps)
+    apps = ask_for_app while apps.flatten.empty?
+    puts apps
+    # > apps = get_app_location(apps)
+    # move_apps_to_desktop(apps)
+  end
+
+  def clean
+    github_apps = get_github_apps
+    gitlab_apps = get_gitlab_apps
+
+    github_apps_out = get_open_apps(github_apps)
+    gitlab_apps_out = get_open_apps(gitlab_apps)
+    # > .. = get_app_location(..)
+
+    # if scripts_out
+    #   if scripts_out.is_a? Array
+    #     scripts_out.each { |s| system("mv #{HOME}/Desktop/#{File.basename(s)} #{s}") }
+    #   else
+    #     system("mv #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
+    #   end
+
+    #   # > commit_changes
+    # end
+  end
+
   private
+
+  def move_apps_to_desktop(*apps)
+    apps.flatten!
+    apps.each do |app|
+      if File.exist?(app)
+        system("cp #{app} #{HOME}/Desktop")
+      else
+        puts "NotFoundError: could not find '#{app}'"
+      end
+    end
+  end
+
+  def ask_for_app
+    puts "What app do you want?"
+    apps = gets.split(/\s.*?/).flatten
+    apps
+  end
 
   def filter_apps(apps, app_regexp=false)
     pattern = Regexp.new(app_regexp) if app_regexp
