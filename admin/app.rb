@@ -69,7 +69,6 @@ GitLab Applications (private)
     gitlab_apps = get_gitlab_apps
 
     Dir.foreach("#{ENV['HOME']}/Desktop") do |entry|
-      puts "entry: #{entry}"
       next unless File.directory?(entry)
       next if entry == '.' or entry == '..'
 
@@ -78,13 +77,14 @@ GitLab Applications (private)
 
       if is_github and is_gitlab
       elsif is_github
+        puts "Found GitHub #{entry}..."
         open_apps << "#{GITHUB_LOCAL}/#{entry}"
       elsif is_gitlab
+        puts "Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
       else
       end
     end
-    puts "list #{open_apps.inspect}"
 
     open_apps
   end
