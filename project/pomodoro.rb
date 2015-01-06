@@ -1,12 +1,21 @@
 #!/usr/bin/env ruby -w
 # pomodoro.rb
 # Author: Andy Bettisworth
-# Description: Initialize a pomodoro sequence for current terminal
+# Description: Empower a developer to focus on code for 20 minutes
+
+class Pomodoro  
+  def start
+  end
+  
+  private
+
+  def disable_network
+  end
+  
+  def swap_wallpaper
+  end
+end
 
 if __FILE__ == $0
-  terminal_pid = Process.ppid
-  close_terminal = fork do
-    exec "sleep 1200; kill -9 #{terminal_pid}"
-  end
-  Process.detach(close_terminal)
+  # > 
 end
