@@ -151,15 +151,29 @@ GitLab Applications (private)
   end
 
   def get_github_apps
-    entries = Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
-    entries = entries.keep_if { |x| File.directory?(x) }
-    entries
+    Dir.entries(GITHUB_LOCAL).each do |entry|
+      puts File.absolute_path(entry)
+      puts entry.class
+      puts entry
+      puts File.directory?(entry)
+      puts ''
+    end
+    # entries = Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    # entries = entries.keep_if { |x| File.directory?(x) }
+    # entries
   end
 
   def get_gitlab_apps
-    entries = Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
-    entries = entries.keep_if { |x| File.directory?(x) }
-    entries
+    Dir.entries(GITLAB_LOCAL).each do |entry|
+      puts File.absolute_path(entry)
+      puts entry.class
+      puts entry
+      puts File.directory?(entry)
+      puts ''
+    end
+    # entries = Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    # entries = entries.keep_if { |x| File.directory?(x) }
+    # entries
   end
 end
 
