@@ -152,11 +152,7 @@ GitLab Applications (private)
 
   def get_github_apps
     Dir.glob("#{GITHUB_LOCAL}/*/").each do |entry|
-      puts File.absolute_path(entry)
-      puts entry.class
-      puts entry
-      puts File.directory?(entry)
-      puts ''
+      puts File.basename(entry)
     end
     # entries = Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
     # entries = entries.keep_if { |x| File.directory?(x) }
@@ -165,11 +161,7 @@ GitLab Applications (private)
 
   def get_gitlab_apps
     Dir.glob("#{GITLAB_LOCAL}/*/").each do |entry|
-      puts File.absolute_path(entry)
-      puts entry.class
-      puts entry
-      puts File.directory?(entry)
-      puts ''
+      puts File.basename(entry)
     end
     # entries = Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
     # entries = entries.keep_if { |x| File.directory?(x) }
