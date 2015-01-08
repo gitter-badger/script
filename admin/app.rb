@@ -149,11 +149,15 @@ GitLab Applications (private)
   end
 
   def get_github_apps
-    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = entries.keep_if { |x| File.directory?(x) }
+    entries
   end
 
   def get_gitlab_apps
-    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = entries.keep_if { |x| File.directory?(x) }
+    entries
   end
 end
 
