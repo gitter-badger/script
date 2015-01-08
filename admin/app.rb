@@ -151,7 +151,7 @@ GitLab Applications (private)
   end
 
   def get_github_apps
-    Dir.entries(GITHUB_LOCAL).each do |entry|
+    Dir.glob("#{GITHUB_LOCAL}/*/").each do |entry|
       puts File.absolute_path(entry)
       puts entry.class
       puts entry
@@ -164,7 +164,7 @@ GitLab Applications (private)
   end
 
   def get_gitlab_apps
-    Dir.entries(GITLAB_LOCAL).each do |entry|
+    Dir.glob("#{GITLAB_LOCAL}/*/").each do |entry|
       puts File.absolute_path(entry)
       puts entry.class
       puts entry
