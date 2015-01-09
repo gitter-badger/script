@@ -178,7 +178,7 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--clean', 'Move application(s) off Desktop and commit changes') do
+    opts.on('--clean', 'Move application(s) off Desktop') do
       options[:clean] = true
     end
   end
