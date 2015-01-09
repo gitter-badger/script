@@ -6,21 +6,29 @@
 class Pomodoro
   GSETTING = "org.gnome.desktop.background"
 
+  attr_accessor :image_dir
   attr_accessor :images
-  attr_reader :current_background
 
   def start(image_dir)
     if File.exist?(image_dir)
-      @images = Dir.entries(image_dir).reject {|x| x == '.' || x == '..'}
+      @image_dir = image_dir
+      @images    = Dir.entries(image_dir).reject {|x| x == '.' || x == '..'}
     else
       STDERR.puts "NoDirectoryError: no such directory '#{image_dir}'"
       exit 1
     end
 
-    puts @images.inspect
+    puts get_current_background
+    # rotate_wallpaper
   end
 
   private
+
+  def get_current_background
+    current_background_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
+    current_background = File.basename(current_background_path.strip.gsub("'", ''))
+    current_background
+  end
 
   def disable_network
   end
