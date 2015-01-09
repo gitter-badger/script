@@ -76,11 +76,11 @@ GitLab Applications (private)
       if is_github and is_gitlab
         next
       elsif is_github
-        puts "  Found GitHub #{entry}..."
-        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+        puts "  Found GitHub #{filename}..."
+        open_apps << "#{GITHUB_LOCAL}/#{filename}"
       elsif is_gitlab
-        puts "  Found GitLab #{entry}..."
-        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+        puts "  Found GitLab #{filename}..."
+        open_apps << "#{GITLAB_LOCAL}/#{filename}"
       else
         next
       end
