@@ -28,7 +28,7 @@ class DesktopBackground
 
       set_background("#{@images}/#{new_pic}")
     else
-      raise "UnknownError: I have no clue what went wrong, you?"
+      raise "EmptyDirectoryError: No images found in this directory"
     end
   end
 

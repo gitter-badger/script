@@ -8,8 +8,7 @@ class Pomodoro
 
   attr_accessor :image_dir
   attr_accessor :images
-
-  attr_reader :original_image_path
+  attr_reader   :original_image_path
 
   def start(image_dir)
     if File.exist?(image_dir)
@@ -20,25 +19,32 @@ class Pomodoro
       exit 1
     end
 
-    puts get_current_background
+    puts @images.sample
+    # set_background("#{@image_dir}/#{@images}")
     # rotate_wallpaper
   end
 
   private
 
   def get_current_background
-    original_image_path = `gsettings get #{GSETTING} picture-uri`
-    original_image_path = original_image_path.gsub('file://','')
-    @original_image_path = original_image_path.strip.gsub("'", '')
-    puts @original_image_path
+    image_path = `gsettings get #{GSETTING} picture-uri`
+    image_path = image_path.gsub('file://','')
+    image_path = image_path.strip.gsub("'", '')
+
+    @original_image_path = image_path
+
     current_background = File.basename(@original_image_path)
     current_background
   end
 
-  def disable_network
+  def set_background(image_path)
+    `GNOME_SESSION_PID=$(pgrep gnome-session); export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$GNOME_SESSION_PID/environ|cut -d= -f2-); DISPLAY=:0 gsettings set #{GSETTING} picture-uri "file://#{image_path}"`
   end
 
   def rotate_wallpaper
+  end
+
+  def disable_network
   end
 end
 
