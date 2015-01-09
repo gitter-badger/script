@@ -40,21 +40,22 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
-    if open_apps
-      if open_apps.is_a? Array
-        open_apps.each do |app|
-          system <<-CMD
-            rm --recursive --force #{app};
-            mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
-          CMD
-        end
-      else
-        system <<-CMD
-          rm --recursive --force #{open_apps};
-          mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
-        CMD
-      end
-    end
+    puts "open_apps: #{open_apps}"
+    # if open_apps
+    #   if open_apps.is_a? Array
+    #     open_apps.each do |app|
+    #       system <<-CMD
+    #         rm --recursive --force #{app};
+    #         mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
+    #       CMD
+    #     end
+    #   else
+    #     system <<-CMD
+    #       rm --recursive --force #{open_apps};
+    #       mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
+    #     CMD
+    #   end
+    # end
   end
 
   private
