@@ -19,7 +19,7 @@ class Pomodoro
 end
 
 if __FILE__ == $0
-  image_dir = ARGV[0] if ARGV.count > 1
+  image_dir = ARGV[0] if ARGV.count > 0
   image_dir ||= "#{ENV['HOME']}/Pictures/Backgrounds"
   mgr = Pomodoro.new
   mgr.start(image_dir)
