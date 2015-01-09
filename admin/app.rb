@@ -40,22 +40,22 @@ GitLab Applications (private)
 
   def clean
     open_apps = get_open_apps
-    puts "open_apps: #{open_apps}"
-    # if open_apps
-    #   if open_apps.is_a? Array
-    #     open_apps.each do |app|
-    #       system <<-CMD
-    #         rm --recursive --force #{app};
-    #         mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
-    #       CMD
-    #     end
-    #   else
-    #     system <<-CMD
-    #       rm --recursive --force #{open_apps};
-    #       mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
-    #     CMD
-    #   end
-    # end
+
+    if open_apps
+      if open_apps.is_a? Array
+        open_apps.each do |app|
+          system <<-CMD
+            rm --recursive --force #{app};
+            mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
+          CMD
+        end
+      else
+        system <<-CMD
+          rm --recursive --force #{open_apps};
+          mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
+        CMD
+      end
+    end
   end
 
   private
@@ -76,10 +76,10 @@ GitLab Applications (private)
       if is_github and is_gitlab
         next
       elsif is_github
-        puts "  Found GitHub #{filename}..."
+        puts "  Cleaning GitHub application '#{filename}'..."
         open_apps << "#{GITHUB_LOCAL}/#{filename}"
       elsif is_gitlab
-        puts "  Found GitLab #{filename}..."
+        puts "  Cleaning GitLab application '#{filename}'..."
         open_apps << "#{GITLAB_LOCAL}/#{filename}"
       else
         next
