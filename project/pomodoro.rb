@@ -9,6 +9,8 @@ class Pomodoro
   attr_accessor :image_dir
   attr_accessor :images
 
+  attr_reader :original_image_path
+
   def start(image_dir)
     if File.exist?(image_dir)
       @image_dir = image_dir
@@ -25,8 +27,9 @@ class Pomodoro
   private
 
   def get_current_background
-    current_background_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
-    current_background = File.basename(current_background_path.strip.gsub("'", ''))
+    @original_image_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
+    puts @original_image_path
+    current_background = File.basename(@original_image_path.strip.gsub("'", ''))
     current_background
   end
 
