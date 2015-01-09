@@ -20,9 +20,11 @@ class Pomodoro
     end
 
     get_current_background
-    puts "#{@image_dir}/#{@images.sample}"
+
+    image_path = "#{@image_dir}/#{@images.sample}"
+    puts "Setting background to #{File.basename(image_path)}"
     sleep(5)
-    puts @original_image_path
+    puts "Resetting background to #{@original_image_path}"
     # set_background("#{@image_dir}/#{@images.sample}")
     # set_background(@original_image_path)
     # rotate_wallpaper
