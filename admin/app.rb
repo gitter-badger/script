@@ -69,10 +69,12 @@ GitLab Applications (private)
     Dir.glob("#{ENV['HOME']}/Desktop/*/") do |entry|
       next if entry == '.' or entry == '..'
 
-      is_github = true if github_apps.include?(entry)
-      is_gitlab = true if gitlab_apps.include?(entry)
+      filename = File.basename(entry)
+      is_github = true if github_apps.include?(filename)
+      is_gitlab = true if gitlab_apps.include?(filename)
 
       puts entry
+      puts filename
       puts "is_github: #{is_github}"
       puts "is_gitlab: #{is_gitlab}"
       puts ''
