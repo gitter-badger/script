@@ -5,6 +5,7 @@
 
 class Pomodoro
   GSETTING = "org.gnome.desktop.background"
+  MINUTE   = 60
 
   attr_accessor :image_dir
   attr_accessor :images
@@ -21,15 +22,26 @@ class Pomodoro
 
     get_current_background
 
-    image_path = "#{@image_dir}/#{@images.sample}"
-    puts "Setting background to #{File.basename(image_path)}..."
-    set_background(image_path)
-    sleep(5)
-    puts "Resetting background to #{File.basename(@original_image_path)}..."
-    set_background(@original_image_path)
+    3.times do |i|
+      rotate_background
+      sleep(MINUTE)
+    end
+
+    reset_background
   end
 
   private
+
+  def rotate_background
+    image_path = "#{@image_dir}/#{@images.sample}"
+    puts "Setting background to #{File.basename(image_path)}..."
+    set_background(image_path)
+  end
+
+  def reset_background
+    puts "Resetting background to #{File.basename(@original_image_path)}..."
+    set_background(@original_image_path)
+  end
 
   def get_current_background
     image_path = `gsettings get #{GSETTING} picture-uri`
