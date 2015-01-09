@@ -4,9 +4,20 @@
 # Description: Rotate the Desktop's wallpaper for the next 20 minutes
 
 class Pomodoro
+  GSETTING = "org.gnome.desktop.background"
+
+  attr_accessor :images
+  attr_reader :current_background
+
   def start(image_dir)
-    puts image_dir
-    puts File.exist?(image_dir)
+    if File.exist?(image_dir)
+      @images = Dir.entries(image_dir).reject {|x| x == '.' || x == '..'}
+    else
+      STDERR.puts "NoDirectoryError: no such directory '#{image_dir}'"
+      exit 1
+    end
+
+    puts @images.inspect
   end
 
   private
@@ -14,7 +25,7 @@ class Pomodoro
   def disable_network
   end
 
-  def swap_wallpaper
+  def rotate_wallpaper
   end
 end
 
