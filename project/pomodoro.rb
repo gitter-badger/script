@@ -19,8 +19,10 @@ class Pomodoro
       exit 1
     end
 
-    puts @images.sample
-    # set_background("#{@image_dir}/#{@images}")
+    puts "#{@image_dir}/#{@images.sample}"
+    puts @original_image_path
+    # set_background("#{@image_dir}/#{@images.sample}")
+    # set_background(@original_image_path)
     # rotate_wallpaper
   end
 
