@@ -4,7 +4,9 @@
 # Description: Rotate the Desktop's wallpaper for the next 20 minutes
 
 class Pomodoro
-  def start
+  def start(image_dir)
+    puts image_dir
+    puts File.exist?(image_dir)
   end
 
   private
@@ -17,5 +19,8 @@ class Pomodoro
 end
 
 if __FILE__ == $0
-  puts ARGV.count
+  image_dir = ARGV[0] if ARGV.count > 1
+  image_dir ||= "#{ENV['HOME']}/Pictures/Backgrounds"
+  mgr = Pomodoro.new
+  mgr.start(image_dir)
 end
