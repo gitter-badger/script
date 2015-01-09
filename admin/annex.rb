@@ -26,17 +26,25 @@ class Annex
 
   def github
     puts "Syncing with GitHub #{GITHUB_REMOTE}/#{@user}...\n"
-    @github_repos.each do |repo|
-      print_target(File.basename(repo))
-      sync_changes(repo)
+    if @github_repos
+      @github_repos.each do |repo|
+        print_target(File.basename(repo))
+        sync_changes(repo)
+      end
+    else
+      puts "Nothing locally to sync, lame."
     end
   end
 
   def gitlab
     puts "Syncing with GitLab #{GITLAB_REMOTE}/#{@user}...\n"
-    @gitlab_repos.each do |repo|
-      print_target(File.basename(repo))
-      sync_changes(repo)
+    if @gitlab_repos
+      @gitlab_repos.each do |repo|
+        print_target(File.basename(repo))
+        sync_changes(repo)
+      end
+    else
+      puts "Nothing locally to sync, lame."
     end
   end
 
@@ -91,11 +99,16 @@ class Annex
   end
 
   def get_local_github_repos
-    Dir.glob("#{GITHUB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
+    entries = Dir.glob("#{GITHUB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
+    puts entries
+    entries
   end
 
   def get_local_gitlab_repos
-    Dir.glob("#{GITLAB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
+    entries = Dir.glob("#{GITLAB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
+    puts 'GitLab: '
+    puts entries.inspect
+    entries
   end
 end
 
