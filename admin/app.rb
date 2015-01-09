@@ -151,21 +151,19 @@ GitLab Applications (private)
   end
 
   def get_github_apps
+    entries = []
     Dir.glob("#{GITHUB_LOCAL}/*/").each do |entry|
-      puts File.basename(entry)
+      entries << File.basename(entry)
     end
-    # entries = Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
-    # entries = entries.keep_if { |x| File.directory?(x) }
-    # entries
+    entries
   end
 
   def get_gitlab_apps
+    entries = []
     Dir.glob("#{GITLAB_LOCAL}/*/").each do |entry|
-      puts File.basename(entry)
+      entries << File.basename(entry)
     end
-    # entries = Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
-    # entries = entries.keep_if { |x| File.directory?(x) }
-    # entries
+    entries
   end
 end
 
