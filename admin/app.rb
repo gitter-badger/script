@@ -14,9 +14,6 @@ class Application
   def list(app_regexp=false)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
-    puts "github_apps: #{github_apps.inspect}"
-    puts "gitlab_apps: #{gitlab_apps.inspect}"
-
     github_apps = filter_apps(github_apps, app_regexp)
     gitlab_apps = filter_apps(gitlab_apps, app_regexp)
 
