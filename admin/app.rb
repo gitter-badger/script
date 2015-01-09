@@ -73,23 +73,17 @@ GitLab Applications (private)
       is_github = true if github_apps.include?(filename)
       is_gitlab = true if gitlab_apps.include?(filename)
 
-      puts entry
-      puts filename
-      puts "is_github: #{is_github}"
-      puts "is_gitlab: #{is_gitlab}"
-      puts ''
-
-      # if is_github and is_gitlab
-      #   next
-      # elsif is_github
-      #   puts "  Found GitHub #{entry}..."
-      #   open_apps << "#{GITHUB_LOCAL}/#{entry}"
-      # elsif is_gitlab
-      #   puts "  Found GitLab #{entry}..."
-      #   open_apps << "#{GITLAB_LOCAL}/#{entry}"
-      # else
-      #   next
-      # end
+      if is_github and is_gitlab
+        next
+      elsif is_github
+        puts "  Found GitHub #{entry}..."
+        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+      elsif is_gitlab
+        puts "  Found GitLab #{entry}..."
+        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+      else
+        next
+      end
     end
 
     open_apps
