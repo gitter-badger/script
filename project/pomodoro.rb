@@ -22,12 +22,11 @@ class Pomodoro
     get_current_background
 
     image_path = "#{@image_dir}/#{@images.sample}"
-    puts "Setting background to #{File.basename(image_path)}"
+    puts "Setting background to #{File.basename(image_path)}..."
+    set_background(image_path)
     sleep(5)
-    puts "Resetting background to #{@original_image_path}"
-    # set_background("#{@image_dir}/#{@images.sample}")
-    # set_background(@original_image_path)
-    # rotate_wallpaper
+    puts "Resetting background to #{File.basename(@original_image_path)}..."
+    set_background(@original_image_path)
   end
 
   private
@@ -45,12 +44,6 @@ class Pomodoro
 
   def set_background(image_path)
     `GNOME_SESSION_PID=$(pgrep gnome-session); export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$GNOME_SESSION_PID/environ|cut -d= -f2-); DISPLAY=:0 gsettings set #{GSETTING} picture-uri "file://#{image_path}"`
-  end
-
-  def rotate_wallpaper
-  end
-
-  def disable_network
   end
 end
 
