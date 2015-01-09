@@ -100,14 +100,11 @@ class Annex
 
   def get_local_github_repos
     entries = Dir.glob("#{GITHUB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
-    puts entries
     entries
   end
 
   def get_local_gitlab_repos
     entries = Dir.glob("#{GITLAB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
-    puts 'GitLab: '
-    puts entries.inspect
     entries
   end
 end
