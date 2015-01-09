@@ -91,11 +91,11 @@ class Annex
   end
 
   def get_local_github_repos
-    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    Dir.glob("#{GITHUB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
   end
 
   def get_local_gitlab_repos
-    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    Dir.entries("#{GITLAB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
   end
 end
 
