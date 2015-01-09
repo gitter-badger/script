@@ -19,6 +19,7 @@ class Pomodoro
       exit 1
     end
 
+    get_current_background
     puts "#{@image_dir}/#{@images.sample}"
     puts @original_image_path
     # set_background("#{@image_dir}/#{@images.sample}")
