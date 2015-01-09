@@ -25,18 +25,18 @@ class Annex
   end
 
   def github
-    puts "Syncing GitHub #{GITHUB_REMOTE}/#{@user}...\n"
+    puts "Syncing with GitHub #{GITHUB_REMOTE}/#{@user}...\n"
     @github_repos.each do |repo|
-      print_target_repo(repo)
-      sync_changes("#{GITHUB_LOCAL}/#{repo}")
+      print_target(File.basename(repo))
+      sync_changes(repo)
     end
   end
 
   def gitlab
-    puts "Syncing GitLab #{GITLAB_REMOTE}/#{@user}...\n"
+    puts "Syncing with GitLab #{GITLAB_REMOTE}/#{@user}...\n"
     @gitlab_repos.each do |repo|
-      print_target_repo(repo)
-      sync_changes("#{GITLAB_LOCAL}/#{repo}")
+      print_target(File.basename(repo))
+      sync_changes(repo)
     end
   end
 
@@ -48,7 +48,7 @@ class Annex
     push_remote
   end
 
-  def print_target_repo(repo)
+  def print_target(repo)
     puts <<-MSG
 
 ### #{repo}
@@ -95,7 +95,7 @@ class Annex
   end
 
   def get_local_gitlab_repos
-    Dir.entries("#{GITLAB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
+    Dir.glob("#{GITLAB_LOCAL}/*/").reject! {|x| x == '.' or x == '..'}
   end
 end
 
