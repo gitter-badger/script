@@ -27,9 +27,11 @@ class Pomodoro
   private
 
   def get_current_background
-    @original_image_path = `gsettings get #{GSETTING} picture-uri`.gsub('file://','')
+    @original_image_path = `gsettings get #{GSETTING} picture-uri`
+    @original_image_path.gsub('file://','')
+    @original_image_path.strip.gsub("'", '')
     puts @original_image_path
-    current_background = File.basename(@original_image_path.strip.gsub("'", ''))
+    current_background = File.basename(@original_image_path)
     current_background
   end
 
