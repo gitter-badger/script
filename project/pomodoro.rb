@@ -22,7 +22,7 @@ class Pomodoro
 
     get_current_background
 
-    3.times do |i|
+    20.times do |i|
       rotate_background
       sleep(MINUTE)
     end
@@ -34,12 +34,10 @@ class Pomodoro
 
   def rotate_background
     image_path = "#{@image_dir}/#{@images.sample}"
-    puts "Setting background to #{File.basename(image_path)}..."
     set_background(image_path)
   end
 
   def reset_background
-    puts "Resetting background to #{File.basename(@original_image_path)}..."
     set_background(@original_image_path)
   end
 
