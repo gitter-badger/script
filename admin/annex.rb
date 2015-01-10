@@ -25,18 +25,26 @@ class Annex
   end
 
   def github
-    puts "Syncing GitHub #{GITHUB_REMOTE}/#{@user}...\n"
-    @github_repos.each do |repo|
-      print_target_repo(repo)
-      sync_changes("#{GITHUB_LOCAL}/#{repo}")
+    puts "Syncing with GitHub #{GITHUB_REMOTE}/#{@user}...\n"
+    if @github_repos
+      @github_repos.each do |repo|
+        print_target(File.basename(repo))
+        sync_changes(repo)
+      end
+    else
+      puts "Nothing locally to sync, lame."
     end
   end
 
   def gitlab
-    puts "Syncing GitLab #{GITLAB_REMOTE}/#{@user}...\n"
-    @gitlab_repos.each do |repo|
-      print_target_repo(repo)
-      sync_changes("#{GITLAB_LOCAL}/#{repo}")
+    puts "Syncing with GitLab #{GITLAB_REMOTE}/#{@user}...\n"
+    if @gitlab_repos
+      @gitlab_repos.each do |repo|
+        print_target(File.basename(repo))
+        sync_changes(repo)
+      end
+    else
+      puts "Nothing locally to sync, lame."
     end
   end
 
@@ -48,7 +56,7 @@ class Annex
     push_remote
   end
 
-  def print_target_repo(repo)
+  def print_target(repo)
     puts <<-MSG
 
 ### #{repo}
@@ -91,11 +99,13 @@ class Annex
   end
 
   def get_local_github_repos
-    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = Dir.glob("#{GITHUB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
+    entries
   end
 
   def get_local_gitlab_repos
-    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = Dir.glob("#{GITLAB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
+    entries
   end
 end
 

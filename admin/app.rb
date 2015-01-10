@@ -14,7 +14,6 @@ class Application
   def list(app_regexp=false)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
-
     github_apps = filter_apps(github_apps, app_regexp)
     gitlab_apps = filter_apps(gitlab_apps, app_regexp)
 
@@ -42,6 +41,7 @@ GitLab Applications (private)
   def clean
     puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
+
     if open_apps
       if open_apps.is_a? Array
         open_apps.each do |app|
@@ -79,8 +79,8 @@ GitLab Applications (private)
 
       if is_github and is_gitlab
       elsif is_github
-        puts "  Found GitHub #{entry}..."
-        open_apps << "#{GITHUB_LOCAL}/#{entry}"
+        puts "  Cleaning GitHub application '#{filename}'..."
+        open_apps << "#{GITHUB_LOCAL}/#{filename}"
       elsif is_gitlab
         puts "  Found GitLab #{entry}..."
         open_apps << "#{GITLAB_LOCAL}/#{entry}"
@@ -107,7 +107,7 @@ GitLab Applications (private)
       elsif is_gitlab
         app = "#{GITLAB_LOCAL}/#{app}"
       else
-        puts "  WARNING: could not find #{app}"
+        puts "  WARNING: could not find application named '#{app}'"
         app = nil
       end
 
@@ -150,11 +150,19 @@ GitLab Applications (private)
   end
 
   def get_github_apps
-    Dir.entries(GITHUB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = []
+    Dir.glob("#{GITHUB_LOCAL}/*/").each do |entry|
+      entries << File.basename(entry)
+    end
+    entries
   end
 
   def get_gitlab_apps
-    Dir.entries(GITLAB_LOCAL).reject! {|x| x == '.' or x == '..'}
+    entries = []
+    Dir.glob("#{GITLAB_LOCAL}/*/").each do |entry|
+      entries << File.basename(entry)
+    end
+    entries
   end
 end
 
@@ -172,7 +180,7 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--clean', 'Move application(s) off Desktop and commit changes') do
+    opts.on('--clean', 'Move application(s) off Desktop') do
       options[:clean] = true
     end
   end
