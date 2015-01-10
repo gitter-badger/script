@@ -39,20 +39,17 @@ GitLab Applications (private)
   end
 
   def clean
-    puts "Moving open applications off Desktop to their archival directory..."
     open_apps = get_open_apps
 
     if open_apps
       if open_apps.is_a? Array
         open_apps.each do |app|
-          puts "  Updating #{app}..."
           system <<-CMD
             rm --recursive --force #{app};
             mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
           CMD
         end
       else
-        puts "  Updating #{open_apps}..."
         system <<-CMD
           rm --recursive --force #{open_apps};
           mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
@@ -69,21 +66,23 @@ GitLab Applications (private)
     github_apps = get_github_apps
     gitlab_apps = get_gitlab_apps
 
-    all_dir = Dir.entries("#{ENV['HOME']}/Desktop")
-    all_dir.delete('.')
-    all_dir.delete('..')
+    Dir.glob("#{ENV['HOME']}/Desktop/*/") do |entry|
+      next if entry == '.' or entry == '..'
 
-    all_dir.each do |entry|
-      is_github = true if github_apps.include?(entry)
-      is_gitlab = true if gitlab_apps.include?(entry)
+      filename = File.basename(entry)
+      is_github = true if github_apps.include?(filename)
+      is_gitlab = true if gitlab_apps.include?(filename)
 
       if is_github and is_gitlab
+        next
       elsif is_github
         puts "  Cleaning GitHub application '#{filename}'..."
         open_apps << "#{GITHUB_LOCAL}/#{filename}"
       elsif is_gitlab
-        puts "  Found GitLab #{entry}..."
-        open_apps << "#{GITLAB_LOCAL}/#{entry}"
+        puts "  Cleaning GitLab application '#{filename}'..."
+        open_apps << "#{GITLAB_LOCAL}/#{filename}"
+      else
+        next
       end
     end
 
