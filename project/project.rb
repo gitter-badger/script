@@ -60,6 +60,10 @@ class ProjectManager
 
   private
 
+  def ensure_project_dir
+    FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
+  end
+
   def get_projects
     projects = Dir.glob("#{PROJECT}/*/")
     projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
@@ -79,10 +83,6 @@ class ProjectManager
 
   # def todo_commit(msg)
   #   `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
-  # end
-
-  # def ensure_project_dir
-  #   FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
   # end
 end
 
