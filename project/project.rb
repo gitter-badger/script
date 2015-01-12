@@ -10,23 +10,16 @@ require 'yaml'
 class ProjectManager
   PROJECT  = "#{ENV['HOME']}/Projects"
 
-  def list(regexp)
+  def list(project_regexp=false)
     ensure_project_dir
-
     projects = get_projects
+    projects = filter_projects(projects, project_regexp)
     puts projects.inspect
-    # pattern = Regexp.new(regexp) if regexp
-    # projects.select! { |s| pattern.match(s) } if pattern
-
-    # if projects.count > 0
-    #   projects.each do |project|
-    #     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-    #     puts "#{project} - #{info[:description]}"
-    #   end
-    # else
-    #   puts "No projects exist on this computer."
-    # end
   end
+  # projects.each do |project|
+  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+  #   puts "#{project} - #{info[:description]}"
+  # end
 
   # def fetch(project)
   #   ensure_project_dir
@@ -67,6 +60,12 @@ class ProjectManager
   def get_projects
     projects = Dir.glob("#{PROJECT}/*/")
     projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
+    projects
+  end
+
+  def filter_projects(projects, project_regexp=false)
+    pattern = Regexp.new(project_regexp) if project_regexp
+    projects.select! { |a| pattern.match(a) } if pattern
     projects
   end
 
