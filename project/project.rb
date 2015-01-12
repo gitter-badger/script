@@ -38,12 +38,9 @@ class ProjectManager
     archived_projects = get_projects
     desktop_dir = get_desktop_dir
     desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
-    # > skip mv of any projects that:
-    #  already exist id PROJECT/dir
+    desktop_dir = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
     puts desktop_dir.inspect
-    #  do not have info.yml
-        # File.exist?("#{DESKTOP}/#{project}")
-        # `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+    # `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
   end
 
   private
