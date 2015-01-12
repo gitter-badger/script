@@ -79,6 +79,7 @@ class ProjectManager
       if File.exist?("#{PROJECT}/#{project}/info.yml")
         info = YAML.load_file("#{PROJECT}/#{project}/info.yml")
         info[:project] = project
+        info
       else
         project
       end
