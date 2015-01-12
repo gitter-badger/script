@@ -17,7 +17,7 @@ class ProjectManager
     projects = get_info(projects)
 
     projects.each do |project|
-      if project.is_a Hash
+      if project.is_a? Hash
         puts project[:project]
         puts "  #{project[:info]}"
       else
