@@ -38,9 +38,10 @@ class ProjectManager
     archived_projects = get_projects
     desktop_dir = get_desktop_dir
     desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
-    desktop_dir = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
-    puts desktop_dir.inspect
-    # `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+    projects = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
+    projects.each do |project|
+      `mv #{DESKTOP}/#{project} #{PROJECT}`
+    end
   end
 
   private
