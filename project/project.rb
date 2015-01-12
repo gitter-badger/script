@@ -15,7 +15,10 @@ class ProjectManager
     projects = get_projects
     projects = filter_projects(projects, project_regexp)
     projects = get_info(projects)
-    puts projects.inspect
+
+    projects.each do |project|
+      puts project
+    end
   end
   # projects.each do |project|
   #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
@@ -75,7 +78,7 @@ class ProjectManager
     projects = projects.collect do |project|
       if File.exist?("#{PROJECT}/#{project}/info.yml")
         info = YAML.load_file("#{PROJECT}/#{project}/info.yml")
-        info
+        info[:project] = project
       else
         project
       end
