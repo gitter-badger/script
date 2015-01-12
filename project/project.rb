@@ -28,9 +28,8 @@ class ProjectManager
 
   def fetch(project)
     projects = get_projects
-    puts projects.include?(project)
-    # raise "No known project #{project}" unless project_exist?(project)
-    # `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
+    raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
+    `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
   end
 
   # def clean
