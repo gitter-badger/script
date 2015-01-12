@@ -60,6 +60,7 @@ class ProjectManager
   def get_projects
     projects = Dir.glob("#{PROJECT}/*/")
     projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
+    projects = projects.collect { |p| File.basename(p) }
     projects
   end
 
