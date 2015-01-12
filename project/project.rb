@@ -8,123 +8,82 @@ require 'fileutils'
 require 'yaml'
 
 class ProjectManager
-  PROJECT  = "#{ENV['HOME']}/.sync/.project"
-  TEMPLATE = "#{ENV['HOME']}/.sync/.template/projects"
-
-  attr_accessor :project
-  attr_accessor :project_path
-
-  def initialize
-    @project = File.basename(Dir.getwd).downcase.gsub(' ', '_')
-    @project_path = "#{PROJECT}/#{@project}"
-  end
-
-  def init(template)
-    ensure_project_archive
-    unless project_exist?(@project)
-      Dir.mkdir("#{PROJECT}/#{@project}")
-      puts "Describe this project:\n"
-      description = gets.strip until description
-      project = {
-        description: description,
-        location: File.dirname(Dir.pwd),
-        created_at: Time.now
-      }
-      file = File.open("#{@project_path}/project.yaml", 'a+') << project.to_yaml.gsub("---\n", '')
-      file.close
-      if File.exist?("#{TEMPLATE}/#{template}")
-        `cp -r #{TEMPLATE}/#{template}/* .`
-      end
-      todo_commit("Created project '#{@project}' #{Time.now.strftime('%Y%m%d%H%M%S')}")
-    else
-      puts "Project already exists for #{@project}."
-    end
-  end
+  PROJECT  = "#{ENV['HOME']}/Projects"
 
   def list(regexp)
-    ensure_project_archive
-    pattern = Regexp.new(regexp) if regexp
+    ensure_project_dir
+
     projects = get_projects
-    projects.select! { |s| pattern.match(s) } if pattern
+    puts projects.inspect
+    # pattern = Regexp.new(regexp) if regexp
+    # projects.select! { |s| pattern.match(s) } if pattern
 
-    if projects.count > 0
-      projects.each do |project|
-        info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-        puts "#{project} - #{info[:description]}"
-      end
-    else
-      puts "No projects exist on this computer."
-    end
+    # if projects.count > 0
+    #   projects.each do |project|
+    #     info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+    #     puts "#{project} - #{info[:description]}"
+    #   end
+    # else
+    #   puts "No projects exist on this computer."
+    # end
   end
 
-  def fetch(project)
-    ensure_project_archive
-    raise "No known project #{project}" unless project_exist?(project)
-    info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-    `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
-  end
+  # def fetch(project)
+  #   ensure_project_dir
+  #   raise "No known project #{project}" unless project_exist?(project)
+  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+  #   `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
+  # end
 
-  def clean
-    ensure_project_archive
-    all_projects = get_projects
-    desktop_dir = get_desktop_dir
-    all_projects.each do |project|
-      if desktop_dir.include? project
-        info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-        `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
-      end
-    end
-  end
+  # def clean
+  #   ensure_project_dir
+  #   all_projects = get_projects
+  #   desktop_dir = get_desktop_dir
+  #   all_projects.each do |project|
+  #     if desktop_dir.include? project
+  #       info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+  #       `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+  #     end
+  #   end
+  # end
 
-  def set_location(path)
-    ensure_project_archive
-    raise "No known project #{@project}" unless project_exist?(@project)
-    info = YAML.load_file("#{PROJECT}/#{@project}/project.yaml")
-    old_path = info[:location]
-    info[:location] = path
-    File.open("#{@project_path}/project.yaml", 'w') { |f| YAML.dump(info, f) }
-    todo_commit("Set project location to '#{path}'")
-    `mv #{old_path}/#{@project} #{path}`
-  end
-
-  def info(project)
-    ensure_project_archive
-    project = @project if project == '.'
-    raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
-    info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-    puts "Project:     #{project}"
-    puts "Description: #{info[:description]}"
-    puts "Location:    #{info[:location]}"
-    puts "Created At:  #{info[:created_at]}"
-  end
+  # def info(project)
+  #   ensure_project_dir
+  #   project = @project if project == '.'
+  #   raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
+  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
+  #   puts "Project:     #{project}"
+  #   puts "Description: #{info[:description]}"
+  #   puts "Location:    #{info[:location]}"
+  #   puts "Created At:  #{info[:created_at]}"
+  # end
 
   private
 
-  def project_exist?(project)
-    File.exist?("#{PROJECT}/#{project}")
-  end
-
   def get_projects
-    projects = Dir.entries(PROJECT).select! do |e|
-      File.directory?(File.join(PROJECT, e)) and !(e == '.' || e == '..' || e == ".git")
-    end
+    projects = Dir.glob("#{PROJECT}/*/")
+    projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
     projects
   end
 
-  def get_desktop_dir
-    desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop").select! do |e|
-      File.directory?(File.join("#{ENV['HOME']}/Desktop", e)) and !(e == '.' || e == '..' || e == ".git")
-    end
-    desktop_dir
-  end
+  # def project_exist?(project)
+  #   File.exist?("#{PROJECT}/#{project}")
+  # end
 
-  def todo_commit(msg)
-    `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
-  end
+  # def get_desktop_dir
+  #   desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop").select! do |e|
+  #     File.directory?(File.join("#{ENV['HOME']}/Desktop", e)) and !(e == '.' || e == '..' || e == ".git")
+  #   end
+  #   desktop_dir
+  # end
 
-  def ensure_project_archive
-    FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
-  end
+  # def todo_commit(msg)
+  #   `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
+  # end
+
+  # def ensure_project_dir
+  #   FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
+  # end
 end
 
 if __FILE__ == $0
