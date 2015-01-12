@@ -14,6 +14,7 @@ class ProjectManager
     ensure_project_dir
     projects = get_projects
     projects = filter_projects(projects, project_regexp)
+    projects = get_info(projects)
     puts projects.inspect
   end
   # projects.each do |project|
@@ -70,19 +71,22 @@ class ProjectManager
     projects
   end
 
-  # def project_exist?(project)
-  #   File.exist?("#{PROJECT}/#{project}")
-  # end
+  def get_info(projects)
+    projects = projects.collect do |project|
+      if File.exist("#{PROJECT}/#{project}/info.yml")
+        info = YAML.load_file("#{PROJECT}/#{project}/info.yml")
+      else
+        project
+      end
+    end
+    projects
+  end
 
   # def get_desktop_dir
   #   desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop").select! do |e|
   #     File.directory?(File.join("#{ENV['HOME']}/Desktop", e)) and !(e == '.' || e == '..' || e == ".git")
   #   end
   #   desktop_dir
-  # end
-
-  # def todo_commit(msg)
-  #   `cd #{PROJECT}; git checkout -q annex; git add -A; git commit -m "#{msg}";`
   # end
 end
 
