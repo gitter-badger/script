@@ -8,7 +8,8 @@ require 'fileutils'
 require 'yaml'
 
 class ProjectManager
-  PROJECT  = "#{ENV['HOME']}/Projects"
+  DESKTOP = "#{ENV['HOME']}/Desktop"
+  PROJECT = "#{ENV['HOME']}/Projects"
 
   def list(project_regexp=false)
     ensure_project_dir
@@ -32,17 +33,18 @@ class ProjectManager
     `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
   end
 
-  # def clean
-  #   ensure_project_dir
-  #   all_projects = get_projects
-  #   desktop_dir = get_desktop_dir
-  #   all_projects.each do |project|
-  #     if desktop_dir.include? project
-  #       info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-  #       `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
-  #     end
-  #   end
-  # end
+  def clean
+    ensure_project_dir
+    archived_projects = get_projects
+    desktop_dir = get_desktop_dir
+    desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
+    # > skip mv of any projects that:
+    #  already exist id PROJECT/dir
+    puts desktop_dir.inspect
+    #  do not have info.yml
+        # File.exist?("#{DESKTOP}/#{project}")
+        # `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
+  end
 
   private
 
@@ -77,12 +79,12 @@ class ProjectManager
     projects
   end
 
-  # def get_desktop_dir
-  #   desktop_dir = Dir.entries("#{ENV['HOME']}/Desktop").select! do |e|
-  #     File.directory?(File.join("#{ENV['HOME']}/Desktop", e)) and !(e == '.' || e == '..' || e == ".git")
-  #   end
-  #   desktop_dir
-  # end
+  def get_desktop_dir
+    desktop_dir = Dir.glob("#{DESKTOP}/*/")
+    desktop_dir = desktop_dir.reject { |d| d == '.' || d == '..' || d == ".git" }
+    desktop_dir = desktop_dir.collect { |p| File.basename(p) }
+    desktop_dir
+  end
 end
 
 if __FILE__ == $0
@@ -102,14 +104,6 @@ if __FILE__ == $0
     opts.on('--clean', 'Move project(s) off Desktop') do
       options[:clean] = true
     end
-
-    opts.on('-i [PROJECT]', '--info [PROJECT]', 'Info for current project') do |project|
-      if project
-        options[:info] = project
-      else
-        options[:info] = '.'
-      end
-    end
   end
   option_parser.parse!
 
@@ -123,9 +117,6 @@ if __FILE__ == $0
     exit
   elsif options[:clean]
     mgmt.clean
-    exit
-  elsif options[:info]
-    mgmt.info(options[:info])
     exit
   end
 
