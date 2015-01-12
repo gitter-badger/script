@@ -25,17 +25,13 @@ class ProjectManager
       end
     end
   end
-  # projects.each do |project|
-  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-  #   puts "#{project} - #{info[:description]}"
-  # end
 
-  # def fetch(project)
-  #   ensure_project_dir
-  #   raise "No known project #{project}" unless project_exist?(project)
-  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-  #   `mv #{info[:location]}/#{project} #{ENV['HOME']}/Desktop`
-  # end
+  def fetch(project)
+    projects = get_projects
+    puts projects.include?(project)
+    # raise "No known project #{project}" unless project_exist?(project)
+    # `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
+  end
 
   # def clean
   #   ensure_project_dir
@@ -47,17 +43,6 @@ class ProjectManager
   #       `mv #{ENV['HOME']}/Desktop/#{project} #{info[:location]}`
   #     end
   #   end
-  # end
-
-  # def info(project)
-  #   ensure_project_dir
-  #   project = @project if project == '.'
-  #   raise "No known project #{project}" unless File.exist?("#{PROJECT}/#{project}")
-  #   info = YAML.load_file("#{PROJECT}/#{project}/project.yaml")
-  #   puts "Project:     #{project}"
-  #   puts "Description: #{info[:description]}"
-  #   puts "Location:    #{info[:location]}"
-  #   puts "Created At:  #{info[:created_at]}"
   # end
 
   private
