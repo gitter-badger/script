@@ -7,7 +7,7 @@
 
 require 'optparse'
 
-class Script
+class ScriptManager
   HOME     = ENV['HOME']
   SCRIPT   = "#{HOME}/GitHub/script"
   BINARIES = {
@@ -447,7 +447,7 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: script [options] [SCRIPT]"
+    opts.banner = "Usage: script [options] SCRIPT"
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
       options[:list] = true
@@ -480,7 +480,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  mgr = Script.new
+  mgr = ScriptManager.new
 
   if options[:list]
     mgr.list(options[:list_pattern])

@@ -130,31 +130,19 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'USAGE: project [options]'
-
-    opts.on('--init [TEMPLATE]', 'Create a new project for current directory') do |template|
-      if template
-        options[:init] = template
-      else
-        options[:init] = 0
-      end
-    end
+    opts.banner = 'USAGE: project [options] PROJECT'
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching projects') do |regexp|
       options[:list] = true
       options[:list_pattern] = regexp
     end
 
-    opts.on('-f PROJECT', '--fetch PROJECT', 'Fetch target project') do |project|
+    opts.on('-f PROJECT', '--fetch PROJECT', 'Move projects to Desktop') do |project|
       options[:fetch] = project
     end
 
     opts.on('--clean', 'Move project(s) off Desktop') do
       options[:clean] = true
-    end
-
-    opts.on('--set-location PATH', 'Set project target location') do |location|
-      options[:set_location] = location
     end
 
     opts.on('-i [PROJECT]', '--info [PROJECT]', 'Info for current project') do |project|
@@ -169,10 +157,7 @@ if __FILE__ == $0
 
   mgmt = ProjectManager.new
 
-  if options[:init]
-    mgmt.init(options[:init])
-    exit
-  elsif options[:list]
+  if options[:list]
     mgmt.list(options[:list_pattern])
     exit
   elsif options[:fetch]
@@ -181,9 +166,6 @@ if __FILE__ == $0
   elsif options[:clean]
     mgmt.clean
     exit
-  elsif options[:set_location]
-    mgmt.set_location(options[:set_location])
-    exit
   elsif options[:info]
     mgmt.info(options[:info])
     exit
@@ -191,10 +173,3 @@ if __FILE__ == $0
 
   puts option_parser
 end
-
-
-## TODO
-
-# fatal: Not a git repository (or any of the parent directories): .git
-# fatal: Not a git repository (or any of the parent directories): .git
-# fatal: Not a git repository (or any of the parent directories): .git

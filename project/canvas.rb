@@ -5,7 +5,7 @@
 
 require 'optparse'
 
-class Canvas
+class CanvasManager
   DESKTOP     = "#{ENV['HOME']}/Desktop"
   CANVAS      = "#{ENV['HOME']}/GitHub/canvas"
   ALIAS_CMD = {
@@ -372,7 +372,7 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: canvas [options] [CANVAS]"
+    opts.banner = "Usage: canvas [options] CANVAS"
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
       options[:list] = true
@@ -406,7 +406,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  c = Canvas.new
+  c = CanvasManager.new
 
   if options[:list]
     c.list(options[:canvas_pattern], options[:lang_pattern])

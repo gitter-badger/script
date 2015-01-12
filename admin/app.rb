@@ -7,7 +7,7 @@
 
 require 'optparse'
 
-class Application
+class ApplicationManager
   GITHUB_LOCAL  = "#{ENV['HOME']}/GitHub"
   GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
 
@@ -168,7 +168,7 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: app [options] [APPLICATION]"
+    opts.banner = "Usage: app [options] APPLICATION"
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching applications') do |regexp|
       options[:list] = true
@@ -185,7 +185,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  mgr = Application.new
+  mgr = ApplicationManager.new
 
   if options[:list]
     mgr.list(options[:list_pattern])
