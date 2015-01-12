@@ -77,7 +77,8 @@ class ProjectManager
   def get_info(projects)
     projects = projects.collect do |project|
       if File.exist?("#{PROJECT}/#{project}/info.yml")
-        info = YAML.load_file("#{PROJECT}/#{project}/info.yml")
+        info = {}
+        info[:info] = YAML.load_file("#{PROJECT}/#{project}/info.yml")
         info[:project] = project
         info
       else
