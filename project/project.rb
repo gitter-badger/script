@@ -17,7 +17,12 @@ class ProjectManager
     projects = get_info(projects)
 
     projects.each do |project|
-      puts project
+      if project.is_a Hash
+        puts project[:project]
+        puts "  #{project[:info]}"
+      else
+        puts project
+      end
     end
   end
   # projects.each do |project|
