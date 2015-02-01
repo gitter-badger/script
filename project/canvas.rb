@@ -12,12 +12,14 @@ class CanvasManager
     '.rb'  => 'ruby',
     '.py'  => 'python',
     '.exp' => 'expect',
+    '.js'  => 'node',
     '.sh'  => 'bash'
   }
   SHEBANGS = {
     '.rb'  => '#!/usr/bin/env ruby -w',
     '.py'  => '#!/usr/bin/env python',
     '.exp' => '#!/usr/bin/env expect',
+    '.js'  => '#!/usr/bin/env node',
     '.sh'  => '#!/bin/bash'
   }
     BOILERPLATE = <<-TXT
