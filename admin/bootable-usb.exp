@@ -212,7 +212,7 @@ proc get_install_space { user } {
   set gitlab_path /home/$user/GitLab
 
   regexp {(\d*)} [exec sh -c {df -P /media/raist/Village/ | tail -1 | awk '{print $4}'}] -> device_size
-  regexp {(\d*)} [exec du --summarize $gitlab_path/seed-install] -> seed_install_size
+  regexp {(\d*)} [exec du --summarize $gitlab_path/seed_install] -> seed_install_size
 
   set remainder [expr "$device_size - $seed_install_size"]
 
@@ -225,7 +225,7 @@ proc get_install_space { user } {
 
 proc get_include_install { enough_install_space } {
   if { $enough_install_space == "yes" } {
-    puts "Include seed-install?"
+    puts "Include seed_install?"
     expect_user -re "(.*)\n"
     set answer "n"
     regexp {(y|Y)} $expect_out(1,string) -> answer
@@ -245,13 +245,13 @@ proc add_preseed_config { user include_install } {
   set gitlab_path /home/$user/GitLab
 
   if { [file exists $gitlab_path] } {
-    exec cp $gitlab_path/seed-config/host.seed $usb_preseed
-    exec cp $gitlab_path/seed-config/seed_config.sh $usb_preseed
-    exec cp -r $gitlab_path/seed-config $usb_preseed
+    exec cp $gitlab_path/seed_config/host.seed $usb_preseed
+    exec cp $gitlab_path/seed_config/seed_config.sh $usb_preseed
+    exec cp -r $gitlab_path/seed_config $usb_preseed
 
     if { $include_install == "yes" } {
-      exec cp $gitlab_path/seed-install/seed_install.sh $usb_preseed
-      exec cp -r $gitlab_path/seed-install $usb_preseed
+      exec cp $gitlab_path/seed_install/seed_install.sh $usb_preseed
+      exec cp -r $gitlab_path/seed_install $usb_preseed
     }
   } else {
     send_user "WARNING: no preseed files found locally\n"
