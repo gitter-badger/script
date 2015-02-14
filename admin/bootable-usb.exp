@@ -38,7 +38,7 @@ proc exit_if_not_enough_space { mount_point primary_sectors iso } {
   set r_mb [expr "$remainder / 1024 / 1024"]
 
   if {$remainder <= 0} {
-    send_error "Not enough space on /dev/${mount_point}1 for $iso \nby $r_mb mb\n"
+    send_error "Not enough space on /dev/${mount_point}1 for $iso \nOff by $r_mb MB\n"
     exit 4
   }
 }
