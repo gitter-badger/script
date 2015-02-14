@@ -37,8 +37,8 @@ proc exit_if_not_enough_space { mount_point primary_sectors iso } {
   set remainder [expr "$device_size - $iso_size"]
 
   if {$remainder <= 0} {
-    set abs_ammount [proc abs $remainder]
-    set r_mb [expr "$abs_ammount / 1024 / 1024"]
+    set abs_remainder [expr {abs($remainder)}]
+    set r_mb [expr "$abs_remainder / 1024 / 1024"]
     send_error "Not enough space on /dev/${mount_point}1 for $iso \nOff by $r_mb MB\n"
     exit 4
   }
