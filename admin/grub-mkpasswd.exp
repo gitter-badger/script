@@ -1,0 +1,13 @@
+#!/usr/bin/env expect
+# grub-mkpasswd.exp
+# Author: Andy Bettisworth
+# Description: Generate a GRUB password
+
+set timeout -1
+
+send_user "Enter password: \n"
+expect_user -re "(.*)\n"
+set plaintext $expect_out(1,string)
+set password [exec echo "$plaintext\n$plaintext" | grub-mkpasswd-pbkdf2]
+regexp {\s(grub\.pbkdf2.*)} $password -> secret
+send_user "$secret\n"
