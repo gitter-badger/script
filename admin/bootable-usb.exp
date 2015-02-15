@@ -51,7 +51,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
   }
 
   if { $secondary_sectors == 0 } {
-    send_user "Creating single partition on /dev/$mount_point...\n"
+    send_user "Creating a single partition on /dev/$mount_point...\n"
 
     ## "o\nn\np\n1\n\n\na\n1\nw\n"
     log_user 0
@@ -96,7 +96,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
 
 proc format_partition { mount_point secondary_sectors } {
   if { $secondary_sectors == 0 } {
-    send_user "Formatting /dev/${mount_point}1 NTFS...\n"
+    send_user "Formatting /dev/${mount_point}1 to NTFS...\n"
 
     log_user 1
     catch {exec sudo mkntfs -L Village /dev/${mount_point}1}
@@ -104,7 +104,7 @@ proc format_partition { mount_point secondary_sectors } {
 
     exec sync
   } else {
-    send_user "Formatting /dev/${mount_point}1 NTFS and /dev/${mount_point}2 ext4...\n"
+    send_user "Formatting /dev/${mount_point}1 to NTFS and /dev/${mount_point}2 to ext4...\n"
 
     log_user 1
     catch {exec sudo mkntfs -L Village /dev/${mount_point}1}
@@ -198,7 +198,7 @@ proc build_grub_menu { user secondary_sectors } {
   regexp {\s(grub\.pbkdf2.*)} $pbkdf2_response -> secret
 
   set header "set default='guest'\nset timeout=1\nset superusers='$username'\npassword_pbkdf2 $username $secret\nexport superusers\n\n"
-  exec echo $header >> $menu
+  exec echo $header > $menu
 
   if { $secondary_sectors != 0 } {
     set menuentry1 "menuentry 'guest' --unrestricted {\n\tlinux /casper/vmlinuz boot=casper priority=low pcspkr.blacklist=yes textonly noprompt persistent --\n\tinitrd /casper/initrd.lz\n}\n"
