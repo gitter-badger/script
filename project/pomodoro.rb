@@ -4,6 +4,7 @@
 # Description: Rotate the Desktop's wallpaper for the next 20 minutes
 
 class Pomodoro
+  BACKGROUND_DEFAULT = '/usr/share/backgrounds/warty-final-ubuntu.png'
   GSETTING = "org.gnome.desktop.background"
   MINUTE   = 60
 
@@ -38,7 +39,7 @@ class Pomodoro
   end
 
   def reset_background
-    set_background(@original_image_path)
+    set_background(BACKGROUND_DEFAULT)
   end
 
   def get_current_background
