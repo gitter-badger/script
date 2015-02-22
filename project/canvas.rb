@@ -335,7 +335,7 @@ $0
     commit_msg = "canvas clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
     system <<-CMD
       echo '';
-      echo 'Commit changes in ~/.sync/.canvas';
+      echo 'Committing changes for canveses...';
       cd #{CANVAS};
       git checkout annex;
       git add -A;

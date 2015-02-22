@@ -10,8 +10,8 @@ class CleanDesktop
   DESKTOP  = "#{HOME}/Desktop"
   CANVAS   = "#{HOME}/GitHub/canvas"
   SCRIPT   = "#{HOME}/GitHub/script"
-  GITHUB_LOCAL  = "#{HOME}/GitHub"
-  GITLAB_LOCAL  = "#{HOME}/GitLab"
+  GITHUB_LOCAL = "#{HOME}/GitHub"
+  GITLAB_LOCAL = "#{HOME}/GitLab"
 
   def clean
     clean_app
@@ -100,7 +100,7 @@ class CleanDesktop
         system("mv #{DESKTOP}/#{File.basename(canvases_out)} #{canvases_out}")
       end
 
-      commit_changes
+      commit_canvases_changes
     end
   end
 
@@ -130,6 +130,36 @@ class CleanDesktop
     end
 
     canvas_list
+  end
+
+  def get_canvas_info(filepath)
+    canvas = {}
+
+    dirname  = File.dirname(filepath)
+    top_path = File.expand_path('..', dirname)
+    language = dirname.gsub("#{top_path}/", '')
+
+    file_head = File.open(filepath).readlines
+    c = file_head[0..11].join('')
+
+    if c.valid_encoding?
+      canvas[:language] = language
+      canvas[:filename] = File.basename(filepath)
+
+      created_at = /created at:(?<created_at>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(c.force_encoding('UTF-8'))
+      canvas[:description] = description[:description].strip if description
+    else
+      STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      exit 1
+    end
+
+    canvas
   end
 
   def get_open_canvases(canvases)
@@ -199,17 +229,13 @@ class CleanDesktop
     end
   end
 
-  def commit_changes
+  def commit_canvases_changes
     puts 'Enter a commit message:'
-    commit_msg = gets.strip
-    commit_msg = "canvas clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
     system <<-CMD
-      echo '';
-      echo 'Commit changes in ~/.sync/.canvas';
       cd #{CANVAS};
       git checkout annex;
       git add -A;
-      git commit -m "#{commit_msg}";
+      git commit -m "clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
     CMD
   end
 
@@ -290,6 +316,16 @@ class CleanDesktop
     else
       return scripts
     end
+  end
+
+  def commit_changes
+    puts 'Enter a commit message:'
+    system <<-CMD
+      cd #{SCRIPT};
+      git checkout annex;
+      git add -A;
+      git commit -m "clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+    CMD
   end
 end
 
