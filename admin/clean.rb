@@ -12,6 +12,10 @@ class CleanDesktop
   SCRIPT   = "#{HOME}/GitHub/script"
   GITHUB_LOCAL = "#{HOME}/GitHub"
   GITLAB_LOCAL = "#{HOME}/GitLab"
+  DEPENDENCIES = {
+    '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i),
+    '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
+  }
 
   def clean
     clean_app
@@ -57,10 +61,8 @@ class CleanDesktop
       if is_github and is_gitlab
         next
       elsif is_github
-        puts "  Cleaning GitHub application '#{filename}'..."
         open_apps << "#{GITHUB_LOCAL}/#{filename}"
       elsif is_gitlab
-        puts "  Cleaning GitLab application '#{filename}'..."
         open_apps << "#{GITLAB_LOCAL}/#{filename}"
       else
         next
@@ -171,6 +173,21 @@ class CleanDesktop
     end
 
     open_canvases
+  end
+
+  def canvas_exist?(canvas)
+    canvas = set_default_ext(canvas)
+    canvas = set_default_prefix(canvas)
+
+    lang_dir = get_lang_dir
+    canvases = get_canvases(lang_dir)
+    canvases.select! { |c| c[:filename] == canvas }
+
+    if canvases.count >= 1
+      true
+    else
+      false
+    end
   end
 
   def get_canvas_location(*canvases)
@@ -285,6 +302,44 @@ class CleanDesktop
     script_list
   end
 
+  def get_script_info(filepath)
+    script = {}
+
+    dirname  = File.dirname(filepath)
+    top_path = File.expand_path('..', dirname)
+    category = dirname.gsub("#{top_path}/", '')
+
+    file_head = File.open(filepath).readlines
+    s = file_head[0..11].join('')
+
+    if s.valid_encoding?
+      script[:category] = category
+      script[:shebang] = file_head[0].strip
+      script[:filename] = File.basename(filepath)
+
+      author = /author:(?<author>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:author] = author[:author].strip if author
+
+      created_at = /created at:(?<created_at>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:created_at] = created_at[:created_at].strip if created_at
+
+      modified_at = /modified at:(?<modified_at>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:modified_at] = modified_at[:modified_at].strip if modified_at
+
+      description = /description:(?<description>.*)/i.match(s.force_encoding('UTF-8'))
+      script[:description] = description[:description].strip if description
+
+      dep_regexp = DEPENDENCIES[File.extname(filepath)]
+      dependencies = s.scan(dep_regexp) if dep_regexp
+      script[:dependencies] = dependencies.flatten if dependencies
+    else
+      STDERR.puts "ERROR: Not valid UTF-8 encoding in '#{File.basename(filepath)}'"
+      exit 1
+    end
+
+    script
+  end
+
   def get_open_scripts(scripts)
     open_scripts = []
 
@@ -315,6 +370,20 @@ class CleanDesktop
       return scripts[0]
     else
       return scripts
+    end
+  end
+
+  def script_exist?(script)
+    script = set_default_ext(script)
+
+    categories = get_app_categories
+    scripts = get_scripts(categories)
+    scripts.select! { |s| s[:filename] == script }
+
+    if scripts.count >= 1
+      true
+    else
+      false
     end
   end
 
