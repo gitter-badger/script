@@ -9,13 +9,13 @@ current_kernel = `uname -r`.chomp
 lib_modules    = Dir['/lib/modules/**']
 boot_files     = Dir['/boot/**'].select! { |x| File.file?(x) }
 
-puts current_kernel
-# lib_modules.each do |kernel|
-#   target_kernel = File.basename(kernel).chomp
-#   unless current_kernel == target_kernel
-#     FileUtils.rm_rf(kernel)
-#   end
-# end
+lib_modules.each do |kernel|
+  puts kernel
+  # target_kernel = File.basename(kernel).chomp
+  # unless current_kernel == target_kernel
+  #   FileUtils.rm_rf(kernel)
+  # end
+end
 
 # boot_files.each do |f|
 #   target_file = File.basename(f).chomp
