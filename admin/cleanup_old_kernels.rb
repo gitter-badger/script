@@ -12,8 +12,8 @@ boot_files     = Dir['/boot/**'].select! { |x| File.file?(x) }
 lib_modules.each do |kernel|
   target_kernel = File.basename(kernel).chomp
   unless current_kernel == target_kernel
-    puts kernel
-    # FileUtils.rm_rf(kernel)
+    puts "removing #{kernel}..."
+    FileUtils.rm_rf(kernel)
   end
 end
 
