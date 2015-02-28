@@ -17,9 +17,10 @@ lib_modules.each do |kernel|
   end
 end
 
-# boot_files.each do |f|
-#   target_file = File.basename(f).chomp
-#   unless target_file.match(/#{current_kernel}/)
-#     FileUtils.rm_rf(f)
-#   end
-# end
+boot_files.each do |f|
+  target_file = File.basename(f).chomp
+  unless target_file.match(/#{current_kernel}/)
+    puts "removing #{f}..."
+    `sudo rm -rf #{f}`
+  end
+end
