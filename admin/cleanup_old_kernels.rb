@@ -13,7 +13,7 @@ lib_modules.each do |kernel|
   target_kernel = File.basename(kernel).chomp
   unless current_kernel == target_kernel
     puts "removing #{kernel}..."
-    FileUtils.rm_rf(kernel)
+    `rm -rf #{kernel}`
   end
 end
 
