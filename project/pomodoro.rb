@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 # pomodoro.rb
 # Author: Andy Bettisworth
-# Description: Rotate the Desktop's wallpaper for the next 20 minutes
+# Description: Rotate the Desktop's wallpaper every minute for the next 20 minutes
 
 class Pomodoro
   BACKGROUND_DEFAULT = '/usr/share/backgrounds/warty-final-ubuntu.png'
@@ -10,18 +10,19 @@ class Pomodoro
 
   attr_accessor :image_dir
   attr_accessor :images
-  attr_reader   :original_image_path
+  attr_reader   :original_background
 
   def start(image_dir)
     if File.exist?(image_dir)
       @image_dir = image_dir
       @images    = Dir.entries(image_dir).reject {|x| x == '.' || x == '..'}
+      @images.sort!
     else
       STDERR.puts "NoDirectoryError: no such directory '#{image_dir}'"
       exit 1
     end
 
-    get_current_background
+    set_original_background
 
     20.times do |i|
       rotate_background
@@ -34,8 +35,16 @@ class Pomodoro
   private
 
   def rotate_background
-    image_path = "#{@image_dir}/#{@images.sample}"
-    set_background(image_path)
+    current_image = File.basename(get_current_background)
+    index = @images.find_index(current_image)
+
+    if index.nil?
+      next_image = "#{@image_dir}/#{@images.first}"
+    else
+      next_image = "#{@image_dir}/#{@images.at(index + 1)}"
+    end
+
+    set_background(next_image)
   end
 
   def reset_background
@@ -46,10 +55,12 @@ class Pomodoro
     image_path = `gsettings get #{GSETTING} picture-uri`
     image_path = image_path.gsub('file://','')
     image_path = image_path.strip.gsub("'", '')
+    image_path
+  end
 
-    @original_image_path = image_path
-
-    current_background = File.basename(@original_image_path)
+  def set_original_background
+    @original_background = get_current_background
+    current_background = File.basename(@original_background)
     current_background
   end
 
