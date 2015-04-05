@@ -41,6 +41,7 @@ class DirMusic
 
   def get_local_music
     local_music = Dir[LOCAL_MUSIC + "/**/*"]
+    local_music.delete_if { |path| File.directory?(path) }
     local_music.map! { |path| [File.basename(path), path] }
     local_music = local_music.to_h
     local_music
@@ -48,22 +49,23 @@ class DirMusic
 
   def get_remote_music
     remote_music = Dir[REMOTE_MUSIC + "/**/*"]
+    remote_music.delete_if { |path| File.directory?(path) }
     remote_music.map! { |path| [File.basename(path), path] }
     remote_music = remote_music.to_h
     remote_music
   end
 
-  # > pull remote music to local dir
-  def pull_remote_music(*diff)
-    diff.flatten!
-
-    diff.each do |path|
-      puts path
-      # FileUtils.mv(path, LOCAL_MUSIC)
+  def pull_remote_music(diff)
+    diff.each do |file, path|
+      source_path = path
+      target_path = File.dirname(path).gsub(/.*?Music/, LOCAL_MUSIC)
+      require_directory(target_path)
+      puts "#{target_path}/#{File.basename(source_path)}"
+      FileUtils.cp(source_path, target_path)
     end
   end
 
-  def make_dir(dir)
+  def require_directory(dir)
     FileUtils.mkdir_p(dir)
   end
 end
