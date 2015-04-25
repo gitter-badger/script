@@ -211,12 +211,12 @@ proc build_grub_menu { user secondary_sectors } {
 
 proc add_preseed_config { user } {
   set usb_preseed /media/$user/Village/preseed
-  set gitlab_path /home/$user/GitLab
+  set github_path /home/$user/GitHub
 
-  if { [file exists $gitlab_path] } {
-    exec cp $gitlab_path/seed_config/host.seed $usb_preseed
-    exec cp $gitlab_path/seed_config/seed_config.sh $usb_preseed
-    exec cp -r $gitlab_path/seed_config $usb_preseed
+  if { [file exists $github_path] } {
+    exec cp $github_path/seed_config/host.seed $usb_preseed
+    exec cp $github_path/seed_config/seed_config.sh $usb_preseed
+    exec cp -r $github_path/seed_config $usb_preseed
   } else {
     send_user "WARNING: no preseed files found locally\n"
   }
