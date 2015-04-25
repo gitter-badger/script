@@ -9,116 +9,82 @@ require 'open3'
 
 module Annex
   class Base
-    attr_accessor :user
-    attr_accessor :github_repos
-    attr_accessor :gitlab_repos
+    attr_accessor :scope
+    attr_accessor :remote
+    attr_accessor :local
 
-    def initialize(user='wurde')
-      @user = user
-      @github_repos = get_local_github_repos
-      @gitlab_repos = get_local_gitlab_repos
-    end
-
-    def github
-      puts "Syncing with GitHub #{GITHUB_REMOTE}/#{@user}...\n"
-      if @github_repos
-        @github_repos.each do |repo|
-          print_target(File.basename(repo))
-          sync_changes(repo)
-        end
-      else
-        puts "Nothing locally to sync, lame."
+    def sync
+      puts @scope
+      repos = get_local_repos
+      repos.each do |repo|
+        print_target(repo, File.basename(repo))
+        commit_local
+        puts
+        Dir.chdir repo
+        push_remote
       end
     end
 
-    def gitlab
-      puts "Syncing with GitLab #{GITLAB_REMOTE}/#{@user}...\n"
-      if @gitlab_repos
-        @gitlab_repos.each do |repo|
-          print_target(File.basename(repo))
-          sync_changes(repo)
-        end
-      else
-        puts "Nothing locally to sync, lame."
-      end
+    def get_local_repos(local_path=@local)
+      entries = Dir.glob("#{local_path}/*/").reject {|x| x == '.' or x == '..'}
+      entries
     end
 
     private
 
-    def sync_changes(local_repo)
-      Dir.chdir local_repo
-      commit_local
-      push_remote
-    end
-
-    def print_target(repo)
+    def print_target(path, repo)
       puts <<-MSG
 
-  ### #{repo}
-
+  ### #{repo} - #{path}
       MSG
     end
 
     def commit_local
-      puts <<-MSG
-
-    Saving open changes on local repo...
-
-    MSG
-
       system <<-CMD
-        git checkout -b annex;
-        git add -A;
+        git checkout -b annex 2> /dev/null;
+        git checkout annex 2> /dev/null;
+        git add -A 2> /dev/null;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
       CMD
     end
 
     def push_remote
-      puts <<-MSG
-
-    Pushing changes to remote repo...
-
-    MSG
-
       system <<-CMD
-        git checkout master;
+        git checkout -b master 2> /dev/null;
+        git checkout master 2> /dev/null;
         git pull --no-edit origin master;
-        git checkout annex;
+        git checkout annex 2> /dev/null;
         git rebase master;
-        git checkout master;
+        git checkout master 2> /dev/null;
         git merge --no-edit annex;
-        git push origin master;
-        git checkout annex;
-        git merge --no-edit master
+        git push origin master 2> /dev/null;
+        git checkout annex 2> /dev/null;
+        git merge --no-edit master 2> /dev/null;
       CMD
-    end
-
-    def get_local_github_repos
-      entries = Dir.glob("#{GITHUB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
-      entries
-    end
-
-    def get_local_gitlab_repos
-      entries = Dir.glob("#{GITLAB_LOCAL}/*/").reject {|x| x == '.' or x == '..'}
-      entries
     end
   end
 
   class GitHub < Annex::Base
-    REMOTE = "https://www.github.com"
-    LOCAL  = "#{ENV['HOME']}/GitHub"
+    def initialize
+      @scope  = 'syncing github...'
+      @remote = "https://www.github.com"
+      @local  = "#{ENV['HOME']}/GitHub"
+    end
 
     def sync
-      puts 'syncing github...'
+      super
     end
   end
 
   class GitLab < Annex::Base
-    REMOTE = "http://localhost:8080"
-    LOCAL  = "#{ENV['HOME']}/GitLab"
+    def initialize
+      @scope  = 'syncing gitlab...'
+      @remote = "http://localhost:8080"
+      @local  = "#{ENV['HOME']}/GitLab"
+    end
 
     def sync
-      puts 'syncing gitlab...'
+      super
     end
   end
 end
