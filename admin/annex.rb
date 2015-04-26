@@ -19,7 +19,7 @@ module Annex
       repos.each do |repo|
         print_target(repo, File.basename(repo))
         Dir.chdir repo
-        # commit_local
+        commit_local
         # puts
         # push_remote
       end
