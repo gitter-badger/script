@@ -36,7 +36,7 @@ module Annex
       puts <<-MSG
 
 ################################
-# ## ### #{repo} - #{path}
+# #{repo} - #{path}
       MSG
     end
 
