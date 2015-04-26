@@ -21,7 +21,7 @@ module Annex
         Dir.chdir repo
         commit_local
         puts
-        # push_remote
+        push_remote
       end
     end
 
@@ -39,7 +39,6 @@ module Annex
       MSG
     end
 
-    # 2> /dev/null
     def commit_local
       system <<-CMD
         git checkout --quiet -b annex 2> /dev/null;
@@ -51,15 +50,19 @@ module Annex
 
     def push_remote
       system <<-CMD
-        git checkout -b master;
-        git checkout master;
+        git checkout -b master 2> /dev/null;
+        git checkout master 2> /dev/null;
         git pull --no-edit origin master;
-        git checkout annex;
+        git checkout annex 2> /dev/null;
+        echo 'Rebasing master with annex...';
         git rebase master;
-        git checkout master;
+        git checkout master 2> /dev/null;
+        echo 'Merging annex...';
         git merge --no-edit annex;
+        echo 'Push origin master...';
         git push origin master;
-        git checkout annex;
+        git checkout annex 2> /dev/null;
+        echo 'Merge master with annex...';
         git merge --no-edit master;
       CMD
     end
