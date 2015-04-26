@@ -18,10 +18,10 @@ module Annex
       repos = get_local_repos
       repos.each do |repo|
         print_target(repo, File.basename(repo))
-        commit_local
-        puts
         Dir.chdir repo
-        push_remote
+        # commit_local
+        # puts
+        # push_remote
       end
     end
 
@@ -39,27 +39,28 @@ module Annex
       MSG
     end
 
+    # 2> /dev/null
     def commit_local
       system <<-CMD
-        git checkout -b annex 2> /dev/null;
-        git checkout annex 2> /dev/null;
-        git add -A 2> /dev/null;
+        git checkout -b annex;
+        git checkout annex;
+        git add -A;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
       CMD
     end
 
     def push_remote
       system <<-CMD
-        git checkout -b master 2> /dev/null;
-        git checkout master 2> /dev/null;
+        git checkout -b master;
+        git checkout master;
         git pull --no-edit origin master;
-        git checkout annex 2> /dev/null;
+        git checkout annex;
         git rebase master;
-        git checkout master 2> /dev/null;
+        git checkout master;
         git merge --no-edit annex;
-        git push origin master 2> /dev/null;
-        git checkout annex 2> /dev/null;
-        git merge --no-edit master 2> /dev/null;
+        git push origin master;
+        git checkout annex;
+        git merge --no-edit master;
       CMD
     end
   end
