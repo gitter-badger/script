@@ -43,7 +43,7 @@ module Annex
     def commit_local
       system <<-CMD
         git checkout -b annex 2> /dev/null;
-        git checkout annex 2> /dev/null;
+        git checkout annex 2>&1 /dev/null;
         git add -A 2> /dev/null;
         git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
       CMD
