@@ -35,7 +35,9 @@ module Annex
     def print_target(path, repo)
       puts <<-MSG
 
-  ### #{repo} - #{path}
+#####
+##### #{repo} - #{path}
+#####
       MSG
     end
 
@@ -50,20 +52,22 @@ module Annex
 
     def push_remote
       system <<-CMD
-        git checkout -b master 2> /dev/null;
-        git checkout master 2> /dev/null;
+        git checkout --quiet -b master 2> /dev/null;
+        git checkout --quiet master 2> /dev/null;
         git pull --no-edit origin master;
+        echo '';
         git checkout annex 2> /dev/null;
-        echo 'Rebasing master with annex...';
+        echo 'Rebasing annex onto master...';
         git rebase master;
+        echo '';
         git checkout master 2> /dev/null;
-        echo 'Merging annex...';
+        echo 'Merging annex with master...';
         git merge --no-edit annex;
-        echo 'Push origin master...';
+        echo '';
+        echo 'Pushing master to remote origin...';
         git push origin master;
         git checkout annex 2> /dev/null;
-        echo 'Merge master with annex...';
-        git merge --no-edit master;
+        git merge  --quiet --no-edit master 2> /dev/null;
       CMD
     end
   end
