@@ -35,9 +35,8 @@ module Annex
     def print_target(path, repo)
       puts <<-MSG
 
-#####
-##### #{repo} - #{path}
-#####
+################################
+# ## ### #{repo} - #{path}
       MSG
     end
 
