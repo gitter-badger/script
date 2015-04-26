@@ -57,17 +57,17 @@ module Annex
         git checkout --quiet master 2> /dev/null;
         git pull --no-edit origin master;
         echo '';
-        git checkout annex 2> /dev/null;
+        git checkout --quiet annex 2> /dev/null;
         echo 'Rebasing annex onto master...';
         git rebase master;
         echo '';
-        git checkout master 2> /dev/null;
+        git checkout --quiet master 2> /dev/null;
         echo 'Merging annex with master...';
         git merge --no-edit annex;
         echo '';
         echo 'Pushing master to remote origin...';
         git push origin master;
-        git checkout annex 2> /dev/null;
+        git checkout --quiet annex 2> /dev/null;
         git merge  --quiet --no-edit master 2> /dev/null;
       CMD
     end
