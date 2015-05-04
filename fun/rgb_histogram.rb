@@ -277,47 +277,49 @@ Colors: #{number_colors}
   end
 end
 
-puts <<END_INFO
+if __FILE__ == $0
+  puts <<END_INFO
 
-This example shows how to get pixel-level access to an image.
-Usage: histogram.rb <image-filename>
+  This example shows how to get pixel-level access to an image.
+  Usage: histogram.rb <image-filename>
 
-END_INFO
+  END_INFO
 
-# Get filename from command line.
-if !ARGV[0]
-  puts 'No filename argument. Defaulting to Flower_Hat.jpg'
-  filename = '../doc/ex/images/Flower_Hat.jpg'
-else
-  filename = ARGV[0]
-end
-
-# Only process first frame if multi-frame image
-image = Magick::Image.read(filename)
-if image.length > 1
-  puts 'Charting 1st image'
-end
-image = image.first
-
-# Give the user something to look at while we're working.
-name = File.basename(filename).sub(/\..*?$/,'')
-$stdout.sync = true
-printf "Creating #{name}_Histogram.miff"
-
-timer = Thread.new do
-  loop do
-    sleep(1)
-    printf '.'
+  # Get filename from command line.
+  if !ARGV[0]
+    puts 'No filename argument. Defaulting to Flower_Hat.jpg'
+    filename = '../doc/ex/images/Flower_Hat.jpg'
+  else
+    filename = ARGV[0]
   end
+
+  # Only process first frame if multi-frame image
+  image = Magick::Image.read(filename)
+  if image.length > 1
+    puts 'Charting 1st image'
+  end
+  image = image.first
+
+  # Give the user something to look at while we're working.
+  name = File.basename(filename).sub(/\..*?$/,'')
+  $stdout.sync = true
+  printf "Creating #{name}_Histogram.miff"
+
+  timer = Thread.new do
+    loop do
+      sleep(1)
+      printf '.'
+    end
+  end
+
+  # Generate the histograms
+  histogram = image.histogram(Magick::Pixel.from_color('white'), Magick::Pixel.from_color('black'))
+
+  # Write output file
+  histogram.compression = Magick::ZipCompression
+  histogram.write("./#{name}_Histogram.miff")
+
+  Thread.kill(timer)
+  puts 'Done!'
+  exit
 end
-
-# Generate the histograms
-histogram = image.histogram(Magick::Pixel.from_color('white'), Magick::Pixel.from_color('black'))
-
-# Write output file
-histogram.compression = Magick::ZipCompression
-histogram.write("./#{name}_Histogram.miff")
-
-Thread.kill(timer)
-puts 'Done!'
-exit

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
 # thumbnail.rb
 # Author: RMagick Project
-# Description:
+# Description: Generate a thumbnail of a larger image
 # https://github.com/rmagick/rmagick
 
 require 'rmagick'
@@ -68,3 +68,6 @@ thumbnail = white_bg.composite(img, CenterGravity, OverCompositeOp)
 
 thumbnail.write('thumbnail.gif')
 exit
+
+if __FILE__ == $0
+end
