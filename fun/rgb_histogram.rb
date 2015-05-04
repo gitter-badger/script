@@ -277,49 +277,43 @@ Colors: #{number_colors}
   end
 end
 
-if __FILE__ == $0
-  puts <<END_INFO
+class HistogramGenerator
+  def create_histogram(filename)
+    exit 1 unless File.exist?(filename)
 
-  This example shows how to get pixel-level access to an image.
-  Usage: histogram.rb <image-filename>
-
-  END_INFO
-
-  # Get filename from command line.
-  if !ARGV[0]
-    puts 'No filename argument. Defaulting to Flower_Hat.jpg'
-    filename = '../doc/ex/images/Flower_Hat.jpg'
-  else
-    filename = ARGV[0]
-  end
-
-  # Only process first frame if multi-frame image
-  image = Magick::Image.read(filename)
-  if image.length > 1
-    puts 'Charting 1st image'
-  end
-  image = image.first
-
-  # Give the user something to look at while we're working.
-  name = File.basename(filename).sub(/\..*?$/,'')
-  $stdout.sync = true
-  printf "Creating #{name}_Histogram.miff"
-
-  timer = Thread.new do
-    loop do
-      sleep(1)
-      printf '.'
+    image = Magick::Image.read(filename)
+    if image.length > 1
+      puts 'Charting 1st image'
     end
+    image = image.first
+
+    name = File.basename(filename).sub(/\..*?$/,'')
+    $stdout.sync = true
+    printf "Creating #{name}_histogram.miff"
+
+    timer = Thread.new do
+      loop do
+        sleep(1)
+        printf '.'
+      end
+    end
+
+    histogram = image.histogram(Magick::Pixel.from_color('white'), Magick::Pixel.from_color('black'))
+    histogram.compression = Magick::ZipCompression
+    histogram.write("./#{name}_histogram.miff")
+
+    Thread.kill(timer)
+    puts 'Done!'
+    exit
   end
+end
 
-  # Generate the histograms
-  histogram = image.histogram(Magick::Pixel.from_color('white'), Magick::Pixel.from_color('black'))
-
-  # Write output file
-  histogram.compression = Magick::ZipCompression
-  histogram.write("./#{name}_Histogram.miff")
-
-  Thread.kill(timer)
-  puts 'Done!'
-  exit
+if __FILE__ == $0
+  if ARGV[0]
+    gen = HistogramGenerator.new
+    gen.create_histogram(ARGV[0])
+  else
+    puts "Usage: histogram IMAGE"
+    puts "To display the .miff file `display image.miff`"
+  end
 end
