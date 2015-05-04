@@ -1,6 +1,8 @@
-# This routine needs the color_histogram method
-# from either ImageMagick 6.0.0 or GraphicsMagick 1.1
-# Specify an image filename as an argument.
+#!/usr/bin/env ruby -w
+# rgb_histogram.rb
+# Author: RMagick Project
+# Description: Generate an RGB histogram of an image
+# https://github.com/rmagick/rmagick
 
 require 'rmagick'
 

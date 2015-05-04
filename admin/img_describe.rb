@@ -1,17 +1,11 @@
 #!/usr/bin/env ruby -w
 # img_describe.rb
 # Author: RMagick Project
-# https://github.com/rmagick/rmagick
 # Description: Demonstrate getting information from the image attributes.
 # Usage: describe.rb filename1 [filename2...]
+# https://github.com/rmagick/rmagick
 
 require 'rmagick'
-
-puts <<END_INFO
-
-This example shows how to extract attributes from an image.
-
-END_INFO
 
 if ARGV.length == 0
   puts 'Specify one or more image filenames as arguments.'

@@ -1,3 +1,9 @@
+#!/usr/bin/env ruby -w
+# thumbnail.rb
+# Author: RMagick Project
+# Description:
+# https://github.com/rmagick/rmagick
+
 require 'rmagick'
 include Magick
 
