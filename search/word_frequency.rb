@@ -3,8 +3,6 @@
 # Author: Andy Bettisworth
 # Description: Return Array of words and their frequencies from a text file
 
-require 'optparse'
-
 class WordFrequency
   def get(file)
     if File.exist?(file)
