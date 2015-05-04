@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 # img_describe.rb
-# Author: RMagick Project
+# Author: Andy Bettisworth and RMagick Project
 # Description: Get metadata of an image
 # https://github.com/rmagick/rmagick
 

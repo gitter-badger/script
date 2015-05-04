@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 # rgb_histogram.rb
-# Author: RMagick Project
+# Author: Andy Bettisworth and RMagick Project
 # Description: Generate an RGB histogram of an image
 # https://github.com/rmagick/rmagick
 
