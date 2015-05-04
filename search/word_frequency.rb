@@ -12,7 +12,7 @@ class WordFrequency
       content_array = content.downcase.split(/\b/).select { |x| /\w/.match(x) }
       content_hash = {}
       content_array.each { |word| content_hash.has_key?(word) ? content_hash[word] += 1 : content_hash[word] = 1 }
-      content_hash.sort!
+      content_hash = content_hash.sort
       puts content_hash
       content_hash
     end
