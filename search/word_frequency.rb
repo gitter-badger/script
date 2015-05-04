@@ -13,7 +13,7 @@ class WordFrequency
       content_hash = {}
       content_array.each { |word| content_hash.has_key?(word) ? content_hash[word] += 1 : content_hash[word] = 1 }
       content_hash = content_hash.sort_by {|k, v| v}
-      puts content_hash
+      puts content_hash.inspect
       content_hash
     end
   end
