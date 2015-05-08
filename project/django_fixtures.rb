@@ -25,7 +25,7 @@ Example MODEL:
 
 Example FILE:
   <Array: fields>, <Array: records <Array: data>>
-  [group_id, permission_id], [[1001,3], [1001,4], [1002,3]]
+  ['group_id', 'permission_id'], [[1001,3], [1001,4], [1002,3]]
 
 Result:
   - model: auth.GroupPermissions
