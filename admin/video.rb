@@ -5,3 +5,7 @@
 # Modified At: 2015 0513 220907
 # Description: Manage Videos
 
+# > play
+#   >> shuffle cowboy bebop
+#   >> shuffle samuraii champloo
+#   >> shuffle all

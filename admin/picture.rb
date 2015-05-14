@@ -5,3 +5,5 @@
 # Modified At: 2015 0513 220924
 # Description: Manage Pictures
 
+# > open
+#   >> current directory and all subdirectory
