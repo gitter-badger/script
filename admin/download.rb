@@ -15,21 +15,30 @@ end
 if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: document [options] REGEXP"
+    opts.banner = "Usage: download [options] REGEXP"
+
+    opts.on('-f', '--flush', 'Flush all downloads') do
+      options[:flush] = true
+    end
+
+    opts.on('-p', '--pop', 'Move most recent download to desktop') do
+      options[:pop] = true
+    end
+
+    opts.on('--list', 'List matching downloads') do
+      options[:list] = true
+    end
+
+    opts.on('--fetch', 'Fetch matching downloads') do
+      options[:fetch] = true
+    end
   end
   option_parser.parse!
 
   puts option_parser
 
-  # ## Delete all files in download directory, password to confirm
-  # download --flush
-
-  # ## Move most recent file to Desktop
-  # download --pop
-
-  # ## List downloads sort by most recent
-  # download --list
-
-  # ## Fetch downloads that match regular expression
-  # download --fetch REGEXP
+  # > download --flush
+  # > download --pop
+  # > download --list
+  # > download --fetch REGEXP
 end

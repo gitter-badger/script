@@ -482,7 +482,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  mgr = ScriptManager.new
+  mgr = Admin::ScriptManager.new
 
   if options[:list]
     mgr.list(options[:list_pattern])

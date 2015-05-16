@@ -16,14 +16,20 @@ if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: document [options] REGEXP"
+
+    opts.on('--filter FILTER', 'Filter by category') do |filter|
+      options[:filter] = filter
+    end
+
+    opts.on('--fetch REGEXP', 'Fetch document(s) by regular expression') do |regexp|
+      options[:fetch] = regexp
+    end
   end
   option_parser.parse!
 
   puts option_parser
 
-  # ## Filter by category
-  # document --filter Technical Elegant Ruby
-
-  # ## Fetch a document
-  # document --fetch On Writing Well
+  # > document --filter Technical Elegant Ruby
+  # > document --fetch On Writing Well
+  # > document Rise of the Ogre
 end

@@ -16,14 +16,19 @@ if __FILE__ == $0
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: video [options] REGEXP"
+
+    opts.on('-s', '--shuffle', 'Shuffle the playlist') do
+      options[:shuffle] = true
+    end
+
+    opts.on('--timer MINUTES', 'Set a timeout to process') do |minutes|
+      options[:time] = minutes
+    end
   end
   option_parser.parse!
 
   puts option_parser
 
-  # ## Play matching videos and put it on shuffle
-  # video --shuffle samurai champloo
-
-  # ## Play video and timeout after 20 minutes
-  # video --timer 20
+  # > video --shuffle samurai champloo
+  # > video --timer 20
 end
