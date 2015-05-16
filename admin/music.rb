@@ -5,17 +5,34 @@
 # Modified At: 2015 0513 220942
 # Description: Manage Music
 
-## Filter by category
-music --filter Guardian
+require 'optparse'
 
-## List available playlists
-music --playlist
+module Admin
+  class Music
+  end
+end
 
-## Play music in target playlist
-music --playlist Chillosophy
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "Usage: music [options] REGEXP"
+  end
+  option_parser.parse!
 
-## Open radio stream and record it
-radio --record 88.7
+  puts option_parser
 
-## List all podcasts
-podcast --list
+  # ## Filter by category
+  # music --filter Guardian
+
+  # ## List available playlists
+  # music --playlist
+
+  # ## Play music in target playlist
+  # music --playlist Chillosophy
+
+  # ## Open radio stream and record it
+  # radio --record 88.7
+
+  # ## List all podcasts
+  # podcast --list
+end

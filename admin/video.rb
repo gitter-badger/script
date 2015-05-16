@@ -5,8 +5,25 @@
 # Modified At: 2015 0513 220907
 # Description: Manage Videos
 
-## Play matching videos and put it on shuffle
-video --shuffle samurai champloo
+require 'optparse'
 
-## Play video and timeout after 20 minutes
-video --timer 20
+module Admin
+  class Video
+  end
+end
+
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "Usage: video [options] REGEXP"
+  end
+  option_parser.parse!
+
+  puts option_parser
+
+  # ## Play matching videos and put it on shuffle
+  # video --shuffle samurai champloo
+
+  # ## Play video and timeout after 20 minutes
+  # video --timer 20
+end

@@ -5,14 +5,31 @@
 # Modified At: 2015 0513 221014
 # Description: Manage Downloads
 
-## Delete all files in download directory, password to confirm
-download --flush
+require 'optparse'
 
-## Move most recent file to Desktop
-download --pop
+module Admin
+  class Download
+  end
+end
 
-## List downloads sort by most recent
-download --list
+if __FILE__ == $0
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "Usage: document [options] REGEXP"
+  end
+  option_parser.parse!
 
-## Fetch downloads that match regular expression
-download --fetch REGEXP
+  puts option_parser
+
+  # ## Delete all files in download directory, password to confirm
+  # download --flush
+
+  # ## Move most recent file to Desktop
+  # download --pop
+
+  # ## List downloads sort by most recent
+  # download --list
+
+  # ## Fetch downloads that match regular expression
+  # download --fetch REGEXP
+end
