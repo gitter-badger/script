@@ -5,16 +5,17 @@
 # Modified At: 2015 0513 220942
 # Description: Manage Music
 
-# > query
-#   >> filter by Chillosophy
-#   >> filter by Jazz
-#   >> filter by Guardian
-#   >> filter by Radio
-#   >> filter by Podcast
+## Filter by category
+music --filter Guardian
 
-# > play
-#   >> Chillosophy
-#   >> Jazz
-#   >> Guardian
-#   >> Radio
-#   >> Podcast
+## List available playlists
+music --playlist
+
+## Play music in target playlist
+music --playlist Chillosophy
+
+## Open radio stream and record it
+radio --record 88.7
+
+## List all podcasts
+podcast --list

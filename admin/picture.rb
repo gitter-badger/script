@@ -5,5 +5,11 @@
 # Modified At: 2015 0513 220924
 # Description: Manage Pictures
 
-# > open
-#   >> current directory and all subdirectory
+## Open target directory optional depth argument
+picture --depth 2 DIR
+
+## Play slideshow
+picture --slideshow .
+
+## Fullscreen
+picture --fullscreen IMG

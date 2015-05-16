@@ -5,7 +5,8 @@
 # Modified At: 2015 0513 220907
 # Description: Manage Videos
 
-# > play
-#   >> shuffle cowboy bebop
-#   >> shuffle samuraii champloo
-#   >> shuffle all
+## Play matching videos and put it on shuffle
+video --shuffle samurai champloo
+
+## Play video and timeout after 20 minutes
+video --timer 20
