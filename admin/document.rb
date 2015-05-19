@@ -28,12 +28,25 @@ if __FILE__ == $0
   option_parser.parse!
 
   if ARGV.size > 0
-    puts 'Success'
-    # > document --filter Technical Elegant Ruby
-    # > document --fetch On Writing Well
-    # > document Rise of the Ogre
+    is_fetch = false
+
+    if options[:fetch]
+      is_fetch = true
+    end
+
+    if options[:filter]
+      # > document --filter Technical Elegant Ruby
+      # D - ask if we want to copy queryset to Desktop
+
+      # > document --fetch --filter Technicial On Writing Well
+    else
+      # > document Rise of the Ogre
+      # D - ask if we want to copy queryset to Desktop
+
+      # > document --fetch
+      # D ask to confirm copy all documents or input keywords
+    end
   end
   puts option_parser
   exit 1
-
 end
