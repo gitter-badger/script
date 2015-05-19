@@ -9,6 +9,15 @@ require 'optparse'
 
 module Admin
   class Picture
+    def initialize(timeout, depth, is_fullscreen)
+      @timeout = timeout
+      @depth = depth
+      @is_fullscreen = is_fullscreen
+    end
+
+    def launch
+      `shotwell`
+    end
   end
 end
 
@@ -25,7 +34,7 @@ if __FILE__ == $0
       options[:slideshow] = true
     end
 
-    opts.on('-f', '--fullscreen', 'Browse in fullscreen') do
+    opts.on('-f', '--fullscreen', 'Maximize photo browser window') do
       options[:fullscreen] = true
     end
 
@@ -33,23 +42,29 @@ if __FILE__ == $0
       options[:shuffle] = true
     end
 
-    opts.on('--timer MINUTES', 'Set a timeout to process') do |minutes|
-      options[:time] = minutes
+    opts.on('--timeout MINUTES', 'Set a timeout to the process') do |minutes|
+      options[:timeout] = minutes
     end
   end
   option_parser.parse!
 
-  admin_picture = Admin::Picture.new
 
   if ARGV.size > 0
-    if options[:depth]
-      # > picture --depth 2 DIR
-    elsif options[:slideshow]
-      # > picture --slideshow .
-    elsif options[:fullscreen]
-      # > picture --fullscreen IMG
+    timout = 0
+    depth = 0
+    is_fullscreen = false
+
+    if options[:timeout] and options[:timeout].is_a? Integer
+      timeout = options[:timeout]
+    end
+    depth = options[:depth] if options[:depth]
+    is_fullscreen = true if options[:fullscreen]
+
+    admin_picture = Admin::Picture.new(timeout, depth, is_fullscreen)
+
+    if options[:slideshow]
+      admin_picture.slideshow
     else
-      # > DEFAULT launch the shotwell application
       admin_picture.launch
     end
   end

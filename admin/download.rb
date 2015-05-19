@@ -45,16 +45,12 @@ if __FILE__ == $0
     admin_download = Admin::Download.new
 
     if options[:flush]
-      # > download --flush
       admin_download.flush
     elsif options[:pop]
-      # > download --pop
       admin_download.pop
     elsif options[:list]
-      # > download --list
       admin_download.list
     else
-      # > download --fetch REGEXP
       admin_download.fetch
     end
   end

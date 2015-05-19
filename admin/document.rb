@@ -37,16 +37,9 @@ if __FILE__ == $0
     admin_document = Admin::Document.new
 
     if options[:filter]
-      # > document --filter Technical Elegant Ruby
-      # D - ask if we want to copy queryset to Desktop
-
-      # > document --fetch --filter Technicial On Writing Well
+      admin_document.filter(is_fetch, options[:filter])
     else
-      # > document Rise of the Ogre
-      # D - ask if we want to copy queryset to Desktop
-
-      # > document --fetch
-      # D ask to confirm copy all documents or input keywords
+      admin_document.launch
     end
   end
 

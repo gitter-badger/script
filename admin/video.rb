@@ -9,6 +9,13 @@ require 'optparse'
 
 module Admin
   class Video
+    def initialize(timeout)
+      @timeout = timeout
+    end
+
+    def launch
+      `totem`
+    end
   end
 end
 
@@ -21,21 +28,28 @@ if __FILE__ == $0
       options[:shuffle] = true
     end
 
-    opts.on('--timer MINUTES', 'Set a timeout to process') do |minutes|
-      options[:time] = minutes
+    opts.on('-f', '--fullscreen', 'Maximize video player window') do
+      options[:fullscreen] = true
+    end
+
+    opts.on('--timeout MINUTES', 'Set a timeout to the process') do |minutes|
+      options[:timeout] = minutes
     end
   end
   option_parser.parse!
 
-  admin_video = Admin::Video.new
-
   if ARGV.size > 0
+    timeout = 0
+
+    if options[:timeout] and options[:timeout].is_a? Integer
+      timeout = options[:timeout]
+    end
+
+    admin_video = Admin::Video.new(timeout)
+
     if options[:shuffle]
-      # > video --shuffle samurai champloo
-    elsif options[:timer]
-      # > video --timer 20
+      admin_video.shuffle
     else
-      # > DEFAULT launch the totem application
       admin_video.launch
     end
   end

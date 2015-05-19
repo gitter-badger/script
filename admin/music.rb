@@ -9,6 +9,15 @@ require 'optparse'
 
 module Admin
   class Music
+    def initialize(is_shuffle, is_record, timeout)
+      @is_shuffle = is_shuffle
+      @is_record  = is_record
+      @timeout    = timeout
+    end
+
+    def launch
+      `rhythmbox`
+    end
   end
 end
 
@@ -29,7 +38,7 @@ if __FILE__ == $0
       options[:shuffle] = true
     end
 
-    opts.on('--timeout MINUTES', 'Set a timeout to process') do |minutes|
+    opts.on('--timeout MINUTES', 'Set a timeout to the process') do |minutes|
       options[:timeout] = minutes
     end
 
@@ -47,25 +56,28 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  admin_music = Admin::Music.new
-
   if ARGV.size > 0
     is_shuffle = false
     is_record  = false
+    timeout    = 0
 
+    if options[:timeout] and options[:timeout].is_a? Integer
+      timeout = options[:timeout]
+    end
     is_shuffle = true if options[:shuffle]
     is_record  = true if options[:record]
 
+    admin_music = Admin::Music.new(is_shuffle, is_record, timeout)
+
     if options[:filter]
-      # > music --filter Guardian
+      admin_music.filter(ARGV)
     elsif options[:playlist]
-      # > music --playlist
-      # > music --shuffle --playlist Chillosophy
-      # > music --record --radio 88.7
+      admin_music.playlist(ARGV)
+    elsif options[:radio]
+      admin_music.radio(ARGV)
     elsif options[:podcast]
-      # > music --podcast Snap Judgment
+      admin_music.podcast(ARGV)
     else
-      # > DEFAULT launch rhythmbox application
       admin_music.launch
     end
   end
