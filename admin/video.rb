@@ -38,22 +38,15 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if ARGV.size > 0
-    timeout = 0
-
-    if options[:timeout] and options[:timeout].is_a? Integer
-      timeout = options[:timeout]
-    end
-
-    admin_video = Admin::Video.new(timeout)
-
-    if options[:shuffle]
-      admin_video.shuffle
-    else
-      admin_video.launch
-    end
+  if options[:timeout] and options[:timeout].is_a? Integer
+    timeout = options[:timeout]
   end
 
-  puts option_parser
-  exit 1
+  admin_video = Admin::Video.new(timeout)
+
+  if options[:shuffle]
+    admin_video.shuffle
+  else
+    admin_video.launch
+  end
 end

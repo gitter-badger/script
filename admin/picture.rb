@@ -48,26 +48,19 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if ARGV.size > 0
-    timout = 0
-    depth = 0
-    is_fullscreen = false
 
-    if options[:timeout] and options[:timeout].is_a? Integer
-      timeout = options[:timeout]
-    end
-    depth = options[:depth] if options[:depth]
-    is_fullscreen = true if options[:fullscreen]
-
-    admin_picture = Admin::Picture.new(timeout, depth, is_fullscreen)
-
-    if options[:slideshow]
-      admin_picture.slideshow
-    else
-      admin_picture.launch
-    end
+  if options[:timeout] and options[:timeout].is_a? Integer
+    timeout = options[:timeout]
   end
 
-  puts option_parser
-  exit 1
+  depth = options[:depth] if options[:depth]
+  is_fullscreen = true if options[:fullscreen]
+
+  admin_picture = Admin::Picture.new(timeout, depth, is_fullscreen)
+
+  if options[:slideshow]
+    admin_picture.slideshow
+  else
+    admin_picture.launch
+  end
 end

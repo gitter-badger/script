@@ -56,32 +56,23 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if ARGV.size > 0
-    is_shuffle = false
-    is_record  = false
-    timeout    = 0
-
-    if options[:timeout] and options[:timeout].is_a? Integer
-      timeout = options[:timeout]
-    end
-    is_shuffle = true if options[:shuffle]
-    is_record  = true if options[:record]
-
-    admin_music = Admin::Music.new(is_shuffle, is_record, timeout)
-
-    if options[:filter]
-      admin_music.filter(ARGV)
-    elsif options[:playlist]
-      admin_music.playlist(ARGV)
-    elsif options[:radio]
-      admin_music.radio(ARGV)
-    elsif options[:podcast]
-      admin_music.podcast(ARGV)
-    else
-      admin_music.launch
-    end
+  if options[:timeout] and options[:timeout].is_a? Integer
+    timeout = options[:timeout]
   end
+  is_shuffle = true if options[:shuffle]
+  is_record  = true if options[:record]
 
-  puts option_parser
-  exit 1
+  admin_music = Admin::Music.new(is_shuffle, is_record, timeout)
+
+  if options[:filter]
+    admin_music.filter(ARGV)
+  elsif options[:playlist]
+    admin_music.playlist(ARGV)
+  elsif options[:radio]
+    admin_music.radio(ARGV)
+  elsif options[:podcast]
+    admin_music.podcast(ARGV)
+  else
+    admin_music.launch
+  end
 end
