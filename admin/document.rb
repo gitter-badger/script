@@ -27,9 +27,13 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
+  if ARGV.size > 0
+    puts 'Success'
+    # > document --filter Technical Elegant Ruby
+    # > document --fetch On Writing Well
+    # > document Rise of the Ogre
+  end
   puts option_parser
+  exit 1
 
-  # > document --filter Technical Elegant Ruby
-  # > document --fetch On Writing Well
-  # > document Rise of the Ogre
 end
