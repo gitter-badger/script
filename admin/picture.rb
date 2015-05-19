@@ -48,7 +48,6 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-
   if ARGV.size > 0
     timout = 0
     depth = 0
