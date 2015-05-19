@@ -39,9 +39,21 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  puts option_parser
+  admin_picture = Admin::Picture.new
 
-  # > picture --depth 2 DIR
-  # > picture --slideshow .
-  # > picture --fullscreen IMG
+  if ARGV.size > 0
+    if options[:depth]
+      # > picture --depth 2 DIR
+    elsif options[:slideshow]
+      # > picture --slideshow .
+    elsif options[:fullscreen]
+      # > picture --fullscreen IMG
+    else
+      # > DEFAULT launch the shotwell application
+      admin_picture.launch
+    end
+  end
+
+  puts option_parser
+  exit 1
 end

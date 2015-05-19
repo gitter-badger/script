@@ -34,6 +34,8 @@ if __FILE__ == $0
       is_fetch = true
     end
 
+    admin_document = Admin::Document.new
+
     if options[:filter]
       # > document --filter Technical Elegant Ruby
       # D - ask if we want to copy queryset to Desktop
@@ -47,6 +49,7 @@ if __FILE__ == $0
       # D ask to confirm copy all documents or input keywords
     end
   end
+
   puts option_parser
   exit 1
 end

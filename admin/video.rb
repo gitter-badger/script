@@ -27,8 +27,19 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  puts option_parser
+  admin_video = Admin::Video.new
 
-  # > video --shuffle samurai champloo
-  # > video --timer 20
+  if ARGV.size > 0
+    if options[:shuffle]
+      # > video --shuffle samurai champloo
+    elsif options[:timer]
+      # > video --timer 20
+    else
+      # > DEFAULT launch the totem application
+      admin_video.launch
+    end
+  end
+
+  puts option_parser
+  exit 1
 end

@@ -47,11 +47,29 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  puts option_parser
+  admin_music = Admin::Music.new
 
-  # > music --filter Guardian
-  # > music --playlist
-  # > music --shuffle --playlist Chillosophy
-  # > music --record --radio 88.7
-  # > music --podcast Snap Judgment
+  if ARGV.size > 0
+    is_shuffle = false
+    is_record  = false
+
+    is_shuffle = true if options[:shuffle]
+    is_record  = true if options[:record]
+
+    if options[:filter]
+      # > music --filter Guardian
+    elsif options[:playlist]
+      # > music --playlist
+      # > music --shuffle --playlist Chillosophy
+      # > music --record --radio 88.7
+    elsif options[:podcast]
+      # > music --podcast Snap Judgment
+    else
+      # > DEFAULT launch rhythmbox application
+      admin_music.launch
+    end
+  end
+
+  puts option_parser
+  exit 1
 end
