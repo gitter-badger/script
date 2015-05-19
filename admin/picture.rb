@@ -9,14 +9,18 @@ require 'optparse'
 
 module Admin
   class Picture
-    def initialize(timeout, depth, is_fullscreen)
-      @timeout = timeout
-      @depth = depth
+    def initialize(timeout=nil, depth=0, is_fullscreen=false)
+      @timeout       = timeout
+      @depth         = depth
       @is_fullscreen = is_fullscreen
     end
 
     def launch
-      `shotwell`
+      if @timeout
+        `timeout #{@timeout} shotwell`
+      else
+        `shotwell`
+      end
     end
   end
 end
@@ -48,13 +52,9 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-
-  if options[:timeout] and options[:timeout].is_a? Integer
-    timeout = options[:timeout]
-  end
-
-  depth = options[:depth] if options[:depth]
-  is_fullscreen = true if options[:fullscreen]
+  timeout       = options[:timeout] ? options[:timeout] : nil
+  depth         = options[:depth] ? options[:depth] : 0
+  is_fullscreen = options[:fullscreen] ? options[:fullscreen] : false
 
   admin_picture = Admin::Picture.new(timeout, depth, is_fullscreen)
 

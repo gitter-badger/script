@@ -9,14 +9,18 @@ require 'optparse'
 
 module Admin
   class Music
-    def initialize(is_shuffle, is_record, timeout)
-      @is_shuffle = is_shuffle
-      @is_record  = is_record
-      @timeout    = timeout
+    def initialize(timeout=nil, is_shuffled=false, is_recorded=false)
+      @timeout     = timeout
+      @is_shuffled = is_shuffled
+      @is_recorded = is_recorded
     end
 
     def launch
-      `rhythmbox`
+      if @timeout
+        `timeout #{@timeout} rhythmbox`
+      else
+        `rhythmbox`
+      end
     end
   end
 end
@@ -56,13 +60,11 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if options[:timeout] and options[:timeout].is_a? Integer
-    timeout = options[:timeout]
-  end
-  is_shuffle = true if options[:shuffle]
-  is_record  = true if options[:record]
+  timeout     = options[:timeout] ? options[:timeout] : nil
+  is_shuffled = options[:shuffle] ? options[:shuffle] : false
+  is_recorded = options[:record] ? options[:record] : false
 
-  admin_music = Admin::Music.new(is_shuffle, is_record, timeout)
+  admin_music = Admin::Music.new(timeout, is_shuffled, is_recorded)
 
   if options[:filter]
     admin_music.filter(ARGV)

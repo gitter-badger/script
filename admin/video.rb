@@ -9,12 +9,20 @@ require 'optparse'
 
 module Admin
   class Video
-    def initialize(timeout)
+    def initialize(timeout=nil)
       @timeout = timeout
     end
 
     def launch
-      `totem`
+      if @timeout
+        `timeout #{@timeout} totem`
+      else
+        `totem`
+      end
+    end
+
+    def shuffle
+      launch
     end
   end
 end
@@ -38,9 +46,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if options[:timeout] and options[:timeout].is_a? Integer
-    timeout = options[:timeout]
-  end
+  timeout = options[:timeout] ? options[:timeout] : nil
 
   admin_video = Admin::Video.new(timeout)
 
