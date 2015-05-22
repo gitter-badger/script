@@ -17,9 +17,25 @@ module Admin
 
     def list_windows
       windows = []
-      `wmctrl -l`.split(/[[:newline:]]/).each do |window|
-        puts window
-        # windows.push(window.split(/[[:space:]]+/))
+      `wmctrl -lpG`.split(/\n/).each do |window|
+        windows.push(window)
+      end
+
+      windows.map! {|w| w.split }
+
+      windows.collect! do |window|
+        window.reverse!
+        attr_hash = {}
+        attr_hash[:id] = window.pop
+        attr_hash[:desktop] = window.pop
+        attr_hash[:pid] = window.pop
+        attr_hash[:x] = window.pop
+        attr_hash[:y] = window.pop
+        attr_hash[:width] = window.pop
+        attr_hash[:height] = window.pop
+        attr_hash[:hostname] = window.pop
+        attr_hash[:title] = window.join(' ')
+        attr_hash
       end
       windows
     end
@@ -49,5 +65,7 @@ end
 if __FILE__ == $0
   include Admin::Window
 
-  list_windows.inspect
+  list_windows.each do |win|
+    puts win.inspect
+  end
 end
