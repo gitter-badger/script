@@ -16,11 +16,12 @@ module Admin
     end
 
     def list_windows
-      `wmctrl -l`.split('\n').each do |window|
+      windows = []
+      `wmctrl -l`.split(/[[:newline:]]/).each do |window|
         puts window
+        # windows.push(window.split(/[[:space:]]+/))
       end
-      # include G (Geometry)
-      # include p (Process ID)
+      windows
     end
 
     def close_window(window)
@@ -48,5 +49,5 @@ end
 if __FILE__ == $0
   include Admin::Window
 
-  list_windows
+  list_windows.inspect
 end
