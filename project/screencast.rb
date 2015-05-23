@@ -1,5 +1,5 @@
   #!/usr/bin/env ruby
-  # wm_record.rb
+  # screencast.rb
   # Author: Andy Bettisworth
   # Created At: 2015 0521 182728
   # Modified At: 2015 0521 182728
@@ -7,7 +7,7 @@
 
 module Admin
   module Window
-    class Record
+    class Screencast
     end
   end
 end
