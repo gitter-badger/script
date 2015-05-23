@@ -97,7 +97,7 @@ if __FILE__ == $0
       options[:list_desktops] = true
     end
 
-    opts.on('-l', '--list-windows REGEXP', 'List all windows.') do |regexp|
+    opts.on('-l', '--list-windows [REGEXP]', 'List all windows.') do |regexp|
       options[:list_windows] = regexp
     end
   end
