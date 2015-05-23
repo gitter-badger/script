@@ -5,6 +5,8 @@
 # Modified At: 2015 0521 185131
 # Description: X Window Manager interface
 
+require 'optparse'
+
 module Admin
   module WindowManager
     def environment
