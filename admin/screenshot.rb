@@ -8,6 +8,8 @@ module Admin
     class Screenshot
       def save
         # >
+        filename = "screenshot_#{Time.now.to_i}.png"
+        File.open("#{ENV['HOME']}/Desktop/#{filename}", 'w+')
       end
     end
   end

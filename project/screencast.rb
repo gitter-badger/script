@@ -7,6 +7,8 @@
 
 require 'optparse'
 
+require_relative 'screenshot'
+
 module Admin
   module WindowManager
     class Screencast
@@ -19,18 +21,14 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
+        screen = Screenshot.new
         while true do
-          filename = "screenshot_#{Time.now.to_i}.png"
-          File.open("#{ENV['HOME']}/Desktop/#{filename}", 'w+')
+          screen.save
           sleep(1.0/6)
         end
       end
 
       private
-
-      def capture
-        # > save screenshot
-      end
 
       def encode
         # > create packed png
