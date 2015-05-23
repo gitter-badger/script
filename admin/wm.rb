@@ -56,10 +56,10 @@ module Admin
     end
 
     def filter_windows(windows, query)
-      case
-      when query ~= /\h{8}/
+        case
+      when query =~ /\h{8}/
         windows = windows.keep_if { |w| w[:id] =~ /#{query}/ } if query
-      when query ~= /\d+/
+      when query =~ /\d+/
         windows = windows.keep_if { |w| w[:pid] =~ /#{query}/ } if query
       else
         windows = windows.keep_if { |w| w[:title] =~ /#{query}/ } if query
