@@ -18,6 +18,10 @@ module Admin
       def start!
         puts "Starting Capture"
         puts "================"
+
+        while true do
+          sleep(1.0/8)
+        end
       end
 
       private
