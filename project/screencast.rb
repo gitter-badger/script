@@ -27,7 +27,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screencast [options]"
 
-    opts.on('-w', '--window WINDOW', 'Target specific window.') do |regexp|
+    opts.on('-w', '--window WINDOW', 'Record a specific window.') do |regexp|
       options[:window] = regexp
     end
 
@@ -48,7 +48,7 @@ if __FILE__ == $0
   puts option_parser
 
   # > default is start recording entire desktop until process is killed output to desktop
-  # > accept window IDs and String-based querys for best-fit
+  # > accept pid, window ID, and regexp
   # > output <name>_anim.js and <name>_packed.png
   # > end_frame_pause delay, how long to way for before loop (4000)
   # > simplification_tolerance, how many pixels able to waste in crush (512)
