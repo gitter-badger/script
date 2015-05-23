@@ -7,6 +7,7 @@
 
 require 'optparse'
 
+require_relative 'wm'
 require_relative 'screenshot'
 
 module Admin
@@ -21,11 +22,17 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        screen = Screenshot.new
-        while true do
-          screen.save
-          sleep(1.0/6)
-        end
+        # > is it Integer
+
+        # > get window ID
+        # puts @window if @window
+        # puts windows(@window)
+
+        # screen = Screenshot.new
+        # while true do
+        #   screen.save
+        #   sleep(1.0/6)
+        # end
       end
 
       private
