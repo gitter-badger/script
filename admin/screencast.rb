@@ -22,6 +22,7 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
+        # > cleanup param passing
         screen   = Screenshot.new(window: @window) if @window
         screen ||= Screenshot.new
         while true do

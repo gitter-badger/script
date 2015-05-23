@@ -23,34 +23,52 @@ module Admin
 
     def desktops
       require_wmctrl
-      `wmctrl -d`
+
+      desktops = []
+      `wmctrl -d`.split(/\n/).each do |desktop|
+        desktops.push(desktop)
+      end
+      desktops
+    end
+
+    def window(query)
+      require_wmctrl
+
+      windows = windows(query)
+      windows.pop
     end
 
     def windows(query=nil)
       require_wmctrl
+
       windows = []
       `wmctrl -lpG`.split(/\n/).each do |window|
         windows.push(window)
       end
-
       windows.map! { |w| w.split }
+
       windows.collect! do |window|
         window.reverse!
-        attr_hash            = {}
-        attr_hash[:id]       = window.pop
-        attr_hash[:desktop]  = window.pop
-        attr_hash[:pid]      = window.pop
-        attr_hash[:x]        = window.pop
-        attr_hash[:y]        = window.pop
-        attr_hash[:width]    = window.pop
-        attr_hash[:height]   = window.pop
-        attr_hash[:hostname] = window.pop
-        attr_hash[:title]    = window.join(' ')
+        attr_hash = parse_window_attr(window)
         attr_hash
       end
 
       windows = filter_windows(windows, query) if query
       windows
+    end
+
+    def parse_window_attr(window)
+      attr_hash            = {}
+      attr_hash[:id]       = window.pop
+      attr_hash[:desktop]  = window.pop
+      attr_hash[:pid]      = window.pop
+      attr_hash[:x]        = window.pop
+      attr_hash[:y]        = window.pop
+      attr_hash[:width]    = window.pop
+      attr_hash[:height]   = window.pop
+      attr_hash[:hostname] = window.pop
+      attr_hash[:title]    = window.join(' ')
+      attr_hash
     end
 
     def filter_windows(windows, query)
@@ -123,7 +141,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: wm [options]"
 
-    opts.on('-l', '--list-windows [REGEXP]', 'List all or matching windows.') do |regexp|
+    opts.on('-l', '--list-windows [REGEXP]', 'List matching windows.') do |regexp|
       options[:list_windows]  = true
       options[:list_windows_regexp] = regexp
     end
