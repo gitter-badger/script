@@ -10,6 +10,18 @@ require 'optparse'
 module Admin
   module WindowManager
     class Screencast
+      attr_accessor :window
+      attr_accessor :timeout
+      attr_accessor :delay
+      attr_accessor :output
+
+      def start!
+        puts "Starting Capture"
+        puts "================"
+      end
+
+      private
+
       def capture
         # > save screenshot
       end
@@ -23,6 +35,8 @@ module Admin
 end
 
 if __FILE__ == $0
+  include Admin::WindowManager
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screencast [options]"
@@ -45,7 +59,12 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  puts option_parser
+  ep = Screencast.new
+  ep.window  = options[:window]  if options[:window]
+  ep.timeout = options[:timeout] if options[:timeout]
+  ep.delay   = options[:delay]   if options[:delay]
+  ep.output  = options[:output]  if options[:output]
+  ep.start!
 
   # > default is start recording entire desktop until process is killed output to desktop
   # > accept pid, window ID, and regexp
