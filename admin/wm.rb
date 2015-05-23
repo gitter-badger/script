@@ -91,9 +91,9 @@ if __FILE__ == $0
   option_parser.parse!
 
   if options[:list_desktops]
-    # > --list-desktops
+    puts desktops
   elsif options[:list_windows]
-    # > --list-windows
+    puts windows
   else
     puts option_parser
   end
