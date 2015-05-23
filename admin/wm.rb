@@ -56,20 +56,22 @@ module Admin
     end
 
     def filter_windows(windows, query)
-        case
+      case
       when query =~ /\h{8}/
+        puts 'found hex'
         windows = windows.keep_if { |w| w[:id] =~ /#{query}/ } if query
       when query =~ /\d+/
+        puts 'found int'
         windows = windows.keep_if { |w| w[:pid] =~ /#{query}/ } if query
       else
+        puts 'found str'
         windows = windows.keep_if { |w| w[:title] =~ /#{query}/ } if query
       end
       windows
     end
 
     def pretty_print_windows(query=nil)
-      windows = windows
-      windows = windows.keep_if { |w| w[:title] =~ /#{query}/ } if query
+      windows = windows(query)
       if windows
         windows.each do |win|
           puts <<-WIN
