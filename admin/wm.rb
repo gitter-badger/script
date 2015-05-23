@@ -53,6 +53,7 @@ origin:   #{win[:x]}, #{win[:x]}
 geometry: #{win[:width]}, #{win[:height]}
 hostname: #{win[:hostname]}
 title:    #{win[:title]}
+
         WIN
       end
     end
