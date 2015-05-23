@@ -11,6 +11,7 @@ module Admin
   module WindowManager
     def require_wmctrl
       `whatis wmctrl`
+      puts $?
       unless $? == 0
         raise StandardError, 'The wmctrl library is required.'
         puts 'raised error'
