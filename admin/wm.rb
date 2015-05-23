@@ -66,11 +66,35 @@ module Admin
   end
 end
 
+# wm = WMCtrl.new
+# wm_data = wm.list_windows.map { |w| wm.get_window_data(w[:id]) }
+# wm_data.reject! { |w| w[:state].include?("_NET_WM_STATE_SKIP_PAGER") }
+# puts wm_data
+
 if __FILE__ == $0
   include Admin::WindowManager
 
-  # > --list-windows
-  # > --list-desktops
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = "Usage: wm [options]"
+
+    opts.on('--list-desktops', 'List all desktops.') do
+      options[:list_desktops] = true
+    end
+
+    opts.on('--list-windows', 'List all windows.') do
+      options[:list_windows] = true
+    end
+  end
+  option_parser.parse!
+
+  if options[:list_desktops]
+    # > --list-desktops
+  elsif options[:list_windows]
+    # > --list-windows
+  else
+    puts option_parser
+  end
 
   # > show active desktop
   # > show active window
