@@ -92,10 +92,6 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: wm [options]"
 
-    opts.on('--list-desktops', 'List all desktops.') do
-      options[:list_desktops] = true
-    end
-
     opts.on('-l', '--list-windows [REGEXP]', 'List all or matching windows.') do |regexp|
       options[:list_windows]  = true
       options[:list_windows_regexp] = regexp
@@ -103,9 +99,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  if options[:list_desktops]
-    puts desktops
-  elsif options[:list_windows]
+  if options[:list_windows]
     pretty_print_windows(options[:list_windows_regexp])
   else
     puts option_parser
@@ -123,4 +117,5 @@ if __FILE__ == $0
   # > minimize window
   # > set window geometry
   # > get window info
+  # > list desktops
 end
