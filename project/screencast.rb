@@ -20,7 +20,9 @@ module Admin
         puts "================"
 
         while true do
-          sleep(1.0/8)
+          filename = "screenshot_#{Time.now.to_i}.png"
+          File.open("#{ENV['HOME']}/Desktop/#{filename}", 'w+')
+          sleep(1.0/6)
         end
       end
 
