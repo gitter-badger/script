@@ -44,10 +44,7 @@ module Admin
 
     def pretty_print_windows(regexp)
       list = windows
-      if regexp
-        list = list.keep_if { |w| w[:title] =~ /#{regexp}/ }
-      end
-
+      list = list.keep_if { |w| w[:title] =~ /#{regexp}/ } if regexp
       list.each do |win|
         puts <<-WIN
 id:       #{win[:id]}
