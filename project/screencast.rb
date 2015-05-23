@@ -6,7 +6,7 @@
   # Description: Record a window as a PNG and JSON metadata
 
 module Admin
-  module Window
+  module WindowManager
     class Screencast
       def capture
         # > save screenshot

@@ -6,16 +6,16 @@
 # Description: X Window Manager interface
 
 module Admin
-  module Window
+  module WindowManager
     def environment
       `wmctrl -m`
     end
 
-    def list_desktops
+    def desktops
       `wmctrl -d`
     end
 
-    def list_windows
+    def windows
       windows = []
       `wmctrl -lpG`.split(/\n/).each do |window|
         windows.push(window)
@@ -59,13 +59,29 @@ module Admin
     def hide_desktop
       `wmctrl -k off`
     end
+
+    def set_title(title='')
+      `wmctrl -r :ACTIVE: -N "#{title}"`
+    end
   end
 end
 
 if __FILE__ == $0
-  include Admin::Window
+  include Admin::WindowManager
 
-  list_windows.each do |win|
-    puts win.inspect
-  end
+  # > --list-windows
+  # > --list-desktops
+
+  # > show active desktop
+  # > show active window
+  # > switch active desktop
+  # > switch active window
+  # > close window
+  # > toggle show desktop mode
+  # > change viewport
+  # > set window title
+  # > maximize window
+  # > minimize window
+  # > set window geometry
+  # > get window info
 end
