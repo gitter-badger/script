@@ -97,8 +97,9 @@ if __FILE__ == $0
       options[:list_desktops] = true
     end
 
-    opts.on('-l', '--list-windows [REGEXP]', 'List all windows.') do |regexp|
-      options[:list_windows] = regexp
+    opts.on('-l', '--list-windows [REGEXP]', 'List all or matching windows.') do |regexp|
+      options[:list_windows]  = true
+      options[:list_windows_regexp] = regexp
     end
   end
   option_parser.parse!
@@ -106,7 +107,7 @@ if __FILE__ == $0
   if options[:list_desktops]
     puts desktops
   elsif options[:list_windows]
-    pretty_print_windows(options[:list_windows])
+    pretty_print_windows(options[:list_windows_regexp])
   else
     puts option_parser
   end
