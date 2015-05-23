@@ -95,7 +95,7 @@ if __FILE__ == $0
       options[:list_desktops] = true
     end
 
-    opts.on('--list-windows', 'List all windows.') do
+    opts.on('-l', '--list-windows', 'List all windows.') do
       options[:list_windows] = true
     end
   end
