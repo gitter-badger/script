@@ -10,11 +10,9 @@ require 'optparse'
 module Admin
   module WindowManager
     def require_wmctrl
-      `whatis wmctrl`
-      puts $?
+      `which wmctrl`
       unless $? == 0
         raise StandardError, 'The wmctrl library is required.'
-        puts 'raised error'
       end
     end
 
@@ -36,7 +34,6 @@ module Admin
       end
 
       windows.map! { |w| w.split }
-
       windows.collect! do |window|
         window.reverse!
         attr_hash            = {}
@@ -53,7 +50,6 @@ module Admin
       end
 
       windows = filter_windows(windows, query) if query
-
       windows
     end
 
