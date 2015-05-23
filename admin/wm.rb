@@ -43,21 +43,23 @@ module Admin
     end
 
     def pretty_print_windows(regexp)
-      puts regexp
-      puts regexp.class
-#       list = windows
-#       list.each do |win|
-#         puts <<-WIN
-# id:       #{win[:id]}
-# desktop:  #{win[:desktop]}
-# process:  #{win[:pid]}
-# origin:   #{win[:x]}, #{win[:x]}
-# geometry: #{win[:width]}, #{win[:height]}
-# hostname: #{win[:hostname]}
-# title:    #{win[:title]}
+      list = windows
+      if regexp
+        list = list.keep_if { |w| w[:title] =~ /#{regexp}/ }
+      end
 
-#         WIN
-#       end
+      list.each do |win|
+        puts <<-WIN
+id:       #{win[:id]}
+desktop:  #{win[:desktop]}
+process:  #{win[:pid]}
+origin:   #{win[:x]}, #{win[:x]}
+geometry: #{win[:width]}, #{win[:height]}
+hostname: #{win[:hostname]}
+title:    #{win[:title]}
+
+        WIN
+      end
     end
 
     def close_window(window)
