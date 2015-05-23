@@ -6,10 +6,9 @@
 module Admin
   module WindowManager
     class Screenshot
-      def save
-        # >
-        filename = "screenshot_#{Time.now.to_i}.png"
-        File.open("#{ENV['HOME']}/Desktop/#{filename}", 'w+')
+      def save(window: 'root', name: 'desktop')
+        filename = "#{name}_#{Time.now.to_i}"
+        `import -window #{window} #{filename}.png`
       end
     end
   end
