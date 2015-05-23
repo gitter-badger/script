@@ -42,6 +42,21 @@ module Admin
       windows
     end
 
+    def pretty_print_windows
+      list = windows
+      list.each do |win|
+        puts <<-WIN
+id:       #{win[:id]}
+desktop:  #{win[:desktop]}
+process:  #{win[:pid]}
+origin:   #{win[:x]}, #{win[:x]}
+geometry: #{win[:width]}, #{win[:height]}
+hostname: #{win[:hostname]}
+title:    #{win[:title]}
+        WIN
+      end
+    end
+
     def close_window(window)
       `wmctrl -c #{window}`
     end
@@ -68,11 +83,6 @@ module Admin
   end
 end
 
-# wm = WMCtrl.new
-# wm_data = wm.list_windows.map { |w| wm.get_window_data(w[:id]) }
-# wm_data.reject! { |w| w[:state].include?("_NET_WM_STATE_SKIP_PAGER") }
-# puts wm_data
-
 if __FILE__ == $0
   include Admin::WindowManager
 
@@ -93,7 +103,7 @@ if __FILE__ == $0
   if options[:list_desktops]
     puts desktops
   elsif options[:list_windows]
-    puts windows
+    pretty_print_windows
   else
     puts option_parser
   end
