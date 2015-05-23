@@ -42,20 +42,22 @@ module Admin
       windows
     end
 
-    def pretty_print_windows
-      list = windows
-      list.each do |win|
-        puts <<-WIN
-id:       #{win[:id]}
-desktop:  #{win[:desktop]}
-process:  #{win[:pid]}
-origin:   #{win[:x]}, #{win[:x]}
-geometry: #{win[:width]}, #{win[:height]}
-hostname: #{win[:hostname]}
-title:    #{win[:title]}
+    def pretty_print_windows(regexp)
+      puts regexp
+      puts regexp.class
+#       list = windows
+#       list.each do |win|
+#         puts <<-WIN
+# id:       #{win[:id]}
+# desktop:  #{win[:desktop]}
+# process:  #{win[:pid]}
+# origin:   #{win[:x]}, #{win[:x]}
+# geometry: #{win[:width]}, #{win[:height]}
+# hostname: #{win[:hostname]}
+# title:    #{win[:title]}
 
-        WIN
-      end
+#         WIN
+#       end
     end
 
     def close_window(window)
@@ -95,8 +97,8 @@ if __FILE__ == $0
       options[:list_desktops] = true
     end
 
-    opts.on('-l', '--list-windows', 'List all windows.') do
-      options[:list_windows] = true
+    opts.on('-l', '--list-windows REGEXP', 'List all windows.') do |regexp|
+      options[:list_windows] = regexp
     end
   end
   option_parser.parse!
@@ -104,7 +106,7 @@ if __FILE__ == $0
   if options[:list_desktops]
     puts desktops
   elsif options[:list_windows]
-    pretty_print_windows
+    pretty_print_windows(options[:list_windows])
   else
     puts option_parser
   end
