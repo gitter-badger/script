@@ -70,8 +70,9 @@ module Admin
     def pretty_print_windows(query=nil)
       windows = windows
       windows = windows.keep_if { |w| w[:title] =~ /#{query}/ } if query
-      windows.each do |win|
-        puts <<-WIN
+      if windows
+        windows.each do |win|
+          puts <<-WIN
 id:       #{win[:id]}
 desktop:  #{win[:desktop]}
 process:  #{win[:pid]}
@@ -81,6 +82,7 @@ hostname: #{win[:hostname]}
 title:    #{win[:title]}
 
         WIN
+        end
       end
     end
 
