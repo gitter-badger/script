@@ -12,7 +12,7 @@ module Admin
     def require_wmctrl
       `which wmctrl`
       unless $? == 0
-        raise StandardError, 'The wmctrl library is required.'
+        raise StandardError, 'The wmctrl system library is required.'
       end
     end
 

@@ -22,17 +22,12 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        # > is it Integer
-
-        # > get window ID
-        # puts @window if @window
-        # puts windows(@window)
-
-        # screen = Screenshot.new
-        # while true do
-        #   screen.save
-        #   sleep(1.0/6)
-        # end
+        screen   = Screenshot.new(window: @window) if @window
+        screen ||= Screenshot.new
+        while true do
+          screen.save
+          sleep(1.0/6)
+        end
       end
 
       private
