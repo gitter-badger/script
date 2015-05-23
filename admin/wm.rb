@@ -13,6 +13,7 @@ module Admin
       `whatis wmctrl`
       unless $? == 0
         raise StandardError, 'The wmctrl library is required.'
+        puts 'raised error'
       end
     end
 
