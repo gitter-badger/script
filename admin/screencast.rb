@@ -52,7 +52,7 @@ module Admin
         if @query
           screen = window(@query)
           if screen[:id]
-            cmd += "# --windowid #{screen[:id]}"
+            cmd += " --windowid #{screen[:id]}"
           end
         end
         cmd += " --no-frame"
