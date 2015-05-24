@@ -40,6 +40,7 @@ module Admin
 
       def build_command
         cmd  = ""
+        cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
         cmd += " --overwrite"
@@ -66,8 +67,8 @@ if __FILE__ == $0
       options[:name] = name
     end
 
-    opts.on('-t', '--timeout MINUTES', 'Timeout after N minutes.') do |minutes|
-      options[:timeout] = minutes
+    opts.on('-t', '--timeout TIME', 'Timeout after N minutes.') do |time|
+      options[:timeout] = time
     end
   end
   option_parser.parse!
