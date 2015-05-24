@@ -10,15 +10,15 @@ require_relative 'wm'
 module Admin
   module WindowManager
     class Screenshot
-      def save(window: 'root', name: 'desktop')
-        unless window == 'root'
+      def save(screen: 'root', name: 'desktop')
+        unless screen == 'root'
           screen = window(window)
-          window_id = screen[:id]
+          screen = screen[:id]
         end
 
         filename = "#{name}_#{Time.now.to_i}"
 
-        `import -window #{window_id} #{filename}.png`
+        `import -window #{screen} #{filename}.png`
       end
     end
   end
