@@ -31,7 +31,6 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        setup_project
         cmd = build_command
         puts cmd
         `#{cmd}`
