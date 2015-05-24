@@ -41,7 +41,7 @@ module Admin
         name ||= 'screencast'
         dir    = "#{ENV['HOME']}/Desktop/#{name}"
 
-        FileUtils.rmdir(dir)
+        FileUtils.rm_r(dir)
         FileUtils.mkdir_p(dir)
         Dir.chdir(dir)
       end
