@@ -34,7 +34,7 @@ module Admin
         setup_project
         cmd = build_command
         puts cmd
-        # `#{cmd}`
+        `#{cmd}`
       end
 
       private
