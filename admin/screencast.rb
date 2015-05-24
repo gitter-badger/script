@@ -31,7 +31,6 @@ module Admin
 
         while true do
           screen.save
-          sleep(1.0/6)
         end
       end
 
