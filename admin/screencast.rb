@@ -19,19 +19,20 @@ module Admin
       attr_accessor :timeout
       attr_accessor :delay
 
+      def require_recordmydesktop
+        `which recordmydesktop`
+        unless $? == 0
+          raise StandardError, 'The recordmydesktop application is required.'
+        end
+      end
+
       def start!
+        require_recordmydesktop
+
         puts "Starting Capture"
         puts "================"
 
         setup_project
-
-        screen = Screenshot.new
-        screen.query = @query if @query
-        screen.name  = @name  if @name
-
-        while true do
-          screen.save
-        end
       end
 
       private
@@ -44,11 +45,6 @@ module Admin
         FileUtils.rmdir(dir)
         FileUtils.mkdir_p(dir)
         Dir.chdir(dir)
-      end
-
-      def encode
-        # > create packed png
-        # > create timeline
       end
     end
   end
@@ -80,11 +76,13 @@ if __FILE__ == $0
   option_parser.parse!
 
   ep = Screencast.new
-  ep.query   = options[:query]  if options[:query]
+  ep.query   = options[:query]   if options[:query]
   ep.timeout = options[:timeout] if options[:timeout]
   ep.delay   = options[:delay]   if options[:delay]
   ep.name    = options[:name]    if options[:name]
   ep.start!
+
+  # > ensure project is overwritten if already exists
 
   # > default is start recording entire desktop until process is killed output to desktop
   # > accept pid, window ID, and regexp
