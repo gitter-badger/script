@@ -60,8 +60,8 @@ if __FILE__ == $0
       options[:delay] = seconds
     end
 
-    opts.on('-o', '--output NAME', 'Give output files a name.') do |name|
-      options[:output] = name
+    opts.on('-n', '--name NAME', 'Give output files a name.') do |name|
+      options[:name] = name
     end
   end
   option_parser.parse!
@@ -70,7 +70,7 @@ if __FILE__ == $0
   ep.window  = options[:window]  if options[:window]
   ep.timeout = options[:timeout] if options[:timeout]
   ep.delay   = options[:delay]   if options[:delay]
-  ep.output  = options[:output]  if options[:output]
+  ep.name    = options[:name]    if options[:name]
   ep.start!
 
   # > default is start recording entire desktop until process is killed output to desktop
