@@ -6,6 +6,7 @@
 # Description: Record a window as a PNG and JSON metadata
 
 require 'optparse'
+require 'fileutils'
 
 require_relative 'wm'
 require_relative 'screenshot'
@@ -22,16 +23,26 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
+        setup_project
+
         # > cleanup param passing
-        screen   = Screenshot.new(window: @window) if @window
-        screen ||= Screenshot.new
-        while true do
-          screen.save
-          sleep(1.0/6)
-        end
+        # screen   = Screenshot.new(query: @window) if @window
+        # screen ||= Screenshot.new
+        # while true do
+        #   screen.save
+        #   sleep(1.0/6)
+        # end
       end
 
       private
+
+      def setup_project
+        name = 'screencast'
+        dir  = "#{ENV['HOME']}/Desktop/#{name}"
+        FileUtils.rmdir(dir)
+        FileUtils.mkdir(dir)
+        Dir.chdir(dir)
+      end
 
       def encode
         # > create packed png

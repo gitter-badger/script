@@ -10,6 +10,10 @@ require_relative 'wm'
 module Admin
   module WindowManager
     class Screenshot
+      def initialize
+        # >
+      end
+
       def save(query: 'root', name: 'desktop')
         unless query == 'root'
           screen = window(query)
@@ -43,6 +47,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
+  # > move window selection to initialize method
   screen = Screenshot.new
 
   param = {}
