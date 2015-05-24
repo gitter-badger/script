@@ -74,7 +74,7 @@ USAGE: script [options] [SCRIPT]
     -l, --list [REGXP]               List all matching scripts
     -n, --new SCRIPT                 Create a script
     -f, --fetch                      Copy script(s) to Desktop
-        --info SCRIPT                Show script information
+        --info SCRIPT                Show script header information
         --clean                      Move script(s) off Desktop
         --refresh                    Refresh script Bash aliases
         --history                    List recent script activity
