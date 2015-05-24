@@ -39,16 +39,6 @@ module Admin
 
       private
 
-      def setup_project
-        name   = @name if @name
-        name ||= 'screencast'
-        dir    = "#{ENV['HOME']}/Desktop/#{name}"
-
-        FileUtils.rm_r(dir)
-        FileUtils.mkdir_p(dir)
-        Dir.chdir(dir)
-      end
-
       def build_command
         cmd  = ""
         cmd += " timeout #{@timeout}" if @timeout
