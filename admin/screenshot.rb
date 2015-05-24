@@ -12,7 +12,7 @@ module Admin
     class Screenshot
       def save(screen: 'root', name: 'desktop')
         unless screen == 'root'
-          screen = window(window)
+          screen = window(screen)
           screen = screen[:id]
         end
 
