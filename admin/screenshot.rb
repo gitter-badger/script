@@ -11,9 +11,10 @@ module Admin
   module WindowManager
     class Screenshot
       def save(window: 'root', name: 'desktop')
-        # > query for window id if window kwargs
-        # window(window) if window
-        window_id = '0x034014f9'
+        unless window == 'root'
+          screen = window(window)
+          window_id = screen[:id]
+        end
 
         filename = "#{name}_#{Time.now.to_i}"
 
