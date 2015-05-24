@@ -41,7 +41,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screenshot [options]"
 
-    opts.on('-w', '--window QUERY', 'Capture a specific window.') do |query|
+    opts.on('-q', '--query WINDOW', 'Capture a specific window.') do |query|
       options[:query] = query
     end
 
