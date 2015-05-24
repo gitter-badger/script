@@ -32,7 +32,6 @@ module Admin
         puts "================"
 
         cmd = build_command
-        puts cmd
         `#{cmd}`
       end
 
@@ -43,9 +42,36 @@ module Admin
         cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
+        if @query
+          screen = window(@query)
+          if screen[:id]
+            cmd += "# --windowid #{screen[:id]}"
+          end
+        end
         cmd += " --no-frame"
         cmd += " --overwrite"
-        cmd += " --v_quality 35"
+        if @v_quality
+          if (0..63).include?(@quality)
+            cmd += " --v_quality #{@quality}" if @quality.is_a? Integer
+          end
+        else
+          cmd += " --v_quality 35"
+        end
+        if @no_sound
+          cmd += " --no-sound"
+        end
+        if @no_cursor
+          cmd += " --no-cursor"
+        end
+        if @follow_mouse
+          cmd += " --follow-mouse"
+        end
+        if @width
+          cmd += " --width #{@width}" if @width.is_a? Integer
+        end
+        if @height
+          cmd += " --height #{@height}" if @height.is_a? Integer
+        end
         cmd += " -o #{@name}" if @name
         cmd
       end
