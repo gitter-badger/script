@@ -13,7 +13,7 @@ module Admin
       def save(screen: 'root', name: 'desktop')
         unless screen == 'root'
           screen = window(screen)
-          screen = screen[:id]
+          screen = screen[:id] if screen[:id]
         end
 
         filename = "#{name}_#{Time.now.to_i}"
