@@ -10,10 +10,12 @@ require_relative 'wm'
 module Admin
   module WindowManager
     class Screenshot
-      def save(screen: 'root', name: 'desktop')
-        unless screen == 'root'
-          screen = window(screen)
+      def save(query: 'root', name: 'desktop')
+        unless query == 'root'
+          screen = window(query)
           screen = screen[:id] if screen[:id]
+        else
+          screen = query
         end
 
         filename = "#{name}_#{Time.now.to_i}"
@@ -32,7 +34,7 @@ if __FILE__ == $0
     opts.banner = "Usage: screenshot [options]"
 
     opts.on('-w', '--window WINDOW', 'Capture a specific window.') do |query|
-      options[:window] = query
+      options[:query] = query
     end
 
     opts.on('-n', '--name NAME', 'Give screenshot a name.') do |name|
@@ -43,9 +45,9 @@ if __FILE__ == $0
 
   screen = Screenshot.new
 
-  param  = {}
-  param[:window] = options[:window] if options[:window]
-  param[:name]   = options[:name] if options[:name]
+  param = {}
+  param[:query] = options[:query] if options[:query]
+  param[:name]  = options[:name] if options[:name]
 
   screen.save(param)
 end
