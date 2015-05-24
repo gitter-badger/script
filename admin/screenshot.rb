@@ -21,7 +21,11 @@ module Admin
           screen = 'root'
         end
 
-        name = if @name ? @name : 'desktop'
+        if @name
+          name = @name
+        else
+          name = 'desktop'
+        end
         filename = "#{name}_#{Time.now.to_i}"
 
         `import -window #{screen} #{filename}.png`
