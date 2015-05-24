@@ -14,7 +14,6 @@ module Admin
   module WindowManager
     class Screencast
       attr_accessor :query
-      attr_accessor :name
       attr_accessor :timeout
       attr_accessor :delay
       attr_accessor :v_quality
@@ -24,6 +23,7 @@ module Admin
       attr_accessor :follow_mouse
       attr_accessor :width
       attr_accessor :height
+      attr_accessor :outfile
 
       def require_recordmydesktop
         `which recordmydesktop`
