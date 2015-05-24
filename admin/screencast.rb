@@ -39,9 +39,9 @@ module Admin
       def setup_project
         name = 'screencast'
         dir  = "#{ENV['HOME']}/Desktop/#{name}"
-        FileUtils.rmdir(dir)
-        FileUtils.mkdir(dir)
-        Dir.chdir(dir)
+        # FileUtils.rmdir(dir)
+        # FileUtils.mkdir_p(dir)
+        # Dir.chdir(dir)
       end
 
       def encode
