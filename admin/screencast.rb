@@ -14,10 +14,10 @@ require_relative 'screenshot'
 module Admin
   module WindowManager
     class Screencast
-      attr_accessor :window
+      attr_accessor :query
+      attr_accessor :name
       attr_accessor :timeout
       attr_accessor :delay
-      attr_accessor :output
 
       def start!
         puts "Starting Capture"
@@ -25,23 +25,26 @@ module Admin
 
         setup_project
 
-        # > cleanup param passing
-        # screen   = Screenshot.new(query: @window) if @window
-        # screen ||= Screenshot.new
-        # while true do
-        #   screen.save
-        #   sleep(1.0/6)
-        # end
+        screen = Screenshot.new
+        screen.query = @query if @query
+        screen.name  = @name  if @name
+
+        while true do
+          screen.save
+          sleep(1.0/6)
+        end
       end
 
       private
 
       def setup_project
-        name = 'screencast'
-        dir  = "#{ENV['HOME']}/Desktop/#{name}"
+        name   = @name if @name
+        name ||= 'screencast'
+        dir    = "#{ENV['HOME']}/Desktop/#{name}"
+
         FileUtils.rmdir(dir)
-        # FileUtils.mkdir_p(dir)
-        # Dir.chdir(dir)
+        FileUtils.mkdir_p(dir)
+        Dir.chdir(dir)
       end
 
       def encode
@@ -59,8 +62,12 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screencast [options]"
 
-    opts.on('-w', '--window WINDOW', 'Record a specific window.') do |regexp|
-      options[:window] = regexp
+    opts.on('-w', '--window QUERY', 'Record a specific window.') do |query|
+      options[:query] = query
+    end
+
+    opts.on('-n', '--name NAME', 'Give output files a name.') do |name|
+      options[:name] = name
     end
 
     opts.on('-t', '--timeout MINUTES', 'Timeout after N minutes.') do |minutes|
@@ -70,15 +77,11 @@ if __FILE__ == $0
     opts.on('-d', '--delay SECONDS', 'Set delay before looping animation.') do |seconds|
       options[:delay] = seconds
     end
-
-    opts.on('-n', '--name NAME', 'Give output files a name.') do |name|
-      options[:name] = name
-    end
   end
   option_parser.parse!
 
   ep = Screencast.new
-  ep.window  = options[:window]  if options[:window]
+  ep.query   = options[:query]  if options[:query]
   ep.timeout = options[:timeout] if options[:timeout]
   ep.delay   = options[:delay]   if options[:delay]
   ep.name    = options[:name]    if options[:name]
