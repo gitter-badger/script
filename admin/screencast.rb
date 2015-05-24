@@ -9,7 +9,6 @@ require 'optparse'
 require 'fileutils'
 
 require_relative 'wm'
-require_relative 'screenshot'
 
 module Admin
   module WindowManager
@@ -84,7 +83,7 @@ if __FILE__ == $0
 
   # > ensure project is overwritten if already exists
 
-  # > default is start recording entire desktop until process is killed output to desktop
+  # > default is start recording entire desktop until process is killed
   # > accept pid, window ID, and regexp
   # > output <name>_anim.js and <name>_packed.png
   # > end_frame_pause delay, how long to way for before loop (4000)
