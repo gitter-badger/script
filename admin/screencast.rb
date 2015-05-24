@@ -43,6 +43,7 @@ module Admin
         cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
+        cmd += " --no-frame"
         cmd += " --overwrite"
         cmd += " --v_quality 35"
         cmd += " -o #{@name}" if @name
