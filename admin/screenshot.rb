@@ -11,7 +11,7 @@ module Admin
   module WindowManager
     class Screenshot
       attr_accessor :query
-      attr_accessor :name
+      attr_accessor :outfile
 
       def save
         if @query
@@ -21,12 +21,12 @@ module Admin
           screen = 'root'
         end
 
-        if @name
-          name = @name
+        if @outfile
+          outfile = @outfile
         else
-          name = 'desktop'
+          outfile = 'desktop'
         end
-        filename = "#{name}_#{Time.now.to_i}"
+        filename = "#{outfile}_#{Time.now.to_i}"
 
         `import -window #{screen} #{filename}.png`
       end
@@ -45,14 +45,14 @@ if __FILE__ == $0
       options[:query] = query
     end
 
-    opts.on('-n', '--name STRING', 'Give screenshot a name.') do |name|
-      options[:name] = name
+    opts.on('-o', '--outfile FILENAME', 'Name of screenshot.') do |string|
+      options[:outfile] = string
     end
   end
   option_parser.parse!
 
   screen = Screenshot.new
-  screen.query = options[:query] if options[:query]
-  screen.name  = options[:name]  if options[:name]
+  screen.query   = options[:query]    if options[:query]
+  screen.outfile = options[:outfile]  if options[:outfile]
   screen.save
 end

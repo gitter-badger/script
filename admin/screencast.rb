@@ -84,7 +84,7 @@ module Admin
         if @height
           cmd += " --height #{@height}" if @height.is_a? Integer
         end
-        cmd += " -o #{@name}" if @name
+        cmd += " -o #{@outfile}" if @outfile
         cmd
       end
     end
@@ -100,10 +100,6 @@ if __FILE__ == $0
 
     opts.on('-q', '--query WINDOW', 'Record a specific window.') do |query|
       options[:query] = query
-    end
-
-    opts.on('-n', '--name NAME', 'Give output files a name.') do |name|
-      options[:name] = name
     end
 
     opts.on('-t', '--timeout TIME', 'Timeout after N minutes.') do |time|
@@ -137,12 +133,15 @@ if __FILE__ == $0
     opts.on('-h', '--height', 'Height of recorded window.') do |integer|
       options[:height] = integer
     end
+
+    opts.on('-o', '--outfile FILENAME', 'Name of recorded video.') do |string|
+      options[:outfile] = string
+    end
   end
   option_parser.parse!
 
   ep = Screencast.new
   ep.query        = options[:query]     if options[:query]
-  ep.name         = options[:name]      if options[:name]
   ep.timeout      = options[:timeout]   if options[:timeout]
   ep.v_quality    = options[:v_quality] if options[:v_quality]
   ep.s_quality    = options[:s_quality] if options[:s_quality]
@@ -151,5 +150,6 @@ if __FILE__ == $0
   ep.follow_mouse = options[:follow_mouse] if options[:follow_mouse]
   ep.width        = options[:width]  if options[:width]
   ep.height       = options[:height] if options[:height]
+  ep.outfile      = options[:outfile] if options[:outfile]
   ep.start!
 end
