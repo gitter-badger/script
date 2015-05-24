@@ -32,6 +32,9 @@ module Admin
         puts "================"
 
         setup_project
+        cmd = build_command
+        puts cmd
+        # `#{cmd}`
       end
 
       private
@@ -44,6 +47,16 @@ module Admin
         FileUtils.rm_r(dir)
         FileUtils.mkdir_p(dir)
         Dir.chdir(dir)
+      end
+
+      def build_command
+        cmd  = ""
+        cmd += " timeout #{@timeout}" if @timeout
+        cmd += " recordmydesktop"
+        cmd += " --overwrite"
+        cmd += " --v_quality 35"
+        cmd += " -o #{@name}" if @name
+        cmd
       end
     end
   end
@@ -67,25 +80,12 @@ if __FILE__ == $0
     opts.on('-t', '--timeout MINUTES', 'Timeout after N minutes.') do |minutes|
       options[:timeout] = minutes
     end
-
-    opts.on('-d', '--delay SECONDS', 'Set delay before looping animation.') do |seconds|
-      options[:delay] = seconds
-    end
   end
   option_parser.parse!
 
   ep = Screencast.new
   ep.query   = options[:query]   if options[:query]
-  ep.timeout = options[:timeout] if options[:timeout]
-  ep.delay   = options[:delay]   if options[:delay]
   ep.name    = options[:name]    if options[:name]
+  ep.timeout = options[:timeout] if options[:timeout]
   ep.start!
-
-  # > ensure project is overwritten if already exists
-
-  # > default is start recording entire desktop until process is killed
-  # > accept pid, window ID, and regexp
-  # > output <name>_anim.js and <name>_packed.png
-  # > end_frame_pause delay, how long to way for before loop (4000)
-  # > simplification_tolerance, how many pixels able to waste in crush (512)
 end
