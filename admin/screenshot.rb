@@ -26,6 +26,7 @@ module Admin
         else
           outfile = 'desktop'
         end
+
         filename = "#{outfile}_#{Time.now.to_i}"
 
         `import -window #{screen} #{filename}.png`
