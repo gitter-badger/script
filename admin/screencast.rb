@@ -14,8 +14,8 @@ module Admin
   module WindowManager
     class Screencast
       attr_accessor :query
-      attr_accessor :timeout
       attr_accessor :delay
+      attr_accessor :timeout
       attr_accessor :v_quality
       attr_accessor :s_quality
       attr_accessor :no_sound
@@ -46,6 +46,7 @@ module Admin
 
       def build_command
         cmd  = ""
+        cmd += " sleep #{@delay};" if @delay
         cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
@@ -102,6 +103,10 @@ if __FILE__ == $0
       options[:query] = query
     end
 
+    opts.on('-d', '--delay TIME', 'Delay screencast for N seconds.') do |time|
+      options[:delay] = time
+    end
+
     opts.on('-t', '--timeout TIME', 'Timeout after N minutes.') do |time|
       options[:timeout] = time
     end
@@ -142,14 +147,15 @@ if __FILE__ == $0
 
   ep = Screencast.new
   ep.query        = options[:query]     if options[:query]
+  ep.delay        = options[:delay]     if options[:delay]
   ep.timeout      = options[:timeout]   if options[:timeout]
   ep.v_quality    = options[:v_quality] if options[:v_quality]
   ep.s_quality    = options[:s_quality] if options[:s_quality]
   ep.no_sound     = options[:no_sound]  if options[:no_sound]
   ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
   ep.follow_mouse = options[:follow_mouse] if options[:follow_mouse]
-  ep.width        = options[:width]  if options[:width]
-  ep.height       = options[:height] if options[:height]
+  ep.width        = options[:width]   if options[:width]
+  ep.height       = options[:height]  if options[:height]
   ep.outfile      = options[:outfile] if options[:outfile]
   ep.start!
 end
