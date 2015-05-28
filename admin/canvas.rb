@@ -387,8 +387,8 @@ if __FILE__ == $0
       options[:lang_pattern] = regexp
     end
 
-    opts.on('-n CANVAS', '--new CANVAS', 'Create a new canvas') do |c|
-      options[:add] = c
+    opts.on('-n CANVAS', '--new CANVAS', 'Create a new canvas') do |name|
+      options[:add] = name
     end
 
     opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
@@ -413,22 +413,22 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  c = Admin::Canvas.new
+  canvas = Admin::Canvas.new
 
   if options[:list]
-    c.list(options[:canvas_pattern], options[:lang_pattern])
+    canvas.list(options[:canvas_pattern], options[:lang_pattern])
   elsif options[:add]
-    c.add(options[:add])
+    canvas.add(options[:add])
   elsif options[:fetch]
-    c.fetch(ARGV)
+    canvas.fetch(ARGV)
   elsif options[:info]
-    c.info(options[:info])
+    canvas.info(options[:info])
   elsif options[:clean]
-    c.clean
+    canvas.clean
   elsif options[:sync]
-    c.sync
+    canvas.sync
   elsif options[:history]
-    c.history
+    canvas.history
   else
     puts option_parser
   end

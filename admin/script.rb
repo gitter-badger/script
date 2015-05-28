@@ -456,8 +456,8 @@ if __FILE__ == $0
       options[:list_pattern] = regexp
     end
 
-    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a new script') do |s|
-      options[:add] = s
+    opts.on('-n SCRIPT', '--new SCRIPT', 'Create a new script') do |name|
+      options[:add] = name
     end
 
     opts.on('-f', '--fetch', 'Copy script(s) to the Desktop') do
@@ -482,22 +482,22 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  mgr = Admin::Script.new
+  script = Admin::Script.new
 
   if options[:list]
-    mgr.list(options[:list_pattern])
+    script.list(options[:list_pattern])
   elsif options[:add]
-    mgr.add(options[:add])
+    script.add(options[:add])
   elsif options[:fetch]
-    mgr.fetch(ARGV)
+    script.fetch(ARGV)
   elsif options[:clean]
-    mgr.clean
+    script.clean
   elsif options[:info]
-    mgr.info(options[:info])
+    script.info(options[:info])
   elsif options[:refresh]
-    mgr.refresh_aliases
+    script.refresh_aliases
   elsif options[:history]
-    mgr.history
+    script.history
   else
     puts option_parser
   end
