@@ -11,8 +11,8 @@ require_relative 'admin'
 
 module Admin
   class Script
-    SCRIPT   = "#{HOME}/GitHub/script"
-    BINARIES = {
+    SCRIPT_DIR = "#{HOME}/GitHub/script"
+    BINARIES   = {
       '.rb'  => 'ruby',
       '.py'  => 'python',
       '.exp' => 'expect',
@@ -96,7 +96,7 @@ $0
         name        = File.basename(script[:filename], extension)
         alias_cmd   = "alias #{name}="
         exec_binary = "'#{BINARIES[extension]} "
-        script_path = "#{SCRIPT}/#{script[:category]}/#{script[:filename]}'"
+        script_path = "#{SCRIPT_DIR}/#{script[:category]}/#{script[:filename]}'"
         str_alias   = alias_cmd + exec_binary + script_path
         new_bash_aliases.puts str_alias
       end
@@ -106,7 +106,7 @@ $0
     end
 
     def history
-      files = `cd #{SCRIPT}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+      files = `cd #{SCRIPT_DIR}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
       files = files.split("\n")
       puts "7-Day Script Activity:"
 
@@ -153,7 +153,7 @@ $0
       header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
       header = header.gsub!('$4', description)
 
-      File.new("#{SCRIPT}/#{category}/#{script}", 'w+') << header
+      File.new("#{SCRIPT_DIR}/#{category}/#{script}", 'w+') << header
       File.new("#{HOME}/Desktop/#{script}", 'w+') << header
     end
 
@@ -285,7 +285,7 @@ $0
         sl = scripts_list.select { |s| s[:filename] == script }
 
         if sl.count >= 1
-          "#{SCRIPT}/#{sl[0][:category]}/#{script}"
+          "#{SCRIPT_DIR}/#{sl[0][:category]}/#{script}"
         else
           script
         end
@@ -329,10 +329,10 @@ $0
 
       categories.each do |category|
         target_category = category
-        Dir.foreach("#{SCRIPT}/#{target_category}") do |file|
+        Dir.foreach("#{SCRIPT_DIR}/#{target_category}") do |file|
           next if file == '.' or file == '..'
           script = {}
-          script = get_script_info("#{SCRIPT}/#{target_category}/#{file}")
+          script = get_script_info("#{SCRIPT_DIR}/#{target_category}/#{file}")
           script_list << script
         end
       end
@@ -354,8 +354,8 @@ $0
     def get_app_categories
       categories = []
 
-      Dir.foreach(SCRIPT) do |entry|
-        next unless File.directory?(File.join(SCRIPT, entry))
+      Dir.foreach(SCRIPT_DIR) do |entry|
+        next unless File.directory?(File.join(SCRIPT_DIR, entry))
         next if entry == '.' or entry == '..' or entry == '.git'
         categories << entry
       end
@@ -366,11 +366,11 @@ $0
     def get_sync_scripts
       script_list = []
 
-      Dir.foreach(SCRIPT) do |file|
-        next if File.directory?(File.join(SCRIPT, file))
+      Dir.foreach(SCRIPT_DIR) do |file|
+        next if File.directory?(File.join(SCRIPT_DIR, file))
         script = {}
 
-        file_head = File.open(File.join(SCRIPT, file)).readlines
+        file_head = File.open(File.join(SCRIPT_DIR, file)).readlines
         s = file_head[0..11].join('')
 
         script[:shebang] = file_head[0].strip
@@ -426,7 +426,7 @@ $0
       system <<-CMD
         echo '';
         echo 'Commit changes in ~/.sync/.script';
-        cd #{SCRIPT};
+        cd #{SCRIPT_DIR};
         git checkout annex;
         git add -A;
         git commit -m "#{commit_msg}";

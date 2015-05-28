@@ -11,8 +11,8 @@ require_relative 'admin'
 
 module Admin
   class Canvas
-    CANVAS      = "#{ENV['HOME']}/GitHub/canvas"
-    ALIAS_CMD = {
+    CANVAS_DIR = "#{HOME}/GitHub/canvas"
+    ALIAS_CMD  = {
       '.c'   => 'gcc',
       '.rb'  => 'ruby',
       '.py'  => 'python',
@@ -92,11 +92,11 @@ $0
 
     def sync
       commit_changes
-      sync_github(CANVAS)
+      sync_github(CANVAS_DIR)
     end
 
     def history
-      files = `cd #{CANVAS}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+      files = `cd #{CANVAS_DIR}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
       files = files.split("\n")
       puts "7-Day Canvas Activity:"
 
@@ -127,10 +127,10 @@ $0
 
       lang_dir.each do |lang|
         target_lang = lang
-        Dir.foreach("#{CANVAS}/#{target_lang}") do |file|
+        Dir.foreach("#{CANVAS_DIR}/#{target_lang}") do |file|
           next if file == '.' or file == '..'
           canvas = {}
-          canvas = get_canvas_info("#{CANVAS}/#{target_lang}/#{file}")
+          canvas = get_canvas_info("#{CANVAS_DIR}/#{target_lang}/#{file}")
           canvas_list << canvas
         end
       end
@@ -152,8 +152,8 @@ $0
     def get_lang_dir(lang_regexp=false)
       language = []
 
-      Dir.foreach(CANVAS) do |entry|
-        next unless File.directory?(File.join(CANVAS, entry))
+      Dir.foreach(CANVAS_DIR) do |entry|
+        next unless File.directory?(File.join(CANVAS_DIR, entry))
         next if entry == '.' or entry == '..' or entry == '.git'
         language << entry
       end
@@ -234,7 +234,7 @@ $0
       header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
       header = header.gsub!('$4', description)
 
-      File.new("#{CANVAS}/#{language}/#{canvas}", 'w+') << header
+      File.new("#{CANVAS_DIR}/#{language}/#{canvas}", 'w+') << header
       File.new("#{DESKTOP}/#{canvas}", 'w+') << header
     end
 
@@ -281,7 +281,7 @@ $0
         cl = canvas_list.select { |c| c[:filename] == canvas }
 
         if cl.count >= 1
-          "#{CANVAS}/#{cl[0][:language]}/#{canvas}"
+          "#{CANVAS_DIR}/#{cl[0][:language]}/#{canvas}"
         else
           canvas
         end
@@ -341,7 +341,7 @@ $0
       system <<-CMD
         echo '';
         echo 'Committing changes for canveses...';
-        cd #{CANVAS};
+        cd #{CANVAS_DIR};
         git checkout annex;
         git add -A;
         git commit -m "#{commit_msg}";
