@@ -22,7 +22,11 @@ module Admin
     '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
   }
   COMMENTS = {
-    '.c'  => '//',
-    '.js' => '//'
+    '.c'   => '//',
+    '.rb'  => '#',
+    '.py'  => '#',
+    '.exp' => '#',
+    '.js'  => '//',
+    '.sh'  => '#'
   }
 end

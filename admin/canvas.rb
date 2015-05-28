@@ -22,11 +22,11 @@ module Admin
     }
     BOILERPLATE = <<-TXT
 $0
-# $1
-# Author: Andy Bettisworth
-# Created At: $2
-# Modified At: $3
-# Description: $4
+$C $1
+$C Author: Andy Bettisworth
+$C Created At: $2
+$C Modified At: $3
+$C Description: $4
     TXT
 
     def list(canvas_regexp=false, lang_regexp=false)
@@ -207,12 +207,13 @@ $0
     end
 
     def create_canvas(canvas)
-      canvas = set_default_ext(canvas)
-      canvas = set_default_prefix(canvas)
+      canvas  = set_default_ext(canvas)
+      canvas  = set_default_prefix(canvas)
+      extname = File.extname(canvas)
 
-      language = BINARIES[File.extname(canvas)]
+      language = BINARIES[extname]
       unless language
-        STDERR.puts "Unknown extension '#{File.extname(canvas)}'"
+        STDERR.puts "Unknown extension '#{extname}'"
         STDERR.puts "Possible extensions include: #{BINARIES.keys.join(' ')}"
         exit 1
       end
@@ -221,7 +222,8 @@ $0
       description = gets
       description ||= '...'
 
-      header = BOILERPLATE.gsub!('$0', get_shebang(File.extname(canvas)))
+      header = BOILERPLATE.gsub!('$C', COMMENTS[extname])
+      header = BOILERPLATE.gsub!('$0', get_shebang(extname))
       header = header.gsub!('$1', canvas)
       header = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
       header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
