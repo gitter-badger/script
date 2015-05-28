@@ -6,4 +6,6 @@
 # Description: system administration module
 
 module Admin
+  HOME    = ENV['HOME']
+  DESKTOP = "#{HOME}/Desktop"
 end

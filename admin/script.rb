@@ -11,7 +11,6 @@ require_relative 'admin'
 
 module Admin
   class Script
-    HOME     = ENV['HOME']
     SCRIPT   = "#{HOME}/GitHub/script"
     BINARIES = {
       '.rb'  => 'ruby',

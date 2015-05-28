@@ -11,7 +11,6 @@ require_relative 'admin'
 
 module Admin
   class Canvas
-    DESKTOP     = "#{ENV['HOME']}/Desktop"
     CANVAS      = "#{ENV['HOME']}/GitHub/canvas"
     ALIAS_CMD = {
       '.c'   => 'gcc',
