@@ -7,6 +7,8 @@
 
 require 'optparse'
 
+require_relative 'admin'
+
 module Admin
   class Script
     HOME     = ENV['HOME']
