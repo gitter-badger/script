@@ -8,7 +8,7 @@
 require 'optparse'
 
 module Admin
-  class ScriptManager
+  class Script
     HOME     = ENV['HOME']
     SCRIPT   = "#{HOME}/GitHub/script"
     BINARIES = {
@@ -482,7 +482,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  mgr = Admin::ScriptManager.new
+  mgr = Admin::Script.new
 
   if options[:list]
     mgr.list(options[:list_pattern])
