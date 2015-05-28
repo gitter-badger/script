@@ -12,15 +12,7 @@ require_relative 'admin'
 module Admin
   class Canvas
     CANVAS_DIR = "#{HOME}/GitHub/canvas"
-    ALIAS_CMD  = {
-      '.c'   => 'gcc',
-      '.rb'  => 'ruby',
-      '.py'  => 'python',
-      '.exp' => 'expect',
-      '.js'  => 'node',
-      '.sh'  => 'bash'
-    }
-    SHEBANGS = {
+    SHEBANGS   = {
       '.c'   => '//',
       '.rb'  => '#!/usr/bin/env ruby -w',
       '.py'  => '#!/usr/bin/env python',
@@ -218,10 +210,10 @@ $0
       canvas = set_default_ext(canvas)
       canvas = set_default_prefix(canvas)
 
-      language = ALIAS_CMD[File.extname(canvas)]
+      language = BINARIES[File.extname(canvas)]
       unless language
         STDERR.puts "Unknown extension '#{File.extname(canvas)}'"
-        STDERR.puts "Possible extensions include: #{ALIAS_CMD.keys.join(' ')}"
+        STDERR.puts "Possible extensions include: #{BINARIES.keys.join(' ')}"
         exit 1
       end
 
@@ -363,7 +355,7 @@ $0
 
     def sync_github(repo_path)
       raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
-      raise "MissingBranch: No branch named 'annex'" unless branch_exist?(repo_path, 'annex')
+      raise "MissingBranch: No branch named 'annex'"  unless branch_exist?(repo_path, 'annex')
       raise "MissingBranch: No remote named 'github'" unless remote_exist?(repo_path, 'github')
       system <<-CMD
         cd #{repo_path}

@@ -11,22 +11,10 @@ require_relative 'admin'
 
 module Admin
   class Script
-    SCRIPT_DIR = "#{HOME}/GitHub/script"
-    CATEGORIES = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
-    BINARIES   = {
-      '.c'   => 'gcc',
-      '.rb'  => 'ruby',
-      '.py'  => 'python',
-      '.exp' => 'expect',
-      '.sh'  => 'bash'
-    }
-    DEPENDENCIES = {
-      '.c'  => Regexp.new(/include.*?\s\'(?<dependency>.*)\'/i),
-      '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i),
-      '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
-    }
+    SCRIPT_DIR    = "#{HOME}/GitHub/script"
+    CATEGORIES    = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
     SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
-    BOILERPLATE = <<-TXT
+    BOILERPLATE   = <<-TXT
 $0
 # $1
 # Author: Andy Bettisworth
