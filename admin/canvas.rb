@@ -21,6 +21,7 @@ module Admin
       '.sh'  => 'bash'
     }
     SHEBANGS = {
+      '.c'   => '//',
       '.rb'  => '#!/usr/bin/env ruby -w',
       '.py'  => '#!/usr/bin/env python',
       '.exp' => '#!/usr/bin/env expect',
