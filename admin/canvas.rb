@@ -395,8 +395,8 @@ if __FILE__ == $0
       options[:fetch] = true
     end
 
-    opts.on('--info SCRIPT', 'Show script header information') do |script|
-      options[:info] = script
+    opts.on('--info CANVAS', 'Show canvas header information') do |canvas|
+      options[:info] = canvas
     end
 
     opts.on('--clean', 'Move canvas(es) off Desktop and commit changes') do

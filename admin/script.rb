@@ -24,12 +24,12 @@ module Admin
     CATEGORIES = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
     SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
     BOILERPLATE = <<-TXT
-  $0
-  # $1
-  # Author: Andy Bettisworth
-  # Created At: $2
-  # Modified At: $3
-  # Description: $4
+$0
+# $1
+# Author: Andy Bettisworth
+# Created At: $2
+# Modified At: $3
+# Description: $4
     TXT
 
     def list(script_regexp=false)
