@@ -15,7 +15,7 @@ module Village
     attr_accessor :remote_dir
 
     def initialize
-      @scope = 'syncing all media...'
+      @scope      = 'syncing all media...'
       @local_dir  = "#{ENV['HOME']}"
       @remote_dir = "/media/#{ ENV['USER'] }/Village"
     end
