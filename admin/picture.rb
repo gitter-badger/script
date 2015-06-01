@@ -26,6 +26,8 @@ module Admin
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: picture [options] DIR"
@@ -56,7 +58,7 @@ if __FILE__ == $0
   depth         = options[:depth] ? options[:depth] : 0
   is_fullscreen = options[:fullscreen] ? options[:fullscreen] : false
 
-  admin_picture = Admin::Picture.new(timeout, depth, is_fullscreen)
+  admin_picture = Picture.new(timeout, depth, is_fullscreen)
 
   if options[:slideshow]
     admin_picture.slideshow

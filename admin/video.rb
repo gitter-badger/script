@@ -28,6 +28,8 @@ module Admin
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: video [options] REGEXP"
@@ -48,7 +50,7 @@ if __FILE__ == $0
 
   timeout = options[:timeout] ? options[:timeout] : nil
 
-  admin_video = Admin::Video.new(timeout)
+  admin_video = Video.new(timeout)
 
   if options[:shuffle]
     admin_video.shuffle

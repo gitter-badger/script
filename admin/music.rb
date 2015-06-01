@@ -26,12 +26,14 @@ module Admin
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: music [options] REGEXP"
 
-    opts.on('--filter FILTER', 'Filter by category') do |filter|
-      options[:filter] = filter
+    opts.on('-c', '--category FILTER', 'Filter by category') do |category|
+      options[:category] = category
     end
 
     opts.on('--playlist PLAYLIST', 'Start a playlist') do |playlist|
@@ -64,7 +66,7 @@ if __FILE__ == $0
   is_shuffled = options[:shuffle] ? options[:shuffle] : false
   is_recorded = options[:record] ? options[:record] : false
 
-  admin_music = Admin::Music.new(timeout, is_shuffled, is_recorded)
+  admin_music = Music.new(timeout, is_shuffled, is_recorded)
 
   if options[:filter]
     admin_music.filter(ARGV)

@@ -438,6 +438,8 @@ $0
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: script [options] SCRIPT"
@@ -473,7 +475,7 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  script = Admin::Script.new
+  script = Script.new
 
   if options[:list]
     script.list(options[:list_pattern])

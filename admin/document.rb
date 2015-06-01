@@ -9,40 +9,70 @@ require 'optparse'
 
 module Admin
   class Document
+    DOC_DIR = "#{ENV['HOME']}/Documents"
+
+    attr_accessor :documents
+    attr_accessor :query
+    attr_accessor :category
+    attr_accessor :is_fetch
+
+    def exec
+      @documents = query_documents
+      filter_documents if @query
+      fetch_documents if @is_fetch
+      print_list
+    end
+
+    def query_documents
+      document_list = []
+
+      Dir["#{DOC_DIR}/**/*"].each do |file|
+        next if file == '.' or file == '..' or File.directory?(file)
+        document_list << file
+      end
+
+      document_list
+    end
+
+    def filter_documents
+      pattern = Regexp.new(@query, Regexp::IGNORECASE)
+      @documents = @documents.select! { |e| pattern.match(e) }
+      @documents
+    end
+
+    def fetch_documents
+      puts "Fetching..."
+    end
+
+    def print_list
+      @documents.each do |file|
+        puts file
+      end
+    end
   end
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: document [options] REGEXP"
 
-    opts.on('--filter FILTER', 'Filter by category') do |filter|
-      options[:filter] = filter
+    opts.on('-c', '--category FILTER', 'Filter by category') do |category|
+      options[:category] = category
     end
 
-    opts.on('--fetch REGEXP', 'Fetch document(s) by regular expression') do |regexp|
-      options[:fetch] = regexp
+    opts.on('-f', '--fetch', 'Fetch document(s) to Desktop') do
+      options[:fetch] = true
     end
   end
   option_parser.parse!
 
-  if ARGV.size > 0
-    is_fetch = false
-
-    if options[:fetch]
-      is_fetch = true
-    end
-
-    admin_document = Admin::Document.new
-
-    if options[:filter]
-      admin_document.filter(is_fetch, options[:filter])
-    else
-      admin_document.launch
-    end
-  end
-
-  puts option_parser
-  exit 1
+  admin          = Document.new
+  admin.category = options[:category] if options[:category]
+  admin.is_fetch = true if options[:fetch]
+  admin.query    = ARGV[0] if ARGV.size > 0
+  admin.query    = ARGV.join(' ') if ARGV.size > 0
+  admin.exec
 end
