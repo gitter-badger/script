@@ -13,6 +13,7 @@ require_relative 'wm'
 module Admin
   module WindowManager
     class Screencast
+      attr_accessor :pid
       attr_accessor :query
       attr_accessor :delay
       attr_accessor :timeout
@@ -38,13 +39,15 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        trap("INT") do
+        Signal.trap("INT") do
           puts "================"
           puts "Stopping Capture"
+          Process.kill("USR1", @pid)
         end
 
-        cmd = build_command
-        `#{cmd}`
+        cmd  = build_command
+        @pid = spawn(cmd)
+        Process.wait @pid
       end
 
       private
