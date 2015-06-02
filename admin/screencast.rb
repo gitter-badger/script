@@ -40,9 +40,10 @@ module Admin
         puts "================"
 
         Signal.trap("INT") do
+          puts
           puts "================"
           puts "Stopping Capture"
-          Process.kill("USR1", @pid)
+          Process.kill("INT", @pid)
         end
 
         cmd  = build_command
