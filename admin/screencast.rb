@@ -38,12 +38,13 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        cmd = build_command
-        begin
-          `#{cmd}`
-        rescue StandardError => e
-          puts "Closing screencast..."
+        trap("INT") do
+          puts "================"
+          puts "Stopping Capture"
         end
+
+        cmd = build_command
+        `#{cmd}`
       end
 
       private
@@ -51,6 +52,7 @@ module Admin
       def build_command
         cmd  = ""
         cmd += " sleep #{@delay};" if @delay
+        cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
         if @query
