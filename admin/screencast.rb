@@ -55,7 +55,6 @@ module Admin
       def build_command
         cmd  = ""
         cmd += " sleep #{@delay};" if @delay
-        cmd += " timeout 10s" unless @timeout
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
         if @query
