@@ -74,10 +74,9 @@ module Admin
 
     def print_sensor_list(sensors)
       sensors.each do |sensor|
-        print_file_metadata(sensor)
-        # space = 31 - sensor[:filename].length if sensor[:filename].length < 31
-        # space ||= 1
-        # puts "#{sensor[:filename].gsub('sensor_', '')} #{' ' * space} #{sensor[:description]}"
+        space = 31 - sensor[:filename].length if sensor[:filename].length < 31
+        space ||= 1
+        puts "#{sensor[:filename].gsub('sensor_', '')} #{' ' * space} #{sensor[:description]}"
       end
     end
 
