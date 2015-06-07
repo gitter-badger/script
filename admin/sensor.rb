@@ -25,8 +25,7 @@ module Admin
       sensors = ask_for_sensor while sensors.flatten.empty?
       sensors = set_default_ext(sensors)
       sensors = get_sensor_location(sensors)
-      puts sensors
-      # move_sensor_to_desktop(sensors)
+      move_sensor_to_desktop(sensors)
     end
 
     private
@@ -127,7 +126,6 @@ module Admin
       sensors.flatten!
       sensors.collect! do |sensor|
         sensor = set_default_ext(sensor)
-        puts sensor
         cl = sensor_list.select { |c| c[:filename] == sensor }
 
         if cl.count >= 1
@@ -141,6 +139,17 @@ module Admin
         return sensors[0]
       else
         return sensors
+      end
+    end
+
+    def move_sensor_to_desktop(*sensors)
+      sensors.flatten!
+      sensors.each do |sensor|
+        if File.exist?(sensor)
+          system("cp #{sensor} #{DESKTOP}")
+        else
+          puts "No such sensor: '#{File.basename(sensor)}'"
+        end
       end
     end
   end
