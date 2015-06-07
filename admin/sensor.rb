@@ -17,9 +17,7 @@ module Admin
       sensors = get_sensors
       sensors = filter_sensors(sensors, sensor_regexp)
       sensors = sensors.sort_by { |k,v| k[:filename]}
-      # print_file_metadata(sensors)
-      puts sensors
-      puts sensors.class
+      print_sensor_list(sensors)
       sensors
     end
 
@@ -74,12 +72,21 @@ module Admin
       sensors
     end
 
-    def print_file_metadata(file)
-      puts "filename:     #{file[:filename]}" if file[:filename]
-      puts "author:       #{file[:author]}" if file[:author]
-      puts "created_at:   #{file[:created_at]}" if file[:created_at]
-      puts "modified_at:  #{file[:modified_at]}" if file[:modified_at]
-      puts "description:  #{file[:description]}" if file[:description]
+    def print_sensor_list(sensors)
+      sensors.each do |sensor|
+        print_file_metadata(sensor)
+        # space = 31 - sensor[:filename].length if sensor[:filename].length < 31
+        # space ||= 1
+        # puts "#{sensor[:filename].gsub('sensor_', '')} #{' ' * space} #{sensor[:description]}"
+      end
+    end
+
+    def print_file_metadata(sensor)
+      puts "filename:     #{sensor[:filename]}" if sensor[:filename]
+      puts "author:       #{sensor[:author]}" if sensor[:author]
+      puts "created_at:   #{sensor[:created_at]}" if sensor[:created_at]
+      puts "modified_at:  #{sensor[:modified_at]}" if sensor[:modified_at]
+      puts "description:  #{sensor[:description]}" if sensor[:description]
     end
   end
 end
