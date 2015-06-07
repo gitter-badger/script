@@ -122,7 +122,7 @@ module Admin
     end
 
     def get_sensor_location(*sensors)
-      sensor_list = get_sensors(lang_dir)
+      sensor_list = get_sensors
 
       sensors.flatten!
       sensors.collect! do |sensor|
