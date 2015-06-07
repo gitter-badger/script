@@ -127,6 +127,7 @@ module Admin
       sensors.flatten!
       sensors.collect! do |sensor|
         sensor = set_default_ext(sensor)
+        puts sensor
         cl = sensor_list.select { |c| c[:filename] == sensor }
 
         if cl.count >= 1
