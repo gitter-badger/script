@@ -17,7 +17,9 @@ module Admin
       sensors = get_sensors
       sensors = filter_sensors(sensors, sensor_regexp)
       sensors = sensors.sort_by { |k,v| k[:filename]}
-      print_file_metadata(sensors)
+      # print_file_metadata(sensors)
+      puts sensors
+      puts sensors.class
       sensors
     end
 
