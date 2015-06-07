@@ -28,6 +28,22 @@ module Admin
       move_sensor_to_desktop(sensors)
     end
 
+    def clean
+      sensors     = get_sensors
+      sensors_out = get_open_sensors(sensors)
+      sensors_out = get_sensor_location(sensors_out)
+
+      if sensors_out
+        if sensors_out.is_a? Array
+          sensors_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+        else
+          system("mv #{DESKTOP}/#{File.basename(sensors_out)} #{sensors_out}")
+        end
+
+        commit_changes
+      end
+    end
+
     private
 
     def get_sensors
@@ -152,6 +168,43 @@ module Admin
         end
       end
     end
+
+    def get_open_sensors(sensors)
+      open_sensors = []
+
+      Dir.foreach("#{DESKTOP}") do |entry|
+        next if File.directory?(entry)
+        open_sensors << entry if sensor_exist?(entry)
+      end
+
+      open_sensors
+    end
+
+    def sensor_exist?(sensor)
+      sensor = set_default_ext(sensor)
+      sensors = get_sensors
+      sensors.select! { |s| s[:filename] == sensor }
+
+      if sensors.count >= 1
+        true
+      else
+        false
+      end
+    end
+
+    def commit_changes
+      puts 'Enter a commit message:'
+      commit_msg = gets.strip
+      commit_msg = "sensor clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
+      system <<-CMD
+        echo '';
+        echo 'Committing changes for sensors...';
+        cd #{SENSOR_DIR};
+        git checkout annex;
+        git add -A;
+        git commit -m "#{commit_msg}";
+      CMD
+    end
   end
 end
 
@@ -174,6 +227,10 @@ if __FILE__ == $0
     opts.on('-f', '--fetch', 'Copy sensor sketch(es) to the Desktop') do
       options[:fetch] = true
     end
+
+    opts.on('--clean', 'Move sensor(s) off Desktop and commit changes') do
+      options[:clean] = true
+    end
   end
   option_parser.parse!
 
@@ -185,6 +242,8 @@ if __FILE__ == $0
     sensor.add(options[:add])
   elsif options[:fetch]
     sensor.fetch(ARGV)
+  elsif options[:clean]
+    sensor.clean
   else
     puts option_parser
   end
