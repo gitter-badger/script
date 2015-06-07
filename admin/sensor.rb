@@ -27,7 +27,7 @@ module Admin
       sensor_list = []
 
       Dir.foreach("#{SENSOR_DIR}") do |file|
-        next if File.directory?("#{SENSOR_DIR}/#{filepath}")
+        next if File.directory?("#{SENSOR_DIR}/#{file}")
         sensor = {}
         sensor = get_sensor_info("#{SENSOR_DIR}/#{file}")
         sensor_list << sensor
