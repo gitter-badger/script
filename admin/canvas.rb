@@ -29,8 +29,8 @@ $C Modified At: $3
 $C Description: $4
     TXT
 
-    def list(canvas_regexp=false, lang_regexp=false)
-      lang_dir = get_lang_dir(lang_regexp)
+    def list(canvas_regexp=false)
+      lang_dir = get_lang_dir
       canvases = get_canvases(lang_dir)
       canvases = filter_canvases(canvases, canvas_regexp)
       canvases = canvases.sort_by { |k,v| k[:filename]}
@@ -142,7 +142,7 @@ $C Description: $4
       open_canvases
     end
 
-    def get_lang_dir(lang_regexp=false)
+    def get_lang_dir
       language = []
 
       Dir.foreach(CANVAS_DIR) do |entry|
@@ -373,17 +373,18 @@ $C Description: $4
 end
 
 if __FILE__ == $0
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: canvas [options] CANVAS"
 
-    opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching canvases') do |regexp|
+    opts.on('-l', '--list [REGXP]', 'List all matching canvases') do |regexp|
       options[:list] = true
       options[:canvas_pattern] = regexp
-      options[:lang_pattern] = regexp
     end
 
-    opts.on('-n CANVAS', '--new CANVAS', 'Create a new canvas') do |name|
+    opts.on('-n', '--new CANVAS', 'Create a new canvas') do |name|
       options[:add] = name
     end
 
@@ -409,10 +410,10 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  canvas = Admin::Canvas.new
+  canvas = Canvas.new
 
   if options[:list]
-    canvas.list(options[:canvas_pattern], options[:lang_pattern])
+    canvas.list(options[:canvas_pattern])
   elsif options[:add]
     canvas.add(options[:add])
   elsif options[:fetch]
