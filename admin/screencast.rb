@@ -67,6 +67,7 @@ module Admin
         end
         cmd += " --no-frame"
         cmd += " --overwrite"
+        cmd += " --v_bitrate 2000000"
         if @v_quality
           if (0..63).include?(@v_quality)
             cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
@@ -163,8 +164,8 @@ if __FILE__ == $0
   ep.no_sound     = options[:no_sound]  if options[:no_sound]
   ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
   ep.follow_mouse = options[:follow_mouse] if options[:follow_mouse]
-  ep.width        = options[:width]   if options[:width]
-  ep.height       = options[:height]  if options[:height]
-  ep.outfile      = options[:outfile] if options[:outfile]
+  ep.width        = options[:width]     if options[:width]
+  ep.height       = options[:height]    if options[:height]
+  ep.outfile      = options[:outfile]   if options[:outfile]
   ep.start!
 end
