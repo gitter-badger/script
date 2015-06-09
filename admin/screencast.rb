@@ -58,6 +58,7 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
+        cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
           if screen[:id]
@@ -71,7 +72,7 @@ module Admin
             cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
           end
         else
-          cmd += " --v_quality 35"
+          cmd += " --v_quality 63"
         end
         if @s_quality
           if (-1..10).include?(@s_quality)
@@ -119,11 +120,11 @@ if __FILE__ == $0
       options[:timeout] = time
     end
 
-    opts.on('-v', '--v-quality INTEGER', 'Video encoding quality (0..63).') do |integer|
+    opts.on('--v-quality INTEGER', 'Video encoding quality (0..63).') do |integer|
       options[:v_quality] = integer
     end
 
-    opts.on('-s', '--s-quality INTEGER', 'Audio encoding quality (-1..10).') do |integer|
+    opts.on('--s-quality INTEGER', 'Audio encoding quality (-1..10).') do |integer|
       options[:s_quality] = integer
     end
 
