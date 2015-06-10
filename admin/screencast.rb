@@ -18,6 +18,7 @@ module Admin
       attr_accessor :delay
       attr_accessor :timeout
       attr_accessor :v_quality
+      attr_accessor :v_bitrate
       attr_accessor :s_quality
       attr_accessor :no_sound
       attr_accessor :no_cursor
@@ -60,6 +61,7 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
+        cmd += " --compress-cache"
         cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
@@ -69,13 +71,19 @@ module Admin
         end
         cmd += " --no-frame"
         cmd += " --overwrite"
-        cmd += " --v_bitrate 8000000"
         if @v_quality
           if (0..63).include?(@v_quality)
             cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
           end
         else
           cmd += " --v_quality 63"
+        end
+        if @v_bitrate
+          if (0..63).include?(@v_bitrate)
+            cmd += " --v_bitrate #{@v_bitrate}" if @v_bitrate.is_a? Integer
+          end
+        else
+          cmd += " --v_bitrate 8000000"
         end
         if @s_quality
           if (-1..10).include?(@s_quality)
@@ -139,6 +147,10 @@ if __FILE__ == $0
       options[:v_quality] = integer
     end
 
+    opts.on('--v-bitrate INTEGER', 'Video encoding bitrate (45000..2000000).') do |integer|
+      options[:v_bitrate] = integer
+    end
+
     opts.on('--s-quality INTEGER', 'Audio encoding quality (-1..10).') do |integer|
       options[:s_quality] = integer
     end
@@ -182,12 +194,13 @@ if __FILE__ == $0
   ep.delay        = options[:delay]     if options[:delay]
   ep.timeout      = options[:timeout]   if options[:timeout]
   ep.v_quality    = options[:v_quality] if options[:v_quality]
+  ep.v_bitrate    = options[:v_bitrate] if options[:v_bitrate]
   ep.s_quality    = options[:s_quality] if options[:s_quality]
   ep.no_sound     = options[:no_sound]  if options[:no_sound]
   ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
   ep.framerate    = options[:framerate] if options[:framerate]
   ep.frequency    = options[:frequency] if options[:frequency]
-  ep.follow = options[:follow] if options[:follow]
+  ep.follow       = options[:follow]    if options[:follow]
   ep.width        = options[:width]     if options[:width]
   ep.height       = options[:height]    if options[:height]
   ep.outfile      = options[:outfile]   if options[:outfile]
