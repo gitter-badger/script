@@ -60,7 +60,6 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
-        cmd += " --quick-subsampling"
         cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
@@ -99,7 +98,7 @@ module Admin
         if @frequency
           cmd += " --freq #{@frequency}"
         else
-          cmd += " --freq 40000"
+          cmd += " --freq 48000"
         end
         if @follow_mouse
           cmd += " --follow-mouse"
@@ -194,3 +193,5 @@ if __FILE__ == $0
   ep.outfile      = options[:outfile]   if options[:outfile]
   ep.start!
 end
+
+This is a message for you .
