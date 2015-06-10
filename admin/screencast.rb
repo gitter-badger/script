@@ -21,6 +21,7 @@ module Admin
       attr_accessor :s_quality
       attr_accessor :no_sound
       attr_accessor :no_cursor
+      attr_accessor :framerate
       attr_accessor :follow_mouse
       attr_accessor :width
       attr_accessor :height
@@ -58,6 +59,7 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
+        cmd += " --quick-subsampling"
         cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
@@ -79,12 +81,19 @@ module Admin
           if (-1..10).include?(@s_quality)
             cmd += " --s_quality #{@s_quality}" if @s_quality.is_a? Integer
           end
+        else
+          cmd += " --s_quality 10"
         end
         if @no_sound
           cmd += " --no-sound"
         end
         if @no_cursor
           cmd += " --no-cursor"
+        end
+        if @framerate
+          cmd += " --fps 30"
+        else
+          cmd += @framerate
         end
         if @follow_mouse
           cmd += " --follow-mouse"
@@ -137,6 +146,10 @@ if __FILE__ == $0
       options[:no_cursor] = true
     end
 
+    opts.on('--fps', 'Adjust the framerate.') do
+      options[:framerate] = true
+    end
+
     opts.on('-m', '--follow-mouse', 'Track the cursor movement.') do
       options[:follow_mouse] = true
     end
@@ -163,6 +176,7 @@ if __FILE__ == $0
   ep.s_quality    = options[:s_quality] if options[:s_quality]
   ep.no_sound     = options[:no_sound]  if options[:no_sound]
   ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
+  ep.framerate    = options[:framerate] if options[:framerate]
   ep.follow_mouse = options[:follow_mouse] if options[:follow_mouse]
   ep.width        = options[:width]     if options[:width]
   ep.height       = options[:height]    if options[:height]
