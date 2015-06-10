@@ -61,7 +61,7 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
-        # cmd += " --compress-cache"
+        cmd += " --compress-cache"
         cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
@@ -101,7 +101,7 @@ module Admin
         if @framerate
           cmd += " --fps #{@framerate}"
         else
-          cmd += " --fps 30"
+          cmd += " --fps 25"
         end
         if @frequency
           cmd += " --freq #{@frequency}"
