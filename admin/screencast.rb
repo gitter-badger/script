@@ -70,7 +70,7 @@ module Admin
         end
         cmd += " --no-frame"
         cmd += " --overwrite"
-        cmd += " --v_bitrate 2000000"
+        cmd += " --v_bitrate 8000000"
         if @v_quality
           if (0..63).include?(@v_quality)
             cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
