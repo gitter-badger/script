@@ -30,6 +30,7 @@ module Admin
       attr_accessor :follow
       attr_accessor :width
       attr_accessor :height
+      attr_accessor :encode_mp4
       attr_accessor :outfile
 
       def require_recordmydesktop
@@ -121,6 +122,9 @@ module Admin
           cmd += " --height #{@height}" if @height.is_a? Integer
         end
         cmd += " -o #{@outfile}" if @outfile
+        if @encode_mp4
+          cmd += "; ffmpeg -i #{@outfile} -strict experimental -vcodec libx264 #{@outfile}.mp4"
+        end
         cmd
       end
     end
@@ -189,23 +193,28 @@ if __FILE__ == $0
     opts.on('-o', '--outfile FILENAME', 'Name of recorded video.') do |string|
       options[:outfile] = string
     end
+
+    opts.on('--encode-mp4', 'Convert OGV into MP4.') do
+      options[:encode_mp4] = true
+    end
   end
   option_parser.parse!
 
-  ep = Screencast.new
-  ep.query        = options[:query]     if options[:query]
-  ep.delay        = options[:delay]     if options[:delay]
-  ep.timeout      = options[:timeout]   if options[:timeout]
-  ep.v_quality    = options[:v_quality] if options[:v_quality]
-  ep.v_bitrate    = options[:v_bitrate] if options[:v_bitrate]
-  ep.s_quality    = options[:s_quality] if options[:s_quality]
-  ep.no_sound     = options[:no_sound]  if options[:no_sound]
-  ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
-  ep.framerate    = options[:framerate] if options[:framerate]
-  ep.frequency    = options[:frequency] if options[:frequency]
-  ep.follow       = options[:follow]    if options[:follow]
-  ep.width        = options[:width]     if options[:width]
-  ep.height       = options[:height]    if options[:height]
-  ep.outfile      = options[:outfile]   if options[:outfile]
+  ep            = Screencast.new
+  ep.query      = options[:query]      if options[:query]
+  ep.delay      = options[:delay]      if options[:delay]
+  ep.timeout    = options[:timeout]    if options[:timeout]
+  ep.v_quality  = options[:v_quality]  if options[:v_quality]
+  ep.v_bitrate  = options[:v_bitrate]  if options[:v_bitrate]
+  ep.s_quality  = options[:s_quality]  if options[:s_quality]
+  ep.no_sound   = options[:no_sound]   if options[:no_sound]
+  ep.no_cursor  = options[:no_cursor]  if options[:no_cursor]
+  ep.framerate  = options[:framerate]  if options[:framerate]
+  ep.frequency  = options[:frequency]  if options[:frequency]
+  ep.follow     = options[:follow]     if options[:follow]
+  ep.width      = options[:width]      if options[:width]
+  ep.height     = options[:height]     if options[:height]
+  ep.outfile    = options[:outfile]    if options[:outfile]
+  ep.encode_mp4 = options[:encode_mp4] if options[:encode_mp4]
   ep.start!
 end
