@@ -91,9 +91,9 @@ module Admin
           cmd += " --no-cursor"
         end
         if @framerate
-          cmd += " --fps 30"
-        else
           cmd += @framerate
+        else
+          cmd += " --fps 30"
         end
         if @follow_mouse
           cmd += " --follow-mouse"
