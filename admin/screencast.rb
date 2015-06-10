@@ -5,6 +5,9 @@
 # Modified At: 2015 0521 182728
 # Description: Record a window as a PNG and JSON metadata
 
+# > allow conversion into MP4 format AAC-LC (audio), H.264 (video)
+# ffmpeg -i morsecode_led.ogv -strict experimental -vcodec libx264 morsecode_led.mp4
+
 require 'optparse'
 require 'fileutils'
 
