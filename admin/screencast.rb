@@ -101,7 +101,7 @@ module Admin
         if @framerate
           cmd += " --fps #{@framerate}"
         else
-          cmd += " --fps 25"
+          cmd += " --fps 15"
         end
         if @frequency
           cmd += " --freq #{@frequency}"
