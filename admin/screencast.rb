@@ -80,7 +80,7 @@ module Admin
             cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
           end
         else
-          cmd += " --v_quality 50"
+          cmd += " --v_quality 63"
         end
         if @v_bitrate
           if (0..63).include?(@v_bitrate)
