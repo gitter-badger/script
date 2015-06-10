@@ -61,7 +61,7 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " recordmydesktop"
-        cmd += " --compress-cache"
+        # cmd += " --compress-cache"
         cmd += " --pause-shortcut Control+p"
         if @query
           screen = window(@query)
