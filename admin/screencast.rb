@@ -23,7 +23,7 @@ module Admin
       attr_accessor :no_cursor
       attr_accessor :framerate
       attr_accessor :frequency
-      attr_accessor :follow_mouse
+      attr_accessor :follow
       attr_accessor :width
       attr_accessor :height
       attr_accessor :outfile
@@ -100,7 +100,7 @@ module Admin
         else
           cmd += " --freq 48000"
         end
-        if @follow_mouse
+        if @follow
           cmd += " --follow-mouse"
         end
         if @width
@@ -160,7 +160,7 @@ if __FILE__ == $0
     end
 
     opts.on('-m', '--follow-mouse', 'Track the cursor movement.') do
-      options[:follow_mouse] = true
+      options[:follow] = true
     end
 
     opts.on('-w', '--width', 'Width of recorded window.') do |integer|
@@ -187,10 +187,9 @@ if __FILE__ == $0
   ep.no_cursor    = options[:no_cursor] if options[:no_cursor]
   ep.framerate    = options[:framerate] if options[:framerate]
   ep.frequency    = options[:frequency] if options[:frequency]
-  ep.follow_mouse = options[:follow_mouse] if options[:follow_mouse]
+  ep.follow = options[:follow] if options[:follow]
   ep.width        = options[:width]     if options[:width]
   ep.height       = options[:height]    if options[:height]
   ep.outfile      = options[:outfile]   if options[:outfile]
   ep.start!
 end
-
