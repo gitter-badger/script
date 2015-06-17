@@ -7,8 +7,13 @@
 
 import argparse
 import os
+import sys
 import re
 import doctest
+import django
+
+from django.conf import settings
+from django.db import connections
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='django project testing tool')
@@ -20,6 +25,36 @@ if __name__ == "__main__":
 
     if not args.PROJECT:
         args.PROJECT = '.'
+    project_dir      = args.PROJECT
+    project_abs      = os.path.abspath(args.PROJECT)
+    project_name     = os.path.basename(project_abs).lower()
+    project_settings = "%s.settings" % project_name
+    test_db_name     = '%s_test' % project_name
+
+    try:
+        print 'Loading %s.settings ...' % project_name
+        sys.path.insert(0, project_abs)
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", project_settings)
+        django.setup()
+    except Exception as e:
+        print 'ERROR: %s' % e
+
+    try:
+        print 'Connecting to %s...' % test_db_name
+        connections.databases[test_db_name] = {
+            'ENGINE':   'django.contrib.gis.db.backends.postgis',
+            'NAME':     test_db_name,
+            'USER':     'testuser',
+            'PASSWORD': 'testpassword',
+            'HOST':     'localhost'
+        }
+        connections.databases.ensure_defaults(test_db_name)
+        conn = connections[test_db_name]
+        print conn
+    except Exception as e:
+        print e
+        os.system('createuser -P -s testuser')
+        os.system('createdb %s -O testuser' % test_db_name)
 
     if args.models:
         try:
@@ -33,7 +68,5 @@ if __name__ == "__main__":
             for module_pathname in model_modules:
                 print 'Testing %s...' % module_pathname
                 doctest.testfile(module_pathname)
-
-            # >   associate any doctests/models to generate coverage
         except:
             pass
