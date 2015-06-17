@@ -34,56 +34,62 @@ if __name__ == "__main__":
     try:
         print 'Loading %s...' % project_settings
         sys.path.append(project_abs)
+        os.chdir(project_abs)
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", project_settings)
         django.setup()
     except Exception as e:
         print 'ERROR: %s' % e
         sys.exit(1)
 
-    # try:
-    #     print 'Connecting %s...' % test_db_name
-    #     connections.databases[test_db_name] = {
-    #         'ENGINE':   'django.contrib.gis.db.backends.postgis',
-    #         'NAME':     test_db_name,
-    #         'USER':     'testuser',
-    #         'PASSWORD': 'testpassword',
-    #         'HOST':     'localhost'
-    #     }
-    #     conn = connections[test_db_name]
-    #     conn_test = conn.cursor()
-    # except Exception as e:
-    #     print 'ERROR: %s' % e
-    #     os.system('createuser -P -s testuser')
-    #     os.system('createdb %s -O testuser' % test_db_name)
-    #     sys.exit(1)
+    try:
+        print 'Connecting %s...' % test_db_name
+        connections.databases[test_db_name] = {
+            'ENGINE':   'django.contrib.gis.db.backends.postgis',
+            'NAME':     test_db_name,
+            'USER':     'testuser',
+            'PASSWORD': 'testpassword',
+            'HOST':     'localhost'
+        }
+        conn = connections[test_db_name]
+        conn_test = conn.cursor()
+    except Exception as e:
+        print 'ERROR: %s' % e
+        os.system('createuser -P -s testuser')
+        os.system('createdb %s -O testuser' % test_db_name)
+        sys.exit(1)
 
-    # try:
-    #     print 'Syncing models...'
-    #     call_command('migrate', database=test_db_name)
-    # except Exception as e:
-    #     print 'ERROR %s' % e
-    #     sys.exit(1)
+    try:
+        print 'Syncing models...'
+        call_command('migrate', database=test_db_name)
+    except Exception as e:
+        print 'ERROR %s' % e
+        sys.exit(1)
 
     try:
         print 'Testing models...'
         all_models  = apps.get_models()
         model_count = len(all_models)
-        print model_count
 
-        # if args.models:
-        #     try:
-        #         model_modules = []
-        #         models_re = re.compile(r'^models.py$', re.IGNORECASE)
-        #         for root, dirnames, filenames in os.walk(args.PROJECT):
-        #             for name in filenames:
-        #                 if models_re.match(name):
-        #                     model_modules.append(os.path.join(root, name))
+        # > use doctest to find tests
+        model_modules = []
+        models_re = re.compile(r'^models.py$', re.IGNORECASE)
+        for root, dirnames, filenames in os.walk('.'):
+            for name in filenames:
+                if models_re.match(name):
+                    model_modules.append(os.path.join(root, name))
 
-        #         for module_pathname in model_modules:
-        #             print 'Testing %s...' % module_pathname
-        #             doctest.testfile(module_pathname)
-        #     except:
-        #         pass
+        # > execute doctests
+        # > count doctests
+        for module_pathname in model_modules:
+            print 'Testing %s...' % module_pathname
+            failure_count, test_count = doctest.testfile(
+                filename=module_pathname,
+                optionflags=doctest.REPORT_ONLY_FIRST_FAILURE)
+            print ''
+
+        # > generate coverage report
+        # [ ] get count of models with passing doctests
+        # [ ] calculate coverage round to nearest integer
+        print "10%% model coverage (4 / %s)" % model_count
     except Exception as e:
-        print 'ERROR %s' % e
-        sys.exit(1)
+        pass
