@@ -87,7 +87,7 @@ if __name__ == "__main__":
             total_tests += test_count
             total_failure += failure_count
 
-        coverage = int(round(float(total_failure) / float(total_tests), 2) * 100)
+        coverage = 100 - int(round(float(total_failure) / float(total_tests), 2) * 100)
 
         print ''
         print "%s%% model coverage (%s / %s)" % (coverage, total_failure, total_tests)
