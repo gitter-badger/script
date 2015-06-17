@@ -32,15 +32,16 @@ if __name__ == "__main__":
     test_db_name     = '%s_test' % project_name
 
     try:
-        print 'Loading %s.settings ...' % project_name
-        sys.path.insert(0, project_abs)
+        print 'Loading %s ...' % project_settings
+        sys.path.append(project_abs)
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", project_settings)
         django.setup()
     except Exception as e:
         print 'ERROR: %s' % e
+        sys.exit(1)
 
     try:
-        print 'Connecting to %s...' % test_db_name
+        print 'Connecting %s...' % test_db_name
         connections.databases[test_db_name] = {
             'ENGINE':   'django.contrib.gis.db.backends.postgis',
             'NAME':     test_db_name,
@@ -48,25 +49,26 @@ if __name__ == "__main__":
             'PASSWORD': 'testpassword',
             'HOST':     'localhost'
         }
-        connections.databases.ensure_defaults(test_db_name)
         conn = connections[test_db_name]
-        print conn
+        # > run migrate to sync migration-models
+        # python manage.py migrate --database=test_db_name
     except Exception as e:
-        print e
+        print 'ERROR: %s' % e
         os.system('createuser -P -s testuser')
         os.system('createdb %s -O testuser' % test_db_name)
+        sys.exit(1)
 
-    if args.models:
-        try:
-            model_modules = []
-            models_re = re.compile(r'^models.py$', re.IGNORECASE)
-            for root, dirnames, filenames in os.walk(args.PROJECT):
-                for name in filenames:
-                    if models_re.match(name):
-                        model_modules.append(os.path.join(root, name))
+    # if args.models:
+    #     try:
+    #         model_modules = []
+    #         models_re = re.compile(r'^models.py$', re.IGNORECASE)
+    #         for root, dirnames, filenames in os.walk(args.PROJECT):
+    #             for name in filenames:
+    #                 if models_re.match(name):
+    #                     model_modules.append(os.path.join(root, name))
 
-            for module_pathname in model_modules:
-                print 'Testing %s...' % module_pathname
-                doctest.testfile(module_pathname)
-        except:
-            pass
+    #         for module_pathname in model_modules:
+    #             print 'Testing %s...' % module_pathname
+    #             doctest.testfile(module_pathname)
+    #     except:
+    #         pass
