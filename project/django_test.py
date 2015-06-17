@@ -63,17 +63,17 @@ if __name__ == "__main__":
         print 'ERROR %s' % e
         sys.exit(1)
 
-    # if args.models:
-    #     try:
-    #         model_modules = []
-    #         models_re = re.compile(r'^models.py$', re.IGNORECASE)
-    #         for root, dirnames, filenames in os.walk(args.PROJECT):
-    #             for name in filenames:
-    #                 if models_re.match(name):
-    #                     model_modules.append(os.path.join(root, name))
+    if args.models:
+        try:
+            model_modules = []
+            models_re = re.compile(r'^models.py$', re.IGNORECASE)
+            for root, dirnames, filenames in os.walk(args.PROJECT):
+                for name in filenames:
+                    if models_re.match(name):
+                        model_modules.append(os.path.join(root, name))
 
-    #         for module_pathname in model_modules:
-    #             print 'Testing %s...' % module_pathname
-    #             doctest.testfile(module_pathname)
-    #     except:
-    #         pass
+            for module_pathname in model_modules:
+                print 'Testing %s...' % module_pathname
+                doctest.testfile(module_pathname)
+        except:
+            pass
