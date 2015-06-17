@@ -66,11 +66,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        print 'Testing models...'
         all_models  = apps.get_models()
         model_count = len(all_models)
 
-        # > use doctest to find tests
         model_modules = []
         models_re = re.compile(r'^models.py$', re.IGNORECASE)
         for root, dirnames, filenames in os.walk('.'):
@@ -78,18 +76,20 @@ if __name__ == "__main__":
                 if models_re.match(name):
                     model_modules.append(os.path.join(root, name))
 
-        # > execute doctests
-        # > count doctests
+        total_tests = 0
+        total_failure = 0
         for module_pathname in model_modules:
+            print ''
             print 'Testing %s...' % module_pathname
             failure_count, test_count = doctest.testfile(
                 filename=module_pathname,
                 optionflags=doctest.REPORT_ONLY_FIRST_FAILURE)
-            print ''
+            total_tests += test_count
+            total_failure += failure_count
 
-        # > generate coverage report
-        # [ ] get count of models with passing doctests
-        # [ ] calculate coverage round to nearest integer
-        print "10%% model coverage (4 / %s)" % model_count
+        coverage = int(round(float(total_failure) / float(total_tests), 2) * 100)
+
+        print ''
+        print "%s%% model coverage (%s / %s)" % (coverage, total_failure, total_tests)
     except Exception as e:
         pass
