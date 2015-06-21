@@ -11,7 +11,8 @@ module Security
   class SystemFiles
     def self.unlock
       STATIC_DIR.each do |dir|
-        `sudo chattr -VR -i #{dir}/*`
+        puts "Unlocking #{dir}..."
+        `sudo chattr -VR -i #{dir}`
       end
     end
   end
