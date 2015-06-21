@@ -10,9 +10,11 @@ module Security
     '/boot',
     '/sbin',
     '/bin',
+    '/lib',
     '/usr/sbin',
     '/usr/bin',
     '/usr/lib',
+    '/usr/local/sbin',
     '/usr/local/bin',
     '/usr/local/lib'
   ]
