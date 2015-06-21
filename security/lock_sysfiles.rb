@@ -19,6 +19,6 @@ module Security
 end
 
 if __FILE__ == $0
-  include Security::SystemFiles
+  include Security
   SystemFiles.lock
 end
