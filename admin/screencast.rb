@@ -60,6 +60,18 @@ module Admin
 
       private
 
+      # MONITOR=$(pactl list | grep -A2 '^Source #' | grep 'Name: .*\.monitor$' | awk '{print $NF}' | tail -n1)
+      # MIKE=$(pactl list | grep alsa_input | awk '{print $2}' | tail -n1 )
+      # RESOLUTION=$(xrandr 2>/dev/null | grep current | sed 's/.*current //;s/,.*//;s/ x /x/')
+      # DATE=$(date +"%Y%m%d_%H%M%S")
+      # avconv -f x11grab -s $RESOLUTION -r 30 -i :0.0 \
+      #        -f pulse -i $MONITOR \
+      #        -f pulse -i $MIKE \
+      #        -filter_complex amix=inputs=2:duration=first:dropout_transition=3 \
+      #        -qscale 5 \
+      #        -vcodec libx264 \
+      #        -acodec libmp3lame \
+      #        -y screencast_${HOSTNAME}_${DATE}.mp4
       def build_command
         cmd  = ""
         cmd += " sleep #{@delay};" if @delay
