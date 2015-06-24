@@ -77,7 +77,7 @@ module Admin
           cmd += " -f pulse -i #{@sys_audio}"
         elsif @no_sound
         else
-          cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
+          cmd += " -f pulse -i #{@sys_audio.strip} -f pulse -i #{@mic_audio.strip}"
           cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
         end
         cmd += " -qscale 5"
