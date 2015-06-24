@@ -37,9 +37,7 @@ module Admin
           puts
           puts "================"
           puts "Stopping Capture"
-          `kill -INT #{@pid}`
-          # Process.kill("INT", @pid)
-          # exit 0
+          Process.kill("INT", @pid)
         end
 
         @resolution = get_resolution
