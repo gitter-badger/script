@@ -46,8 +46,8 @@ module Admin
 
         cmd  = build_command
         puts cmd
-        # @pid = spawn(cmd)
-        # Process.wait @pid
+        @pid = spawn(cmd)
+        Process.wait @pid
       end
 
       private
