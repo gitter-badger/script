@@ -70,7 +70,7 @@ module Admin
         cmd  = ""
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
-        cmd += " avconv -f x11grab -s #{@resolution} -r 30 -i :0.0"
+        cmd += " avconv -f x11grab -s #{@resolution.strip} -r 30 -i :0.0"
         if @mic_audio
           cmd += " -f pulse -i #{@mic_audio}"
         elsif @sys_audio
