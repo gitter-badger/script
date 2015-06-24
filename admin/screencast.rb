@@ -46,7 +46,8 @@ module Admin
 
         cmd  = build_command
         @pid = spawn(cmd)
-        Process.wait(@pid)
+        loop do; end
+        # Process.wait(@pid)
         puts cmd
       end
 
