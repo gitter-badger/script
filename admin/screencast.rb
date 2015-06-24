@@ -37,7 +37,8 @@ module Admin
           puts
           puts "================"
           puts "Stopping Capture"
-          `sudo pkill avconv`
+          # `sudo pkill avconv`
+          Process.kill('SIGTERM', @pid)
         end
 
         @resolution = get_resolution
