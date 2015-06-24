@@ -71,13 +71,14 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " avconv -f x11grab -s #{@resolution} -r 30 -i :0.0"
-        unless @no_sound
-          cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
-          cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
-        elsif @mic_audio
+        if @mic_audio
           cmd += " -f pulse -i #{@mic_audio}"
         elsif @sys_audio
           cmd += " -f pulse -i #{@sys_audio}"
+        elsif @no_sound
+        else
+          cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
+          cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
         end
         cmd += " -qscale 5"
         cmd += " -vcodec libx264"
