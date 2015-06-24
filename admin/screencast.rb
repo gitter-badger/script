@@ -33,12 +33,12 @@ module Admin
         puts "Starting Capture"
         puts "================"
 
-        # Signal.trap("INT") do
-        #   puts
-        #   puts "================"
-        #   puts "Stopping Capture"
-        #   Process.kill("HUP", @pid)
-        # end
+        Signal.trap("INT") do
+          puts
+          puts "================"
+          puts "Stopping Capture"
+          `sudo pkill avconv`
+        end
 
         @resolution = get_resolution
         @mic_audio  = get_mic_audio
@@ -46,7 +46,6 @@ module Admin
 
         cmd  = build_command
         @pid = spawn(cmd)
-        # Process.wait @pid
       end
 
       private
