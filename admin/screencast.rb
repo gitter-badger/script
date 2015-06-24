@@ -72,9 +72,9 @@ module Admin
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " avconv -f x11grab -s #{@resolution.strip} -r 30 -i :0.0"
         if @mic_audio
-          cmd += " -f pulse -i #{@mic_audio}"
+          cmd += " -f pulse -i #{@mic_audio.strip}"
         elsif @sys_audio
-          cmd += " -f pulse -i #{@sys_audio}"
+          cmd += " -f pulse -i #{@sys_audio.strip}"
         elsif @no_sound
         else
           cmd += " -f pulse -i #{@sys_audio.strip} -f pulse -i #{@mic_audio.strip}"
