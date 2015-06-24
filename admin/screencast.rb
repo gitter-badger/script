@@ -38,7 +38,7 @@ module Admin
           puts "================"
           puts "Stopping Capture"
           # `sudo pkill avconv`
-          Process.kill('INT', @pid)
+          Process.kill('TERM', @pid)
           # Process.kill('TERM', @pid)
         end
 
@@ -49,6 +49,7 @@ module Admin
         cmd  = build_command
         @pid = spawn(cmd)
         Process.wait(@pid)
+        puts cmd
       end
 
       private
