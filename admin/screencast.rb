@@ -69,19 +69,14 @@ module Admin
         cmd += " sleep #{@delay};" if @delay
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " avconv -f x11grab -s #{@resolution.strip} -r 30 -i :0.0"
-        if @mic_audio
-          cmd += " -f pulse -i #{@mic_audio.strip}"
-        elsif @sys_audio
-          cmd += " -f pulse -i #{@sys_audio.strip}"
-        elsif @no_sound
-        else
+        unless @no_sound
           cmd += " -f pulse -i #{@sys_audio.strip} -f pulse -i #{@mic_audio.strip}"
           cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
         end
         cmd += " -qscale 5"
         cmd += " -vcodec libx264"
         cmd += " -acodec libmp3lame"
-        cmd += " -y screencast_#{ENV['HOSTNAME']}_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
+        cmd += " -y screencast_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
         cmd
       end
     end
@@ -106,22 +101,12 @@ if __FILE__ == $0
     opts.on('--no-sound', 'Do not record audio.') do
       options[:no_sound] = true
     end
-
-    opts.on('--mike-audio', 'Only record microphone audio.') do
-      options[:mic_audio] = true
-    end
-
-    opts.on('--sys-audio', 'Only record system audio.') do
-      options[:sys_audio] = true
-    end
   end
   option_parser.parse!
 
   ep           = Screencast.new
-  ep.delay     = options[:delay]      if options[:delay]
-  ep.timeout   = options[:timeout]    if options[:timeout]
-  ep.no_sound  = options[:no_sound]   if options[:no_sound]
-  ep.mic_audio = options[:mic_audio]  if options[:mic_audio]
-  ep.sys_audio = options[:sys_audio]  if options[:sys_audio]
+  ep.delay     = options[:delay]    if options[:delay]
+  ep.timeout   = options[:timeout]  if options[:timeout]
+  ep.no_sound  = options[:no_sound] if options[:no_sound]
   ep.start!
 end
