@@ -17,31 +17,21 @@ module Admin
   module WindowManager
     class Screencast
       attr_accessor :pid
-      attr_accessor :query
       attr_accessor :delay
       attr_accessor :timeout
-      attr_accessor :v_quality
-      attr_accessor :v_bitrate
-      attr_accessor :s_quality
       attr_accessor :no_sound
-      attr_accessor :no_cursor
-      attr_accessor :framerate
-      attr_accessor :frequency
-      attr_accessor :follow
-      attr_accessor :width
-      attr_accessor :height
-      attr_accessor :encode_mp4
-      attr_accessor :outfile
+      attr_accessor :mic_audio
+      attr_accessor :sys_audio
 
-      def require_recordmydesktop
-        `which recordmydesktop`
+      def require_libav
+        `which avconv`
         unless $? == 0
-          raise StandardError, 'The recordmydesktop application is required.'
+          raise StandardError, 'The libav-tools must be installed.'
         end
       end
 
       def start!
-        require_recordmydesktop
+        require_libav
 
         puts "Starting Capture"
         puts "================"
@@ -53,6 +43,10 @@ module Admin
           Process.kill("INT", @pid)
         end
 
+        @resolution = get_resolution
+        @mic_audio  = get_mic_audio
+        @sys_audio  = get_sys_audio
+
         cmd  = build_command
         @pid = spawn(cmd)
         Process.wait @pid
@@ -60,84 +54,41 @@ module Admin
 
       private
 
-      # MONITOR=$(pactl list | grep -A2 '^Source #' | grep 'Name: .*\.monitor$' | awk '{print $NF}' | tail -n1)
-      # MIKE=$(pactl list | grep alsa_input | awk '{print $2}' | tail -n1 )
-      # RESOLUTION=$(xrandr 2>/dev/null | grep current | sed 's/.*current //;s/,.*//;s/ x /x/')
+      def get_resolution
+        `xrandr 2>/dev/null | grep current | sed 's/.*current //;s/,.*//;s/ x /x/'`
+      end
+
+      def get_mic_audio
+        `pactl list | grep alsa_input | awk '{print $2}' | tail -n1`
+      end
+
+      def get_sys_audio
+        `pactl list | grep -A2 '^Source #' | grep 'Name: .*\.monitor$' | awk '{print $NF}' | tail -n1`
+      end
+
       # DATE=$(date +"%Y%m%d_%H%M%S")
-      # avconv -f x11grab -s $RESOLUTION -r 30 -i :0.0 \
-      #        -f pulse -i $MONITOR \
-      #        -f pulse -i $MIKE \
-      #        -filter_complex amix=inputs=2:duration=first:dropout_transition=3 \
-      #        -qscale 5 \
-      #        -vcodec libx264 \
-      #        -acodec libmp3lame \
-      #        -y screencast_${HOSTNAME}_${DATE}.mp4
       def build_command
-        cmd  = ""
-        cmd += " sleep #{@delay};" if @delay
-        cmd += " timeout #{@timeout}" if @timeout
-        cmd += " recordmydesktop"
-        cmd += " --compress-cache"
-        cmd += " --pause-shortcut Control+p"
-        if @query
-          screen = window(@query)
-          if screen[:id]
-            cmd += " --windowid #{screen[:id]}"
-          end
-        end
-        cmd += " --no-frame"
-        cmd += " --overwrite"
-        if @v_quality
-          if (0..63).include?(@v_quality)
-            cmd += " --v_quality #{@v_quality}" if @v_quality.is_a? Integer
-          end
-        else
-          cmd += " --v_quality 63"
-        end
-        if @v_bitrate
-          if (0..63).include?(@v_bitrate)
-            cmd += " --v_bitrate #{@v_bitrate}" if @v_bitrate.is_a? Integer
-          end
-        else
-          cmd += " --v_bitrate 8000000"
-        end
-        if @s_quality
-          if (-1..10).include?(@s_quality)
-            cmd += " --s_quality #{@s_quality}" if @s_quality.is_a? Integer
-          end
-        else
-          cmd += " --s_quality 8"
-        end
-        if @no_sound
-          cmd += " --no-sound"
-        end
-        if @no_cursor
-          cmd += " --no-cursor"
-        end
-        if @framerate
-          cmd += " --fps #{@framerate}"
-        else
-          cmd += " --fps 15"
-        end
-        if @frequency
-          cmd += " --freq #{@frequency}"
-        else
-          cmd += " --freq 48000"
-        end
-        if @follow
-          cmd += " --follow-mouse"
-        end
-        if @width
-          cmd += " --width #{@width}" if @width.is_a? Integer
-        end
-        if @height
-          cmd += " --height #{@height}" if @height.is_a? Integer
-        end
-        cmd += " -o #{@outfile}" if @outfile
-        if @encode_mp4
-          cmd += "; ffmpeg -i #{@outfile} -strict experimental -vcodec libx264 #{@outfile}.mp4"
-        end
-        cmd
+        puts "resolution: #{@resolution}"
+        puts "mic_audio:  #{@mic_audio}"
+        puts "sys_audio:  #{@sys_audio}"
+
+        # cmd  = ""
+        # cmd += " sleep #{@delay};" if @delay
+        # cmd += " timeout #{@timeout}" if @timeout
+        # cmd += " avconv -f x11grab -s #{@resolution} -r 30 -i :0.0"
+        # unless @no_sound
+        #   cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
+        #   cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
+        # elsif @mic_audio
+        #   cmd += " -f pulse -i #{@mic_audio}"
+        # elsif @sys_audio
+        #   cmd += " -f pulse -i #{@sys_audio}"
+        # end
+        # cmd += " -qscale 5"
+        # cmd += " -vcodec libx264"
+        # cmd += " -acodec libmp3lame"
+        # cmd += " -y screencast_#{ENV['HOSTNAME']}_#{date}.mp4"
+        # cmd
       end
     end
   end
@@ -150,11 +101,7 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screencast [options]"
 
-    opts.on('-q', '--query WINDOW', 'Record a specific window.') do |query|
-      options[:query] = query
-    end
-
-    opts.on('-d', '--delay TIME', 'Delay screencast for N seconds.') do |time|
+    opts.on('-d', '--delay TIME', 'Delay start for N seconds.') do |time|
       options[:delay] = time
     end
 
@@ -162,71 +109,25 @@ if __FILE__ == $0
       options[:timeout] = time
     end
 
-    opts.on('--v-quality INTEGER', 'Video encoding quality (0..63).') do |integer|
-      options[:v_quality] = integer
-    end
-
-    opts.on('--v-bitrate INTEGER', 'Video encoding bitrate (45000..2000000).') do |integer|
-      options[:v_bitrate] = integer
-    end
-
-    opts.on('--s-quality INTEGER', 'Audio encoding quality (-1..10).') do |integer|
-      options[:s_quality] = integer
-    end
-
     opts.on('--no-sound', 'Do not record audio.') do
       options[:no_sound] = true
     end
 
-    opts.on('--no-cursor', 'Do not include cursor.') do
-      options[:no_cursor] = true
+    opts.on('--mike-audio', 'Only record microphone audio.') do
+      options[:mic_audio] = true
     end
 
-    opts.on('--fps', 'Adjust the video framerate.') do
-      options[:framerate] = true
-    end
-
-    opts.on('--freq', 'Adjust the sound frequency.') do
-      options[:frequency] = true
-    end
-
-    opts.on('-m', '--follow-mouse', 'Track the cursor movement.') do
-      options[:follow] = true
-    end
-
-    opts.on('-w', '--width', 'Width of recorded window.') do |integer|
-      options[:width] = integer
-    end
-
-    opts.on('-h', '--height', 'Height of recorded window.') do |integer|
-      options[:height] = integer
-    end
-
-    opts.on('-o', '--outfile FILENAME', 'Name of recorded video.') do |string|
-      options[:outfile] = string
-    end
-
-    opts.on('--encode-mp4', 'Convert OGV into MP4.') do
-      options[:encode_mp4] = true
+    opts.on('--sys-audio', 'Only record system audio.') do
+      options[:sys_audio] = true
     end
   end
   option_parser.parse!
 
-  ep            = Screencast.new
-  ep.query      = options[:query]      if options[:query]
-  ep.delay      = options[:delay]      if options[:delay]
-  ep.timeout    = options[:timeout]    if options[:timeout]
-  ep.v_quality  = options[:v_quality]  if options[:v_quality]
-  ep.v_bitrate  = options[:v_bitrate]  if options[:v_bitrate]
-  ep.s_quality  = options[:s_quality]  if options[:s_quality]
-  ep.no_sound   = options[:no_sound]   if options[:no_sound]
-  ep.no_cursor  = options[:no_cursor]  if options[:no_cursor]
-  ep.framerate  = options[:framerate]  if options[:framerate]
-  ep.frequency  = options[:frequency]  if options[:frequency]
-  ep.follow     = options[:follow]     if options[:follow]
-  ep.width      = options[:width]      if options[:width]
-  ep.height     = options[:height]     if options[:height]
-  ep.outfile    = options[:outfile]    if options[:outfile]
-  ep.encode_mp4 = options[:encode_mp4] if options[:encode_mp4]
+  ep           = Screencast.new
+  ep.delay     = options[:delay]      if options[:delay]
+  ep.timeout   = options[:timeout]    if options[:timeout]
+  ep.no_sound  = options[:no_sound]   if options[:no_sound]
+  ep.mic_audio = options[:mic_audio]  if options[:mic_audio]
+  ep.sys_audio = options[:sys_audio]  if options[:sys_audio]
   ep.start!
 end
