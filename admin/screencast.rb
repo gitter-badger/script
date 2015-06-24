@@ -84,8 +84,7 @@ module Admin
         cmd += " -vcodec libx264"
         cmd += " -acodec libmp3lame"
         cmd += " -y screencast_#{ENV['HOSTNAME']}_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
-        puts cmd
-
+        cmd
       end
     end
   end
