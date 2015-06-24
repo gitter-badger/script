@@ -66,29 +66,24 @@ module Admin
         `pactl list | grep -A2 '^Source #' | grep 'Name: .*\.monitor$' | awk '{print $NF}' | tail -n1`
       end
 
-      # DATE=$(date +"%Y%m%d_%H%M%S")
       def build_command
-        puts "resolution: #{@resolution}"
-        puts "mic_audio:  #{@mic_audio}"
-        puts "sys_audio:  #{@sys_audio}"
-
-        # cmd  = ""
-        # cmd += " sleep #{@delay};" if @delay
-        # cmd += " timeout #{@timeout}" if @timeout
-        # cmd += " avconv -f x11grab -s #{@resolution} -r 30 -i :0.0"
-        # unless @no_sound
-        #   cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
-        #   cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
-        # elsif @mic_audio
-        #   cmd += " -f pulse -i #{@mic_audio}"
-        # elsif @sys_audio
-        #   cmd += " -f pulse -i #{@sys_audio}"
-        # end
-        # cmd += " -qscale 5"
-        # cmd += " -vcodec libx264"
-        # cmd += " -acodec libmp3lame"
-        # cmd += " -y screencast_#{ENV['HOSTNAME']}_#{date}.mp4"
-        # cmd
+        cmd  = ""
+        cmd += " sleep #{@delay};" if @delay
+        cmd += " timeout #{@timeout}" if @timeout
+        cmd += " avconv -f x11grab -s #{@resolution} -r 30 -i :0.0"
+        unless @no_sound
+          cmd += " -f pulse -i #{@sys_audio} -f pulse -i #{@mic_audio}"
+          cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
+        elsif @mic_audio
+          cmd += " -f pulse -i #{@mic_audio}"
+        elsif @sys_audio
+          cmd += " -f pulse -i #{@sys_audio}"
+        end
+        cmd += " -qscale 5"
+        cmd += " -vcodec libx264"
+        cmd += " -acodec libmp3lame"
+        cmd += " -y screencast_#{ENV['HOSTNAME']}_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
+        cmd
       end
     end
   end
