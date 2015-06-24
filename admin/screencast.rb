@@ -48,8 +48,8 @@ module Admin
         @sys_audio  = get_sys_audio
 
         cmd  = build_command
-        # @pid = spawn(cmd)
-        # Process.wait @pid
+        @pid = spawn(cmd)
+        Process.wait @pid
       end
 
       private
