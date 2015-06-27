@@ -14,7 +14,7 @@ module Admin
   module WindowManager
     class Screencast
       attr_accessor :pid
-      attr_accessor :delay
+      attr_accessor :sleep
       attr_accessor :timeout
       attr_accessor :no_sound
       attr_accessor :mic_audio
@@ -66,7 +66,7 @@ module Admin
 
       def build_command
         cmd  = ""
-        cmd += " sleep #{@delay};" if @delay
+        cmd += " sleep #{@sleep};" if @sleep
         cmd += " timeout #{@timeout}" if @timeout
         cmd += " avconv -f x11grab -s #{@resolution.strip} -r 30 -i :0.0"
         unless @no_sound
@@ -90,8 +90,8 @@ if __FILE__ == $0
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: screencast [options]"
 
-    opts.on('-d', '--delay TIME', 'Delay start for N seconds.') do |time|
-      options[:delay] = time
+    opts.on('-s', '--sleep TIME', 'Delay start for N seconds.') do |time|
+      options[:sleed] = time
     end
 
     opts.on('-t', '--timeout TIME', 'Timeout after N minutes.') do |time|
@@ -105,7 +105,7 @@ if __FILE__ == $0
   option_parser.parse!
 
   ep           = Screencast.new
-  ep.delay     = options[:delay]    if options[:delay]
+  ep.sleep     = options[:sleep]    if options[:sleep]
   ep.timeout   = options[:timeout]  if options[:timeout]
   ep.no_sound  = options[:no_sound] if options[:no_sound]
   ep.start!
