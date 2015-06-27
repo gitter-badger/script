@@ -91,7 +91,7 @@ if __FILE__ == $0
     opts.banner = "Usage: screencast [options]"
 
     opts.on('-s', '--sleep TIME', 'Delay start for N seconds.') do |time|
-      options[:sleed] = time
+      options[:sleep] = time
     end
 
     opts.on('-t', '--timeout TIME', 'Timeout after N minutes.') do |time|
