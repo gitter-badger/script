@@ -8,54 +8,54 @@
 require 'fileutils'
 require 'tempfile'
 
+require_relative 'admin'
+
 module Admin
   class StyleGuide
-    def enforce_80char(file)
-      if File.exist?(file)
-        tmp = Tempfile.new(file)
+    def enforce_80char(file_path)
+      require_file(file_path)
 
-        File.open(file, 'r') do |f|
-          f.flock(File::LOCK_SH)
-          f.each_line do |line|
-            if line.size > 80
-              tmp.puts get_line(line)
-            else
-              tmp.puts line
-            end
-          end
-          f.flock(File::LOCK_UN)
-        end
+      # tmp = Tempfile.new(file)
+      # File.open(file, 'r') do |f|
+      #   f.flock(File::LOCK_SH)
+      #   f.each_line do |line|
+      #     if line.size > 80
+      #       tmp.puts get_line(line)
+      #     else
+      #       tmp.puts line
+      #     end
+      #   end
+      #   f.flock(File::LOCK_UN)
+      # end
 
-        tmp.close
-        FileUtils.mv(tmp.path, file)
-      else
-        puts "File does not exist at '#{file}'"
-      end
+      # tmp.close
+      # FileUtils.mv(tmp.path, file)
     end
 
-    def get_line(line)
-      if line.size > 80
-        line_count = line.size / 80
-        remainder  = line.size % 80
-        full_line = ''
-        token_char = 0
-        line_count.times do |i|
-          start_char   = i * 80
-          start_char  += 1 if start_char != 0
-          end_char     = (i+1) * 80
-          if /^#/.match(line[start_char..end_char])
-            full_line   += "#{line[start_char..end_char]}\n"
-          else
-            full_line   += "# #{line[start_char..end_char]}\n"
-          end
-          token_char   = end_char
-        end
-        full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
-        return full_line
-      else
-        return line
-      end
-    end
+
+    # def get_line(line)
+    #   if line.size > 80
+    #     line_count = line.size / 80
+    #     remainder  = line.size % 80
+    #     full_line = ''
+    #     token_char = 0
+    #     line_count.times do |i|
+    #       start_char   = i * 80
+    #       start_char  += 1 if start_char != 0
+    #       end_char     = (i+1) * 80
+    #       if /^#/.match(line[start_char..end_char])
+    #         full_line   += "#{line[start_char..end_char]}\n"
+    #       else
+    #         full_line   += "# #{line[start_char..end_char]}\n"
+    #       end
+    #       token_char   = end_char
+    #     end
+    #     full_line += "# #{line[(token_char + 1)..(token_char + (remainder - 1))]}"
+    #     return full_line
+    #   else
+    #     return line
+    #   end
+    # end
   end
 end
 
@@ -64,7 +64,6 @@ if __FILE__ == $0
 
   is_valid = true
   is_valid = false unless ARGV[0]
-  is_valid = false unless File.exist?(ARGV[0]) if ARGV[0]  
 
   if is_valid
     enforcer = StyleGuide.new

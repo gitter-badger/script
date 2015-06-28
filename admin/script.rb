@@ -5,8 +5,6 @@
 # Modified At: 2014 1105 193823
 # Description: Script for CLI Application management
 
-require 'optparse'
-
 require_relative 'admin'
 
 module Admin
@@ -439,7 +437,8 @@ end
 
 if __FILE__ == $0
   include Admin
-
+  require 'optparse'
+  
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = "Usage: script [options] SCRIPT"
