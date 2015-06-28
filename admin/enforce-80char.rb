@@ -9,8 +9,8 @@ require 'fileutils'
 require 'tempfile'
 
 module Admin
-  class Enforce80Char
-    def convert(file)
+  class StyleGuide
+    def enforce_80char(file)
       if File.exist?(file)
         tmp = Tempfile.new(file)
 
@@ -61,18 +61,15 @@ end
 
 if __FILE__ == $0
   include Admin
-  require 'optparse'
 
-  option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: enforce-80char FILE"
-  end
-  option_parser.parse!
+  is_valid = true
+  is_valid = false unless ARGV[0]
+  is_valid = false unless File.exist?(ARGV[0]) if ARGV[0]  
 
-  enforcer = Enforce80Char.new
-
-  if ARGV.count == 1
-    enforcer.convert(ARGV[0])
+  if is_valid
+    enforcer = StyleGuide.new
+    enforcer.enforce_80char(ARGV[0])
   else
-    puts option_parser
+    puts 'Usage: enforce-80char FILE'
   end
 end
