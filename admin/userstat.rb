@@ -8,15 +8,31 @@
 module Admin
   def user_status(user=ENV['USER'])
     raw_status = `sudo passwd --status #{user}`
+    status = {}
 
-    raw_status.split.each do |s|
-      puts s + "\n"
+    raw_status.split.each_with_index do |s, i|
+      status[:username]             = s if i == 0
+      status[:password_status]      = s if i == 1
+      status[:password_modified_at] = s if i == 2
+      status[:minimum_age]          = s if i == 3
+      status[:maximum_age]          = s if i == 4
+      status[:inactivity]           = s if i == 5
     end
+
+    status
   end
 
   def print_user_status(user=ENV['USER'])
     stat = user_status(user)
-    # > pretty print
+
+    puts <<-STATUS
+#{stat[:username]}
+  #{stat[:password_status]}
+  #{stat[:password_modified_at]}
+  #{stat[:minimum_age]} minimum age
+  #{stat[:maximum_age]} maximum age
+  #{stat[:inactivity]} of inactivity
+    STATUS
   end
 end
 
