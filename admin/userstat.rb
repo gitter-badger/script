@@ -29,8 +29,9 @@ module Admin
 #{stat[:username]}
   #{stat[:password_status]}
   #{stat[:password_modified_at]}
-  #{stat[:minimum_age]} minimum age
-  #{stat[:maximum_age]} maximum age
+  # > how many days ago from now?
+  #{stat[:minimum_age]} minimum password age
+  #{stat[:maximum_age]} maximum password age
   #{stat[:inactivity]} of inactivity
     STATUS
   end
