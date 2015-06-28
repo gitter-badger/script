@@ -74,6 +74,7 @@ module Admin
           cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
         end
         cmd += " -qscale 5"
+        cmd += " -af asyncts"
         cmd += " -vcodec libx264"
         cmd += " -acodec libmp3lame"
         cmd += " -y screencast_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
