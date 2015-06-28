@@ -23,16 +23,17 @@ module Admin
 
       user_json << user_hash
     end
+    user_json.sort! { |x,y| x[:user_id] <=> y[:user_id] }
 
     user_json
   end
 
-  def pretty_print_users
+  def print_users
     all_users = users
 
     all_users.each do |u|
       user = <<-USER
-  (#{u[:id]}) #{u[:username]}
+  (#{u[:user_id]}) #{u[:username]}
       USER
       puts user
     end
@@ -41,5 +42,5 @@ end
 
 if __FILE__ == $0
   include Admin
-  pretty_print_users
+  print_users
 end
