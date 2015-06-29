@@ -73,10 +73,11 @@ module Admin
           cmd += " -f pulse -i #{@sys_audio.strip} -f pulse -i #{@mic_audio.strip}"
           cmd += " -filter_complex amix=inputs=2:duration=first:dropout_transition=3"
         end
-        cmd += " -qscale 5"
-        cmd += " -af asyncts"
+        cmd += " -qscale 4"
         cmd += " -vcodec libx264"
         cmd += " -acodec libmp3lame"
+        cmd += " -crf 0"
+        cmd += " -threads auto"
         cmd += " -y screencast_#{Time.now.strftime('%Y%m%d%H%M')}.mp4"
         cmd
       end
@@ -105,9 +106,9 @@ if __FILE__ == $0
   end
   option_parser.parse!
 
-  ep           = Screencast.new
-  ep.sleep     = options[:sleep]    if options[:sleep]
-  ep.timeout   = options[:timeout]  if options[:timeout]
-  ep.no_sound  = options[:no_sound] if options[:no_sound]
+  ep          = Screencast.new
+  ep.sleep    = options[:sleep]    if options[:sleep]
+  ep.timeout  = options[:timeout]  if options[:timeout]
+  ep.no_sound = options[:no_sound] if options[:no_sound]
   ep.start!
 end
