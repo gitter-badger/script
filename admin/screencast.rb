@@ -37,6 +37,7 @@ module Admin
           puts
           puts "================"
           puts "Stopping Capture"
+          puts @pid
           Process.kill("INT", @pid)
         end
 
