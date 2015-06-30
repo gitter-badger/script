@@ -30,24 +30,13 @@ module Admin
       def start!
         require_libav
 
-        puts "Starting Capture"
-        puts "================"
-
-        # Signal.trap("INT") do
-        #   puts
-        #   puts "================"
-        #   puts "Stopping Capture"
-        #   Process.kill("INT", @pid)
-        # end
-
         @resolution = get_resolution
         @mic_audio  = get_mic_audio
         @sys_audio  = get_sys_audio
 
         cmd  = build_command
         `#{cmd}`
-        # @pid = spawn(cmd)
-        # Process.wait(@pid)
+        exit 0
       end
 
       private
