@@ -36,7 +36,6 @@ module Admin
 
         cmd  = build_command
         `#{cmd}`
-        exit 0
       end
 
       private
