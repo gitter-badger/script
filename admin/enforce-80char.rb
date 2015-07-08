@@ -15,8 +15,8 @@ module Admin
     def enforce_80char(file_path)
       require_file(file_path)
 
-      tmp = Tempfile.new(file)
-      File.open(file, 'r') do |f|
+      tmp = Tempfile.new(file_path)
+      File.open(file_path, 'r') do |f|
         f.flock(File::LOCK_SH)
         f.each_line do |line|
           if line.size > 80
@@ -29,7 +29,7 @@ module Admin
       end
 
       tmp.close
-      FileUtils.mv(tmp.path, file)
+      FileUtils.mv(tmp.path, file_path)
     end
 
 
