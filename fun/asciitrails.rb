@@ -11,8 +11,14 @@ module AsciiTrails
 
   class Game
     def start
-      puts 'You are now walking the ASCII trails'
-      @history = []
+      puts 'You are now walking the ASCII trails.'
+      load_game
+      game_loop
+    end
+
+    private
+
+    def game_loop
       loop do
         move = get_move
         case move
@@ -37,8 +43,6 @@ module AsciiTrails
       end
     end
 
-    private
-
     def get_move
       STDIN.echo = false
       STDIN.raw!
@@ -56,18 +60,18 @@ module AsciiTrails
     end
 
     def save_game
-      yaml = YAML::dump(self)
-      file = File.open("./asciitrails.yml", 'w+') {|f| f.write yaml.to_yaml}
+      File.open("./asciitrails.yml", 'w') { |f| YAML.dump([] << self, f) }
       exit
     end
 
     def load_game
-      data = File.open("./asciitrails.yml", "r") {|f| f.read}
-      yaml = YAML::load(data)
+      begin
+        yaml = YAML.load_file("./asciitrails.yml")
+        @history = yaml[0].history
+      rescue
+        @history = []
+      end
     end
-  end
-
-  class Board
   end
 end
 
