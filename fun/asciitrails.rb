@@ -36,7 +36,7 @@
               puts "[#{@history.count}] MOVE LEFT"
             when "\u0003"
               @history << "PAUSE"
-              puts "[#{@history.count}] CONTROL-C"
+              puts "[#{@history.count}] PAUSE"
               save_game
               exit 0
             end
