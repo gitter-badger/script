@@ -4,33 +4,69 @@
 # Description: Walk the ASCII trails
 
 module AsciiTrails
-  MOVES = {
-    "\e[A": "UP ARROW",
-    "\e[B": "DOWN ARROW",
-    "\e[C": "RIGHT ARROW",
-    "\e[D": "LEFT ARROW",
-    "\u0003": "CONTROL-C"
-  }
+  require 'io/console'
+  require 'yaml'
+
+  attr_accessor :history
 
   class Game
     def start
       puts 'You are now walking the ASCII trails'
-      move = get_move
-      if MOVES[move]
-        puts MOVES[move]
-      else 
-        puts 'Try again'
+      @history = []
+      loop do
+        move = get_move
+        case move
+        when "\e[A"
+          @history << "MOVE UP"
+          puts "[#{@history.count}] MOVE ARROW"
+        when "\e[B"
+          @history << "MOVE DOWN"
+          puts "[#{@history.count}] MOVE DOWN"
+        when "\e[C"
+          @history << "MOVE RIGHT"
+          puts "[#{@history.count}] MOVE RIGHT"
+        when "\e[D"
+          @history << "MOVE LEFT"
+          puts "[#{@history.count}] MOVE LEFT"
+        when "\u0003"
+          @history << "PAUSE"
+          puts "[#{@history.count}] CONTROL-C"
+          save_game
+          exit 0
+        end
       end
     end
-    
+
     private
 
     def get_move
+      STDIN.echo = false
+      STDIN.raw!
+
       input = STDIN.getc.chr
+      if input == "\e" then
+        input << STDIN.read_nonblock(3) rescue nil
+        input << STDIN.read_nonblock(2) rescue nil
+      end
+    ensure
+      STDIN.echo = true
+      STDIN.cooked!
+
       return input
     end
+
+    def save_game
+      yaml = YAML::dump(self)
+      file = File.open("./asciitrails.yml", 'w+') {|f| f.write yaml.to_yaml}
+      exit
+    end
+
+    def load_game
+      data = File.open("./asciitrails.yml", "r") {|f| f.read}
+      yaml = YAML::load(data)
+    end
   end
- 
+
   class Board
   end
 end
