@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby -w
-# cleanup_old_kernels.rb
+# rm_kernels.rb
 # Author: Andy Bettisworth
 # Description: Remove old and unused linux kernels
 
