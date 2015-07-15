@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/ruby
 # enforce-80char.rb
 # Author: Andy Bettisworth
 # Created At: 2014 1106 120459
@@ -32,7 +32,6 @@ module Admin
       FileUtils.mv(tmp.path, file_path)
     end
 
-
     def get_line(line)
       if line.size > 80
         line_count = line.size / 80
@@ -59,7 +58,7 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
 
   is_valid = true
