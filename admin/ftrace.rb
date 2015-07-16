@@ -28,7 +28,7 @@ if __FILE__ == $PROGRAM_NAME
     pid = Integer(ARGV[0])
   rescue
     puts 'Usage:'
-    puts '  monitor PID'
+    puts '  ftrace PID'
     exit 1
   end
 
