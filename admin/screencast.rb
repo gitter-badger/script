@@ -12,6 +12,7 @@ require_relative 'wm'
 
 module Admin
   module WindowManager
+    # save screen as video
     class Screencast
       attr_accessor :pid
       attr_accessor :sleep
@@ -22,9 +23,7 @@ module Admin
 
       def require_libav
         `which avconv`
-        unless $? == 0
-          raise StandardError, 'The libav-tools must be installed.'
-        end
+        fail StandardError, 'Install libav-tools.' unless $CHILD_STATUS == 0
       end
 
       def start!
