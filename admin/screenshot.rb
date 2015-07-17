@@ -3,12 +3,12 @@
 # Author: Andy Bettisworth
 # Description: Take screenshot of desktop or target window
 
-require 'optparse'
-
 require_relative 'wm'
+require_relative 'admin'
 
 module Admin
   module WindowManager
+    # generate a screenshot
     class Screenshot
       attr_accessor :query
       attr_accessor :delay
@@ -39,12 +39,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin::WindowManager
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: screenshot [options]"
+    opts.banner = 'Usage: screenshot [options]'
 
     opts.on('-q', '--query WINDOW', 'Capture a specific window.') do |query|
       options[:query] = query

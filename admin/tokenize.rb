@@ -3,28 +3,35 @@
 # Author: Andy Bettisworth
 # Description: READ tokenization of Ruby scripts
 
-require 'optparse'
 require 'ripper'
 require 'pp'
 
-class RubyTokenization
-  def tokenize(filename, output=nil)
-    code = get_code(filename)
-    tokens = Ripper.lex(code)
-    tokens.each do |token|
-      puts token.to_s
-    end
-  end
+require_relative 'admin'
 
-  def get_code(filename)
-    File.open(filename).read
+module Admin
+  # extract the ruby tokens of a script
+  class RubyTokenization
+    def tokenize(filename, output = nil)
+      code = get_code(filename)
+      tokens = Ripper.lex(code)
+      tokens.each do |token|
+        puts token.to_s
+      end
+    end
+
+    def get_code(filename)
+      File.open(filename).read
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: tokenize [options] SCRIPT"
+    opts.banner = 'Usage: tokenize [options] SCRIPT'
 
     opts.on('-o FILE', '--output FILE', 'File for tokenization output') do |file|
       options[:output] = file

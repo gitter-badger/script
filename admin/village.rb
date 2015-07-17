@@ -5,128 +5,134 @@
 # Modified At: 2015 0424 221430
 # Description: sync external media from the Village
 
-require 'optparse'
 require 'fileutils'
 
-module Village
-  class Media
-    attr_accessor :scope
-    attr_accessor :local_dir
-    attr_accessor :remote_dir
+require_relative 'admin'
 
-    def initialize
-      @scope      = 'syncing all media...'
-      @local_dir  = "#{ENV['HOME']}"
-      @remote_dir = "/media/#{ ENV['USER'] }/Village"
-    end
+module Admin
+  module Village
+    class Media
+      attr_accessor :scope
+      attr_accessor :local_dir
+      attr_accessor :remote_dir
 
-    def sync
-      puts @scope
-      require_dir(@local_dir)
-      require_dir(@remote_dir)
-      diff = dir_difference
-      sync_file_diff(diff)
-    end
-
-    def require_dir(pathname)
-      unless File.exist?(pathname)
-        raise "MissingDirectoryError::#{pathname}"
+      def initialize
+        @scope      = 'syncing all media...'
+        @local_dir  = "#{ENV['HOME']}"
+        @remote_dir = "/media/#{ ENV['USER'] }/Village"
       end
-    end
 
-    def dir_difference
-      local_files  = get_local_files
-      remote_files = get_remote_files
+      def sync
+        puts @scope
+        require_dir(@local_dir)
+        require_dir(@remote_dir)
+        diff = dir_difference
+        sync_file_diff(diff)
+      end
 
-      local_files.each do |file, path|
-        if remote_files.has_key?(file)
-          remote_files.delete(file)
+      def require_dir(pathname)
+        unless File.exist?(pathname)
+          raise "MissingDirectoryError::#{pathname}"
         end
       end
 
-      remote_files
-    end
+      def dir_difference
+        local_files  = get_local_files
+        remote_files = get_remote_files
 
-    def get_local_files(target=@local_dir)
-      local_files = Dir[target + "/**/*"]
-      local_files.delete_if { |path| File.directory?(path) }
-      local_files.map! { |path| [File.basename(path), path] }
-      local_files = local_files.to_h
-      local_files
-    end
+        local_files.each do |file, path|
+          if remote_files.has_key?(file)
+            remote_files.delete(file)
+          end
+        end
 
-    def get_remote_files(target=@remote_dir)
-      remote_files = Dir[target + "/**/*"]
-      remote_files.delete_if { |path| File.directory?(path) }
-      remote_files.map! { |path| [File.basename(path), path] }
-      remote_files = remote_files.to_h
-      remote_files
-    end
+        remote_files
+      end
 
-    def sync_file_diff(diff, target=@local_dir, source=@remote_dir)
-      diff.each do |filename, remote_path|
-        target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
-        find_or_create_directory(target_path)
-        puts "  #{target_path}/#{filename}"
-        FileUtils.cp(remote_path, target_path)
+      def get_local_files(target=@local_dir)
+        local_files = Dir[target + "/**/*"]
+        local_files.delete_if { |path| File.directory?(path) }
+        local_files.map! { |path| [File.basename(path), path] }
+        local_files = local_files.to_h
+        local_files
+      end
+
+      def get_remote_files(target=@remote_dir)
+        remote_files = Dir[target + "/**/*"]
+        remote_files.delete_if { |path| File.directory?(path) }
+        remote_files.map! { |path| [File.basename(path), path] }
+        remote_files = remote_files.to_h
+        remote_files
+      end
+
+      def sync_file_diff(diff, target=@local_dir, source=@remote_dir)
+        diff.each do |filename, remote_path|
+          target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
+          find_or_create_directory(target_path)
+          puts "  #{target_path}/#{filename}"
+          FileUtils.cp(remote_path, target_path)
+        end
+      end
+
+      def find_or_create_directory(pathname)
+        FileUtils.mkdir_p(pathname)
       end
     end
 
-    def find_or_create_directory(pathname)
-      FileUtils.mkdir_p(pathname)
-    end
-  end
+    class Documents < Village::Media
+      def initialize
+        @scope = 'syncing documents...'
+        @local_dir  = "#{ENV['HOME']}/Documents"
+        @remote_dir = "/media/#{ ENV['USER'] }/Village/Documents"
+      end
 
-  class Documents < Village::Media
-    def initialize
-      @scope = 'syncing documents...'
-      @local_dir  = "#{ENV['HOME']}/Documents"
-      @remote_dir = "/media/#{ ENV['USER'] }/Village/Documents"
-    end
-
-    def sync
-      super
-    end
-  end
-
-  class Music < Village::Media
-    def initialize
-      @scope = 'syncing music...'
-      @local_dir  = "#{ENV['HOME']}/Music"
-      @remote_dir = "/media/#{ ENV['USER'] }/Village/Music"
+      def sync
+        super
+      end
     end
 
-    def sync
-      super
-    end
-  end
+    class Music < Village::Media
+      def initialize
+        @scope = 'syncing music...'
+        @local_dir  = "#{ENV['HOME']}/Music"
+        @remote_dir = "/media/#{ ENV['USER'] }/Village/Music"
+      end
 
-  class Pictures < Village::Media
-    def initialize
-      @scope = 'syncing pictures...'
-      @local_dir  = "#{ENV['HOME']}/Pictures"
-      @remote_dir = "/media/#{ ENV['USER'] }/Village/Pictures"
-    end
-
-    def sync
-      super
-    end
-  end
-
-  class Videos < Village::Media
-    def initialize
-      @scope = 'syncing videos...'
-      @local_dir  = "#{ENV['HOME']}/Videos"
-      @remote_dir = "/media/#{ ENV['USER'] }/Village/Videos"
+      def sync
+        super
+      end
     end
 
-    def sync
-      super
+    class Pictures < Village::Media
+      def initialize
+        @scope = 'syncing pictures...'
+        @local_dir  = "#{ENV['HOME']}/Pictures"
+        @remote_dir = "/media/#{ ENV['USER'] }/Village/Pictures"
+      end
+
+      def sync
+        super
+      end
+    end
+
+    class Videos < Village::Media
+      def initialize
+        @scope = 'syncing videos...'
+        @local_dir  = "#{ENV['HOME']}/Videos"
+        @remote_dir = "/media/#{ ENV['USER'] }/Village/Videos"
+      end
+
+      def sync
+        super
+      end
     end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: village [options]'
@@ -151,6 +157,7 @@ if __FILE__ == $0
 
   if options.empty?
     puts option_parser
+    exit 1
   end
 
   if options[:documents]
@@ -172,6 +179,4 @@ if __FILE__ == $0
     videos = Village::Videos.new
     videos.sync
   end
-
-  exit
 end

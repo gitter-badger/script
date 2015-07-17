@@ -5,7 +5,9 @@
 
 require 'date'
 
-if __FILE__ == $0
+require_relative 'admin'
+
+if __FILE__ == $PROGRAM_NAME
   WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   weekdays = {
     1 => WEEKDAYS[0],
@@ -33,6 +35,6 @@ if __FILE__ == $0
   end
 
   weekdays.each do |index, day|
-    puts "#{day} is a #{WEEKDAYS[index -1]}"
+    puts "#{day} is a #{WEEKDAYS[index - 1]}"
   end
 end

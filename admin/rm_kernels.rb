@@ -5,22 +5,26 @@
 
 require 'fileutils'
 
-current_kernel = `uname -r`.chomp
-lib_modules    = Dir['/lib/modules/**']
-boot_files     = Dir['/boot/**'].select! { |x| File.file?(x) }
+require_relative 'admin'
 
-lib_modules.each do |kernel|
-  target_kernel = File.basename(kernel).chomp
-  unless current_kernel == target_kernel
-    puts "removing #{kernel}..."
-    `sudo rm -rf #{kernel}`
+module Admin
+  current_kernel = `uname -r`.chomp
+  lib_modules    = Dir['/lib/modules/**']
+  boot_files     = Dir['/boot/**'].select! { |x| File.file?(x) }
+
+  lib_modules.each do |kernel|
+    target_kernel = File.basename(kernel).chomp
+    unless current_kernel == target_kernel
+      puts "removing #{kernel}..."
+      `sudo rm -rf #{kernel}`
+    end
   end
-end
 
-boot_files.each do |f|
-  target_file = File.basename(f).chomp
-  unless target_file.match(/#{current_kernel}/)
-    puts "removing #{f}..."
-    `sudo rm -rf #{f}`
+  boot_files.each do |f|
+    target_file = File.basename(f).chomp
+    unless target_file.match(/#{current_kernel}/)
+      puts "removing #{f}..."
+      `sudo rm -rf #{f}`
+    end
   end
 end

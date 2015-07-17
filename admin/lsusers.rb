@@ -3,6 +3,8 @@
 # Author: Andy Bettisworth
 # Description: Get users from /etc/passwd
 
+require_relative 'admin'
+
 module Admin
   def users
     raw_user_list = File.readlines('/etc/passwd')
@@ -23,7 +25,7 @@ module Admin
 
       user_json << user_hash
     end
-    user_json.sort! { |x,y| x[:user_id] <=> y[:user_id] }
+    user_json.sort! { |x, y| x[:user_id] <=> y[:user_id] }
 
     user_json
   end
@@ -40,7 +42,8 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+
   print_users
 end

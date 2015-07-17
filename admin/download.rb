@@ -5,17 +5,20 @@
 # Modified At: 2015 0513 221014
 # Description: Manage Downloads
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
   class Download
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: download [options] REGEXP"
+    opts.banner = 'Usage: download [options] REGEXP'
 
     opts.on('-f', '--flush', 'Flush all downloads') do
       options[:flush] = true

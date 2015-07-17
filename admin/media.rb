@@ -6,8 +6,12 @@
 # Description: alias to village.rb script
 
 require_relative 'village'
+require_relative 'admin'
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: village [options]'
@@ -32,6 +36,7 @@ if __FILE__ == $0
 
   if options.empty?
     puts option_parser
+    exit 1
   end
 
   if options[:documents]
@@ -53,7 +58,4 @@ if __FILE__ == $0
     videos = Village::Videos.new
     videos.sync
   end
-
-  exit
 end
-

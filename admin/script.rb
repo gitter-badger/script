@@ -8,6 +8,7 @@
 require_relative 'admin'
 
 module Admin
+  # manage all local scripts
   class Script
     SCRIPT_DIR    = "#{HOME}/GitHub/script"
     CATEGORIES    = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
@@ -25,7 +26,7 @@ $0
       categories = get_app_categories
       scripts = get_scripts(categories)
       scripts = filter_scripts(scripts, script_regexp)
-      scripts = scripts.sort_by { |k,v| k[:filename]}
+      scripts = scripts.sort_by { |k, v| k[:filename] }
       print_script_list(scripts)
       scripts
     end
@@ -435,13 +436,13 @@ $0
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
   require 'optparse'
-  
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: script [options] SCRIPT"
+    opts.banner = 'Usage: script [options] SCRIPT'
 
     opts.on('-l [REGXP]', '--list [REGXP]', 'List all matching scripts') do |regexp|
       options[:list] = true

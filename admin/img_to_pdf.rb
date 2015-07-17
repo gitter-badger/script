@@ -4,45 +4,52 @@
 # Description: Creates a PDF from images within target Dir
 
 require 'prawn'
-require 'optparse'
 
-class IMGToPDF
-  def generate_pdf_from_img(image_dir, pdf_filename)
-    all_images = Dir.entries(image_dir)
-    all_images.delete('..')
-    all_images.delete('.')
-    all_images.sort!
+require_relative 'admin'
 
-    Prawn::Document.generate("#{pdf_filename}.pdf") do
-      all_images.each do |image|
-        image "#{image_dir}/#{image}", position: :center, vposition: :center, width: 600
+module Admin
+  # convert an image into a PDF
+  class IMGToPDF
+    def generate_pdf_from_img(image_dir, pdf_filename)
+      all_images = Dir.entries(image_dir)
+      all_images.delete('..')
+      all_images.delete('.')
+      all_images.sort!
+
+      Prawn::Document.generate("#{pdf_filename}.pdf") do
+        all_images.each do |image|
+          image "#{image_dir}/#{image}", position: :center, vposition: :center, width: 600
+        end
       end
     end
   end
-end
 
-if __FILE__ == $0
-  options = {}
-  OptionParser.new do |opts|
-    opts.banner = "USAGE: img_to_pdf --img rails_init_guide/ --pdf rails_initialization.pdf"
+  if __FILE__ == $PROGRAM_NAME
+    include Admin
+    require 'optparse'
 
-    opts.on("--img [DIR]", 'Set path to image directory') do |target_img_dir|
-      options[:image_dir] = File.expand_path(target_img_dir.to_s)
-    end
+    options = {}
+    OptionParser.new do |opts|
+      opts.banner = 'Usage: img_to_pdf --img rails_init_guide/ --pdf rails_initialization.pdf'
 
-    opts.on("--pdf [PATH]", 'Set PDF filename') do |pdf_filename|
-      options[:pdf_filename] = pdf_filename.to_s
-    end
-  end.parse!
+      opts.on('--img [DIR]', 'Set path to image directory') do |target_img_dir|
+        options[:image_dir] = File.expand_path(target_img_dir.to_s)
+      end
 
-  if options[:image_dir]
-    if options[:pdf_filename]
-      converter = IMGToPDF.new
-      converter.generate_pdf_from_img(options[:image_dir], options[:pdf_filename])
+      opts.on('--pdf [PATH]', 'Set PDF filename') do |pdf_filename|
+        options[:pdf_filename] = pdf_filename.to_s
+      end
+    end.parse!
+
+    if options[:image_dir]
+      if options[:pdf_filename]
+        converter = IMGToPDF.new
+        converter.generate_pdf_from_img(options[:image_dir], options[:pdf_filename])
+      else
+        puts '!ERROR: A PDF filename is required. (--pdf)'
+      end
     else
-      puts '!ERROR: A PDF filename is required. (--pdf)'
+      puts '!ERROR: An image directory is required. (--img)'
     end
-  else
-    puts '!ERROR: An image directory is required. (--img)'
   end
 end

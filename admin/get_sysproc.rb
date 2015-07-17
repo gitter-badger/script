@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Get current system information (linux-only) using proc
 
-if __FILE__ == $0
+require_relative 'admin'
+
+if __FILE__ == $PROGRAM_NAME
   proc_paths = Dir['/proc/**'].select { |dir| /\d+/.match(dir) }
   init_status = File.open(proc_paths[1] + '/status').read
   status_variables = init_status.split(/\n/)

@@ -5,6 +5,8 @@
 # Modified At: 2015 0715 104755
 # Description: use trace-cmd to monitor processes
 
+require_relative 'admin'
+
 module Admin
   # dump a function trace on a specific process
   class FTrace

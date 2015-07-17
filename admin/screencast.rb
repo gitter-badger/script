@@ -5,10 +5,10 @@
 # Modified At: 2015 0521 182728
 # Description: Record a window as a PNG and JSON metadata
 
-require 'optparse'
 require 'fileutils'
 
 require_relative 'wm'
+require_relative 'admin'
 
 module Admin
   module WindowManager
@@ -72,12 +72,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin::WindowManager
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: screencast [options]"
+    opts.banner = 'Usage: screencast [options]'
 
     opts.on('-s', '--sleep TIME', 'Delay start for N seconds.') do |time|
       options[:sleep] = time

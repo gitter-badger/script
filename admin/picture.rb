@@ -5,11 +5,12 @@
 # Modified At: 2015 0513 220924
 # Description: Manage Pictures
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
+  # manage all local ~/Pictures
   class Picture
-    def initialize(timeout=nil, depth=0, is_fullscreen=false)
+    def initialize(timeout = nil, depth = 0, is_fullscreen = false)
       @timeout       = timeout
       @depth         = depth
       @is_fullscreen = is_fullscreen
@@ -25,12 +26,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: picture [options] DIR"
+    opts.banner = 'Usage: picture [options] DIR'
 
     opts.on('--depth DEPTH', 'Limit number of directory depth') do |depth|
       options[:depth] = depth

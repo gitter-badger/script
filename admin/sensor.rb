@@ -5,18 +5,17 @@
 # Modified At: 2015 0605 004632
 # Description: Example sensor API and usage
 
-require 'optparse'
-
 require_relative 'admin'
 
 module Admin
+  # manage all local sensor code
   class Sensor
     SENSOR_DIR = "#{HOME}/GitHub/sensor"
 
-    def list(sensor_regexp=false)
+    def list(sensor_regexp = false)
       sensors = get_sensors
       sensors = filter_sensors(sensors, sensor_regexp)
-      sensors = sensors.sort_by { |k,v| k[:filename]}
+      sensors = sensors.sort_by { |k, v| k[:filename] }
       print_sensor_list(sensors)
       sensors
     end
@@ -89,7 +88,7 @@ module Admin
       sensor
     end
 
-    def filter_sensors(sensors, sensor_regexp=false)
+    def filter_sensors(sensors, sensor_regexp = false)
       pattern = Regexp.new(sensor_regexp) if sensor_regexp
       sensors.select! { |c| pattern.match(c[:filename]) } if pattern
       sensors
@@ -113,8 +112,8 @@ module Admin
 
     def ask_for_sensor
       sensor_list = []
-      puts "What sensor do you want? [arduino_pir.c pi_xbee.py external_eeprom.c]"
-      puts "Note default extension is ANSI C (.c)"
+      puts 'What sensor do you want? [arduino_pir.c pi_xbee.py external_eeprom.c]'
+      puts 'Note default extension is ANSI C (.c)'
       sensors = gets.split(/\s.*?/).flatten
       sensors.each { |c| sensor_list << c }
       sensor_list
@@ -208,12 +207,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: sensor [options] SENSOR"
+    opts.banner = 'Usage: sensor [options] SENSOR'
 
     opts.on('-l', '--list [REGXP]', 'List all matching sensor sketches') do |regexp|
       options[:list] = true

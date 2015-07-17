@@ -11,94 +11,100 @@ require 'clockwork'
 
 include Clockwork
 
-class Schedule
+require_relative 'admin'
 
-  TASKS = "#{ENV['HOME']}/.sync/.script/.tasks"
+module Admin
+  # automate some tasks
+  class Schedule
+    TASKS = "#{ENV['HOME']}/.sync/.script/.tasks"
 
-  attr_accessor :queue
+    attr_accessor :queue
 
-  def initialize(queue = 'default')
-    self.queue = queue
-  end
-
-  def task(params)
-    @method = params[:method]
-    @args   = params[:args]
-
-    if params[:task]
-      @method = 'Kernel.load'
-      @args   = "#{TASKS}/#{params[:task]}"
+    def initialize(queue = 'default')
+      self.queue = queue
     end
 
-    @delay    = params[:delay]
-    @interval = params[:interval]
-    fail "Cannot have @interval and @delay" if @interval && @delay
+    def task(params)
+      @method = params[:method]
+      @args   = params[:args]
 
-    @repeat = params[:repeat]
-    @repeat ||= 1
-
-    execute
-  end
-
-  private
-
-  def execute
-    timer = Timers.new
-
-    unless @interval
-      @delay ||= 1
-      timer.every(@delay) do
-        enqueue_task(@method, @args)
-        QC::Worker.new(q_name: @queue).work
+      if params[:task]
+        @method = 'Kernel.load'
+        @args   = "#{TASKS}/#{params[:task]}"
       end
 
-      @repeat.times { timer.wait }
-    else
-      timer.every(@interval) do
-        enqueue_task(@method, @args)
-        QC::Worker.new(q_name: @queue).work
-      end
+      @delay    = params[:delay]
+      @interval = params[:interval]
+      fail 'Cannot have @interval and @delay' if @interval && @delay
 
-      loop { timer.wait }
+      @repeat = params[:repeat]
+      @repeat ||= 1
+
+      execute
     end
-  end
 
-  def enqueue_task(method, args)
-    QC::Queue.new(@queue).enqueue(method, args)
+    private
+
+    def execute
+      timer = Timers.new
+
+      unless @interval
+        @delay ||= 1
+        timer.every(@delay) do
+          enqueue_task(@method, @args)
+          QC::Worker.new(q_name: @queue).work
+        end
+
+        @repeat.times { timer.wait }
+      else
+        timer.every(@interval) do
+          enqueue_task(@method, @args)
+          QC::Worker.new(q_name: @queue).work
+        end
+
+        loop { timer.wait }
+      end
+    end
+
+    def enqueue_task(method, args)
+      QC::Queue.new(@queue).enqueue(method, args)
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    executable_name = File.basename($PROGRAM_NAME, ".rb")
+    executable_name = File.basename($PROGRAM_NAME, '.rb')
     opts.banner = "Usage: #{executable_name} -m METHOD -a ARGS [OPTIONS]..."
 
-    opts.on('-m',' --method', 'method') do |method|
+    opts.on('-m', ' --method', 'method') do |method|
       options[:method] = method
     end
 
-    opts.on('-a','--args', 'arguments') do |args|
+    opts.on('-a', '--args', 'arguments') do |args|
       options[:args] = args
     end
 
-    opts.on('-q','--queue', 'custom queue') do |queue|
+    opts.on('-q', '--queue', 'custom queue') do |queue|
       options[:queue] = queue
     end
 
-    opts.on('-d','--delay', 'time inbetween each job') do |delay|
+    opts.on('-d', '--delay', 'time inbetween each job') do |delay|
       options[:delay] = delay
     end
 
-    opts.on('-i','--interval', 'loop jobs indefinitely') do |interval|
+    opts.on('-i', '--interval', 'loop jobs indefinitely') do |interval|
       options[:interval] = interval
     end
 
-    opts.on('-r','--repeat', 'repeat job X times') do |repeat|
+    opts.on('-r', '--repeat', 'repeat job X times') do |repeat|
       options[:repeat] = repeat
     end
 
-    opts.on('-t','--task', 'task name (e.g. test_task.rb)') do |task|
+    opts.on('-t', '--task', 'task name (e.g. test_task.rb)') do |task|
       options[:task] = task
     end
   end

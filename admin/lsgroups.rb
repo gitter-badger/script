@@ -3,6 +3,8 @@
 # Author: Andy Bettisworth
 # Description: Get groups from /etc/groups
 
+require_relative 'admin'
+
 module Admin
   def groups
     raw_group_list = File.readlines('/etc/group')
@@ -20,7 +22,7 @@ module Admin
 
       group_json << group_hash
     end
-    group_json.sort! { |x,y| x[:group_id] <=> y[:group_id] }
+    group_json.sort! { |x, y| x[:group_id] <=> y[:group_id] }
 
     group_json
   end
@@ -37,7 +39,8 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+
   print_groups
 end

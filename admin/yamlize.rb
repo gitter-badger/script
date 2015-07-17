@@ -9,23 +9,30 @@ require 'active_record'
 require 'yaml'
 require 'logger'
 
-class Yamlizer
-  def generate(seed_path, filename='seed.yml')
-    raise 'NoFileError' unless File.exist?(seed_path)
-  end
+require_relative 'admin'
 
-  private
-
-  def ensure_extname(filename)
-    unless File.extname(filename) == '.yml'
-      filename = File.basename(filename, File.extname(filename))
-      filename += '.yml'
+module Admin
+  # convert existing seed.rb data into YAML
+  class Yamlizer
+    def generate(seed_path, filename = 'seed.yml')
+      raise 'NoFileError' unless File.exist?(seed_path)
     end
-    filename
+
+    private
+
+    def ensure_extname(filename)
+      unless File.extname(filename) == '.yml'
+        filename = File.basename(filename, File.extname(filename))
+        filename += '.yml'
+      end
+      filename
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Admin
+
   ctrl = Yamlizer.new
 
   if ARGV.count == 2

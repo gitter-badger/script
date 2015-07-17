@@ -11,6 +11,7 @@ require 'tempfile'
 require_relative 'admin'
 
 module Admin
+  # Apply 80 character wrap
   class StyleGuide
     def enforce_80char(file_path)
       require_file(file_path)

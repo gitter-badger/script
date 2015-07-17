@@ -5,8 +5,6 @@
 # Modified At: 2015 0528 033955
 # Description: Canvas Management CLI Application
 
-require 'optparse'
-
 require_relative 'admin'
 
 module Admin
@@ -372,12 +370,13 @@ $C Description: $4
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: canvas [options] CANVAS"
+    opts.banner = 'Usage: canvas [options] CANVAS'
 
     opts.on('-l', '--list [REGXP]', 'List all matching canvases') do |regexp|
       options[:list] = true

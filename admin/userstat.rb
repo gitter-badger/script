@@ -7,8 +7,10 @@
 
 require 'date'
 
+require_relative 'admin'
+
 module Admin
-  def user_status(user=ENV['USER'])
+  def user_status(user = ENV['USER'])
     raw_status = `sudo passwd --status #{user}`
     status = {}
 
@@ -25,7 +27,7 @@ module Admin
     status
   end
 
-  def print_user_status(user=ENV['USER'])
+  def print_user_status(user = ENV['USER'])
     stat = user_status(user)
     pass_modified_at = Date.strptime(stat[:password_modified_at], '%m/%d/%Y')
     pass_state = case stat[:password_status]
@@ -47,7 +49,7 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
 
   if ARGV[0]

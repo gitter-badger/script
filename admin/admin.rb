@@ -32,7 +32,7 @@ module Admin
 
   def require_file(file_path)
     unless File.exist?(file_path)
-      raise LoadError, "No such file at '#{file_path}'" 
-    end 
+      raise LoadError, "No such file at '#{file_path}'"
+    end
   end
 end

@@ -5,7 +5,7 @@
 # Modified At: 2015 0521 185131
 # Description: X Window Manager interface
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
   module WindowManager
@@ -38,7 +38,7 @@ module Admin
       windows.pop
     end
 
-    def windows(query=nil)
+    def windows(query = nil)
       require_wmctrl
 
       windows = []
@@ -83,7 +83,7 @@ module Admin
       windows
     end
 
-    def pretty_print_windows(query=nil)
+    def pretty_print_windows(query = nil)
       windows = windows(query)
       if windows
         windows.each do |win|
@@ -101,7 +101,7 @@ title:    #{win[:title]}
       end
     end
 
-    def close_window(query=nil)
+    def close_window(query = nil)
       require_wmctrl
       windows = windows.keep_if { |w| w[:title] =~ /#{query}/ } if query
       `wmctrl -c #{window.pop[:id]}`
@@ -127,19 +127,20 @@ title:    #{win[:title]}
       `wmctrl -k off`
     end
 
-    def set_title(title='')
+    def set_title(title = '')
       require_wmctrl
       `wmctrl -r :ACTIVE: -N "#{title}"`
     end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin::WindowManager
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: wm [options]"
+    opts.banner = 'Usage: wm [options]'
 
     opts.on('-l', '--list-windows [REGEXP]', 'List matching windows.') do |regexp|
       options[:list_windows]  = true

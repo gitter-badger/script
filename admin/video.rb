@@ -5,11 +5,12 @@
 # Modified At: 2015 0513 220907
 # Description: Manage Videos
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
+  # manage all local ~/Videos
   class Video
-    def initialize(timeout=nil)
+    def initialize(timeout = nil)
       @timeout = timeout
     end
 
@@ -27,12 +28,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: video [options] REGEXP"
+    opts.banner = 'Usage: video [options] REGEXP'
 
     opts.on('-s', '--shuffle', 'Shuffle the playlist') do
       options[:shuffle] = true
@@ -49,7 +51,6 @@ if __FILE__ == $0
   option_parser.parse!
 
   timeout = options[:timeout] ? options[:timeout] : nil
-
   admin_video = Video.new(timeout)
 
   if options[:shuffle]

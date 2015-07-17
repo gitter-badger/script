@@ -5,11 +5,12 @@
 # Modified At: 2015 0513 220942
 # Description: Manage Music
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
+  # manage all local ~/Music
   class Music
-    def initialize(timeout=nil, is_shuffled=false, is_recorded=false)
+    def initialize(timeout = nil, is_shuffled = false, is_recorded = false)
       @timeout     = timeout
       @is_shuffled = is_shuffled
       @is_recorded = is_recorded
@@ -25,12 +26,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: music [options] REGEXP"
+    opts.banner = 'Usage: music [options] REGEXP'
 
     opts.on('-c', '--category FILTER', 'Filter by category') do |category|
       options[:category] = category

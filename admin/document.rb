@@ -5,9 +5,10 @@
 # Modified At: 2015 0513 220957
 # Description: Manage Documents
 
-require 'optparse'
+require_relative 'admin'
 
 module Admin
+  # Manage all system ~/Documents
   class Document
     DOC_DIR = "#{ENV['HOME']}/Documents"
 
@@ -27,7 +28,7 @@ module Admin
       document_list = []
 
       Dir["#{DOC_DIR}/**/*"].each do |file|
-        next if file == '.' or file == '..' or File.directory?(file)
+        next if file == '.' || file == '..' || File.directory?(file)
         document_list << file
       end
 
@@ -41,7 +42,7 @@ module Admin
     end
 
     def fetch_documents
-      puts "Fetching..."
+      puts 'Fetching...'
     end
 
     def print_list
@@ -52,12 +53,13 @@ module Admin
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Admin
+  require 'optparse'
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: document [options] REGEXP"
+    opts.banner = 'Usage: document [options] REGEXP'
 
     opts.on('-c', '--category FILTER', 'Filter by category') do |category|
       options[:category] = category
