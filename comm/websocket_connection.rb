@@ -28,7 +28,6 @@ require_relative 'comm'
 #   we concatenate this to the byte array.
 # If smaller than 216 (which is the maximum size of two bytes)
 
-
 module Comm
   class WebSocketConnection
     attr_reader :socket

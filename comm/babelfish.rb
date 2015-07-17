@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -w
-# babelfish_spec.rb
+# babelfish.rb
 # Author: Andy Bettisworth
-# Description: Remove language boundaries
+# Description: detect and translate foreign languages passively
 
 require 'whatlanguage'
 require 'i18n'
@@ -11,8 +11,14 @@ require 'http_accept_language'
 require 'easy_translate'
 require 'to_lang'
 
-class BabelFish
+require_relative 'comm'
+
+module Comm
+  class BabelFish
+  end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Comm
+  exit 1
 end
