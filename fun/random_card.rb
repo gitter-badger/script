@@ -3,29 +3,36 @@
 # Author: Andy Bettisworth
 # Description: Read a random card
 
-class CardDeck
-  CARD_TYPE = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Jack','Queen','King','Ace']
-  CARD_SUITE = ['Spade', 'Club', 'Diamond', 'Heart']
+require_relative 'fun'
 
-  attr_reader :deck
+module Fun
+  # generate a random card
+  class CardDeck
+    CARD_TYPE = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Jack','Queen','King','Ace']
+    CARD_SUITE = ['Spade', 'Club', 'Diamond', 'Heart']
 
-  def initialize
-    @deck = []
+    attr_reader :deck
 
-    CARD_TYPE.each do |card_type|
-      CARD_SUITE.each do |suite|
-        @deck << "#{card_type} of #{suite}s"
+    def initialize
+      @deck = []
+
+      CARD_TYPE.each do |card_type|
+        CARD_SUITE.each do |suite|
+          @deck << "#{card_type} of #{suite}s"
+        end
       end
     end
-  end
 
-  def blind_pick
-    @deck.shuffle!
-    puts @deck.pop
+    def blind_pick
+      @deck.shuffle!
+      puts @deck.pop
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Fun
+
   deck = CardDeck.new
   deck.blind_pick
 end

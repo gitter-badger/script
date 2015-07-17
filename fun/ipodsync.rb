@@ -5,18 +5,24 @@
 # Modified At: 2014 1119 031644
 # Description: sync my ipod with my desktop files
 
-class IpodSync
-  def start(music_dir)
-    # > TODO
+require_relative 'fun'
+
+module Fun
+  # sync ~/Music with ipod
+  class IpodSync
+    def start
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Fun
+
   if ARGV.count <= 1
     sync = IpodSync.new
     sync.start(ARGV[0])
   else
-    STDERR.puts "USAGE: ipodsync MUSIC_DIR"
+    STDERR.puts 'USAGE: ipodsync MUSIC_DIR'
     exit 1
   end
 end
