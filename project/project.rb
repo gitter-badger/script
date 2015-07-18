@@ -3,89 +3,95 @@
 # Author: Andy Bettisworth
 # Description: Manage projects
 
-require 'optparse'
 require 'fileutils'
 require 'yaml'
 
-class ProjectManager
-  DESKTOP = "#{ENV['HOME']}/Desktop"
-  PROJECT = "#{ENV['HOME']}/Projects"
+require_relative 'project'
 
-  def list(project_regexp=false)
-    ensure_project_dir
-    projects = get_projects
-    projects = filter_projects(projects, project_regexp)
-    projects = get_info(projects)
+module Project
+  class ProjectManager
+    DESKTOP = "#{ENV['HOME']}/Desktop"
+    PROJECT = "#{ENV['HOME']}/Projects"
 
-    projects.each do |project|
-      if project.is_a? Hash
-        puts project[:project]
-        puts "  #{project[:info]}"
-      else
-        puts project
+    def list(project_regexp = false)
+      ensure_project_dir
+      projects = get_projects
+      projects = filter_projects(projects, project_regexp)
+      projects = get_info(projects)
+
+      projects.each do |project|
+        if project.is_a? Hash
+          puts project[:project]
+          puts "  #{project[:info]}"
+        else
+          puts project
+        end
       end
     end
-  end
 
-  def fetch(project)
-    projects = get_projects
-    raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
-    `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
-  end
-
-  def clean
-    ensure_project_dir
-    archived_projects = get_projects
-    desktop_dir = get_desktop_dir
-    desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
-    projects = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
-    projects.each do |project|
-      `mv #{DESKTOP}/#{project} #{PROJECT}`
+    def fetch(project)
+      projects = get_projects
+      raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
+      `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
     end
-  end
 
-  private
-
-  def ensure_project_dir
-    FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
-  end
-
-  def get_projects
-    projects = Dir.glob("#{PROJECT}/*/")
-    projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
-    projects = projects.collect { |p| File.basename(p) }
-    projects
-  end
-
-  def filter_projects(projects, project_regexp=false)
-    pattern = Regexp.new(project_regexp) if project_regexp
-    projects.select! { |a| pattern.match(a) } if pattern
-    projects
-  end
-
-  def get_info(projects)
-    projects = projects.collect do |project|
-      if File.exist?("#{PROJECT}/#{project}/info.yml")
-        info = {}
-        info[:info] = YAML.load_file("#{PROJECT}/#{project}/info.yml")
-        info[:project] = project
-        info
-      else
-        project
+    def clean
+      ensure_project_dir
+      archived_projects = get_projects
+      desktop_dir = get_desktop_dir
+      desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
+      projects = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
+      projects.each do |project|
+        `mv #{DESKTOP}/#{project} #{PROJECT}`
       end
     end
-    projects
-  end
 
-  def get_desktop_dir
-    desktop_dir = Dir.glob("#{DESKTOP}/*/")
-    desktop_dir = desktop_dir.reject { |d| d == '.' || d == '..' || d == ".git" }
-    desktop_dir = desktop_dir.collect { |p| File.basename(p) }
-    desktop_dir
+    private
+
+    def ensure_project_dir
+      FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
+    end
+
+    def get_projects
+      projects = Dir.glob("#{PROJECT}/*/")
+      projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
+      projects = projects.collect { |p| File.basename(p) }
+      projects
+    end
+
+    def filter_projects(projects, project_regexp=false)
+      pattern = Regexp.new(project_regexp) if project_regexp
+      projects.select! { |a| pattern.match(a) } if pattern
+      projects
+    end
+
+    def get_info(projects)
+      projects = projects.collect do |project|
+        if File.exist?("#{PROJECT}/#{project}/info.yml")
+          info = {}
+          info[:info] = YAML.load_file("#{PROJECT}/#{project}/info.yml")
+          info[:project] = project
+          info
+        else
+          project
+        end
+      end
+      projects
+    end
+
+    def get_desktop_dir
+      desktop_dir = Dir.glob("#{DESKTOP}/*/")
+      desktop_dir = desktop_dir.reject { |d| d == '.' || d == '..' || d == ".git" }
+      desktop_dir = desktop_dir.collect { |p| File.basename(p) }
+      desktop_dir
+    end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Project
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
     opts.banner = 'USAGE: project [options] PROJECT'

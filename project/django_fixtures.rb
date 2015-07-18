@@ -5,15 +5,21 @@
 # Modified At: 2015 0508 081256
 # Description: Generator of Django Fixtures
 
-module Django
-  class Fixture
-    def initialize
-      puts 'BAZINGA!'
+require_relative 'project'
+
+module Project
+  module Django
+    class Fixture
+      def initialize
+        puts 'BAZINGA!'
+      end
     end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Project
+
   if ARGV[0]
     Django::Fixture.new
   else
