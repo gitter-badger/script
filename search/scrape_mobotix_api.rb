@@ -9,7 +9,14 @@ require 'nokogiri'
 require 'open-uri'
 require 'optparse'
 
-if __FILE__ == $0
+require_relative 'search'
+
+module Search
+end
+
+if __FILE__ == $PROGRAM_NAME
+  include Search
+
   url = 'http://developer.mobotix.com/paks/help_cgi-remotecontrol.html'
   doc = Nokogiri::HTML(open(url))
   puts doc.text

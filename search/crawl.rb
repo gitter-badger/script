@@ -1,48 +1,53 @@
 #!/usr/bin/env ruby -w
-# content_scraper.rb
+# crawl.rb
 # Author: Andy Bettisworth
 # Description: Extracting view layer content from remote servers
 
-require 'optparse'
 require 'nokogiri'
 require 'open-uri'
 require 'timeout'
 require 'uri'
 
-class Crawler
+require_relative 'search'
 
-  def get_webpage(url)
-    Timeout::timeout(5) do
-      ensure_valid_uri(url)
-      document = Nokogiri::HTML(open(url))
-      puts document.text
+module Search
+  class Crawler
+    def get_webpage(url)
+      Timeout::timeout(5) do
+        ensure_valid_uri(url)
+        document = Nokogiri::HTML(open(url))
+        puts document.text
+      end
     end
-  end
 
-  def get_webpage_filter_css(url, css_pattern)
-    Timeout::timeout(5) do
-      ensure_valid_uri(url)
-      document = Nokogiri::HTML(open(url))
-      document = document.css(css_pattern)
-      puts document
-      return document
+    def get_webpage_filter_css(url, css_pattern)
+      Timeout::timeout(5) do
+        ensure_valid_uri(url)
+        document = Nokogiri::HTML(open(url))
+        document = document.css(css_pattern)
+        puts document
+        return document
+      end
     end
-  end
 
-  private
+    private
 
-  def ensure_valid_uri(url)
-    unless url =~ URI::regexp
-      STDERR.puts "InvalidURIError: URI provided was invalid"
-      exit 1
+    def ensure_valid_uri(url)
+      unless url =~ URI::regexp
+        STDERR.puts 'InvalidURIError: URI provided was invalid'
+        exit 1
+      end
     end
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Search
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: crawl [options] URL"
+    opts.banner = 'Usage: crawl [options] URL'
 
     opts.on('-c ELEMENT', '--css ELEMENT', 'Filter by CSS elements') do |element|
       options[:css] = element

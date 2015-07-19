@@ -8,5 +8,16 @@
 require 'rtesseract'
 require 'optparse'
 
-class Tesseract
+require_relative 'search'
+
+module Search
+  class Tesseract
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  include Search
+
+  tess = Tesseract.new
+  tess.parse(ARGV[0])
 end
