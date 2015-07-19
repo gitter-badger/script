@@ -7,80 +7,87 @@
 # http://docs.aws.amazon.com/AWSECommerceService/latest/DG/Welcome.html
 
 require 'vacuum'
-require 'optparse'
 require 'open3'
 
-class AmazonQuery
-  LOCALE = ['BR','CA','CN','DE','ES','FR','GB','IN','IT','JP','US']
+require_relative 'trade'
 
-  attr_accessor :request
+module Trade
+  # return Amazon products based on query
+  class AmazonQuery
+    LOCALE = ['BR','CA','CN','DE','ES','FR','GB','IN','IT','JP','US']
 
-  def initialize(locale=nil)
-    if LOCALE.include?(locale)
-      @request = Vacuum.new(locale)
-    else
-      @request = Vacuum.new
+    attr_accessor :request
+
+    def initialize(locale=nil)
+      if LOCALE.include?(locale)
+        @request = Vacuum.new(locale)
+      else
+        @request = Vacuum.new
+      end
+
+      @request.configure(
+        aws_access_key_id:     '42JMWJVA',
+        aws_secret_access_key: 'AENBs0tl',
+        associate_tag:         'wurde'
+      )
     end
 
-    @request.configure(
-      aws_access_key_id:     '42JMWJVA',
-      aws_secret_access_key: 'AENBs0tl',
-      associate_tag:         'wurde'
-    )
-  end
+    def send(index, xml=false, *param)
+      exit_if_no_param(param)
+      exit_if_no_connection
 
-  def send(index, xml=false, *param)
-    exit_if_no_param(param)
-    exit_if_no_connection
+      param[0]['SearchIndex'] = index
 
-    param[0]['SearchIndex'] = index
+      puts "Searching in '#{index}' on Amazon.com..."
+      response = @request.item_search(query: param[0])
 
-    puts "Searching in '#{index}' on Amazon.com..."
-    response = @request.item_search(query: param[0])
-
-    if xml
-      puts response.body
-      return response.body
-    else
-      puts response.to_h
-      return response.to_h
+      if xml
+        puts response.body
+        return response.body
+      else
+        puts response.to_h
+        return response.to_h
+      end
     end
-  end
 
-  private
+    private
 
-  def exit_if_no_param(param)
-    unless param.count > 0 and param[0].count > 0
-      STDERR.puts <<-MSG
-Your request should have atleast 1 of the following parameters:
+    def exit_if_no_param(param)
+      unless param.count > 0 and param[0].count > 0
+        STDERR.puts <<-MSG
+  Your request should have atleast 1 of the following parameters:
 
-Actor, Artist, AudiencRating, Author, Brand, BrowseNode, Composer, Conductor,
-Director, Keywords, Manufacturer, MusicLabel, Orchestra, Power, Publisher, Title,
-TextStream, Cuisine, City, Neighborhood
+  Actor, Artist, AudiencRating, Author, Brand, BrowseNode, Composer, Conductor,
+  Director, Keywords, Manufacturer, MusicLabel, Orchestra, Power, Publisher, Title,
+  TextStream, Cuisine, City, Neighborhood
 
-USAGE: send(SEARCH_INDEX, {'parameter' => 'value', ..})
-      MSG
-      exit 4
+  USAGE: send(SEARCH_INDEX, {'parameter' => 'value', ..})
+        MSG
+        exit 4
+      end
     end
-  end
 
-  def exit_if_no_connection
-    STDOUT.puts 'Testing internet connection...'
-    command = 'ping -c 3 example.com'
-    stdout, stderr, status = Open3.capture3(command)
-    unless status.success?
-      STDERR.puts "Unable to make an internet connection executing '#{command}'"
-      STDERR.puts stderr.gsub(/ping: /, '')
-      exit 2
+    def exit_if_no_connection
+      STDOUT.puts 'Testing internet connection...'
+      command = 'ping -c 3 example.com'
+      stdout, stderr, status = Open3.capture3(command)
+      unless status.success?
+        STDERR.puts "Unable to make an internet connection executing '#{command}'"
+        STDERR.puts stderr.gsub(/ping: /, '')
+        exit 2
+      end
+      STDOUT.puts 'Success!'
     end
-    STDOUT.puts 'Success!'
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  include Trade
+  require 'optparse'
+
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = "USAGE: amazon-query SEARCH_INDEX [options]"
+    opts.banner = 'USAGE: amazon-query SEARCH_INDEX [options]'
 
     opts.on('--actor ACTOR', 'Name of an actor associated with the item.') do |actor|
       options[:actor] = actor
