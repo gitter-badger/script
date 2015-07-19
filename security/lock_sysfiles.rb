@@ -8,6 +8,7 @@
 require_relative 'security'
 
 module Security
+  # lock system files
   class SystemFiles
     def self.lock
       STATIC_DIR.each do |dir|
@@ -18,7 +19,8 @@ module Security
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   include Security
+
   SystemFiles.lock
 end

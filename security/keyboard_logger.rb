@@ -6,8 +6,15 @@
 require 'rubygems'
 require 'libdevinput'
 
-if __FILE__ == $0
-  dev = DevInput.new "/dev/input/event5"
+require_relative 'security'
+
+module Security
+end
+
+if __FILE__ == $PROGRAM_NAME
+  include Security
+
+  dev = DevInput.new '/dev/input/event5'
   log = File.open('keyboard_events.log', 'a')
   dev.each do |event|
     log.write("got event #{event}\n")
