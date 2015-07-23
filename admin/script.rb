@@ -493,5 +493,6 @@ if __FILE__ == $PROGRAM_NAME
     script.history
   else
     puts option_parser
+    exit 1
   end
 end

@@ -376,18 +376,18 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: canvas [options] CANVAS'
+    opts.banner = 'Usage: canvas [options] FILE'
 
-    opts.on('-l', '--list [REGXP]', 'List all matching canvases') do |regexp|
+    opts.on('-l', '--list [REGXP]', 'List matching canvases') do |regexp|
       options[:list] = true
-      options[:canvas_pattern] = regexp
+      options[:list_regexp] = regexp
     end
 
     opts.on('-n', '--new CANVAS', 'Create a new canvas') do |name|
       options[:add] = name
     end
 
-    opts.on('-f', '--fetch', 'Copy canvas(es) to the Desktop') do
+    opts.on('-f', '--fetch', 'Copy matching canvas(es) to ~/Desktop') do
       options[:fetch] = true
     end
 
@@ -412,7 +412,7 @@ if __FILE__ == $PROGRAM_NAME
   canvas = Canvas.new
 
   if options[:list]
-    canvas.list(options[:canvas_pattern])
+    canvas.list(options[:list_regexp])
   elsif options[:add]
     canvas.add(options[:add])
   elsif options[:fetch]
@@ -427,5 +427,6 @@ if __FILE__ == $PROGRAM_NAME
     canvas.history
   else
     puts option_parser
+    exit 1
   end
 end

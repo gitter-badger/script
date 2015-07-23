@@ -1,14 +1,14 @@
-#!/usr/bin/env ruby
 # document.rb
+#!/usr/bin/env ruby
 # Author: Andy Bettisworth
 # Created At: 2015 0513 220957
 # Modified At: 2015 0513 220957
-# Description: Manage Documents
+# Description: Manage ~/Documents
 
 require_relative 'admin'
 
 module Admin
-  # Manage all system ~/Documents
+  # Manage all local ~/Documents
   class Document
     DOC_DIR = "#{ENV['HOME']}/Documents"
 
@@ -59,22 +59,35 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: document [options] REGEXP'
+    opts.banner = 'Usage: document [options] FILE'
+
+    opts.on('-l', '--list [REGEXP]', 'List matching document(s)') do |regexp|
+      options[:list] = true
+      options[:list_regexp] = regexp
+    end
+
+    opts.on('-f', '--fetch', 'Copy matching document(s) to ~/Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('-o', '--open', 'Open matching document(s)') do
+      options[:open] = true
+    end
+
+    opts.on('-i', '--info FILE', 'Show document information') do |document|
+      options[:info] = document
+    end
 
     opts.on('-c', '--category FILTER', 'Filter by category') do |category|
       options[:category] = category
     end
 
-    opts.on('-f', '--fetch', 'Fetch document(s) to Desktop') do
-      options[:fetch] = true
+    opts.on('--log', 'Show ~/Documents log') do
+      options[:log] = true
     end
   end
   option_parser.parse!
 
-  admin          = Document.new
-  admin.category = options[:category] if options[:category]
-  admin.is_fetch = true if options[:fetch]
-  admin.query    = ARGV[0] if ARGV.size > 0
-  admin.query    = ARGV.join(' ') if ARGV.size > 0
-  admin.exec
+  puts option_parser
+  exit 1
 end

@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0513 220907
 # Modified At: 2015 0513 220907
-# Description: Manage Videos
+# Description: Manage ~/Videos
 
 require_relative 'admin'
 
@@ -34,28 +34,31 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: video [options] REGEXP'
+    opts.banner = 'Usage: video [options] FILE'
 
-    opts.on('-s', '--shuffle', 'Shuffle the playlist') do
-      options[:shuffle] = true
+    opts.on('-l', '--list [REGEXP]', 'List matching video(s)') do |regexp|
+      options[:list] = true
+      options[:list_regexp] = regexp
     end
 
-    opts.on('-f', '--fullscreen', 'Maximize video player window') do
-      options[:fullscreen] = true
+    opts.on('-f', '--fetch', 'Copy matching video(s) to ~/Desktop') do
+      options[:fetch] = true
     end
 
-    opts.on('--timeout MINUTES', 'Set a timeout to the process') do |minutes|
-      options[:timeout] = minutes
+    opts.on('-o', '--open', 'Open matching video(s)') do
+      options[:open] = true
+    end
+
+    opts.on('-i', '--info FILE', 'Show video information') do |video|
+      options[:info] = video
+    end
+
+    opts.on('--log', 'Show ~/Videos log') do
+      options[:log] = true
     end
   end
   option_parser.parse!
 
-  timeout = options[:timeout] ? options[:timeout] : nil
-  admin_video = Video.new(timeout)
-
-  if options[:shuffle]
-    admin_video.shuffle
-  else
-    admin_video.launch
-  end
+  puts option_parser
+  exit 1
 end

@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0513 220924
 # Modified At: 2015 0513 220924
-# Description: Manage Pictures
+# Description: Manage ~/Pictures
 
 require_relative 'admin'
 
@@ -32,39 +32,31 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: picture [options] DIR'
+    opts.banner = 'Usage: picture [options] FILE'
 
-    opts.on('--depth DEPTH', 'Limit number of directory depth') do |depth|
-      options[:depth] = depth
+    opts.on('-l', '--list [REGEXP]', 'List matching picture(s)') do |regexp|
+      options[:list] = true
+      options[:list_regexp] = regexp
     end
 
-    opts.on('-s', '--slideshow', 'Play the slideshow') do
-      options[:slideshow] = true
+    opts.on('-f', '--fetch', 'Copy matching picture(s) to ~/Desktop') do
+      options[:fetch] = true
     end
 
-    opts.on('-f', '--fullscreen', 'Maximize photo browser window') do
-      options[:fullscreen] = true
+    opts.on('-o', '--open', 'Open matching picture(s)') do
+      options[:open] = true
     end
 
-    opts.on('-s', '--shuffle', 'Shuffle the slideshow') do
-      options[:shuffle] = true
+    opts.on('-i', '--info FILE', 'Show picture information') do |picture|
+      options[:info] = picture
     end
 
-    opts.on('--timeout MINUTES', 'Set a timeout to the process') do |minutes|
-      options[:timeout] = minutes
+    opts.on('--log', 'Show ~/Pictures log') do
+      options[:log] = true
     end
   end
   option_parser.parse!
 
-  timeout       = options[:timeout] ? options[:timeout] : nil
-  depth         = options[:depth] ? options[:depth] : 0
-  is_fullscreen = options[:fullscreen] ? options[:fullscreen] : false
-
-  admin_picture = Picture.new(timeout, depth, is_fullscreen)
-
-  if options[:slideshow]
-    admin_picture.slideshow
-  else
-    admin_picture.launch
-  end
+  puts option_parser
+  exit 1
 end

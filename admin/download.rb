@@ -3,11 +3,12 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0513 221014
 # Modified At: 2015 0513 221014
-# Description: Manage Downloads
+# Description: Manage ~/Downloads
 
 require_relative 'admin'
 
 module Admin
+  # manage all local ~/Downloads
   class Download
   end
 end
@@ -18,45 +19,39 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: download [options] REGEXP'
+    opts.banner = 'Usage: download [options] FILE'
 
-    opts.on('-f', '--flush', 'Flush all downloads') do
+    opts.on('-l', '--list [REGEXP]', 'List matching download(s)') do |regexp|
+      options[:list] = true
+      options[:list_regexp] = regexp
+    end
+
+    opts.on('-f', '--fetch', 'Copy matching download(s) to ~/Desktop') do
+      options[:fetch] = true
+    end
+
+    opts.on('-o', '--open', 'Open matching download(s)') do
+      options[:open] = true
+    end
+
+    opts.on('-i', '--info FILE', 'Show download information') do |download|
+      options[:info] = download
+    end
+
+    opts.on('-p', '--pop [COUNT]', 'Move most recent download to desktop') do |count|
+      options[:pop] = true
+      options[:pop_count] = count
+    end
+
+    opts.on('--flush', 'Flush/Delete all downloads') do
       options[:flush] = true
     end
 
-    opts.on('-p', '--pop', 'Move most recent download to desktop') do
-      options[:pop] = true
-    end
-
-    opts.on('--list', 'List matching downloads') do
-      options[:list] = true
-    end
-
-    opts.on('--fetch', 'Fetch matching downloads') do
-      options[:fetch] = true
+    opts.on('--log', 'Show ~/Downloads log') do
+      options[:log] = true
     end
   end
   option_parser.parse!
-
-  if ARGV.size > 0
-    is_fetch = false
-
-    if options[:fetch]
-      is_fetch = true
-    end
-
-    admin_download = Admin::Download.new
-
-    if options[:flush]
-      admin_download.flush
-    elsif options[:pop]
-      admin_download.pop
-    elsif options[:list]
-      admin_download.list
-    else
-      admin_download.fetch
-    end
-  end
 
   puts option_parser
   exit 1
