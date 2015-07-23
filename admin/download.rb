@@ -38,7 +38,7 @@ if __FILE__ == $PROGRAM_NAME
       options[:info] = download
     end
 
-    opts.on('-p', '--pop [COUNT]', 'Move most recent download to desktop') do |count|
+    opts.on('-p', '--pop [COUNT]', 'Move most recent download to ~/Desktop') do |count|
       options[:pop] = true
       options[:pop_count] = count
     end
