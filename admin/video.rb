@@ -12,19 +12,19 @@ module Admin
   class Video
     VIDEO_DIR = "#{ENV['HOME']}/Videos"
 
-    def list(query = nil)
+    def list(query: nil, quiet: false)
       videos = grab_all_files(VIDEO_DIR)
       videos = filter_files(videos, query) if query
-      print_files(videos)
+      print_files(videos) if documents && quiet == false
       videos
     end
 
     def fetch(*videos)
       videos.flatten!
       videos = ask_for_file while videos.empty?
-      videos = append_default_ext(videos)
       videos = find_matching_files(videos, list(quiet: true))
-      copy_files(videos, DESKTOP)
+      puts videos.inspect
+      # copy_files(videos, DESKTOP)
     end
   end
 end

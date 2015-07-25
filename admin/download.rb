@@ -12,19 +12,19 @@ module Admin
   class Download
     DOWNLOAD_DIR = "#{ENV['HOME']}/Downloads"
 
-    def list(query = nil)
+    def list(query: nil, quiet: false)
       downloads = grab_all_files(DOWNLOAD_DIR)
       downloads = filter_files(downloads, query) if query
-      print_files(downloads)
+      print_files(downloads) if downloads && quiet == false
       downloads
     end
 
     def fetch(*downloads)
       downloads.flatten!
       downloads = ask_for_file while downloads.empty?
-      downloads = append_default_ext(downloads)
       downloads = find_matching_files(downloads, list(quiet: true))
-      copy_files(downloads, DESKTOP)
+      puts downloads.inspect
+      # copy_files(downloads, DESKTOP)
     end
   end
 end

@@ -12,19 +12,19 @@ module Admin
   class Music
     MUSIC_DIR = "#{ENV['HOME']}/Music"
 
-    def list(query = nil)
+    def list(query: nil, quiet: false)
       music = grab_all_files(MUSIC_DIR)
       music = filter_files(music, query) if query
-      print_files(music)
+      print_files(music) if music && quiet == false
       music
     end
 
     def fetch(*music)
       music.flatten!
       music = ask_for_file while music.empty?
-      music = append_default_ext(music)
       music = find_matching_files(music, list(quiet: true))
-      copy_files(music, DESKTOP)
+      puts music.inspect
+      # copy_files(music, DESKTOP)
     end
   end
 end

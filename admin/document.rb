@@ -22,9 +22,9 @@ module Admin
     def fetch(*documents)
       documents.flatten!
       documents = ask_for_file while documents.empty?
-      documents = append_default_ext(documents)
       documents = find_matching_files(documents, list(quiet: true))
-      copy_files(documents, DESKTOP)
+      puts documents.inspect
+      # copy_files(documents, DESKTOP)
     end
   end
 end

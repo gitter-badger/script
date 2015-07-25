@@ -12,19 +12,19 @@ module Admin
   class Picture
     PICTURE_DIR = "#{ENV['HOME']}/Pictures"
 
-    def list(query = nil)
+    def list(query: nil, quiet: false)
       pictures = grab_all_files(PICTURE_DIR)
       pictures = filter_files(pictures, query) if query
-      print_files(pictures)
+      print_files(pictures) if pictures && quiet == false
       pictures
     end
 
     def fetch(*pictures)
       pictures.flatten!
       pictures = ask_for_file while pictures.empty?
-      pictures = append_default_ext(pictures)
       pictures = find_matching_files(pictures, list(quiet: true))
-      copy_files(pictures, DESKTOP)
+      puts pictures.inspect
+      # copy_files(pictures, DESKTOP)
     end
   end
 end
