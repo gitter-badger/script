@@ -60,6 +60,8 @@ if __FILE__ == $PROGRAM_NAME
 
   if options[:list]
     document_mgr.list(options[:list_regexp])
+  elsif options[:fetch]
+    document_mgr.fetch(ARGV)
   else
     puts option_parser
     exit 1

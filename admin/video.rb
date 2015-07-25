@@ -18,6 +18,11 @@ module Admin
       print_files(videos)
       videos
     end
+
+    def fetch
+      canvases = list
+      copy_files(canvases, DESKTOP)
+    end
   end
 end
 
@@ -56,6 +61,8 @@ if __FILE__ == $PROGRAM_NAME
 
   if options[:list]
     video_mgr.list(options[:list_regexp])
+  elsif options[:fetch]
+    video_mgr.fetch(ARGV)
   else
     puts option_parser
     exit 1

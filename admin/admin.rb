@@ -58,4 +58,16 @@ module Admin
       puts File.basename(item)
     end
   end
+
+  def copy_files(files, destination)
+    files.each do |file|
+      FileUtils.copy(file, destination)
+    end
+  end
+
+  def move_files(files, destination)
+    files.each do |file|
+      FileUtils.mv(file, destination)
+    end
+  end
 end

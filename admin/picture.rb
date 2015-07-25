@@ -56,6 +56,8 @@ if __FILE__ == $PROGRAM_NAME
 
   if options[:list]
     picture_mgr.list(options[:list_regexp])
+  elsif options[:fetch]
+    picture_mgr.fetch(ARGV)
   else
     puts option_parser
     exit 1
