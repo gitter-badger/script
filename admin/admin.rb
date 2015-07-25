@@ -10,6 +10,7 @@ require 'fileutils'
 module Admin
   HOME     = ENV['HOME']
   DESKTOP  = "#{HOME}/Desktop"
+  DEFAULT_EXT = '.rb'
   BINARIES = {
     '.c'   => 'gcc',
     '.rb'  => 'ruby',
@@ -81,7 +82,7 @@ module Admin
 
   def append_default_ext(*files)
     files.flatten!
-    files.collect! { |f| f += '.rb' if File.extname(f) == ""; f }
+    files.collect! { |f| f += DEFAULT_EXT if File.extname(f) == ""; f }
     return files.count <= 1 ? files[0] : files
   end
 
