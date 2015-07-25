@@ -46,17 +46,17 @@ if __FILE__ == $PROGRAM_NAME
       options[:fetch] = true
     end
 
-    opts.on('-o', '--open', 'Open matching picture(s)') do
-      options[:open] = true
-    end
-
-    opts.on('-i', '--info FILE', 'Show picture information') do |picture|
-      options[:info] = picture
-    end
-
-    opts.on('--log', 'Show ~/Pictures log') do
-      options[:log] = true
-    end
+    # opts.on('-o', '--open', 'Open matching picture(s)') do
+    #   options[:open] = true
+    # end
+    #
+    # opts.on('-i', '--info FILE', 'Show picture information') do |picture|
+    #   options[:info] = picture
+    # end
+    #
+    # opts.on('--log', 'Show ~/Pictures log') do
+    #   options[:log] = true
+    # end
   end
   option_parser.parse!
 

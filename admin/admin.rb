@@ -75,7 +75,7 @@ module Admin
   end
 
   def ask_for_file
-    puts "What file do you want?"
+    puts "What file(s) do you want?"
     filequery = gets.split(/\s.*?/).flatten
     filequery
   end

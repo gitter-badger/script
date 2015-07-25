@@ -46,17 +46,17 @@ if __FILE__ == $PROGRAM_NAME
       options[:fetch] = true
     end
 
-    opts.on('-o', '--open', 'Open matching video(s)') do
-      options[:open] = true
-    end
-
-    opts.on('-i', '--info FILE', 'Show video information') do |video|
-      options[:info] = video
-    end
-
-    opts.on('--log', 'Show ~/Videos log') do
-      options[:log] = true
-    end
+    # opts.on('-o', '--open', 'Open matching video(s)') do
+    #   options[:open] = true
+    # end
+    #
+    # opts.on('-i', '--info FILE', 'Show video information') do |video|
+    #   options[:info] = video
+    # end
+    #
+    # opts.on('--log', 'Show ~/Videos log') do
+    #   options[:log] = true
+    # end
   end
   option_parser.parse!
 
