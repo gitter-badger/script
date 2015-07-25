@@ -12,18 +12,11 @@ module Admin
   class Picture
     PICTURE_DIR = "#{ENV['HOME']}/Pictures"
 
-    def initialize(timeout = nil, depth = 0, is_fullscreen = false)
-      @timeout       = timeout
-      @depth         = depth
-      @is_fullscreen = is_fullscreen
-    end
-
-    def launch
-      if @timeout
-        `timeout #{@timeout} shotwell`
-      else
-        `shotwell`
-      end
+    def list(query = nil)
+      pictures = grab_all_files(PICTURE_DIR)
+      pictures = filter_files(pictures, query) if query
+      print_files(pictures)
+      pictures
     end
   end
 end

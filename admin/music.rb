@@ -12,18 +12,11 @@ module Admin
   class Music
     MUSIC_DIR = "#{ENV['HOME']}/Music"
 
-    def initialize(timeout = nil, is_shuffled = false, is_recorded = false)
-      @timeout     = timeout
-      @is_shuffled = is_shuffled
-      @is_recorded = is_recorded
-    end
-
-    def launch
-      if @timeout
-        `timeout #{@timeout} rhythmbox`
-      else
-        `rhythmbox`
-      end
+    def list(query = nil)
+      music = grab_all_files(MUSIC_DIR)
+      music = filter_files(music, query) if query
+      print_files(music)
+      music
     end
   end
 end

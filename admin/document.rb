@@ -12,39 +12,11 @@ module Admin
   class Document
     DOCUMENT_DIR = "#{ENV['HOME']}/Documents"
 
-    attr_accessor :documents
-
     def list(query = nil)
-      @documents = grab_all_documents
-      filter_documents(query) if query
-      print_list
-    end
-
-    def grab_all_documents
-      document_list = []
-
-      Dir["#{DOCUMENT_DIR}/**/*"].each do |file|
-        next if file == '.' || file == '..' || File.directory?(file)
-        document_list << file
-      end
-
-      document_list
-    end
-
-    def filter_documents(query)
-      pattern = Regexp.new(query, Regexp::IGNORECASE)
-      @documents = @documents.select! { |e| pattern.match(e) }
-      @documents
-    end
-
-    def fetch_documents
-      puts 'Fetching...'
-    end
-
-    def print_list
-      @documents.each do |file|
-        puts file
-      end
+      documents = grab_all_files(DOCUMENT_DIR)
+      documents = filter_files(documents, query) if query
+      print_files(documents)
+      documents
     end
   end
 end

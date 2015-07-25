@@ -12,6 +12,12 @@ module Admin
   class Download
     DOWNLOAD_DIR = "#{ENV['HOME']}/Downloads"
 
+    def list(query = nil)
+      downloads = grab_all_files(DOWNLOAD_DIR)
+      downloads = filter_files(downloads, query) if query
+      print_files(downloads)
+      downloads
+    end
   end
 end
 

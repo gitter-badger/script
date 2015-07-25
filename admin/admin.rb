@@ -35,4 +35,27 @@ module Admin
       raise LoadError, "No such file at '#{file_path}'"
     end
   end
+
+  def grab_all_files(dirname = '.')
+    files = []
+
+    Dir["#{dirname}/**/*"].each do |file|
+      next if file == '.' || file == '..' || File.directory?(file)
+      files << file
+    end
+
+    files
+  end
+
+  def filter_files(files, query)
+    pattern = Regexp.new(query, Regexp::IGNORECASE)
+    files = files.select! { |e| pattern.match(e) }
+    files
+  end
+
+  def print_files(list)
+    list.each do |item|
+      puts File.basename(item)
+    end
+  end
 end

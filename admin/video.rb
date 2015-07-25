@@ -12,20 +12,11 @@ module Admin
   class Video
     VIDEO_DIR = "#{ENV['HOME']}/Videos"
 
-    def initialize(timeout = nil)
-      @timeout = timeout
-    end
-
-    def launch
-      if @timeout
-        `timeout #{@timeout} totem`
-      else
-        `totem`
-      end
-    end
-
-    def shuffle
-      launch
+    def list(query = nil)
+      videos = grab_all_files(VIDEO_DIR)
+      videos = filter_files(videos, query) if query
+      print_files(videos)
+      videos
     end
   end
 end
