@@ -85,8 +85,7 @@ module Admin
     end
   end
 
-  def append_default_ext(*files)
-    puts files.inspect
+  def append_default_ext(*files.flatten!)
     files.collect! { |f| f += '.rb' if File.extname(f) == ""; f }
     return files.count <= 1 ? files[0] : files
   end

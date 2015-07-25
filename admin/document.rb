@@ -19,11 +19,10 @@ module Admin
       documents
     end
 
-    def fetch(*documents)
-      documents = ask_for_file while documents.flatten.empty?
-      # > add default extension
+    def fetch(*documents.flatten!)
+      documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
-      puts documents
+      puts documents.inspect
       # > get document location
       # copy_files(documents, DESKTOP)
     end
