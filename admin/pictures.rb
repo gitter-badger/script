@@ -1,33 +1,11 @@
 #!/usr/bin/env ruby
-# picture.rb
+# pictures.rb
 # Author: Andy Bettisworth
-# Created At: 2015 0513 220924
-# Modified At: 2015 0513 220924
-# Description: Manage ~/Pictures
+# Created At: 2015 0725 121329
+# Modified At: 2015 0725 121329
+# Description: symbolic link to picture.rb script
 
 require_relative 'admin'
-
-module Admin
-  # manage all local ~/Pictures
-  class Picture
-    PICTURE_DIR = "#{ENV['HOME']}/Pictures"
-
-    def list(query = nil)
-      pictures = grab_all_files(PICTURE_DIR)
-      pictures = filter_files(pictures, query) if query
-      print_files(pictures)
-      pictures
-    end
-
-    def fetch(*pictures)
-      pictures.flatten!
-      pictures = ask_for_file while pictures.empty?
-      pictures = append_default_ext(pictures)
-      pictures = find_matching_files(pictures, list(quiet: true))
-      copy_files(pictures, DESKTOP)
-    end
-  end
-end
 
 if __FILE__ == $PROGRAM_NAME
   include Admin
