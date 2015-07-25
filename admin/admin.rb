@@ -84,4 +84,9 @@ module Admin
       FileUtils.mv(file, destination)
     end
   end
+
+  def append_default_ext(*files)
+    files.collect! do { |f| f += '.rb' if File.extname(f) == ""; f }
+    return files.count <= 1 ? files[0] : files
+  end
 end

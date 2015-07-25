@@ -21,9 +21,9 @@ module Admin
 
     def fetch(*documents)
       documents = ask_for_file while documents.flatten.empty?
-      puts documents.class
-      puts documents
       # > add default extension
+      documents = append_default_ext(documents)
+      puts documents
       # > get document location
       # copy_files(documents, DESKTOP)
     end
