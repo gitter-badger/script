@@ -23,8 +23,7 @@ module Admin
       downloads.flatten!
       downloads = ask_for_file while downloads.empty?
       downloads = find_matching_files(downloads, list(quiet: true))
-      puts downloads.inspect
-      # copy_files(downloads, DESKTOP)
+      copy_files(downloads, DESKTOP)
     end
   end
 end
@@ -45,27 +44,6 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-f', '--fetch', 'Copy matching download(s) to ~/Desktop') do
       options[:fetch] = true
     end
-
-    # opts.on('-o', '--open', 'Open matching download(s)') do
-    #   options[:open] = true
-    # end
-    #
-    # opts.on('-i', '--info FILE', 'Show download information') do |download|
-    #   options[:info] = download
-    # end
-    #
-    # opts.on('-p', '--pop [COUNT]', 'Move most recent download to ~/Desktop') do |count|
-    #   options[:pop] = true
-    #   options[:pop_count] = count
-    # end
-    #
-    # opts.on('--flush', 'Flush/Delete all downloads') do
-    #   options[:flush] = true
-    # end
-    #
-    # opts.on('--log', 'Show ~/Downloads log') do
-    #   options[:log] = true
-    # end
   end
   option_parser.parse!
 

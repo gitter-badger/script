@@ -23,8 +23,7 @@ module Admin
       pictures.flatten!
       pictures = ask_for_file while pictures.empty?
       pictures = find_matching_files(pictures, list(quiet: true))
-      puts pictures.inspect
-      # copy_files(pictures, DESKTOP)
+      copy_files(pictures, DESKTOP)
     end
   end
 end
@@ -45,18 +44,6 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-f', '--fetch', 'Copy matching picture(s) to ~/Desktop') do
       options[:fetch] = true
     end
-
-    # opts.on('-o', '--open', 'Open matching picture(s)') do
-    #   options[:open] = true
-    # end
-    #
-    # opts.on('-i', '--info FILE', 'Show picture information') do |picture|
-    #   options[:info] = picture
-    # end
-    #
-    # opts.on('--log', 'Show ~/Pictures log') do
-    #   options[:log] = true
-    # end
   end
   option_parser.parse!
 

@@ -23,8 +23,7 @@ module Admin
       videos.flatten!
       videos = ask_for_file while videos.empty?
       videos = find_matching_files(videos, list(quiet: true))
-      puts videos.inspect
-      # copy_files(videos, DESKTOP)
+      copy_files(videos, DESKTOP)
     end
   end
 end
@@ -45,18 +44,6 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-f', '--fetch', 'Copy matching video(s) to ~/Desktop') do
       options[:fetch] = true
     end
-
-    # opts.on('-o', '--open', 'Open matching video(s)') do
-    #   options[:open] = true
-    # end
-    #
-    # opts.on('-i', '--info FILE', 'Show video information') do |video|
-    #   options[:info] = video
-    # end
-    #
-    # opts.on('--log', 'Show ~/Videos log') do
-    #   options[:log] = true
-    # end
   end
   option_parser.parse!
 
