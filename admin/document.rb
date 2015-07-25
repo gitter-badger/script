@@ -23,18 +23,17 @@ module Admin
       documents.flatten!
       documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
-
-      puts "Fetching #{documents.inspect}..."
-
-      # > get documents that match (return full path)
-      all_documents = list(quiet: true)
-      all_documents.each do |d|
-        if documents.include?(File.basename(d))
-          puts d
-        end
-      end
-
+      documents = find_matching_files(documents, list(quiet: true))
+      puts documents.inspect
       # copy_files(documents, DESKTOP)
+    end
+
+    def find_matching_files(query, files)
+      matches = []
+      files.each do |d|
+        matches << d if query.include?(File.basename(d))
+      end
+      matches
     end
   end
 end
