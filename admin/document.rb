@@ -1,5 +1,5 @@
-# document.rb
 #!/usr/bin/env ruby
+# document.rb
 # Author: Andy Bettisworth
 # Created At: 2015 0513 220957
 # Modified At: 2015 0513 220957
@@ -10,24 +10,20 @@ require_relative 'admin'
 module Admin
   # Manage all local ~/Documents
   class Document
-    DOC_DIR = "#{ENV['HOME']}/Documents"
+    DOCUMENT_DIR = "#{ENV['HOME']}/Documents"
 
     attr_accessor :documents
-    attr_accessor :query
-    attr_accessor :category
-    attr_accessor :is_fetch
 
-    def exec
-      @documents = query_documents
-      filter_documents if @query
-      fetch_documents if @is_fetch
+    def list(query = nil)
+      @documents = grab_all_documents
+      filter_documents(query) if query
       print_list
     end
 
-    def query_documents
+    def grab_all_documents
       document_list = []
 
-      Dir["#{DOC_DIR}/**/*"].each do |file|
+      Dir["#{DOCUMENT_DIR}/**/*"].each do |file|
         next if file == '.' || file == '..' || File.directory?(file)
         document_list << file
       end
@@ -35,8 +31,8 @@ module Admin
       document_list
     end
 
-    def filter_documents
-      pattern = Regexp.new(@query, Regexp::IGNORECASE)
+    def filter_documents(query)
+      pattern = Regexp.new(query, Regexp::IGNORECASE)
       @documents = @documents.select! { |e| pattern.match(e) }
       @documents
     end
@@ -88,6 +84,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  puts option_parser
-  exit 1
+  document_mgr = Document.new
+
+  if options[:list]
+    document_mgr.list(options[:list_regexp])
+  else
+    puts option_parser
+    exit 1
+  end
 end

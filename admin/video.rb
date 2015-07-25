@@ -10,6 +10,8 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Videos
   class Video
+    VIDEO_DIR = "#{ENV['HOME']}/Videos"
+
     def initialize(timeout = nil)
       @timeout = timeout
     end
@@ -59,6 +61,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  puts option_parser
-  exit 1
+  video_mgr = Video.new
+
+  if options[:list]
+    video_mgr.list(options[:list_regexp])
+  else
+    puts option_parser
+    exit 1
+  end
 end

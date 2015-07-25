@@ -10,6 +10,8 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Music
   class Music
+    MUSIC_DIR = "#{ENV['HOME']}/Music"
+
     def initialize(timeout = nil, is_shuffled = false, is_recorded = false)
       @timeout     = timeout
       @is_shuffled = is_shuffled
@@ -74,6 +76,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  puts option_parser
-  exit 1
+  music_mgr = Music.new
+
+  if options[:list]
+    music_mgr.list(options[:list_regexp])
+  else
+    puts option_parser
+    exit 1
+  end
 end

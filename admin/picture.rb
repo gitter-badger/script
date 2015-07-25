@@ -10,6 +10,8 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Pictures
   class Picture
+    PICTURE_DIR = "#{ENV['HOME']}/Pictures"
+
     def initialize(timeout = nil, depth = 0, is_fullscreen = false)
       @timeout       = timeout
       @depth         = depth
@@ -57,6 +59,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  puts option_parser
-  exit 1
+  picture_mgr = Picture.new
+
+  if options[:list]
+    picture_mgr.list(options[:list_regexp])
+  else
+    puts option_parser
+    exit 1
+  end
 end

@@ -10,6 +10,8 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Downloads
   class Download
+    DOWNLOAD_DIR = "#{ENV['HOME']}/Downloads"
+
   end
 end
 
@@ -53,6 +55,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  puts option_parser
-  exit 1
+  download_mgr = Download.new
+
+  if options[:list]
+    download_mgr.list(options[:list_regexp])
+  else
+    puts option_parser
+    exit 1
+  end
 end
