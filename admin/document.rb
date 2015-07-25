@@ -19,20 +19,21 @@ module Admin
       documents
     end
 
-    def fetch(*documents.flatten!)
+    def fetch(*documents)
+      documents.flatten!
       documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
-      puts documents.inspect
+
       # > get document location
+      all_documents = list
+      all_documents.each do |d|
+        if documents.include?(File.basename(d))
+          puts d
+        end
+      end
+
       # copy_files(documents, DESKTOP)
     end
-
-    def ask_for_file
-      puts "What file do you want?"
-      filequery = gets.split(/\s.*?/).flatten
-      filequery
-    end
-
   end
 end
 

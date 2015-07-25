@@ -85,7 +85,14 @@ module Admin
     end
   end
 
-  def append_default_ext(*files.flatten!)
+  def ask_for_file
+    puts "What file do you want?"
+    filequery = gets.split(/\s.*?/).flatten
+    filequery
+  end
+
+  def append_default_ext(*files)
+    files.flatten!
     files.collect! { |f| f += '.rb' if File.extname(f) == ""; f }
     return files.count <= 1 ? files[0] : files
   end
