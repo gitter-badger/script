@@ -20,8 +20,11 @@ module Admin
     end
 
     def fetch(*videos)
-      canvases = list
-      copy_files(canvases, DESKTOP)
+      videos.flatten!
+      videos = ask_for_file while videos.empty?
+      videos = append_default_ext(videos)
+      videos = find_matching_files(videos, list(quiet: true))
+      copy_files(videos, DESKTOP)
     end
   end
 end

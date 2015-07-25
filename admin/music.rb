@@ -18,6 +18,14 @@ module Admin
       print_files(music)
       music
     end
+
+    def fetch(*music)
+      music.flatten!
+      music = ask_for_file while music.empty?
+      music = append_default_ext(music)
+      music = find_matching_files(music, list(quiet: true))
+      copy_files(music, DESKTOP)
+    end
   end
 end
 

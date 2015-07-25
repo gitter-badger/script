@@ -18,6 +18,14 @@ module Admin
       print_files(downloads)
       downloads
     end
+
+    def fetch(*downloads)
+      downloads.flatten!
+      downloads = ask_for_file while downloads.empty?
+      downloads = append_default_ext(downloads)
+      downloads = find_matching_files(downloads, list(quiet: true))
+      copy_files(downloads, DESKTOP)
+    end
   end
 end
 
