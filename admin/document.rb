@@ -18,6 +18,24 @@ module Admin
       print_files(documents)
       documents
     end
+
+    def fetch(*documents)
+      while documents.flatten.empty?
+        query = ask_for_document
+        puts query
+        # documents = list(query)
+      end
+      # copy_files(documents, DESKTOP)
+    end
+
+    def ask_for_document
+      documents = []
+      puts "What files do you want?"
+      queries = gets.split(/\s.*?/).flatten
+      queries.each { |q| documents << q }
+      puts documents
+    end
+
   end
 end
 
