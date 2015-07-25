@@ -28,6 +28,11 @@ module Admin
 
       # > get documents that match (return full path)
       all_documents = list(quiet: true)
+      all_documents.each do |d|
+        if documents.include?(File.basename(d))
+          puts d
+        end
+      end
 
       # copy_files(documents, DESKTOP)
     end

@@ -50,21 +50,9 @@ module Admin
   end
 
   def filter_files(files, query)
-    # > create multiple patterns if array query
-    if query.is_a? Array
-      pattern = []
-      query.each do |q|
-        pattern << Regexp.new(q, Regexp::IGNORECASE)
-      end
-    else
-      pattern = Regexp.new(query, Regexp::IGNORECASE)
-    end
-    # > match against multiple patterns
-    puts pattern.class
-    puts pattern
-
-    # files = files.select! { |e| pattern.match(e) }
-    # files
+    pattern = Regexp.new(query, Regexp::IGNORECASE)
+    files = files.select! { |f| pattern.match(f) }
+    files
   end
 
   def print_files(list)
