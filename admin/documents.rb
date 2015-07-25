@@ -23,22 +23,6 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-f', '--fetch', 'Copy matching document(s) to ~/Desktop') do
       options[:fetch] = true
     end
-
-    opts.on('-o', '--open', 'Open matching document(s)') do
-      options[:open] = true
-    end
-
-    opts.on('-i', '--info FILE', 'Show document information') do |document|
-      options[:info] = document
-    end
-
-    opts.on('-c', '--category FILTER', 'Filter by category') do |category|
-      options[:category] = category
-    end
-
-    opts.on('--log', 'Show ~/Documents log') do
-      options[:log] = true
-    end
   end
   option_parser.parse!
 

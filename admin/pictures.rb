@@ -23,25 +23,13 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-f', '--fetch', 'Copy matching picture(s) to ~/Desktop') do
       options[:fetch] = true
     end
-
-    opts.on('-o', '--open', 'Open matching picture(s)') do
-      options[:open] = true
-    end
-
-    opts.on('-i', '--info FILE', 'Show picture information') do |picture|
-      options[:info] = picture
-    end
-
-    opts.on('--log', 'Show ~/Pictures log') do
-      options[:log] = true
-    end
   end
   option_parser.parse!
 
   picture_mgr = Picture.new
 
   if options[:list]
-    picture_mgr.list(options[:list_regexp])
+    picture_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     picture_mgr.fetch(ARGV)
   else
