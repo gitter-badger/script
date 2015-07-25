@@ -20,13 +20,21 @@ module Admin
     end
 
     def fetch(*documents)
-      # while documents.flatten.empty?
-      #   query = ask_for_document
-      #   puts query
-      #   # documents = list(query)
-      # end
-      copy_files(documents, DESKTOP)
+      while documents.flatten.empty?
+        query = ask_for_file
+        documents = list(query)
+      end
+      puts documents
+      # > get document location
+      # copy_files(documents, DESKTOP)
     end
+
+    def ask_for_file
+      puts "What file do you want?"
+      files = gets.split(/\s.*?/).flatten
+      files
+    end
+
   end
 end
 
