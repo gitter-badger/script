@@ -24,13 +24,8 @@ module Admin
       documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
 
-      # > get document location
-      all_documents = list
-      all_documents.each do |d|
-        if documents.include?(File.basename(d))
-          puts d
-        end
-      end
+      # > get documents that match (return full path)
+      # all_documents = list
 
       # copy_files(documents, DESKTOP)
     end
