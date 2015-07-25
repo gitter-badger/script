@@ -5,7 +5,7 @@
 # Modified At: 2015 0725 121329
 # Description: symbolic link to picture.rb script
 
-require_relative 'admin'
+require_relative 'picture'
 
 if __FILE__ == $PROGRAM_NAME
   include Admin
