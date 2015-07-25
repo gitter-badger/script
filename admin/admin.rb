@@ -5,6 +5,8 @@
 # Modified At: 2015 0528 044634
 # Description: system administration module
 
+require 'fileutils'
+
 module Admin
   HOME     = ENV['HOME']
   DESKTOP  = "#{HOME}/Desktop"
