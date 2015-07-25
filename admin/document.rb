@@ -15,7 +15,7 @@ module Admin
     def list(query: nil, quiet: false)
       documents = grab_all_files(DOCUMENT_DIR)
       documents = filter_files(documents, query) if query
-      print_files(documents) if documents
+      print_files(documents) if documents && quiet == false
       documents
     end
 
