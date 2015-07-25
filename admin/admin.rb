@@ -88,8 +88,9 @@ module Admin
 
   def find_matching_files(query, files)
     matches = []
-    files.each do |d|
-      matches << d if query.include?(File.basename(d))
+    query.each do |q|
+      pattern = Regexp.new(q, Regexp::IGNORECASE)
+      matches << files.select! { |f| pattern.match(File.basename(f)) }
     end
     matches
   end
