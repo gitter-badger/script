@@ -24,16 +24,7 @@ module Admin
       documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
       documents = find_matching_files(documents, list(quiet: true))
-      puts documents.inspect
-      # copy_files(documents, DESKTOP)
-    end
-
-    def find_matching_files(query, files)
-      matches = []
-      files.each do |d|
-        matches << d if query.include?(File.basename(d))
-      end
-      matches
+      copy_files(documents, DESKTOP)
     end
   end
 end

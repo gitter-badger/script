@@ -84,4 +84,12 @@ module Admin
     files.collect! { |f| f += '.rb' if File.extname(f) == ""; f }
     return files.count <= 1 ? files[0] : files
   end
+
+  def find_matching_files(query, files)
+    matches = []
+    files.each do |d|
+      matches << d if query.include?(File.basename(d))
+    end
+    matches
+  end
 end
