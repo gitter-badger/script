@@ -20,19 +20,18 @@ module Admin
     end
 
     def fetch(*documents)
-      while documents.flatten.empty?
-        query = ask_for_file
-        documents = list(query)
-      end
+      documents = ask_for_file while documents.flatten.empty?
+      puts documents.class
       puts documents
+      # > add default extension
       # > get document location
       # copy_files(documents, DESKTOP)
     end
 
     def ask_for_file
       puts "What file do you want?"
-      files = gets.split(/\s.*?/).flatten
-      files
+      filequery = gets.split(/\s.*?/).flatten
+      filequery
     end
 
   end
