@@ -19,7 +19,7 @@ module Admin
       videos
     end
 
-    def fetch
+    def fetch(*videos)
       canvases = list
       copy_files(canvases, DESKTOP)
     end
