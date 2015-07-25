@@ -90,7 +90,7 @@ module Admin
     matches = []
     query.each do |q|
       pattern = Regexp.new(q, Regexp::IGNORECASE)
-      matches << files.select! { |f| pattern.match(File.basename(f)) }
+      files.each { |f| matches << f if pattern.match(File.basename(f)) }
     end
     matches
   end
