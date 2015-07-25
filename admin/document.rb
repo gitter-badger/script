@@ -12,7 +12,7 @@ module Admin
   class Document
     DOCUMENT_DIR = "#{ENV['HOME']}/Documents"
 
-    def list(query = nil)
+    def list(query: nil, quiet: false)
       documents = grab_all_files(DOCUMENT_DIR)
       documents = filter_files(documents, query) if query
       print_files(documents) if documents
@@ -24,8 +24,10 @@ module Admin
       documents = ask_for_file while documents.empty?
       documents = append_default_ext(documents)
 
+      puts "Fetching #{documents.inspect}..."
+
       # > get documents that match (return full path)
-      # all_documents = list
+      all_documents = list(quiet: true)
 
       # copy_files(documents, DESKTOP)
     end
@@ -70,7 +72,7 @@ if __FILE__ == $PROGRAM_NAME
   document_mgr = Document.new
 
   if options[:list]
-    document_mgr.list(options[:list_regexp])
+    document_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     document_mgr.fetch(ARGV)
   else
