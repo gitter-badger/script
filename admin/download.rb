@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
   download_mgr = Download.new
 
   if options[:list]
-    download_mgr.list(options[:list_regexp])
+    download_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     download_mgr.fetch(ARGV)
   else

@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
   music_mgr = Music.new
 
   if options[:list]
-    music_mgr.list(options[:list_regexp])
+    music_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     music_mgr.fetch(ARGV)
   else

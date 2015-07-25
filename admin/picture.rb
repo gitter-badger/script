@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
   picture_mgr = Picture.new
 
   if options[:list]
-    picture_mgr.list(options[:list_regexp])
+    picture_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     picture_mgr.fetch(ARGV)
   else

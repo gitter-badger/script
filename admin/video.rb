@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
   video_mgr = Video.new
 
   if options[:list]
-    video_mgr.list(options[:list_regexp])
+    video_mgr.list(query: options[:list_regexp])
   elsif options[:fetch]
     video_mgr.fetch(ARGV)
   else
