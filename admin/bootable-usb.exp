@@ -62,14 +62,13 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     expect "?irst sector*: " { send "\r" }
     expect "?ast sector*: " { send "\r" }
     expect "?ommand*: " { send "a\r" }
-    expect "?artition number*: " { send "1\r" }
     expect "?ommand*: " { send "w\r" }
     exec sync
     log_user 1
 
-    send_user "Successful partitioning of $mount_point\n"
+    send_user "Successful partitioning of $mount_point.\n"
   } else {
-    send_user "Creating partitions on /dev/$mount_point...\n"
+    send_user "Creating dual partitions on /dev/$mount_point...\n"
 
     ## "o\nn\np\n1\n\n$primary_sectors\nn\np\n2\n\n\na\n1\nw\n"
     log_user 0
@@ -90,7 +89,7 @@ proc partition_device { mount_point primary_sectors secondary_sectors } {
     exec sync
     log_user 1
 
-    send_user "Successful partitioning of $mount_point\n"
+    send_user "Successful partitioning of $mount_point.\n"
   }
 }
 
@@ -246,22 +245,23 @@ if { [string length $device] != 0 && \
   exit_if_not_enough_space $mount_point $primary_sectors $iso
   puts "Primary: $primary_sectors Secondary: $secondary_sectors"
 
-  #  umount_device $user $mount_point
-  #  partition_device $mount_point $primary_sectors $secondary_sectors
-  #  format_partition $mount_point $secondary_sectors
-  #
-  #  mount_iso /mnt/tmpiso $iso
-  #  mount_device $user $mount_point $secondary_sectors
-  #  copy_iso_to_device $user $mount_point $iso
-  #  umount_iso /mnt/tmpiso $iso
-  #  setup_grub_bootloader $user $mount_point
-  #  mount_device $user $mount_point $secondary_sectors
-  #  build_grub_menu $user $secondary_sectors
-  #
-  #  add_preseed_config $user
-  #
-  #  umount_device $user $mount_point
-  #  exec sync
+  puts "Unmounting $mount_point..."
+  umount_device $user $mount_point
+  partition_device $mount_point $primary_sectors $secondary_sectors
+  format_partition $mount_point $secondary_sectors
+
+  mount_iso /mnt/tmpiso $iso
+  mount_device $user $mount_point $secondary_sectors
+  copy_iso_to_device $user $mount_point $iso
+  umount_iso /mnt/tmpiso $iso
+  setup_grub_bootloader $user $mount_point
+  mount_device $user $mount_point $secondary_sectors
+  build_grub_menu $user $secondary_sectors
+
+  add_preseed_config $user
+
+  umount_device $user $mount_point
+  exec sync
 } else {
   usage
 }
