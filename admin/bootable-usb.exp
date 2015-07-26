@@ -229,13 +229,17 @@ if { [string length $device] != 0 && \
   exit_if_not_file $iso
 
   regexp {\/dev\/(\w*)} $device -> mount_point
-  regexp {total\s(\d*)} [exec sudo fdisk -l /dev/$mount_point] -> sector_count
+  regexp {(\d*?)\ssectors} [exec sudo fdisk -l /dev/$mount_point] -> sector_count
 
-  puts "What percentage should go towards persistence? \[10..40\]"
+  puts "What percentage should go towards persistence? \[0..40\]"
   expect_user -re "(.*)\n"
   set persistence $expect_out(1,string)
 
-  set secondary_sectors [format {%0.0f} [expr $sector_count * ( $persistence / 100.0 )]]
+  if { $persistence > 0 } {
+    set secondary_sectors [format {%0.0f} [expr $sector_count * ( $persistence / 100.0 )]]
+  } else {
+    set secondary_sectors 0
+  }
   set primary_sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
   exit_if_not_enough_space $mount_point $primary_sectors $iso
 
