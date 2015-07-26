@@ -214,9 +214,9 @@ proc add_preseed_config { user } {
   set github_path /home/$user/GitHub
 
   if { [file exists $github_path] } {
-    exec cp $github_path/seed_config/solace.seed $usb_preseed
-    exec cp $github_path/seed_config/seed_config.sh $usb_preseed
-    exec cp -r $github_path/seed_config $usb_preseed
+    exec cp $github_path/seed/solace.seed $usb_preseed
+    exec cp $github_path/seed/init.sh $usb_preseed
+    exec cp -r $github_path/seed $usb_preseed
   } else {
     send_user "WARNING: no preseed files found locally\n"
   }
@@ -226,11 +226,13 @@ if { [string length $device] != 0 && \
      [string length $iso] != 0 } {
   exit_if_not_file $device
   exit_if_not_device $device
+  puts "Device $device found."
   exit_if_not_file $iso
+  puts "ISO $iso found."
 
   regexp {\/dev\/(\w*)} $device -> mount_point
+  puts "Getting sector count of /dev/$mount_point..."
   regexp {(\d*?)\ssectors} [exec sudo fdisk -l /dev/$mount_point] -> sector_count
-
   puts "What percentage should go towards persistence? \[0..40\]"
   expect_user -re "(.*)\n"
   set persistence $expect_out(1,string)
@@ -242,23 +244,24 @@ if { [string length $device] != 0 && \
   }
   set primary_sectors [format {%0.0f} [expr ($sector_count - 1) - $secondary_sectors]]
   exit_if_not_enough_space $mount_point $primary_sectors $iso
+  puts "Primary: $primary_sectors Secondary: $secondary_sectors"
 
-  umount_device $user $mount_point
-  partition_device $mount_point $primary_sectors $secondary_sectors
-  format_partition $mount_point $secondary_sectors
-
-  mount_iso /mnt/tmpiso $iso
-  mount_device $user $mount_point $secondary_sectors
-  copy_iso_to_device $user $mount_point $iso
-  umount_iso /mnt/tmpiso $iso
-  setup_grub_bootloader $user $mount_point
-  mount_device $user $mount_point $secondary_sectors
-  build_grub_menu $user $secondary_sectors
-
-  add_preseed_config $user
-
-  umount_device $user $mount_point
-  exec sync
+  #  umount_device $user $mount_point
+  #  partition_device $mount_point $primary_sectors $secondary_sectors
+  #  format_partition $mount_point $secondary_sectors
+  #
+  #  mount_iso /mnt/tmpiso $iso
+  #  mount_device $user $mount_point $secondary_sectors
+  #  copy_iso_to_device $user $mount_point $iso
+  #  umount_iso /mnt/tmpiso $iso
+  #  setup_grub_bootloader $user $mount_point
+  #  mount_device $user $mount_point $secondary_sectors
+  #  build_grub_menu $user $secondary_sectors
+  #
+  #  add_preseed_config $user
+  #
+  #  umount_device $user $mount_point
+  #  exec sync
 } else {
   usage
 }
