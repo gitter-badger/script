@@ -183,36 +183,13 @@ proc setup_grub_bootloader { user mount_point } {
   catch {exec sudo grub-install --no-floppy --root-directory=/media/$user/Village/ /dev/$mount_point}
 }
 
-proc build_grub_menu { user secondary_sectors } {
-  set menu /media/$user/Village/boot/grub/grub.cfg
-
-  send_user "Enter username: \n"
-  expect_user -re "(.*)\n"
-  set username $expect_out(1,string)
-
-  send_user "Enter password: \n"
-  expect_user -re "(.*)\n"
-  set password $expect_out(1,string)
-  set pbkdf2_response [exec echo "$password\n$password" | grub-mkpasswd-pbkdf2]
-  regexp {\s(grub\.pbkdf2.*)} $pbkdf2_response -> secret
-
-  set header "set default='guest'\nset timeout=1\nset superusers='$username'\npassword_pbkdf2 $username $secret\nexport superusers\n\n"
-  exec echo $header > $menu
-
-  if { $secondary_sectors != 0 } {
-    set menuentry1 "menuentry 'guest' --unrestricted {\n\tlinux /casper/vmlinuz boot=casper priority=low pcspkr.blacklist=yes textonly noprompt persistent --\n\tinitrd /casper/initrd.lz\n}\n"
-    exec echo $menuentry1 >> $menu
-  }
-
-  set menuentry2 "menuentry 'solace' --users '' {\n\tlinux /casper/vmlinuz boot=casper priority=low automatic-ubiquity file=/cdrom/preseed/solace.seed live-media-path=/casper/ pcspkr.blacklist=yes textonly noprompt noeject ignore_uuid --\n\tinitrd /casper/initrd.lz\n}\n"
-  exec echo $menuentry2 >> $menu
-}
-
 proc add_preseed_config { user } {
+  set menu /media/$user/Village/boot/grub/grub.cfg
   set usb_preseed /media/$user/Village/preseed
   set github_path /home/$user/GitHub
 
   if { [file exists $github_path] } {
+    exec cp -f $github_path/seed/grub.cfg $menu
     exec cp $github_path/seed/solace.seed $usb_preseed
     exec cp $github_path/seed/init.sh $usb_preseed
     exec cp -r $github_path/seed $usb_preseed
@@ -256,7 +233,6 @@ if { [string length $device] != 0 && \
   umount_iso /mnt/tmpiso $iso
   setup_grub_bootloader $user $mount_point
   mount_device $user $mount_point $secondary_sectors
-  build_grub_menu $user $secondary_sectors
 
   add_preseed_config $user
 
