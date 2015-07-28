@@ -6,6 +6,7 @@
 # Description: system administration module
 
 require 'fileutils'
+require 'pathname'
 
 module Admin
   HOME     = ENV['HOME']
