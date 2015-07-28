@@ -10,7 +10,7 @@ require 'fileutils'
 require_relative 'admin'
 
 module Admin
-  module Village
+  class Village
     LOCAL  = ENV['HOME']
     REMOTE = "/media/#{ ENV['USER'] }/Village"
 
