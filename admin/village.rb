@@ -49,38 +49,26 @@ module Admin
     private
 
     def dir_diff(from, to)
-      from_files = Dir[from + "/**/*"]
-      to_files = Dir[to + "/**/*"]
-      puts from_files.inspect
+      from_files = map_files(from)
+      to_files   = map_files(to)
 
-      # local_files  = get_local_files
-      # remote_files = get_remote_files
-      #
-      # local_files.each do |file, path|
-      #   if remote_files.has_key?(file)
-      #     remote_files.delete(file)
-      #   end
-      # end
-      #
-      # remote_files
+      from_files.each do |file, path|
+        if to_files.has_key?(file)
+          to_files.delete(file)
+        end
+      end
+
+      to_files
     end
 
-    # def get_local_files(target = LOCAL)
-    #   local_files = Dir[target + "/**/*"]
-    #   local_files.delete_if { |path| File.directory?(path) }
-    #   local_files.map! { |path| [File.basename(path), path] }
-    #   local_files = local_files.to_h
-    #   local_files
-    # end
-    #
-    # def get_remote_files(target = REMOTE)
-    #   remote_files = Dir[target + "/**/*"]
-    #   remote_files.delete_if { |path| File.directory?(path) }
-    #   remote_files.map! { |path| [File.basename(path), path] }
-    #   remote_files = remote_files.to_h
-    #   remote_files
-    # end
-    #
+    def map_files(dir)
+      files = Dir[dir + "/**/*"]
+      files.delete_if { |path| File.directory?(path) }
+      files.map! { |path| [File.basename(path), path] }
+      files = to_files.to_h
+      files
+    end
+
     # def sync_file_diff(diff, target = LOCAL, source = REMOTE)
     #   diff.each do |filename, remote_path|
     #     target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
