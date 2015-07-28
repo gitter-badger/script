@@ -122,16 +122,20 @@ module Admin
 
   def sync_diff(diff, target, source)
     diff.each do |filename, pathname|
-      puts "pathname #{pathname}"
+      puts "pathname #{ split_path(pathname).inspect }"
       # target_path = File.dirname(pathname).gsub(/^#{source}/, target)
       # find_or_create_directory(target_path)
       # FileUtils.cp(pathname, target_path)
     end
-    puts "target #{target}"
-    puts "source #{source}"
+    puts "target #{ target }"
+    puts "source #{ source }"
   end
 
   def find_or_create_directory(pathname)
     FileUtils.mkdir_p(pathname)
+  end
+
+  def split_path(path)
+    Pathname(path).each_filename.to_a
   end
 end
