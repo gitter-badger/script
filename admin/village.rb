@@ -32,7 +32,8 @@ module Admin
       require_dir(HOME_MEDIA[media])
       require_dir(REMOTE_MEDIA[media])
       puts "Downloading #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
-      #   diff = dir_difference
+      diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
+      puts diff
       #   sync_file_diff(diff)
     end
 
@@ -40,25 +41,30 @@ module Admin
       require_dir(HOME_MEDIA[media])
       require_dir(REMOTE_MEDIA[media])
       puts "Uploading #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
-      #   diff = dir_difference
+      diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
+      puts diff
       #   sync_file_diff(diff)
     end
 
     private
 
-    # def dir_difference
-    #   local_files  = get_local_files
-    #   remote_files = get_remote_files
-    #
-    #   local_files.each do |file, path|
-    #     if remote_files.has_key?(file)
-    #       remote_files.delete(file)
-    #     end
-    #   end
-    #
-    #   remote_files
-    # end
-    #
+    def dir_diff(from, to)
+      from_files = Dir[from + "/**/*"]
+      to_files = Dir[to + "/**/*"]
+      puts from_files.inspect
+
+      # local_files  = get_local_files
+      # remote_files = get_remote_files
+      #
+      # local_files.each do |file, path|
+      #   if remote_files.has_key?(file)
+      #     remote_files.delete(file)
+      #   end
+      # end
+      #
+      # remote_files
+    end
+
     # def get_local_files(target = LOCAL)
     #   local_files = Dir[target + "/**/*"]
     #   local_files.delete_if { |path| File.directory?(path) }
