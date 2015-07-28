@@ -11,8 +11,22 @@ require_relative 'admin'
 
 module Admin
   class Village
-    LOCAL  = ENV['HOME']
+    HOME = ENV['HOME']
     REMOTE = "/media/#{ ENV['USER'] }/Village"
+    HOME_MEDIA = {
+      documents: "#{ HOME }/Documents",
+      downloads: "#{ HOME }/Downloads",
+      music: "#{ HOME }/Music",
+      pictures: "#{ HOME }/Pictures",
+      videos: "#{ HOME }/Videos"
+    }
+    REMOTE_MEDIA = {
+      documents: "#{ REMOTE }/Documents",
+      downloads: "#{ REMOTE }/Downloads",
+      music: "#{ REMOTE }/Music",
+      pictures: "#{ REMOTE }/Pictures",
+      videos: "#{ REMOTE }/Videos"
+    }
 
     # def sync
     #   diff = dir_difference
@@ -20,15 +34,15 @@ module Admin
     # end
 
     def download(media)
-      require_dir(LOCAL)
+      require_dir(HOME)
       require_dir(REMOTE)
-      puts "Downloading #{media}..."
+      puts "Downloading #{ REMOTE_MEDIA[media] }..."
     end
 
     def upload(media)
-      require_dir(LOCAL)
+      require_dir(HOME)
       require_dir(REMOTE)
-      puts "Uploading #{media}..."
+      puts "Uploading #{ HOME_MEDIA[media] }..."
     end
 
     private
