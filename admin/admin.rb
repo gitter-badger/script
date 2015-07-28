@@ -100,4 +100,25 @@ module Admin
     end
     matches
   end
+
+  def dir_diff(from, to)
+    from_files = map_files(from)
+    to_files   = map_files(to)
+
+    from_files.each do |file, path|
+      if to_files.has_key?(file)
+        to_files.delete(file)
+      end
+    end
+
+    to_files
+  end
+
+  def map_files(dir)
+    files = Dir[dir + "/**/*"]
+    files.delete_if { |path| File.directory?(path) }
+    files.map! { |path| [File.basename(path), path] }
+    files = files.to_h
+    files
+  end    
 end

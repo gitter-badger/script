@@ -31,56 +31,32 @@ module Admin
     def download(media)
       require_dir(HOME_MEDIA[media])
       require_dir(REMOTE_MEDIA[media])
-      puts "Downloading #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
       diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
-      puts diff
-      #   sync_file_diff(diff)
+      puts "Downloading #{ diff.count } files from #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
+      # sync_file_diff(diff)
     end
 
     def upload(media)
       require_dir(HOME_MEDIA[media])
       require_dir(REMOTE_MEDIA[media])
-      puts "Uploading #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
       diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
-      puts diff
-      #   sync_file_diff(diff)
+      puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
+      # sync_file_diff(diff)
     end
 
     private
 
-    def dir_diff(from, to)
-      from_files = map_files(from)
-      to_files   = map_files(to)
-
-      from_files.each do |file, path|
-        if to_files.has_key?(file)
-          to_files.delete(file)
-        end
+    def sync_file_diff(diff, target = LOCAL, source = REMOTE)
+      diff.each do |filename, remote_path|
+        target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
+        find_or_create_directory(target_path)
+        FileUtils.cp(remote_path, target_path)
       end
-
-      to_files
     end
 
-    def map_files(dir)
-      files = Dir[dir + "/**/*"]
-      files.delete_if { |path| File.directory?(path) }
-      files.map! { |path| [File.basename(path), path] }
-      files = files.to_h
-      files
+    def find_or_create_directory(pathname)
+      FileUtils.mkdir_p(pathname)
     end
-
-    # def sync_file_diff(diff, target = LOCAL, source = REMOTE)
-    #   diff.each do |filename, remote_path|
-    #     target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
-    #     find_or_create_directory(target_path)
-    #     puts "  #{target_path}/#{filename}"
-    #     FileUtils.cp(remote_path, target_path)
-    #   end
-    # end
-    #
-    # def find_or_create_directory(pathname)
-    #   FileUtils.mkdir_p(pathname)
-    # end
   end
 end
 
