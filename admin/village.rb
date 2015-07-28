@@ -65,7 +65,7 @@ module Admin
       files = Dir[dir + "/**/*"]
       files.delete_if { |path| File.directory?(path) }
       files.map! { |path| [File.basename(path), path] }
-      files = to_files.to_h
+      files = files.to_h
       files
     end
 
