@@ -106,12 +106,10 @@ module Admin
     to_files   = map_files(to)
 
     from_files.each do |file, path|
-      if to_files.has_key?(file)
-        to_files.delete(file)
-      end
+      from_files.delete(file) if to_files.has_key?(file)
     end
 
-    to_files
+    from_files
   end
 
   def map_files(dir)
@@ -120,5 +118,5 @@ module Admin
     files.map! { |path| [File.basename(path), path] }
     files = files.to_h
     files
-  end    
+  end
 end
