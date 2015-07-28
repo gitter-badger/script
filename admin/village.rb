@@ -87,11 +87,15 @@ if __FILE__ == $PROGRAM_NAME
   option_parser = OptionParser.new do |opts|
     opts.banner = 'Usage: village [options]'
 
-    opts.on('--download MEDIA', 'Download media from Village') do |media|
+    opts.on('--download MEDIA',
+            [:all, :documents, :downloads, :music, :pictures, :videos],
+            'Download media (all, documents, downloads, music, pictures, videos)') do |media|
       options[:download] = media
     end
 
-    opts.on('--upload MEDIA', 'Upload media to Village') do |media|
+    opts.on('--upload MEDIA',
+            [:all, :documents, :downloads, :music, :pictures, :videos],
+            'Upload media (all, documents, downloads, music, pictures, videos)') do |media|
       options[:upload] = media
     end
   end
