@@ -28,21 +28,20 @@ module Admin
       videos: "#{ REMOTE }/Videos"
     }
 
-    # def sync
-    #   diff = dir_difference
-    #   sync_file_diff(diff)
-    # end
-
     def download(media)
-      require_dir(HOME)
-      require_dir(REMOTE)
-      puts "Downloading #{ REMOTE_MEDIA[media] }..."
+      require_dir(HOME_MEDIA[media])
+      require_dir(REMOTE_MEDIA[media])
+      puts "Downloading #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
+      #   diff = dir_difference
+      #   sync_file_diff(diff)
     end
 
     def upload(media)
-      require_dir(HOME)
-      require_dir(REMOTE)
-      puts "Uploading #{ HOME_MEDIA[media] }..."
+      require_dir(HOME_MEDIA[media])
+      require_dir(REMOTE_MEDIA[media])
+      puts "Uploading #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
+      #   diff = dir_difference
+      #   sync_file_diff(diff)
     end
 
     private
@@ -100,14 +99,14 @@ if __FILE__ == $PROGRAM_NAME
     opts.banner = 'Usage: village [options]'
 
     opts.on('--download MEDIA',
-            [:all, :documents, :downloads, :music, :pictures, :videos],
-            'Download media (all, documents, downloads, music, pictures, videos)') do |media|
+            [:documents, :downloads, :music, :pictures, :videos],
+            'Download media (documents, downloads, music, pictures, videos)') do |media|
       options[:download] = media
     end
 
     opts.on('--upload MEDIA',
-            [:all, :documents, :downloads, :music, :pictures, :videos],
-            'Upload media (all, documents, downloads, music, pictures, videos)') do |media|
+            [:documents, :downloads, :music, :pictures, :videos],
+            'Upload media (documents, downloads, music, pictures, videos)') do |media|
       options[:upload] = media
     end
   end
