@@ -33,9 +33,15 @@ module Admin
     '.sh'  => '#'
   }
 
-  def require_file(file_path)
-    unless File.exist?(file_path)
-      raise LoadError, "No such file at '#{file_path}'"
+  def require_file(pathname)
+    unless File.exist?(pathname)
+      raise LoadError, "No such file at '#{pathname}'"
+    end
+  end
+
+  def require_dir(pathname)
+    unless File.exist?(pathname)
+      raise LoadError, "No such directory at #{pathname}"
     end
   end
 

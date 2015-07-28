@@ -14,68 +14,66 @@ module Admin
     LOCAL  = ENV['HOME']
     REMOTE = "/media/#{ ENV['USER'] }/Village"
 
-    def sync
-      require_dir(LOCAL)
-      require_dir(REMOTE)
-      diff = dir_difference
-      sync_file_diff(diff)
-    end
+    # def sync
+    #   diff = dir_difference
+    #   sync_file_diff(diff)
+    # end
 
     def download(media)
+      require_dir(LOCAL)
+      require_dir(REMOTE)
+      puts "Downloading #{media}..."
     end
 
     def upload(media)
+      require_dir(LOCAL)
+      require_dir(REMOTE)
+      puts "Uploading #{media}..."
     end
 
     private
 
-    def require_dir(pathname)
-      unless File.exist?(pathname)
-        raise "MissingDirectoryError::#{pathname}"
-      end
-    end
-
-    def dir_difference
-      local_files  = get_local_files
-      remote_files = get_remote_files
-
-      local_files.each do |file, path|
-        if remote_files.has_key?(file)
-          remote_files.delete(file)
-        end
-      end
-
-      remote_files
-    end
-
-    def get_local_files(target = LOCAL)
-      local_files = Dir[target + "/**/*"]
-      local_files.delete_if { |path| File.directory?(path) }
-      local_files.map! { |path| [File.basename(path), path] }
-      local_files = local_files.to_h
-      local_files
-    end
-
-    def get_remote_files(target = REMOTE)
-      remote_files = Dir[target + "/**/*"]
-      remote_files.delete_if { |path| File.directory?(path) }
-      remote_files.map! { |path| [File.basename(path), path] }
-      remote_files = remote_files.to_h
-      remote_files
-    end
-
-    def sync_file_diff(diff, target = LOCAL, source = REMOTE)
-      diff.each do |filename, remote_path|
-        target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
-        find_or_create_directory(target_path)
-        puts "  #{target_path}/#{filename}"
-        FileUtils.cp(remote_path, target_path)
-      end
-    end
-
-    def find_or_create_directory(pathname)
-      FileUtils.mkdir_p(pathname)
-    end
+    # def dir_difference
+    #   local_files  = get_local_files
+    #   remote_files = get_remote_files
+    #
+    #   local_files.each do |file, path|
+    #     if remote_files.has_key?(file)
+    #       remote_files.delete(file)
+    #     end
+    #   end
+    #
+    #   remote_files
+    # end
+    #
+    # def get_local_files(target = LOCAL)
+    #   local_files = Dir[target + "/**/*"]
+    #   local_files.delete_if { |path| File.directory?(path) }
+    #   local_files.map! { |path| [File.basename(path), path] }
+    #   local_files = local_files.to_h
+    #   local_files
+    # end
+    #
+    # def get_remote_files(target = REMOTE)
+    #   remote_files = Dir[target + "/**/*"]
+    #   remote_files.delete_if { |path| File.directory?(path) }
+    #   remote_files.map! { |path| [File.basename(path), path] }
+    #   remote_files = remote_files.to_h
+    #   remote_files
+    # end
+    #
+    # def sync_file_diff(diff, target = LOCAL, source = REMOTE)
+    #   diff.each do |filename, remote_path|
+    #     target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
+    #     find_or_create_directory(target_path)
+    #     puts "  #{target_path}/#{filename}"
+    #     FileUtils.cp(remote_path, target_path)
+    #   end
+    # end
+    #
+    # def find_or_create_directory(pathname)
+    #   FileUtils.mkdir_p(pathname)
+    # end
   end
 end
 
