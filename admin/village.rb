@@ -33,7 +33,7 @@ module Admin
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
       puts "Downloading #{ diff.count } files from #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
-      5.times { |i| puts diff[i] }
+      puts Hash[diff.sort_by { |k,v| -v }[0..5]]
       # sync_file_diff(diff)
     end
 
@@ -42,7 +42,7 @@ module Admin
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
       puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
-      5.times { |i| puts diff[i] }
+      puts Hash[diff.sort_by { |k,v| -v }[0..5]]
       # sync_file_diff(diff)
     end
 
