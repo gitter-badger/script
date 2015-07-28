@@ -5,8 +5,6 @@
 # Modified At: 2015 0424 221430
 # Description: sync external media from the Village
 
-require 'fileutils'
-
 require_relative 'admin'
 
 module Admin
@@ -33,8 +31,7 @@ module Admin
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
       puts "Downloading #{ diff.count } files from #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
-      puts Hash[diff.sort_by { |k,v| v }[0..5]]
-      # sync_file_diff(diff)
+      sync_diff(diff, HOME_MEDIA[media], REMOTE_MEDIA[media])
     end
 
     def upload(media)
@@ -42,23 +39,8 @@ module Admin
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
       puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
-      puts Hash[diff.sort_by { |k,v| v }[0..5]]
-      # sync_file_diff(diff)
+      sync_diff(diff, REMOTE_MEDIA[media], HOME_MEDIA[media])
     end
-
-    private
-
-    # def sync_file_diff(diff, target = LOCAL, source = REMOTE)
-    #   diff.each do |filename, remote_path|
-    #     target_path = File.dirname(remote_path).gsub(/^#{source}/, target)
-    #     find_or_create_directory(target_path)
-    #     FileUtils.cp(remote_path, target_path)
-    #   end
-    # end
-    #
-    # def find_or_create_directory(pathname)
-    #   FileUtils.mkdir_p(pathname)
-    # end
   end
 end
 

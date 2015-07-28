@@ -101,6 +101,14 @@ module Admin
     matches
   end
 
+  def map_files(dir)
+    files = Dir[dir + "/**/*"]
+    files.delete_if { |path| File.directory?(path) }
+    files.map! { |path| [File.basename(path), path] }
+    files = files.to_h
+    files
+  end
+
   def dir_diff(from, to)
     from_files = map_files(from)
     to_files   = map_files(to)
@@ -112,11 +120,18 @@ module Admin
     from_files
   end
 
-  def map_files(dir)
-    files = Dir[dir + "/**/*"]
-    files.delete_if { |path| File.directory?(path) }
-    files.map! { |path| [File.basename(path), path] }
-    files = files.to_h
-    files
+  def sync_diff(diff, target, source)
+    diff.each do |filename, pathname|
+      puts "pathname #{pathname}"
+      # target_path = File.dirname(pathname).gsub(/^#{source}/, target)
+      # find_or_create_directory(target_path)
+      # FileUtils.cp(pathname, target_path)
+    end
+    puts "target #{target}"
+    puts "source #{source}"
+  end
+
+  def find_or_create_directory(pathname)
+    FileUtils.mkdir_p(pathname)
   end
 end
