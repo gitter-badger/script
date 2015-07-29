@@ -21,6 +21,17 @@ var main = function() {
     StackExchange.question_id = StackExchange.question_id[0].split("/").join("");
   }
 
+  StackExchange.button_html = '<li \
+    class="wmd-button" \
+    id="wmd-button-grammar-bot-' + StackExchange.question_id + '" \
+    title="Grammar Bot" \
+    style="left: 460px;"> \
+      <img src="//i.imgur.com/79qYzkQ.png" \
+           alt="Grammar Bot Edit" \
+           width="18px;" \
+           height="18px;"> \
+    </li>';
+
   StackExchange.edits = {
     i: {
       expr: /(^|\s|\()i(\s|,|\.|!|\?|;|\/|\)|'|$)/gm,
@@ -43,13 +54,19 @@ var main = function() {
   };
 
   StackExchange.get_selections = function() {
-    StackExchange.selections.button_bar = $("#wmd-button-row-" + StackExchange.question_id);
+    StackExchange.selections.redo_button = $("#wmd-redo-button-" + StackExchange.question_id);
     StackExchange.selections.title = $("#title");
     StackExchange.selections.body = $("#wmd-input-" + StackExchange.question_id);
     StackExchange.selections.submit = $("#submit-button");
   };
 
   StackExchange.insert_button = function() {
+    StackExchange.selections.redo_button.after(StackExchange.button_html);
+    StackExchange.selections.button_fix = $("#wmd-button-grammar-bot-" + StackExchange.question_id);
+    StackExchange.selections.button_fix.click(function(e) {
+      e.preventDefault();
+      // > apply edits
+    });
   };
 
   StackExchange.init = function() {
@@ -60,7 +77,6 @@ var main = function() {
   setTimeout(function() {
     if ($(".post-editor")[0]) {
       StackExchange.init();
-      console.log(StackExchange.selections.title.val());
     }
   }, 1000);
 };
