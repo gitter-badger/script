@@ -11,19 +11,21 @@
 
 var main = function() {
   // Define app namespace
-  var StackExchange = {};
-  StackExchange.selections = {};
+  var StackBot = {};
+  StackBot.items = [];
+  StackBot.selections = {};
+  StackBot.completed_edit = false;
+  StackBot.edit_count = 0;
+  StackBot.URL = window.location.href;
 
-  StackExchange.URL = window.location.href;
-
-  StackExchange.question_id = StackExchange.URL.match(/\/(\d+)\//g);
-  if (StackExchange.question_id) {
-    StackExchange.question_id = StackExchange.question_id[0].split("/").join("");
+  StackBot.question_id = StackBot.URL.match(/\/(\d+)\//g);
+  if (StackBot.question_id) {
+    StackBot.question_id = StackBot.question_id[0].split("/").join("");
   }
 
-  StackExchange.button_html = '<li \
+  StackBot.button_html = '<li \
     class="wmd-button" \
-    id="wmd-button-grammar-bot-' + StackExchange.question_id + '" \
+    id="wmd-button-grammar-bot-' + StackBot.question_id + '" \
     title="Grammar Bot" \
     style="left: 460px;"> \
       <img src="//i.imgur.com/79qYzkQ.png" \
@@ -32,7 +34,7 @@ var main = function() {
            height="18px;"> \
     </li>';
 
-  StackExchange.edits = {
+  StackBot.edits = {
     i: {
       expr: /(^|\s|\()i(\s|,|\.|!|\?|;|\/|\)|'|$)/gm,
       replacement: "$1I$2",
@@ -44,44 +46,132 @@ var main = function() {
       reason: "'Stack Overflow' is the legal name"
     },
     se: {
-      expr: /(^|\s)[Ss]tack\s*exchange|StackExchange(.|$)/gm,
+      expr: /(^|\s)[Ss]tack\s*exchange|StackBot(.|$)/gm,
       replacement: "$1Stack Exchange$2",
       reason: "'Stack Exchange' is the legal name"
     }
   };
 
-  StackExchange.fix_it = function() {
+  StackBot.output = function(data) {
+    StackBot.selections.title.val(data[0].title);
+    StackBot.selections.body.val(data[0].body);
+
+    if (StackBot.selections.summary.val()) {
+      data[0].summary = " " + data[0].summary;
+    }
+    StackBot.selections.summary.val(StackBot.selections.summary.val() + data[0].summary);
+
+    StackBot.current_pos = document.body.scrollTop;
+    if ($("#wmd-input")) {
+      $("#wmd-input").focus();
+      $("#edit-comment").focus();
+      $("#wmd-input").focus();
+    } else {
+      $(".wmd-input")[0].focus();
+      $(".edit-comment")[0].focus();
+      $(".wmd-input")[0].focus();
+    }
+    window.scrollTo(0, StackBot.current_pos);
   };
 
-  StackExchange.get_selections = function() {
-    StackExchange.selections.redo_button = $("#wmd-redo-button-" + StackExchange.question_id);
-    StackExchange.selections.title = $("#title");
-    StackExchange.selections.body = $("#wmd-input-" + StackExchange.question_id);
-    StackExchange.selections.submit = $("#submit-button");
+  StackBot.fix_it = function(input, expression, replacement, reasoning) {
+    var match = input.search(expression);
+    if (match !== -1) {
+      StackBot.edit_count++;
+      var phrase;
+
+      if (replacement === "") {
+        input = input.replace(expression, function(data, match1) {
+          phrase = match1;
+          return "";
+        });
+        reasoning = reasoning.replace("$1", phrase);
+      } else {
+        input = input.replace(expression, replacement);
+      }
+
+      return {
+        reason: reasoning,
+        fixed: input
+      };
+    } else {
+      return null;
+    }
   };
 
-  StackExchange.insert_button = function() {
-    StackExchange.selections.redo_button.after(StackExchange.button_html);
-    StackExchange.selections.button_fix = $("#wmd-button-grammar-bot-" + StackExchange.question_id);
-    StackExchange.selections.button_fix.click(function(e) {
+  StackBot.editing = function() {
+    for (var j in StackBot.edits) {
+      if (StackBot.edits.hasOwnProperty(j)) {
+        // Check body
+        var fix = StackBot.funcs.fixIt(data[0].body, StackBot.edits[j].expr,
+          StackBot.edits[j].replacement, StackBot.edits[j].reason);
+        if (fix) {
+          StackBot.globals.reasons[StackBot.globals.numReasons] = fix.reason;
+          data[0].body = fix.fixed;
+          StackBot.globals.numReasons++;
+          StackBot.edits[j].fixed = true;
+        }
+
+        // Check title
+        fix = StackBot.funcs.fixIt(data[0].title, StackBot.edits[j].expr,
+          StackBot.edits[j].replacement, StackBot.edits[j].reason);
+        if (fix) {
+          data[0].title = fix.fixed;
+          if (!StackBot.edits[j].fixed) {
+            StackBot.globals.reasons[StackBot.globals.numReasons] = fix.reason;
+            StackBot.globals.numReasons++;
+            StackBot.edits[j].fixed = true;
+          }
+        }
+      }
+  };
+
+  StackBot.pop_items = function() {
+    StackBot.items[0] = {
+      title: StackBot.selections.title.val(),
+      body: StackBot.selections.body.val(),
+      summary: ''
+    };
+  };
+
+  StackBot.insert_button = function() {
+    StackBot.selections.redo_button.after(StackBot.button_html);
+    StackBot.selections.button_fix = $("#wmd-button-grammar-bot-" + StackBot.question_id);
+    StackBot.selections.button_fix.click(function(e) {
       e.preventDefault();
-      // > apply edits
+
+      if (!StackBot.completed_edit) {
+        data = StackBot.editing(data)
+        StackBot.output(data);
+
+        StackBot.completed_edit = true;
+      }
     });
   };
 
-  StackExchange.init = function() {
-    StackExchange.get_selections();
-    StackExchange.insert_button();
+  StackBot.get_selections = function() {
+    StackBot.selections.redo_button = $("#wmd-redo-button-" + StackBot.question_id);
+    StackBot.selections.title = $("#title");
+    StackBot.selections.body = $("#wmd-input-" + StackBot.question_id);
+    StackBot.selections.tag_field = $($(".tag-editor")[0]);
+    StackBot.selections.summary_box = $("#edit-comment");
+    StackBot.selections.submit = $("#submit-button");
+  };
+
+  StackBot.init = function() {
+    StackBot.get_selections();
+    StackBot.insert_button();
+    StackBot.pop_items();
   }
 
   setTimeout(function() {
     if ($(".post-editor")[0]) {
-      StackExchange.init();
+      StackBot.init();
     }
   }, 1000);
 };
 
-// Inject script into DOM which will give access to jQuery "$"
+// Inject script into DOM (grants access to jQuery "$")
 var script = document.createElement('script');
 script.type = "text/javascript";
 script.textContent = '(' + main.toString() + ')();';
