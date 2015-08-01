@@ -37,14 +37,99 @@ var main = function() {
 
   StackBot.edits = {
     so: {
-      expr: /(^|\s)[Ss]tack\s*overflow|StackOverflow(.|$)/gm,
-      replacement: "$1Stack Overflow$2",
-      reason: "'Stack Overflow' is the legal name"
+        expr: /(^|\s)[Ss]tack\s*overflow|StackOverflow(.|$)/gm,
+        replacement: "$1Stack Overflow$2",
+        reason: "'Stack Overflow' is the legal name"
     },
     se: {
-      expr: /(^|\s)[Ss]tack\s*exchange|StackBot(.|$)/gm,
-      replacement: "$1Stack Exchange$2",
-      reason: "'Stack Exchange' is the legal name"
+        expr: /(^|\s)[Ss]tack\s*exchange|StackExchange(.|$)/gm,
+        replacement: "$1Stack Exchange$2",
+        reason: "'Stack Exchange' is the legal name"
+    },
+    javascript: {
+        expr: /(^|\s)[Jj]ava\s*script(.|$)/gm,
+        replacement: "$1JavaScript$2",
+        reason: "'JavaScript' is the proper capitalization"
+    },
+    jsfiddle: {
+        expr: /(^|\s)[Jj][Ss]\s+[Ff]iddle(.|$)/gm,
+        replacement: "$1JSFiddle$2",
+        reason: "'JSFiddle' is the currently accepted capitalization"
+    },
+    jquery: {
+        expr: /(^|\s)[Jj][Qq]uery(.|$)/gm,
+        replacement: "$1jQuery$2",
+        reason: "'jQuery' is the proper capitalization"
+    },
+    html: {
+        expr: /(^|\s)[Hh]tml(5|\s|$)/gm,
+        replacement: "$1HTML$2",
+        reason: "HTML stands for HyperText Markup Language"
+    },
+    css: {
+        expr: /(^|\s)[Cc]ss(\s|$)/gm,
+        replacement: "$1CSS$2",
+        reason: "CSS stands for Cascading Style Sheets"
+    },
+    json: {
+        expr: /(^|\s)[Jj]son(\s|$)/gm,
+        replacement: "$1JSON$2",
+        reason: "JSON stands for JavaScript Object Notation"
+    },
+    ajax: {
+        expr: /(^|\s)ajax(\s|$)/gm,
+        replacement: "$1AJAX$2",
+        reason: "AJAX stands for Asynchronous JavaScript and XML"
+    },
+    angular: {
+        expr: /[Aa]ngular[Jj][Ss]/g,
+        replacement: "AngularJS",
+        reason: "'AngularJS is the proper capitalization"
+    },
+    sqlite: {
+        expr: /(^|\s)[Ss]qlite([0-9]*)(\s|$)/gm,
+        replacement: "$1SQLite$2$3",
+        reason: "SQLite is the proper capitalization"
+    },
+    android: {
+        expr: /(^|\s)android(\s|$)/gmi,
+        replacement: "$1Android$2",
+        reason: "Android should be capitalizaed"
+    },
+    ubuntu: {
+        expr: /(ubunto|ubunut|ubunutu|ubunu|ubntu|ubutnu|ubanto[o?]|unbuntu|ubunt|ubutu)(\s|$)/igm,
+        replacement: "Ubuntu$2",
+        reason: "corrected Ubuntu spelling"
+    },
+    linux: {
+        expr: /(linux)(\s|$)/igm,
+        replacement: "Linux$2",
+        reason: "Linux should be capitalized"
+    },
+    wordpress: {
+        expr: /[Ww]ordpress/g,
+        replacement: "WordPress",
+        reason: "'WordPress' is the proper capitalization"
+    },
+    google: {
+      expr:  /(google)(\s|$)/igm,
+      replacement: "Google$2",
+      reason: "Google is the proper capitalization"
+    },
+    mysql: {
+      expr:  /(mysql)(\s|$)/igm,
+      replacement: "MySQL$2",
+      reason: "MySQL is the proper capitalization"
+    },
+    apache: {
+      expr:  /(apache)(\s|$)/igm,
+      replacement: "Apache$2",
+      reason: "Apache is the proper capitalization"
+    },
+    github: {
+      expr:  /\b([gG]ithub|GITHUB)(\s|$)/gm,
+      replacement: "GitHub$2",
+      reason: "GitHub is the proper capitalization"
     }
   };
 
@@ -218,6 +303,7 @@ var script = document.createElement('script');
 script.type = "text/javascript";
 script.textContent = '(' + main.toString() + ')();';
 document.body.appendChild(script);
+
 
 //// Add custom rules
 
