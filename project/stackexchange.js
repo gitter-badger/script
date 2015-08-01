@@ -10,13 +10,14 @@
 //// Rebuild
 
 var main = function() {
-  // Define app namespace
   var StackBot = {};
   StackBot.items = [];
   StackBot.selections = {};
   StackBot.completed_edit = false;
   StackBot.edit_count = 0;
   StackBot.URL = window.location.href;
+  StackBot.reasons = [];
+  StackBot.reason_count = 0;
 
   StackBot.question_id = StackBot.URL.match(/\/(\d+)\//g);
   if (StackBot.question_id) {
@@ -52,14 +53,30 @@ var main = function() {
     }
   };
 
+  StackBot.rm_duplicates = function(arr) {
+    var i, len = arr.length,
+      out = [],
+      obj = {};
+
+    for (i = 0; i < len; i++) {
+      obj[arr[i]] = 0;
+    }
+    for (i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        out.push(i);
+      }
+    }
+    return out;
+  };
+
   StackBot.output = function(data) {
     StackBot.selections.title.val(data[0].title);
     StackBot.selections.body.val(data[0].body);
 
-    if (StackBot.selections.summary.val()) {
+    if (StackBot.selections.summary_box.val()) {
       data[0].summary = " " + data[0].summary;
     }
-    StackBot.selections.summary.val(StackBot.selections.summary.val() + data[0].summary);
+    StackBot.selections.summary_box.val(StackBot.selections.summary_box.val() + data[0].summary);
 
     StackBot.current_pos = document.body.scrollTop;
     if ($("#wmd-input")) {
@@ -99,31 +116,55 @@ var main = function() {
     }
   };
 
-  StackBot.editing = function() {
+  StackBot.editing = function(data) {
     for (var j in StackBot.edits) {
-      if (StackBot.edits.hasOwnProperty(j)) {
-        // Check body
-        var fix = StackBot.funcs.fixIt(data[0].body, StackBot.edits[j].expr,
-          StackBot.edits[j].replacement, StackBot.edits[j].reason);
-        if (fix) {
-          StackBot.globals.reasons[StackBot.globals.numReasons] = fix.reason;
-          data[0].body = fix.fixed;
-          StackBot.globals.numReasons++;
+      // Fix body content
+      var fix = StackBot.fix_it(data[0].body, StackBot.edits[j].expr,
+        StackBot.edits[j].replacement, StackBot.edits[j].reason);
+      if (fix) {
+        console.log('body fix: ' + fix.reason)
+        StackBot.reasons[StackBot.reason_count] = fix.reason;
+        data[0].body = fix.fixed;
+        StackBot.reason_count++;
+        StackBot.edits[j].fixed = true;
+      }
+
+      // Fix title content
+      fix = StackBot.fix_it(data[0].title, StackBot.edits[j].expr,
+        StackBot.edits[j].replacement, StackBot.edits[j].reason);
+      if (fix) {
+        console.log('title fix: ' + fix.reason)
+        data[0].title = fix.fixed;
+        if (!StackBot.edits[j].fixed) {
+          StackBot.reasons[StackBot.reason_count] = fix.reason;
+          StackBot.reason_count++;
           StackBot.edits[j].fixed = true;
         }
+      }
+    }
 
-        // Check title
-        fix = StackBot.funcs.fixIt(data[0].title, StackBot.edits[j].expr,
-          StackBot.edits[j].replacement, StackBot.edits[j].reason);
-        if (fix) {
-          data[0].title = fix.fixed;
-          if (!StackBot.edits[j].fixed) {
-            StackBot.globals.reasons[StackBot.globals.numReasons] = fix.reason;
-            StackBot.globals.numReasons++;
-            StackBot.edits[j].fixed = true;
-          }
+    // Remove duplicate reasons
+    StackBot.reasons = StackBot.rm_duplicates(StackBot.reasons);
+
+    // Formatting applied to summary
+    for (var z = 0; z < StackBot.reasons.length; z++) {
+      if (data[0].summary.length < 200) {
+        if (z === 0) {
+          data[0].summary += StackBot.reasons[z][0].toUpperCase() +
+              StackBot.reasons[z].substring(1);
+        } else {
+          data[0].summary += StackBot.reasons[z];
+        }
+
+        if (z !== StackBot.reasons.length - 1) {
+          data[0].summary += "; ";
+        } else {
+          data[0].summary += ".";
         }
       }
+    }
+
+    return data;
   };
 
   StackBot.pop_items = function() {
@@ -141,9 +182,8 @@ var main = function() {
       e.preventDefault();
 
       if (!StackBot.completed_edit) {
-        data = StackBot.editing(data)
+        data = StackBot.editing(StackBot.items);
         StackBot.output(data);
-
         StackBot.completed_edit = true;
       }
     });
@@ -176,6 +216,7 @@ var script = document.createElement('script');
 script.type = "text/javascript";
 script.textContent = '(' + main.toString() + ')();';
 document.body.appendChild(script);
+
 
 //// Add custom rules
 
