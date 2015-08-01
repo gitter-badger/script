@@ -28,19 +28,14 @@ var main = function() {
     class="wmd-button" \
     id="wmd-button-grammar-bot-' + StackBot.question_id + '" \
     title="Grammar Bot" \
-    style="left: 460px;"> \
+    style="left: 420px;"> \
       <img src="//i.imgur.com/79qYzkQ.png" \
-           alt="Grammar Bot Edit" \
+           alt="Grammar Bot" \
            width="18px;" \
            height="18px;"> \
     </li>';
 
   StackBot.edits = {
-    i: {
-      expr: /(^|\s|\()i(\s|,|\.|!|\?|;|\/|\)|'|$)/gm,
-      replacement: "$1I$2",
-      reason: "in English, the pronoun 'I' is capitalized"
-    },
     so: {
       expr: /(^|\s)[Ss]tack\s*overflow|StackOverflow(.|$)/gm,
       replacement: "$1Stack Overflow$2",
@@ -117,6 +112,13 @@ var main = function() {
   };
 
   StackBot.editing = function(data) {
+    StackBot.selections.body.animate({
+        backgroundColor: '#c8ffa7'
+    }, 10);
+    StackBot.selections.body.animate({
+        backgroundColor: '#fff'
+    }, 1000);
+
     for (var j in StackBot.edits) {
       // Fix body content
       var fix = StackBot.fix_it(data[0].body, StackBot.edits[j].expr,
@@ -216,7 +218,6 @@ var script = document.createElement('script');
 script.type = "text/javascript";
 script.textContent = '(' + main.toString() + ')();';
 document.body.appendChild(script);
-
 
 //// Add custom rules
 
