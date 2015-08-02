@@ -9,99 +9,70 @@ require 'open3'
 require_relative 'admin'
 
 module Admin
-  module Annex
-    # Base class for Annex
-    class Base
-      attr_accessor :scope
-      attr_accessor :remote
-      attr_accessor :local
+  # Sync all local GitHub applications
+  class Annex
+    REMOTE = 'https://www.github.com'
+    LOCAL  = "#{ENV['HOME']}/GitHub"
 
-      def sync
-        puts @scope
-        repos = get_local_repos
-        repos.each do |repo|
-          print_target(repo, File.basename(repo))
-          Dir.chdir repo
-          commit_local
-          puts
-          push_remote
-        end
-      end
-
-      def get_local_repos(local_path = @local)
-        entries = Dir.glob("#{local_path}/*/").reject do |x|
-          x == '.' || x == '..'
-        end
-        entries
-      end
-
-      private
-
-      def print_target(path, repo)
-        puts <<-MSG
-
-  ################################
-  ### #{repo}
-  ### #{path}
-
-        MSG
-      end
-
-      def commit_local
-        system <<-CMD
-          git checkout --quiet -b annex 2> /dev/null;
-          git checkout --quiet annex 2> /dev/null;
-          git add -A 2> /dev/null;
-          git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-        CMD
-      end
-
-      def push_remote
-        system <<-CMD
-          git checkout --quiet -b master 2> /dev/null;
-          git checkout --quiet master 2> /dev/null;
-          git pull --no-edit origin master;
-          echo '';
-          git checkout --quiet annex 2> /dev/null;
-          echo 'Rebasing annex onto master...';
-          git rebase master;
-          echo '';
-          git checkout --quiet master 2> /dev/null;
-          echo 'Merging annex with master...';
-          git merge --no-edit annex;
-          echo '';
-          echo 'Pushing master to remote origin...';
-          git push origin master;
-          git checkout --quiet annex 2> /dev/null;
-          git merge  --quiet --no-edit master 2> /dev/null;
-        CMD
+    def sync
+      'Syncing with github...'
+      repos = get_local_repos
+      repos.each do |repo|
+        print_target(repo, File.basename(repo))
+        Dir.chdir repo
+        commit_local
+        puts
+        push_remote
       end
     end
 
-    # sync GitHub
-    class GitHub < Annex::Base
-      def initialize
-        @scope  = 'syncing github...'
-        @remote = 'https://www.github.com'
-        @local  = "#{ENV['HOME']}/GitHub"
+    def get_local_repos(local_path = LOCAL)
+      entries = Dir.glob("#{local_path}/*/").reject do |x|
+        x == '.' || x == '..'
       end
-
-      def sync
-        super
-      end
+      entries
     end
 
-    # sync GitLab
-    class GitLab < Annex::Base
-      def initialize
-        @scope  = 'syncing gitlab...'
-        @remote = 'http://localhost:8080'
-        @local  = "#{ENV['HOME']}/GitLab"
-      end
+    private
 
-      def sync
-        super
-      end
+    def print_target(path, repo)
+      puts <<-MSG
+
+################################
+### #{repo}
+### #{path}
+
+      MSG
+    end
+
+    def commit_local
+      system <<-CMD
+        git checkout --quiet -b annex 2> /dev/null;
+        git checkout --quiet annex 2> /dev/null;
+        git add -A 2> /dev/null;
+        git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}";
+      CMD
+    end
+
+    def push_remote
+      system <<-CMD
+        git checkout --quiet -b master 2> /dev/null;
+        git checkout --quiet master 2> /dev/null;
+        git pull --no-edit origin master;
+        echo '';
+        git checkout --quiet annex 2> /dev/null;
+        echo 'Rebasing annex onto master...';
+        git rebase master;
+        echo '';
+        git checkout --quiet master 2> /dev/null;
+        echo 'Merging annex with master...';
+        git merge --no-edit annex;
+        echo '';
+        echo 'Pushing master to remote origin...';
+        git push origin master;
+        git checkout --quiet annex 2> /dev/null;
+        git merge  --quiet --no-edit master 2> /dev/null;
+      CMD
     end
   end
 end
@@ -112,30 +83,10 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'USAGE: annex [options]'
-
-    opts.on('--github', 'Annex GitHub code repositories') do
-      options[:github] = true
-    end
-
-    opts.on('--gitlab', 'Annex GitLab code repositories') do
-      options[:gitlab] = true
-    end
+    opts.banner = 'USAGE: annex'
   end
   option_parser.parse!
 
-  if options.empty?
-    puts option_parser
-    exit 1
-  end
-
-  if options[:github]
-    annex = Annex::GitHub.new
-    annex.sync
-  end
-
-  if options[:gitlab]
-    annex = Annex::GitLab.new
-    annex.sync
-  end
+  annex = Annex.new
+  annex.sync
 end
