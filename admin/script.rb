@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2014 1005 193820
 # Modified At: 2014 1105 193823
-# Description: Script for CLI Application management
+# Description: Manage local scripts
 
 require_relative 'admin'
 

@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0528 033952
 # Modified At: 2015 0528 033955
-# Description: Canvas Management CLI Application
+# Description: Manage local canvases
 
 require_relative 'admin'
 

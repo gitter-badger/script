@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0103 163526
 # Modified At: 2015 0103 163526
-# Description: CLI-Application for App Management
+# Description: Manage local applications
 
 require_relative 'admin'
 
