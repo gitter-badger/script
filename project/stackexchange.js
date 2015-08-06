@@ -9,6 +9,17 @@
 
 //// Rebuild
 
+//!/usr/bin/env node
+// stackexchange.js
+// Author: Andy Bettisworth
+// Created At: 2015 0728 210044
+// Modified At: 2015 0728 210044
+// Description: userscript to fix grammatical errors on Stack Exchange
+
+// https://github.com/AstroCB/Stack-Exchange-Editor-Toolkit
+
+//// Rebuild
+
 var main = function() {
   var StackBot = {};
   StackBot.items = [];
@@ -36,6 +47,11 @@ var main = function() {
     </li>';
 
   StackBot.edits = {
+    iam: {
+        expr: /(^|\s)[Ii]\s*am|[Ii]\s*AM(.|$)/gm,
+        replacement: "$1I'm$2",
+        reason: "I'm is more concise."
+    },
     so: {
         expr: /(^|\s)[Ss]tack\s*overflow|StackOverflow(.|$)/gm,
         replacement: "$1Stack Overflow$2",
@@ -303,7 +319,6 @@ var script = document.createElement('script');
 script.type = "text/javascript";
 script.textContent = '(' + main.toString() + ')();';
 document.body.appendChild(script);
-
 
 //// Add custom rules
 
