@@ -2,13 +2,13 @@ Welcome to Script <br/><small>our mission is command-line applications.</small>
 --------------
 Script is a collaborative repository dedicated to command-line applications of various languages. Also it serves as a fun way to learn a language or automate repetitive tasks.
 
-Current Favorites
+TODO
 --------------
 
-+ enforce-80char.rb (admin) enforce 80 character limit per line
-+ gitcommit.rb (project) Simple bundling of commands to execute a git commit
-+ asciitrails.rb (fun) Walk the ASCII trails
-+ babelfish.rb (comm) Remove language boundaries
++ offline-wikipedia.rb (search) Setup a local mirror of wikipedia
++ narrativeclip.rb (project) Flush pictures off Narrative Clip 
++ orderpizza.rb (fun) Order pizza from the command line
++ requestride.rb (nav) Request an Uber driver
 
 Usage
 --------------
