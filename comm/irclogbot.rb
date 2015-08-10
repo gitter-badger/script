@@ -83,15 +83,38 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   require 'optparse'
-  
-  bot = Cinch::Bot.new do
-    configure do |c|
-      c.nick = "just-another-bot"
-      c.server = "irc.freenode.org"
-      c.channels = ["#some-channel"]
-      c.plugins.plugins = [Logger]
+
+  options = {}
+  option_parser = OptionParser.new do |opts|
+    opts.banner = 'Usage: irclogbot [options]'
+
+    opts.on('-n', '--nick NAME', 'Set IRC nick.') do |name|
+      options[:nick] = name
+    end
+
+    opts.on('-s', '--server URL', 'Set server URL.') do |url|
+      options[:server] = url
+    end
+
+    opts.on('-c', '--channel NAME', 'Set channel to log.') do |name|
+      options[:channel] = name
     end
   end
+  option_parser.parse!
 
-  bot.start
+  if options[:nick]
+    bot = Cinch::Bot.new do
+      configure do |c|
+        c.nick = "just-another-bot"
+        c.server = "irc.freenode.org"
+        c.channels = ["#some-channel"]
+        c.plugins.plugins = [Logger]
+      end
+    end
+
+    bot.start
+  else
+    puts option_parser
+    exit 1
+  end
 end
