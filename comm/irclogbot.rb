@@ -103,16 +103,15 @@ if __FILE__ == $PROGRAM_NAME
   option_parser.parse!
 
   if options[:nick] && options[:server] && options[:channel]
-    puts options[:channel]
-    # bot = Cinch::Bot.new do
-    #   configure do |c|
-    #     c.nick = options[:nick]
-    #     c.server = options[:server]
-    #     c.channels = ["#some-channel"]
-    #     c.plugins.plugins = [Logger]
-    #   end
-    # end
-    # bot.start
+    bot = Cinch::Bot.new do
+      configure do |c|
+        c.nick = options[:nick]
+        c.server = options[:server]
+        c.channels = [options[:channel]]
+        c.plugins.plugins = [Logger]
+      end
+    end
+    bot.start
   else
     puts option_parser
     exit 1
