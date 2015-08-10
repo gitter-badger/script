@@ -42,7 +42,7 @@ class Logger
     @short_format = "%Y-%m-%d"
     @long_format = "%Y-%m-%d %H:%M:%S"
     @filename = "log-#{Time.now.strftime(@short_format)}.log"
-    @logfile          = File.open(@filename,"w")
+    @logfile = File.open(@filename, "w")
     @midnight_message =  "=== The dawn of a new day: #{@short_format} ==="
     @last_time_check  = Time.now
   end
@@ -88,11 +88,11 @@ if __FILE__ == $PROGRAM_NAME
   option_parser = OptionParser.new do |opts|
     opts.banner = 'Usage: irclogbot [options]'
 
-    opts.on('-n', '--nick NAME', 'Set IRC nick.') do |name|
+    opts.on('-n', '--nick NAME', 'Set IRC nick (wurde).') do |name|
       options[:nick] = name
     end
 
-    opts.on('-s', '--server URL', 'Set server URL.') do |url|
+    opts.on('-s', '--server URL', 'Set server URL (irc.freenode.org).') do |url|
       options[:server] = url
     end
 
@@ -102,17 +102,17 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  if options[:nick]
-    bot = Cinch::Bot.new do
-      configure do |c|
-        c.nick = "just-another-bot"
-        c.server = "irc.freenode.org"
-        c.channels = ["#some-channel"]
-        c.plugins.plugins = [Logger]
-      end
-    end
-
-    bot.start
+  if options[:nick] && options[:server] && options[:channel]
+    puts options[:channel]
+    # bot = Cinch::Bot.new do
+    #   configure do |c|
+    #     c.nick = options[:nick]
+    #     c.server = options[:server]
+    #     c.channels = ["#some-channel"]
+    #     c.plugins.plugins = [Logger]
+    #   end
+    # end
+    # bot.start
   else
     puts option_parser
     exit 1
