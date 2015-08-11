@@ -10,8 +10,9 @@ require_relative 'project'
 
 module Project
   class ProjectManager
-    DESKTOP = "#{ENV['HOME']}/Desktop"
-    PROJECT = "#{ENV['HOME']}/Projects"
+    HOME    = ENV['HOME']
+    DESKTOP = File.join(HOME, 'Desktop')
+    PROJECT = File.join(HOME, 'Projects')
 
     def list(project_regexp = false)
       ensure_project_dir
@@ -32,7 +33,7 @@ module Project
     def fetch(project)
       projects = get_projects
       raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
-      `mv #{PROJECT}/#{project} #{ENV['HOME']}/Desktop`
+      FileUtils.mv(File.join(PROJECT, project), DESKTOP)
     end
 
     def clean
@@ -40,9 +41,9 @@ module Project
       archived_projects = get_projects
       desktop_dir = get_desktop_dir
       desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
-      projects = desktop_dir.select { |d| File.exist?("#{DESKTOP}/#{d}/info.yml") }
+      projects = desktop_dir.select { |d| File.exist?(File.join(DESKTOP, d, 'info.yml')) }
       projects.each do |project|
-        `mv #{DESKTOP}/#{project} #{PROJECT}`
+        FileUtils.mv(File.join(DESKTOP, project), PROJECT)
       end
     end
 
@@ -53,7 +54,7 @@ module Project
     end
 
     def get_projects
-      projects = Dir.glob("#{PROJECT}/*/")
+      projects = Dir.glob(File.join(PROJECT, '*'))
       projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
       projects = projects.collect { |p| File.basename(p) }
       projects
@@ -67,9 +68,9 @@ module Project
 
     def get_info(projects)
       projects = projects.collect do |project|
-        if File.exist?("#{PROJECT}/#{project}/info.yml")
+        if File.exist?(File.join(PROJECT, project, 'info.yml'))
           info = {}
-          info[:info] = YAML.load_file("#{PROJECT}/#{project}/info.yml")
+          info[:info] = YAML.load_file(File.join(PROJECT, project, 'info.yml'))
           info[:project] = project
           info
         else
@@ -80,7 +81,7 @@ module Project
     end
 
     def get_desktop_dir
-      desktop_dir = Dir.glob("#{DESKTOP}/*/")
+      desktop_dir = Dir.glob(File.join(DESKTOP, '*'))
       desktop_dir = desktop_dir.reject { |d| d == '.' || d == '..' || d == ".git" }
       desktop_dir = desktop_dir.collect { |p| File.basename(p) }
       desktop_dir

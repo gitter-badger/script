@@ -12,7 +12,7 @@ module Admin
   # Sync all local GitHub applications
   class Annex
     REMOTE = 'https://www.github.com'
-    LOCAL  = "#{ENV['HOME']}/GitHub"
+    LOCAL  = File.join(HOME, 'GitHub')
 
     def sync
       'Syncing with github...'
@@ -27,7 +27,7 @@ module Admin
     end
 
     def get_local_repos(local_path = LOCAL)
-      entries = Dir.glob("#{local_path}/*/").reject do |x|
+      entries = Dir.glob(File.join(local_path, '*')).reject do |x|
         x == '.' || x == '..'
       end
       entries

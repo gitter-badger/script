@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Videos
   class Video
-    VIDEO_DIR = "#{ENV['HOME']}/Videos"
+    VIDEO_DIR = File.join(HOME, 'Videos')
 
     def list(query: nil, quiet: false)
       videos = grab_all_files(VIDEO_DIR)

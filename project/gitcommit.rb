@@ -14,10 +14,8 @@ if __FILE__ == $PROGRAM_NAME
   if File.exist?('.git')
     puts "Creating a git commit within #{Dir.pwd}"
     message = gets.chomp until message
-    system <<-CMD
-      git add -A
-      git commit -m '#{message}'
-    CMD
+    system('git add -A')
+    system('git commit -m "' + message + '"')
   else
     raise "No git repository found at '#{Dir.pwd}'"
   end
