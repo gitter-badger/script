@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
-# comm.rb
+# nav.rb
 # Author: Andy Bettisworth
 # Created At: 2015 0528 202616
 # Modified At: 2015 0528 202616
-# Description: primary comm module
+# Description: primary nav module
 
-module Comm
+module Nav
   HOME    = ENV['HOME']
   DESKTOP = File.join(HOME, 'Desktop')
 end

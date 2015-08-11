@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
-# comm.rb
+# search.rb
 # Author: Andy Bettisworth
 # Created At: 2015 0528 202616
 # Modified At: 2015 0528 202616
-# Description: primary comm module
+# Description: primary search module
 
-module Comm
+module Search
   HOME    = ENV['HOME']
   DESKTOP = File.join(HOME, 'Desktop')
 end

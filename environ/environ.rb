@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
-# comm.rb
+# environ.rb
 # Author: Andy Bettisworth
 # Created At: 2015 0528 202616
 # Modified At: 2015 0528 202616
-# Description: primary comm module
+# Description: primary environ module
 
-module Comm
+module Environ
   HOME    = ENV['HOME']
   DESKTOP = File.join(HOME, 'Desktop')
 end
