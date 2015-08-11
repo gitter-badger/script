@@ -49,8 +49,8 @@ module Admin
 
     def commit_local
       if @is_windows
-        system 'git checkout --quiet -b annex > NULL'
-        system 'git checkout --quiet annex > NULL'
+        system 'git checkout --quiet -b annex > NUL'
+        system 'git checkout --quiet annex > NUL'
       else
         system 'git checkout --quiet -b annex 2> /dev/null'
         system 'git checkout --quiet annex 2> /dev/null'
@@ -62,8 +62,8 @@ module Admin
 
     def push_remote
       if @is_windows
-        system 'git checkout --quiet -b master > NULL'
-        system 'git checkout --quiet master > NULL'
+        system 'git checkout --quiet -b master > NUL'
+        system 'git checkout --quiet master > NUL'
       else
         system 'git checkout --quiet -b master 2> /dev/null'
         system 'git checkout --quiet master 2> /dev/null'
@@ -73,7 +73,7 @@ module Admin
       system 'echo'
 
       if @is_windows
-        system 'git checkout --quiet annex > NULL'
+        system 'git checkout --quiet annex > NUL'
       else
         system 'git checkout --quiet annex 2> /dev/null'
       end
@@ -83,7 +83,7 @@ module Admin
       system 'echo'
 
       if @is_windows
-        system 'git checkout --quiet master > NULL'
+        system 'git checkout --quiet master > NUL'
       else
         system 'git checkout --quiet master 2> /dev/null'
       end
@@ -95,7 +95,7 @@ module Admin
       system 'git push origin master'
 
       if @is_windows
-        system 'git checkout --quiet annex > NULL'
+        system 'git checkout --quiet annex > NUL'
       else
         system 'git checkout --quiet annex 2> /dev/null'
       end
