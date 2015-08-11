@@ -16,6 +16,8 @@ module Admin
 
     def sync
       'Syncing with github...'
+      @is_windows = (ENV['OS'] == 'Windows_NT')
+
       repos = get_local_repos
       repos.each do |repo|
         print_target(repo, File.basename(repo))

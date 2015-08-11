@@ -5,7 +5,6 @@
 # Modified At: 2015 0811 115609
 # Description: set git credentials
 
-
 if __FILE__ == $PROGRAM_NAME
   require 'optparse'
 
@@ -23,14 +22,17 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
+  is_windows = (ENV['OS'] == 'Windows_NT')
+
   if options[:username] && options[:email]
     system('git config --global color.ui true')
-    system('git config --global user.name "#{options[:username]}"')
-    system('git config --global user.email "#{options[:email]}"')
-    ## linux
-    # system('git config --global credential.helper "cache --timeout=3600"')
-    ## Windows
-    system('git config --global credential.helper wincred')
+    system('git config --global user.name "' + options[:username] + '"')
+    system('git config --global user.email "' + options[:email] + '"')
+    if is_windows
+      system('git config --global credential.helper wincred')
+    else
+      system('git config --global credential.helper "cache --timeout=3600"')
+    end
     system('git config --global core.editor "atom -n"')
   else
     puts option_parser
