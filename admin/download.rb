@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Downloads
   class Download
-    DOWNLOAD_DIR = "#{ENV['HOME']}/Downloads"
+    DOWNLOAD_DIR = File.join(HOME, 'Downloads')
 
     def list(query: nil, quiet: false)
       downloads = grab_all_files(DOWNLOAD_DIR)

@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Pictures
   class Picture
-    PICTURE_DIR = "#{ENV['HOME']}/Pictures"
+    PICTURE_DIR = File.join(HOME, 'Pictures')
 
     def list(query: nil, quiet: false)
       pictures = grab_all_files(PICTURE_DIR)

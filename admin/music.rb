@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # manage all local ~/Music
   class Music
-    MUSIC_DIR = "#{ENV['HOME']}/Music"
+    MUSIC_DIR = File.join(HOME, 'Music')
 
     def list(query: nil, quiet: false)
       music = grab_all_files(MUSIC_DIR)

@@ -8,8 +8,9 @@
 require_relative 'admin'
 
 module Admin
+  # manage all local canvases
   class Canvas
-    CANVAS_DIR = "#{HOME}/GitHub/canvas"
+    CANVAS_DIR = File.join(HOME, 'GitHub', 'canvas')
     SHEBANGS   = {
       '.c'   => '//',
       '.rb'  => '#!/usr/bin/env ruby -w',
@@ -66,15 +67,16 @@ $C Description: $4
     def clean
       lang_dir = get_lang_dir
       canvases = get_canvases(lang_dir)
-
       canvases_out = get_open_canvases(canvases)
       canvases_out = get_canvas_location(canvases_out)
 
       if canvases_out
         if canvases_out.is_a? Array
-          canvases_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+          canvases_out.each do |s|
+            FileUtils.mv(File.join(DESKTOP, File.basename(s)), s)
+          end
         else
-          system("mv #{DESKTOP}/#{File.basename(canvases_out)} #{canvases_out}")
+          FileUtils.mv(File.join(DESKTOP, File.basename(canvases_out)), canvases_out)
         end
 
         commit_changes
@@ -118,10 +120,10 @@ $C Description: $4
 
       lang_dir.each do |lang|
         target_lang = lang
-        Dir.foreach("#{CANVAS_DIR}/#{target_lang}") do |file|
+        Dir.foreach(File.join(CANVAS_DIR, target_lang)) do |file|
           next if file == '.' or file == '..'
           canvas = {}
-          canvas = get_canvas_info("#{CANVAS_DIR}/#{target_lang}/#{file}")
+          canvas = get_canvas_info(File.join(CANVAS_DIR, target_lang, file))
           canvas_list << canvas
         end
       end
@@ -132,7 +134,7 @@ $C Description: $4
     def get_open_canvases(canvases)
       open_canvases = []
 
-      Dir.foreach("#{DESKTOP}") do |entry|
+      Dir.foreach(DESKTOP) do |entry|
         next if File.directory?(entry)
         open_canvases << entry if canvas_exist?(entry)
       end
@@ -159,8 +161,10 @@ $C Description: $4
       top_path = File.expand_path('..', dirname)
       language = dirname.gsub("#{top_path}/", '')
 
-      file_head = File.open(filepath).readlines
+      f = File.open(filepath)
+      file_head = f.readlines
       c = file_head[0..11].join('')
+      f.close
 
       if c.valid_encoding?
         canvas[:language] = language
@@ -227,8 +231,8 @@ $C Description: $4
       header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
       header = header.gsub!('$4', description)
 
-      File.new("#{CANVAS_DIR}/#{language}/#{canvas}", 'w+') << header
-      File.new("#{DESKTOP}/#{canvas}", 'w+') << header
+      File.new(File.join(CANVAS_DIR, language, canvas), 'w+') << header
+      File.new(File.join(DESKTOP, canvas), 'w+') << header
     end
 
     def set_default_ext(*canvases)
@@ -274,7 +278,7 @@ $C Description: $4
         cl = canvas_list.select { |c| c[:filename] == canvas }
 
         if cl.count >= 1
-          "#{CANVAS_DIR}/#{cl[0][:language]}/#{canvas}"
+          File.join(CANVAS_DIR, cl[0][:language], canvas)
         else
           canvas
         end
@@ -291,7 +295,7 @@ $C Description: $4
       canvases.flatten!
       canvases.each do |canvas|
         if File.exist?(canvas)
-          system("cp #{canvas} #{DESKTOP}")
+          FileUtils.cp(canvas, DESKTOP)
         else
           puts "No such canvas: '#{File.basename(canvas)}'"
         end
@@ -331,14 +335,12 @@ $C Description: $4
       puts 'Enter a commit message:'
       commit_msg = gets.strip
       commit_msg = "canvas clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
-      system <<-CMD
-        echo '';
-        echo 'Committing changes for canveses...';
-        cd #{CANVAS_DIR};
-        git checkout annex;
-        git add -A;
-        git commit -m "#{commit_msg}";
-      CMD
+      puts ''
+      puts 'Committing changes for canveses...'
+      Dir.chdir(CANVAS_DIR)
+      system('git checkout annex')
+      system('git add -A')
+      system('git commit -m "' + commit_msg + '"')
     end
 
     def branch_exist?(repository, branch)

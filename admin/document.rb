@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # Manage all local ~/Documents
   class Document
-    DOCUMENT_DIR = "#{ENV['HOME']}/Documents"
+    DOCUMENT_DIR = File.join(HOME, 'Documents')
 
     def list(query: nil, quiet: false)
       documents = grab_all_files(DOCUMENT_DIR)

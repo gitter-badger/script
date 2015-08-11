@@ -10,7 +10,7 @@ require 'pathname'
 
 module Admin
   HOME     = ENV['HOME']
-  DESKTOP  = "#{HOME}/Desktop"
+  DESKTOP  = File.join(HOME, 'Desktop')
   DEFAULT_EXT = '.rb'
   BINARIES = {
     '.c'   => 'gcc',

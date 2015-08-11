@@ -10,7 +10,7 @@ require_relative 'admin'
 module Admin
   # manage all local scripts
   class Script
-    SCRIPT_DIR    = "#{HOME}/GitHub/script"
+    SCRIPT_DIR    = File.join(HOME, 'GitHub', 'script')
     CATEGORIES    = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
     SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
     BOILERPLATE   = <<-TXT
@@ -65,9 +65,9 @@ $0
 
       if scripts_out
         if scripts_out.is_a? Array
-          scripts_out.each { |s| system("mv #{HOME}/Desktop/#{File.basename(s)} #{s}") }
+          scripts_out.each { |s| FileUtils.mv(File.join(HOME, 'Desktop', File.basename(s)), s) }
         else
-          system("mv -f #{HOME}/Desktop/#{File.basename(scripts_out)} #{scripts_out}")
+          FileUtils.mv(File.join(HOME, 'Desktop', File.basename(scripts_out)), scripts_out)
         end
 
         commit_changes
@@ -75,7 +75,7 @@ $0
     end
 
     def refresh_aliases
-      new_bash_aliases = File.open("#{HOME}/.bash_aliases", 'w+')
+      new_bash_aliases = File.open(File.join(HOME, '.bash_aliases'), 'w+')
 
       categories = get_app_categories
       scripts = get_scripts(categories)
@@ -85,13 +85,13 @@ $0
         name        = File.basename(script[:filename], extension)
         alias_cmd   = "alias #{name}="
         exec_binary = "'#{BINARIES[extension]} "
-        script_path = "#{SCRIPT_DIR}/#{script[:category]}/#{script[:filename]}'"
+        script_path = File.join(SCRIPT_DIR, script[:category], script[:filename])
         str_alias   = alias_cmd + exec_binary + script_path
         new_bash_aliases.puts str_alias
       end
       new_bash_aliases.close
 
-      system "source #{"#{HOME}/.bash_aliases"}"
+      system "source #{ File.join(HOME, '.bash_aliases') }"
     end
 
     def history
@@ -142,8 +142,8 @@ $0
       header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
       header = header.gsub!('$4', description)
 
-      File.new("#{SCRIPT_DIR}/#{category}/#{script}", 'w+') << header
-      File.new("#{HOME}/Desktop/#{script}", 'w+') << header
+      File.new(File.join(SCRIPT_DIR, category, script), 'w+') << header
+      File.new(File.join(HOME, 'Desktop', script), 'w+') << header
     end
 
     def set_default_ext(*scripts)
@@ -196,8 +196,10 @@ $0
       top_path = File.expand_path('..', dirname)
       category = dirname.gsub("#{top_path}/", '')
 
-      file_head = File.open(filepath).readlines
+      f = File.open(filepath)
+      file_head = f.readlines
       s = file_head[0..11].join('')
+      f.close
 
       if s.valid_encoding?
         script[:category] = category
@@ -274,7 +276,7 @@ $0
         sl = scripts_list.select { |s| s[:filename] == script }
 
         if sl.count >= 1
-          "#{SCRIPT_DIR}/#{sl[0][:category]}/#{script}"
+          File.join(SCRIPT_DIR, sl[0][:category], script)
         else
           script
         end
@@ -291,7 +293,7 @@ $0
       scripts.flatten!
       scripts.each do |script|
         if File.exist?(script)
-          system("cp #{script} #{HOME}/Desktop")
+          FileUtils.cp(script, DESKTOP)
         else
           msg = "Warning: script not found '#{script}'!\n"
           extname = File.extname(script)
@@ -318,10 +320,10 @@ $0
 
       categories.each do |category|
         target_category = category
-        Dir.foreach("#{SCRIPT_DIR}/#{target_category}") do |file|
+        Dir.foreach(File.join(SCRIPT_DIR, target_category)) do |file|
           next if file == '.' or file == '..'
           script = {}
-          script = get_script_info("#{SCRIPT_DIR}/#{target_category}/#{file}")
+          script = get_script_info(File.join(SCRIPT_DIR, target_category, file))
           script_list << script
         end
       end
@@ -332,7 +334,7 @@ $0
     def get_open_scripts(scripts)
       open_scripts = []
 
-      Dir.foreach("#{HOME}/Desktop") do |entry|
+      Dir.foreach(DESKTOP) do |entry|
         next if File.directory?(entry)
         open_scripts << entry if script_exist?(entry)
       end
@@ -389,7 +391,7 @@ $0
     def get_bash_aliases
       script_list = []
 
-      File.open("#{HOME}/.bash_aliases").readlines.each_with_index do |line, index|
+      File.open(File.join(HOME, '.bash_aliases')).readlines.each_with_index do |line, index|
         next if index == 0
 
         found_script = SCRIPT_REGEXP.match(line)
@@ -412,14 +414,12 @@ $0
       puts 'Enter a commit message:'
       commit_msg = gets.strip
       commit_msg = "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
-      system <<-CMD
-        echo '';
-        echo 'Commit changes in ~/.sync/.script';
-        cd #{SCRIPT_DIR};
-        git checkout annex;
-        git add -A;
-        git commit -m "#{commit_msg}";
-      CMD
+      puts ''
+      puts 'Committing changes for scripts...'
+      Dir.chdir(SCRIPT_DIR)
+      system('git checkout annex')
+      system('git add -A')
+      system('git commit -m "' + commit_msg + '"')
     end
 
     def branch_exist?(repository, branch)

@@ -10,8 +10,8 @@ require_relative 'admin'
 module Admin
   # Manage all applications stored locally
   class ApplicationManager
-    GITHUB_LOCAL  = "#{ENV['HOME']}/GitHub"
-    GITLAB_LOCAL  = "#{ENV['HOME']}/GitLab"
+    GITHUB_LOCAL = File.join(HOME, 'GitHub')
+    GITLAB_LOCAL = File.join(HOME, 'GitLab')
 
     def list(app_regexp = false)
       github_apps = get_github_apps
@@ -46,16 +46,12 @@ module Admin
       if open_apps
         if open_apps.is_a? Array
           open_apps.each do |app|
-            system <<-CMD
-              rm --recursive --force #{app};
-              mv #{ENV['HOME']}/Desktop/#{File.basename(app)} #{app};
-            CMD
+            FileUtils.rm_rf(app)
+            FileUtils.mv(File.join(HOME, 'Desktop', File.basename(app)), app)
           end
         else
-          system <<-CMD
-            rm --recursive --force #{open_apps};
-            mv #{ENV['HOME']}/Desktop/#{File.basename(open_apps)} #{open_apps};
-          CMD
+          FileUtils.rm_rf(open_apps)
+          FileUtils.mv(File.join(HOME, 'Desktop', File.basename(open_apps)), open_apps)
         end
       end
     end
@@ -68,7 +64,7 @@ module Admin
       github_apps = get_github_apps
       gitlab_apps = get_gitlab_apps
 
-      Dir.glob("#{ENV['HOME']}/Desktop/*/") do |entry|
+      Dir.glob(File.join(DESKTOP, '*')) do |entry|
         next if entry == '.' or entry == '..'
 
         filename = File.basename(entry)
@@ -79,10 +75,10 @@ module Admin
           next
         elsif is_github
           puts "  Cleaning GitHub application '#{filename}'..."
-          open_apps << "#{GITHUB_LOCAL}/#{filename}"
+          open_apps << File.join(GITHUB_LOCAL, filename)
         elsif is_gitlab
           puts "  Cleaning GitLab application '#{filename}'..."
-          open_apps << "#{GITLAB_LOCAL}/#{filename}"
+          open_apps << File.join(GITLAB_LOCAL, filename)
         else
           next
         end
@@ -104,9 +100,9 @@ module Admin
           puts "  WARNING: found #{app} in both GitHub and GitLab"
           app = nil
         elsif is_github
-          app = "#{GITHUB_LOCAL}/#{app}"
+          app = File.join(GITHUB_LOCAL, app)
         elsif is_gitlab
-          app = "#{GITLAB_LOCAL}/#{app}"
+          app = File.join(GITLAB_LOCAL, app)
         else
           puts "  WARNING: could not find application named '#{app}'"
           app = nil
@@ -127,10 +123,8 @@ module Admin
 
     Fetching the application '#{File.basename(app)}'...
           MSG
-          system <<-CMD
-            rm --recursive --force #{ENV['HOME']}/Desktop/#{File.basename(app)};
-            cp --recursive #{app} #{ENV['HOME']}/Desktop;
-          CMD
+          FileUtils.rm_rf(File.join(HOME, 'Desktop', File.basename(app)))
+          FileUtils.cp_r(app, DESKTOP)
         else
           puts "NotFoundError: could not find '#{File.basename(app)}'"
         end
@@ -152,7 +146,7 @@ module Admin
 
     def get_github_apps
       entries = []
-      Dir.glob("#{GITHUB_LOCAL}/*/").each do |entry|
+      Dir.glob(File.join(GITHUB_LOCAL, '*')).each do |entry|
         entries << File.basename(entry)
       end
       entries
@@ -160,7 +154,7 @@ module Admin
 
     def get_gitlab_apps
       entries = []
-      Dir.glob("#{GITLAB_LOCAL}/*/").each do |entry|
+      Dir.glob(File.join(GITLAB_LOCAL, '*')).each do |entry|
         entries << File.basename(entry)
       end
       entries

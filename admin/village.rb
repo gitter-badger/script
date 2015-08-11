@@ -9,8 +9,7 @@ require_relative 'admin'
 
 module Admin
   class Village
-    HOME = ENV['HOME']
-    REMOTE = "/media/#{ ENV['USER'] }/Village"
+    REMOTE = File.join('media', ENV['USER'], 'Village')
     HOME_MEDIA = {
       documents: "#{ HOME }/Documents",
       downloads: "#{ HOME }/Downloads",
