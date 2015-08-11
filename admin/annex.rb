@@ -49,33 +49,58 @@ module Admin
 
     def commit_local
       if @is_windows
-        puts "Dos"
+        system 'git checkout --quiet -b annex > NULL'
+        system 'git checkout --quiet annex > NULL'
       else
-        puts "Linux"
+        system 'git checkout --quiet -b annex 2> /dev/null'
+        system 'git checkout --quiet annex 2> /dev/null'
       end
-      # system 'git checkout --quiet -b annex'
-      # system 'git checkout --quiet annex'
-      # system 'git add -A'
-      # system %q{ git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}"'}
+
+      system 'git add -A'
+      system %q{ git commit -m "annex-#{Time.now.strftime('%Y%m%d%H%M%S')}"'}
     end
 
     def push_remote
-      # system 'git checkout --quiet -b master'
-      # system 'git checkout --quiet master'
-      # system 'git pull --no-edit origin master'
-      # system 'echo'
-      # system 'git checkout --quiet annex'
-      # system 'echo "Rebasing annex onto master..."'
-      # system 'git rebase master'
-      # system 'echo'
-      # system 'git checkout --quiet master'
-      # system 'echo "Merging annex with master..."'
-      # system 'git merge --no-edit annex'
-      # system 'echo'
-      # system 'echo "Pushing master to remote origin..."'
-      # system 'git push origin master'
-      # system 'git checkout --quiet annex'
-      # system 'git merge  --quiet --no-edit master'
+      if @is_windows
+        system 'git checkout --quiet -b master > NULL'
+        system 'git checkout --quiet master > NULL'
+      else
+        system 'git checkout --quiet -b master 2> /dev/null'
+        system 'git checkout --quiet master 2> /dev/null'
+      end
+
+      system 'git pull --no-edit origin master'
+      system 'echo'
+
+      if @is_windows
+        system 'git checkout --quiet annex > NULL'
+      else
+        system 'git checkout --quiet annex 2> /dev/null'
+      end
+
+      system 'echo "Rebasing annex onto master..."'
+      system 'git rebase master'
+      system 'echo'
+
+      if @is_windows
+        system 'git checkout --quiet master > NULL'
+      else
+        system 'git checkout --quiet master 2> /dev/null'
+      end
+
+      system 'echo "Merging annex with master..."'
+      system 'git merge --no-edit annex'
+      system 'echo'
+      system 'echo "Pushing master to remote origin..."'
+      system 'git push origin master'
+
+      if @is_windows
+        system 'git checkout --quiet annex > NULL'
+      else
+        system 'git checkout --quiet annex 2> /dev/null'
+      end
+
+      system 'git merge --quiet --no-edit master'
     end
   end
 end
