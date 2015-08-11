@@ -32,7 +32,7 @@ $C Description: $4
       lang_dir = get_lang_dir
       canvases = get_canvases(lang_dir)
       canvases = filter_canvases(canvases, canvas_regexp)
-      canvases = canvases.sort_by { |k,v| k[:filename]}
+      canvases = canvases.sort_by { |k,v| k[:filename] }
       print_canvas_list(canvases)
       canvases
     end
