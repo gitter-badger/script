@@ -9,7 +9,6 @@ require_relative 'admin'
 
 module Admin
   class Village
-    REMOTE = File.join('media', ENV['USER'], 'Village')
     HOME_MEDIA = {
       documents: "#{ HOME }/Documents",
       downloads: "#{ HOME }/Downloads",
@@ -18,19 +17,31 @@ module Admin
       videos: "#{ HOME }/Videos"
     }
     REMOTE_MEDIA = {
-      documents: "#{ REMOTE }/Documents",
-      downloads: "#{ REMOTE }/Downloads",
-      music: "#{ REMOTE }/Music",
-      pictures: "#{ REMOTE }/Pictures",
-      videos: "#{ REMOTE }/Videos"
+      documents: "#{ @remote }/Documents",
+      downloads: "#{ @remote }/Downloads",
+      music: "#{ @remote }/Music",
+      pictures: "#{ @remote }/Pictures",
+      videos: "#{ @remote }/Videos"
     }
+
+    def initialize
+      @is_windows = (ENV['OS'] == 'Windows_NT')
+
+      if @is_windows
+        @remote = File.join('media', ENV['USER'], 'Village')
+      else
+        disk_out = `wmic logicaldisk get caption,description,filesystem`
+        puts disk_out
+        # @remote = File.join('')
+      end
+    end
 
     def download(media)
       require_dir(HOME_MEDIA[media])
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
       puts "Downloading #{ diff.count } files from #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
-      sync_diff(diff, HOME_MEDIA[media], REMOTE_MEDIA[media])
+      # sync_diff(diff, HOME_MEDIA[media], REMOTE_MEDIA[media])
     end
 
     def upload(media)
@@ -38,7 +49,7 @@ module Admin
       require_dir(REMOTE_MEDIA[media])
       diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
       puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
-      sync_diff(diff, REMOTE_MEDIA[media], HOME_MEDIA[media])
+      # sync_diff(diff, REMOTE_MEDIA[media], HOME_MEDIA[media])
     end
   end
 end
