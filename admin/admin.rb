@@ -103,9 +103,11 @@ module Admin
   end
 
   def map_files(dir)
-    files = Dir[dir + "/**/*"]
+    puts File.join(dir, '**', '*')
+    files = Dir[File.join(dir, '**', '*')]
     files.delete_if { |path| File.directory?(path) }
     files.map! { |path| [File.basename(path), path] }
+    files = Hash[files]
     files = files.to_h
     files
   end

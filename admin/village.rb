@@ -10,46 +10,53 @@ require_relative 'admin'
 module Admin
   class Village
     HOME_MEDIA = {
-      documents: "#{ HOME }/Documents",
-      downloads: "#{ HOME }/Downloads",
-      music: "#{ HOME }/Music",
-      pictures: "#{ HOME }/Pictures",
-      videos: "#{ HOME }/Videos"
+      documents: File.join(HOME, 'Documents'),
+      downloads: File.join(HOME, 'Downloads'),
+      music: File.join(HOME, 'Music'),
+      pictures: File.join(HOME, 'Pictures'),
+      videos: File.join(HOME, 'Videos')
     }
-    REMOTE_MEDIA = {
-      documents: "#{ @remote }/Documents",
-      downloads: "#{ @remote }/Downloads",
-      music: "#{ @remote }/Music",
-      pictures: "#{ @remote }/Pictures",
-      videos: "#{ @remote }/Videos"
-    }
+    attr_accessor :remote_media
 
     def initialize
       @is_windows = (ENV['OS'] == 'Windows_NT')
 
       if @is_windows
-        @remote = File.join('media', ENV['USER'], 'Village')
-      else
         disk_out = `wmic logicaldisk get caption,description,filesystem`
-        puts disk_out
-        # @remote = File.join('')
+        disk = disk_out.split(/^/).keep_if { |e| e.length > 3}.collect { |e| e.squeeze }.last.chop.chop
+        if /NTFS/.match(disk)
+          remote = disk[0..1]
+        else
+          STDERR.puts "ERROR: Missing external drive"
+          exit 1
+        end
+      else
+        remote = File.join('media', ENV['USER'], 'Village')
       end
+
+      @remote_media = {
+        documents: File.join(remote, 'Documents'),
+        downloads: File.join(remote, 'Downloads'),
+        music: File.join(remote, 'Music'),
+        pictures: File.join(remote, 'Pictures'),
+        videos: File.join(remote, 'Videos')
+      }
     end
 
     def download(media)
       require_dir(HOME_MEDIA[media])
-      require_dir(REMOTE_MEDIA[media])
-      diff = dir_diff(REMOTE_MEDIA[media], HOME_MEDIA[media])
-      puts "Downloading #{ diff.count } files from #{ REMOTE_MEDIA[media] } to #{ HOME_MEDIA[media] }..."
-      # sync_diff(diff, HOME_MEDIA[media], REMOTE_MEDIA[media])
+      require_dir(@remote_media[media])
+      diff = dir_diff(@remote_media[media], HOME_MEDIA[media])
+      puts "Downloading #{ diff.count } files from #{ @remote_media[media] } to #{ HOME_MEDIA[media] }..."
+      sync_diff(diff, HOME_MEDIA[media], @remote_media[media])
     end
 
     def upload(media)
       require_dir(HOME_MEDIA[media])
-      require_dir(REMOTE_MEDIA[media])
-      diff = dir_diff(HOME_MEDIA[media], REMOTE_MEDIA[media])
-      puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ REMOTE_MEDIA[media] }..."
-      # sync_diff(diff, REMOTE_MEDIA[media], HOME_MEDIA[media])
+      require_dir(@remote_media[media])
+      diff = dir_diff(HOME_MEDIA[media], @remote_media[media])
+      puts "Uploading #{ diff.count } files from #{ HOME_MEDIA[media] } to #{ @remote_media[media] }..."
+      sync_diff(diff, @remote_media[media], HOME_MEDIA[media])
     end
   end
 end
