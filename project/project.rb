@@ -36,7 +36,18 @@ module Project
 
     def clean
       open_projects = get_open_projects
-      puts open_projects.inspect
+
+      if open_projects
+        if open_projects.is_a? Array
+          open_projects.each do |project|
+            FileUtils.rm_rf(project)
+            FileUtils.mv(File.join(HOME, 'Desktop', File.basename(project)), project)
+          end
+        else
+          FileUtils.rm_rf(open_projects)
+          FileUtils.mv(File.join(HOME, 'Desktop', File.basename(open_projects)), open_projects)
+        end
+      end
     end
 
     private
