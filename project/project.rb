@@ -35,6 +35,7 @@ module Project
     end
 
     def clean
+      puts "Cleaning..."
       ensure_project_dir
       archived_projects = get_projects
       desktop_dir = get_desktop_dir
