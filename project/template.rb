@@ -13,7 +13,7 @@ module Project
     def list(template_regexp = false)
       templates = get_templates
       templates = filter_templates(templates, template_regexp) if template_regexp
-      print_template_list(templates)
+      templates.each { |t| puts "#{t}\n" }
       templates
     end
 
@@ -25,7 +25,7 @@ module Project
       @template_list.each_with_index do |target_template, index|
         @template_list[index] = default_extension(target_template)
 
-        if File.exist?("#{TEMPLATE_PATH}/#{@template_list[index]}")
+        if File.exist?(File.join(TEMPLATE, @template_list[index]))
           get_template(@template_list[index])
         else
           puts "TemplateNotExistError: #{TEMPLATE_PATH}/#{@template_list[index]}"
@@ -45,7 +45,7 @@ module Project
       Dir.foreach("#{DESKTOP}") do |open_template|
         next if File.directory?(open_template)
         next unless open_template.include?(".rb")
-        system("mv #{DESKTOP}/#{open_template.to_s} #{TEMPLATE_PATH}") if all_templates.include?(open_template)
+        FileUtils.mv(File.join(DESKTOP, open_template.to_s), TEMPLATE) if all_templates.include?(open_template)
       end
 
       sync_template
@@ -75,14 +75,6 @@ module Project
       @template_list < gets
     end
 
-    def print_template_list(templates)
-      templates.each do |template|
-        space = 31 - template[:filename].length if template[:filename].length < 31
-        space ||= 1
-        puts "#{template[:filename]} #{' ' * space} #{template[:description]}"
-      end
-    end
-
     def default_extension(template)
       if File.extname(template) == ""
         template += '.rb'
@@ -91,7 +83,7 @@ module Project
     end
 
     def template_exist?(template)
-      if File.exist?("#{TEMPLATE_PATH}/#{template}")
+      if File.exist?(File.join(TEMPLATE, template))
         true
       else
         puts "WARNING: No such template exists: '#{template}'"
