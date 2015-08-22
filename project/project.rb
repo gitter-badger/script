@@ -43,6 +43,7 @@ module Project
 
     def get_open_projects
       open_projects = []
+      all_projects  = []
 
       Dir.glob(File.join(PROJECT, '*')).each do |entry|
         all_projects << File.basename(entry)
