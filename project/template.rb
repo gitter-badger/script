@@ -27,6 +27,8 @@ module Project
     end
 
     def clean
+      open_templates = get_open_templates
+
       all_templates = []
 
       Dir.foreach(TEMPLATE) do |template|
@@ -45,6 +47,27 @@ module Project
     end
 
     private
+
+    def get_open_templates(templates)
+      open_templates = []
+
+      Dir.foreach(DESKTOP) do |entry|
+        next if File.directory?(entry)
+        open_templates << entry if template_exist?(entry)
+      end
+
+      open_templates
+    end
+
+    def template_exist?(template)
+      templates = get_templates
+
+      if templates.include?(template)
+        true
+      else
+        false
+      end
+    end
 
     def get_templates
       templates = Dir.glob(File.join(TEMPLATE, '*'))
