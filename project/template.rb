@@ -13,7 +13,7 @@ module Project
   # manage all local templates
   class Template
     include Admin
-    
+
     TEMPLATE = File.join(HOME, 'GitHub', 'templates')
 
     def list(template_regexp = false)
@@ -103,7 +103,7 @@ module Project
 end
 
 if __FILE__ == $PROGRAM_NAME
-  include Admin
+  include Project
   require 'optparse'
 
   options = {}
