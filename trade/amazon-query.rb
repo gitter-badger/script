@@ -9,11 +9,16 @@
 require 'vacuum'
 require 'open3'
 
-require_relative 'trade'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'trade/trade'
 
 module Trade
   # return Amazon products based on query
   class AmazonQuery
+    include Admin
+    
     LOCALE = ['BR','CA','CN','DE','ES','FR','GB','IN','IT','JP','US']
 
     attr_accessor :request

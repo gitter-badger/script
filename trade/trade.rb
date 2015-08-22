@@ -6,6 +6,4 @@
 # Description: primary trade module
 
 module Trade
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end
