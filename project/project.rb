@@ -129,7 +129,7 @@ if __FILE__ == $PROGRAM_NAME
       options[:list_pattern] = regexp
     end
 
-    opts.on('-f PROJECT', '--fetch PROJECT', 'Move projects to Desktop') do |project|
+    opts.on('-f', '--fetch PROJECT', 'Copy matching project(s) to Desktop') do |project|
       options[:fetch] = project
     end
 

@@ -17,6 +17,12 @@ module Project
       templates
     end
 
+    def fetch(template)
+      templates = get_templates
+      raise "MissingTemplateError: No template '#{template}'" unless templates.include?(template)
+      FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
+    end
+
     def fetch(*templates)
       @template_list = templates.flatten
 
@@ -81,26 +87,6 @@ module Project
       end
       template
     end
-
-    def template_exist?(template)
-      if File.exist?(File.join(TEMPLATE, template))
-        true
-      else
-        puts "WARNING: No such template exists: '#{template}'"
-        false
-      end
-    end
-
-    def sync_template
-      system <<-CMD
-        echo '';
-        echo 'Commit changes in ~/.sync/.template';
-        cd #{TEMPLATE_PATH};
-        git checkout annex;
-        git add -A;
-        git commit -m "template_clean-#{Time.now.strftime('%Y%m%d%H%M%S')}";
-      CMD
-    end
   end
 end
 
@@ -117,11 +103,11 @@ if __FILE__ == $PROGRAM_NAME
       options[:list_regexp] = regexp
     end
 
-    opts.on('-f', '--fetch', 'Copy matching template(s) to Desktop') do
-      options[:fetch] = true
+    opts.on('-f', '--fetch TEMPLATE', 'Copy matching template(s) to Desktop') do |template|
+      options[:fetch] = template
     end
 
-    opts.on('-c', '--clean', 'Move template(s) off Desktop and commit changes') do
+    opts.on('--clean', 'Move template(s) off Desktop and commit changes') do
       options[:clean] = true
     end
   end
