@@ -12,8 +12,8 @@ module Project
   class Template
     def list(template_regexp=false)
       templates = get_templates
+      templates = filter_templates(templates, template_regexp) if template_regexp
       puts templates.inspect
-      # templates = filter_templates(templates, template_regexp) if template_regexp
       # templates = templates.sort_by { |k,v| k[:filename] }
       # print_canvas_list(templates)
       templates
@@ -56,14 +56,16 @@ module Project
     private
 
     def get_templates
-      template_list = []
+      templates = Dir.glob(File.join(TEMPLATE, '*'))
+      templates = templates.reject { |d| d == '.' || d == '..' || d == ".git" }
+      templates = templates.collect { |t| File.basename(t) }
+      templates
+    end
 
-      Dir.foreach(TEMPLATE) do |file|
-        next if file == '.' or file == '..'
-        template_list << file
-      end
-
-      template_list
+    def filter_templates(templates, template_regexp=false)
+      pattern = Regexp.new(template_regexp) if template_regexp
+      templates.select! { |a| pattern.match(a) } if pattern
+      templates
     end
 
     def get_template(template)

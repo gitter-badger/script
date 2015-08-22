@@ -15,7 +15,7 @@ module Project
     def list(project_regexp = false)
       ensure_project_dir
       projects = get_projects
-      projects = filter_projects(projects, project_regexp)
+      projects = filter_projects(projects, project_regexp) if project_regexp
       projects = get_info(projects)
 
       projects.each do |project|
