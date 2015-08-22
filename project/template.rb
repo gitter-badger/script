@@ -18,12 +18,12 @@ module Project
     end
 
     def fetch(*templates)
-      puts templates.inspect
-      puts templates.class
-      # templates = ask_for_template while templates.flatten.empty?
-      # puts templates
-      # raise "MissingTemplateError: No template '#{template}'" unless templates.include?(template)
-      # FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
+      templates = ask_for_template while templates.flatten.empty?
+      templates.each do |t|
+        if File.exist?(File.join(Template, t))
+          FileUtils.cp(File.join(TEMPLATE, t), DESKTOP)
+        end
+      end
     end
 
     def clean
