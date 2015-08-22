@@ -13,9 +13,7 @@ module Project
     def list(template_regexp = false)
       templates = get_templates
       templates = filter_templates(templates, template_regexp) if template_regexp
-      puts templates.inspect
-      # templates = templates.sort_by { |k,v| k[:filename] }
-      # print_canvas_list(templates)
+      print_template_list(templates)
       templates
     end
 
@@ -75,6 +73,14 @@ module Project
     def ask_for_template
       puts "What template do you want?"
       @template_list < gets
+    end
+
+    def print_template_list(templates)
+      templates.each do |template|
+        space = 31 - template[:filename].length if template[:filename].length < 31
+        space ||= 1
+        puts "#{template[:filename]} #{' ' * space} #{template[:description]}"
+      end
     end
 
     def default_extension(template)
