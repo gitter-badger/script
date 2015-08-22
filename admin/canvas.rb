@@ -31,7 +31,7 @@ $C Description: $4
     def list(canvas_regexp=false)
       lang_dir = get_lang_dir
       canvases = get_canvases(lang_dir)
-      canvases = filter_canvases(canvases, canvas_regexp)
+      canvases = filter_canvases(canvases, canvas_regexp) if canvas_regexp
       canvases = canvases.sort_by { |k,v| k[:filename] }
       print_canvas_list(canvases)
       canvases
@@ -389,7 +389,7 @@ if __FILE__ == $PROGRAM_NAME
       options[:add] = name
     end
 
-    opts.on('-f', '--fetch', 'Copy matching canvas(es) to ~/Desktop') do
+    opts.on('-f', '--fetch', 'Copy matching canvas(es) to Desktop') do
       options[:fetch] = true
     end
 
@@ -415,18 +415,25 @@ if __FILE__ == $PROGRAM_NAME
 
   if options[:list]
     canvas.list(options[:list_regexp])
+    exit 0
   elsif options[:add]
     canvas.add(options[:add])
+    exit 0
   elsif options[:fetch]
     canvas.fetch(ARGV)
+    exit 0
   elsif options[:info]
     canvas.info(options[:info])
+    exit 0
   elsif options[:clean]
     canvas.clean
+    exit 0
   elsif options[:sync]
     canvas.sync
+    exit 0
   elsif options[:history]
     canvas.history
+    exit 0
   else
     puts option_parser
     exit 1

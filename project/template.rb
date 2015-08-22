@@ -1,16 +1,23 @@
 #!/usr/bin/env ruby -w
 # template.rb
 # Author: Andy Bettisworth
-# Description: Get templates from ~/GitHub/templates
+# Description: Manage local templates
+
+require_relative 'project'
 
 module Project
-  # manage all templates
+  # manage all local templates
   class Template
-    HOME          = ENV['HOME']
-    DESKTOP       = "#{HOME}/Desktop"
-    TEMPLATE_PATH = "#{HOME}/.sync/.template"
+    TEMPLATE = File.join(HOME, 'GitHub', 'template')
 
-    attr_accessor :template_list
+    def list(template_regexp=false)
+      templates = get_templates
+      puts templates.inspect
+      # templates = filter_templates(templates, template_regexp) if template_regexp
+      # templates = templates.sort_by { |k,v| k[:filename] }
+      # print_canvas_list(templates)
+      templates
+    end
 
     def fetch(*templates)
       @template_list = templates.flatten
@@ -48,8 +55,19 @@ module Project
 
     private
 
-    def get_template(target_template)
-      system("cp #{TEMPLATE_PATH}/#{target_template} #{DESKTOP}")
+    def get_templates
+      template_list = []
+
+      Dir.foreach(TEMPLATE) do |file|
+        next if file == '.' or file == '..'
+        template_list << file
+      end
+
+      template_list
+    end
+
+    def get_template(template)
+      FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
     end
 
     def ask_for_template
@@ -92,24 +110,36 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'USAGE: template [options] [template]'
+    opts.banner = 'USAGE: template [options] FILE'
 
-    opts.on('-f', '--fetch', 'Copy template(s) to Desktop') do
+    opts.on('-l', '--list [REGXP]', 'List matching templates') do |regexp|
+      options[:list] = true
+      options[:list_regexp] = regexp
+    end
+
+    opts.on('-f', '--fetch', 'Copy matching template(s) to Desktop') do
       options[:fetch] = true
     end
 
-    opts.on('-c', '--clean', 'Move template(s) back into  ~/.sync') do
+    opts.on('-c', '--clean', 'Move template(s) off Desktop and commit changes') do
       options[:clean] = true
     end
   end
   option_parser.parse!
 
-  template_dispatcher = Template.new
-  if options[:clean]
-    template_dispatcher.clean
+  template = Template.new
+
+  if options[:list]
+    template.list(options[:list_regexp])
+    exit 0
   elsif options[:fetch]
-    template_dispatcher.fetch(ARGV)
+    template.fetch(ARGV)
+    exit 0
+  elsif options[:clean]
+    template.clean
+    exit 0
   else
     puts option_parser
+    exit 1
   end
 end
