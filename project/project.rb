@@ -35,23 +35,34 @@ module Project
     end
 
     def clean
-      puts "Cleaning..."
-      ensure_project_dir
-      archived_projects = get_projects
-      desktop_dir = get_desktop_dir
-      desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
-      projects = desktop_dir.select { |d| File.exist?(File.join(DESKTOP, d, 'info.yml')) }
-      projects.each do |project|
-        puts <<-MSG
-
-  Fetching the project '#{File.basename(project)}'...
-        MSG
-        FileUtils.rm_rf(File.join(HOME, 'Desktop', File.basename(project)))
-        FileUtils.mv(File.join(DESKTOP, project), project)
-      end
+      open_projects = get_open_projects
+      puts open_projects.inspect
     end
 
     private
+
+    def get_open_projects
+      open_projects = []
+
+      Dir.glob(File.join(PROJECT, '*')).each do |entry|
+        all_projects << File.basename(entry)
+      end
+
+      Dir.glob(File.join(DESKTOP, '*')) do |entry|
+        next if entry == '.' or entry == '..'
+
+        filename = File.basename(entry)
+
+        if all_projects.include?(filename)
+          puts "  Cleaning project '#{filename}'..."
+          open_projects << File.join(PROJECT, filename)
+        else
+          next
+        end
+      end
+
+      open_projects
+    end
 
     def ensure_project_dir
       FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
