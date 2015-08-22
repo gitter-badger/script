@@ -8,11 +8,11 @@
 require_relative 'admin'
 
 module Admin
-  # Manage all applications stored locally
-  class ApplicationManager
-    GITHUB_LOCAL = File.join(HOME, 'GitHub')
-    GITLAB_LOCAL = File.join(HOME, 'GitLab')
+  GITHUB_LOCAL = File.join(HOME, 'GitHub')
+  GITLAB_LOCAL = File.join(HOME, 'GitLab')
 
+  # manage all local applications
+  class ApplicationManager
     def list(app_regexp = false)
       github_apps = get_github_apps
       gitlab_apps = get_gitlab_apps

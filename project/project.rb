@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby -w
 # project.rb
 # Author: Andy Bettisworth
-# Description: Manage projects
+# Description: Manage local projects
 
 require 'fileutils'
 require 'yaml'
 
 module Project
-  class ProjectManager
-    HOME    = ENV['HOME']
-    DESKTOP = File.join(HOME, 'Desktop')
-    PROJECT = File.join(HOME, 'Projects')
+  HOME    = ENV['HOME']
+  DESKTOP = File.join(HOME, 'Desktop')
+  PROJECT = File.join(HOME, 'Projects')
 
+  class ProjectManager
     def list(project_regexp = false)
       ensure_project_dir
       projects = get_projects
