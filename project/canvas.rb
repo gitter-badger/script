@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0528 033952
 # Modified At: 2015 0528 033955
-# Description: Manage local canvases
+# Description: Manage all local canvases
 
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
@@ -94,7 +94,8 @@ $C Description: $4
     end
 
     def history
-      files = `cd #{CANVAS_DIR}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+      Dir.chdir CANVAS_DIR
+      files = `git diff --name-status "@{7 days ago}" "@{0 days ago}"`
       files = files.split("\n")
       puts "7-Day Canvas Activity:"
 

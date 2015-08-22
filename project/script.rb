@@ -27,10 +27,10 @@ $0
 # Description: $4
     TXT
 
-    def list(script_regexp=false)
+    def list(script_regexp = false)
       categories = get_app_categories
       scripts = get_scripts(categories)
-      scripts = filter_scripts(scripts, script_regexp)
+      scripts = filter_scripts(scripts, script_regexp) if script_regexp
       scripts = scripts.sort_by { |k, v| k[:filename] }
       print_script_list(scripts)
       scripts
@@ -100,7 +100,8 @@ $0
     end
 
     def history
-      files = `cd #{SCRIPT_DIR}; git diff --name-status "@{7 days ago}" "@{0 days ago}"`
+      Dir.chdir SCRIPT_DIR
+      files = `git diff --name-status "@{7 days ago}" "@{0 days ago}"`
       files = files.split("\n")
       puts "7-Day Script Activity:"
 
