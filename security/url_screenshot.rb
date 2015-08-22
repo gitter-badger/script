@@ -5,11 +5,16 @@
 
 require 'selenium-webdriver'
 
-require_relative 'security'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'security/security'
 
 module Security
   # grab a screenshot of a webpage
   class WebScreenshotFetcher
+    include Admin
+    
     def get_screenshot(target_url, target_img)
       driver = Selenium::WebDriver.for :chrome
       driver.navigate.to "http://#{target_url}"

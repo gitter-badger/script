@@ -2,13 +2,18 @@
 # scrape_spec.rb
 # Description: Extracting view layer content from remote servers
 
-require_relative 'search'
+require 'nokogiri'
+require 'open-uri'
+
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # return matches of html
   class ScreenScraper
-    require 'nokogiri'
-    require 'open-uri'
+    include Admin
 
     attr_reader :document
 

@@ -7,11 +7,16 @@ CHOMP_TAG = lambda { |tag| tag.to_s.chomp }
 
 require 'rexml/document'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # return parsed xml ruby object
   class XMLExtractor
+    include Admin
+    
     def get_elements(filename)
       REXML::Document.new(File.open(filename)).elements()
     end

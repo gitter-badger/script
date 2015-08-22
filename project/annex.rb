@@ -6,11 +6,16 @@
 require 'fileutils'
 require 'open3'
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-module Admin
+require 'admin/admin'
+require 'project/project'
+
+module Project
   # Sync all local GitHub applications
   class Annex
+    include Admin
+
     REMOTE = 'https://www.github.com'
     LOCAL  = File.join(HOME, 'GitHub')
 
@@ -106,8 +111,8 @@ module Admin
 end
 
 if __FILE__ == $PROGRAM_NAME
+  include Project
   require 'optparse'
-  include Admin
 
   options = {}
   option_parser = OptionParser.new do |opts|

@@ -3,21 +3,18 @@
 # Author: Andy Bettisworth
 # Description: Manage local projects
 
+require 'yaml'
+
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
 
-require 'fileutils'
-require 'yaml'
-
 module Project
-  include Admin
-
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
   PROJECT = File.join(HOME, 'Projects')
 
   class ProjectManager
+    include Admin
+
     def list(project_regexp = false)
       ensure_project_dir
       projects = get_projects

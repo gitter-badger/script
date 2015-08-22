@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Return Array of words and their frequencies from a file
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # return array of unique words with usage counts
   class WordFrequency
+    include Admin
+    
     def get(file)
       if File.exist?(file)
         content = File.open(file).read

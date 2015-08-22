@@ -8,6 +8,7 @@
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
+require 'project/project'
 
 module Project
   # manage all local canvases
@@ -377,7 +378,7 @@ $C Description: $4
 end
 
 if __FILE__ == $PROGRAM_NAME
-  include Admin
+  include Project
   require 'optparse'
 
   options = {}

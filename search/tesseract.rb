@@ -8,10 +8,14 @@
 require 'rtesseract'
 require 'optparse'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   class Tesseract
+    include Admin
   end
 end
 

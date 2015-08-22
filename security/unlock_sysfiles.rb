@@ -5,11 +5,16 @@
 # Modified At: 2015 0620 202652
 # Description: unlock static system files
 
-require_relative 'security'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'security/security'
 
 module Security
   # unlock system files
   class SystemFiles
+    include Admin
+    
     def self.unlock
       STATIC_DIR.each do |dir|
         puts "Unlocking #{dir}..."

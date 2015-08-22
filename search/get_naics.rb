@@ -5,11 +5,16 @@
 
 require 'yaml'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # return NAICS code
   class GetNAICSCode
+    include Admin
+    
     NAICS_CODES = YAML.load_file "#{ENV['HOME']}/.sync/.template/1_features/naics_codes.yaml"
 
     attr_accessor :two_digits

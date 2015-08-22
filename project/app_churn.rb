@@ -3,9 +3,14 @@
 # Author: Andy Bettisworth
 # Description: Print the progress of an Application by category
 
-require_relative 'project'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'project/project'
 
 module Project
+  include Admin
+  
   def month_before(a_time)
     a_time - 28 * 24 * 60 * 60
   end

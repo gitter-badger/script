@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Caesar Shift Cipher interpreter
 
-require_relative 'security'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'security/security'
 
 module Security
   # caeser shift cipher
   class CaesarShiftCipher
+    include Admin
+
     ALPHABET = ('a'...'z').to_a
 
     attr_accessor :shift_count

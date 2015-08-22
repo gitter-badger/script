@@ -6,6 +6,4 @@
 # Description: primary nav module
 
 module Nav
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end

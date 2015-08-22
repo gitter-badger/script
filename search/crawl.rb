@@ -8,10 +8,15 @@ require 'open-uri'
 require 'timeout'
 require 'uri'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   class Crawler
+    include Admin
+    
     def get_webpage(url)
       Timeout::timeout(5) do
         ensure_valid_uri(url)

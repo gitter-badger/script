@@ -6,8 +6,6 @@
 # Description: system security module
 
 module Security
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
   STATIC_DIR = [
     '/boot',
     '/sbin',

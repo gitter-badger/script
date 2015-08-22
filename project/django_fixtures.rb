@@ -5,11 +5,16 @@
 # Modified At: 2015 0508 081256
 # Description: Generator of Django Fixtures
 
-require_relative 'project'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'project/project'
 
 module Project
   module Django
     class Fixture
+      include Admin
+      
       def initialize
         puts 'BAZINGA!'
       end

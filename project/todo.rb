@@ -5,13 +5,16 @@
 
 require 'yaml'
 
-require_relative '../admin/wmtitle'
-require_relative 'project'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'admin/wmtitle'
+require 'project/project'
 
 module Project
   class TaskManager
-    PROJECT = "#{ENV['HOME']}/.sync/.project"
-
+    include Admin
+    
     attr_accessor :project
     attr_accessor :project_path
 

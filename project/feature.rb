@@ -6,13 +6,17 @@
 require 'optparse'
 require 'yaml'
 
-require_relative '../search/get_naics'
-require_relative 'project'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'project/project'
+require 'search/get_naics'
 
 module Project
   # manage project features
   class FeatureManager
-    PROJECT_PATH = "#{ENV['HOME']}/.sync/.project"
+    include Admin
+
     APP_CLASS = {
       1 => 'communication',
       2 => 'entertainment',

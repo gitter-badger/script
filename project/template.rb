@@ -6,6 +6,7 @@
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
+require 'project/project'
 
 module Project
   # manage all local templates

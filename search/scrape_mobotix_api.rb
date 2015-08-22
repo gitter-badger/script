@@ -9,9 +9,15 @@ require 'nokogiri'
 require 'open-uri'
 require 'optparse'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
+  class Mobotix
+    include Admin
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME

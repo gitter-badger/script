@@ -5,11 +5,16 @@
 
 require 'geocoder'
 
-require_relative 'nav'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'nav/nav'
 
 module Nav
   # convert IP into Lat,Lng
   class IPGeocoder
+    include Admin
+    
     def ping
       current_locale = Geocoder.coordinates(system('curl --silent ifconfig.me'))
       current_locale

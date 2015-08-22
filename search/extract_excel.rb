@@ -5,11 +5,16 @@
 
 require 'spreadsheet'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # Grab excel data
   class SpreadsheetArray
+    include Admin
+    
     def extract(name)
       name = default_extension(name)
       raise "ExcelFileNotFoundError! No file named #{name}" unless File.exist?(name)

@@ -7,11 +7,16 @@ require 'erb'
 require 'nokogiri'
 require 'open-uri'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # return html matched
   class HTMLFetcher
+    include Admin
+    
     TEST_TEMPLATE = 'test.html.erb'
 
     # GET web content

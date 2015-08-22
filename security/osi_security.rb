@@ -19,11 +19,16 @@ include SessionLayerSecurity
 include ApplicationLayerSecurity
 include PeopleLayerSecurity
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'security/security'
 
 module Security
   # set of system security guides at each layer of the OSI model
   class OSISecurity
+    include Admin
+    
     def initialize
       system 'ln -s /dev/null' unless File.exist?('/dev/null')
       fail 'WARNING: permission denied.' unless `whoami`.include?(ENV['USER'])

@@ -5,11 +5,16 @@
 
 require 'open-uri'
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # Grab some internet content
   class DataRetriever
+    Include Admin
+    
     attr_reader :content
 
     def set_content(target_url)

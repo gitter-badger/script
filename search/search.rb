@@ -6,6 +6,4 @@
 # Description: primary search module
 
 module Search
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end

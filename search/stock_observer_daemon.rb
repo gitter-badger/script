@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Observe stocks as a Daemon
 
-require_relative 'search'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'search/search'
 
 module Search
   # monitor stock changes
   class StockServerObserver < Daemon
+    include Admin
+    
     def initialize(opts = {})
       super()
       @opts = opts

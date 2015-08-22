@@ -5,14 +5,19 @@
 # Modified At: 2015 0103 163526
 # Description: Manage local applications
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-module Admin
-  GITHUB_LOCAL = File.join(HOME, 'GitHub')
-  GITLAB_LOCAL = File.join(HOME, 'GitLab')
+require 'admin/admin'
+require 'project/project'
 
+module Project
   # manage all local applications
   class ApplicationManager
+    include Admin
+
+    GITHUB_LOCAL = File.join(HOME, 'GitHub')
+    GITLAB_LOCAL = File.join(HOME, 'GitLab')
+
     def list(app_regexp = false)
       github_apps = get_github_apps
       gitlab_apps = get_gitlab_apps
