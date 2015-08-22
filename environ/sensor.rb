@@ -3,7 +3,7 @@
 # Author: Andy Bettisworth
 # Created At: 2015 0605 004632
 # Modified At: 2015 0605 004632
-# Description: Example sensor API and usage
+# Description: manage all local sensor code
 
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
@@ -213,7 +213,7 @@ module Environ
 end
 
 if __FILE__ == $PROGRAM_NAME
-  include Admin
+  include Environ
   require 'optparse'
 
   options = {}

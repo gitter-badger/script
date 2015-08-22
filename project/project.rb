@@ -10,10 +10,11 @@ $LOAD_PATH.push File.expand_path('../../', __FILE__)
 require 'admin/admin'
 
 module Project
-  PROJECT = File.join(HOME, 'Projects')
-
+  # manage all local projects
   class ProjectManager
     include Admin
+
+    PROJECT = File.join(HOME, 'Projects')
 
     def list(project_regexp = false)
       ensure_project_dir
