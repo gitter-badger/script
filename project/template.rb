@@ -12,6 +12,8 @@ module Project
 
   # manage all local templates
   class Template
+    include Admin
+    
     TEMPLATE = File.join(HOME, 'GitHub', 'templates')
 
     def list(template_regexp = false)
