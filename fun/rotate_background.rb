@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Rotate Desktop background image using locally stored images
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # for 20 minutes rotate background
   class DesktopBackground
+    include Admin
+    
     GSETTING = 'org.gnome.desktop.background'
 
     attr_accessor :images

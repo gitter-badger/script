@@ -6,6 +6,4 @@
 # Description: primary fun module
 
 module Fun
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end

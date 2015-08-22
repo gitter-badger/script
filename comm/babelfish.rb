@@ -11,10 +11,14 @@ require 'http_accept_language'
 require 'easy_translate'
 require 'to_lang'
 
-require_relative 'comm'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'comm/comm'
 
 module Comm
   class BabelFish
+    include Admin
   end
 end
 

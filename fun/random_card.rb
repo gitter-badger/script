@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Read a random card
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # generate a random card
   class CardDeck
+    include Admin
+    
     CARD_TYPE = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Jack','Queen','King','Ace']
     CARD_SUITE = ['Spade', 'Club', 'Diamond', 'Heart']
 

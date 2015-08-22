@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Play a game of chess at the command-line
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # parse pgn data
   class PGNParser
+    include Admin
+
     def parse(files)
       f = Passant::PGN::File.new(ARGV.first)
 

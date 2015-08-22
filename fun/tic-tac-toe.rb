@@ -3,11 +3,16 @@
 # Author: Andy Bettisworth
 # Description: tic-tac-toe game with unbeatable AI
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # start a no-win-scenario game of tic-tac-toe
   class TicTacToe
+    include Admin
+    
     VALID_MOVE = [
       'top left', 'top center', 'top right',
       'mid left', 'mid center', 'mid right',

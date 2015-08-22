@@ -6,6 +6,4 @@
 # Description: primary environ module
 
 module Environ
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end

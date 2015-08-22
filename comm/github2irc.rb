@@ -17,11 +17,16 @@ require 'libxml'
 require 'ostruct'
 require 'time'
 
-require_relative 'comm'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'comm/comm'
 
 module Comm
   # push github activity to irc
   class ServerLogIrcGateway < Net::IRC::Server::Session
+    include Admin
+    
     EVENTS = {
       'DownloadEvent' => '6',
       'GistEvent'     => '10',

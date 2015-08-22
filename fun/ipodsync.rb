@@ -5,11 +5,16 @@
 # Modified At: 2014 1119 031644
 # Description: sync my ipod with my desktop files
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # sync ~/Music with ipod
   class IpodSync
+    include Admin
+    
     def start
     end
   end

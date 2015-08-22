@@ -4,11 +4,16 @@
 # Description: convert temperature
 # LINK http://www.gnu.org/sofware/units/units.html
 
-require_relative 'environ'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'environ/environ'
 
 module Environ
   # convert temperature readings
   class TemperatureConverter
+    include Admin
+    
     BASE_UNIT_OF = {
       'temperature' => 'K',
       'temp' => 'K'

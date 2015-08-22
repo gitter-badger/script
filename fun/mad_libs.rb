@@ -3,10 +3,15 @@
 # Author: Andy Bettisworth
 # Description: Allow creation of a mad lib from the command line
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   module MadLibGame
+    include Admin
+    
     class MadLib < ActiveRecord::Migration
       def change
         create_table :mad_libs do |t|

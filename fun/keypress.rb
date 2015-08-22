@@ -5,9 +5,15 @@
 
 require 'io/console'
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
+  class Keypress
+    include Admin
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME

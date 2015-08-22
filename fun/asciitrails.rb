@@ -3,13 +3,18 @@
 # Author: Andy Bettisworth
 # Description: Walk the ASCII trails
 
-require_relative 'fun'
+require 'io/console'
+require 'yaml'
+
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # walk the ascii trails
   module AsciiTrails
-    require 'io/console'
-    require 'yaml'
+    include Admin
 
     attr_accessor :history
 

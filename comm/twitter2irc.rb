@@ -8,7 +8,10 @@ require 'twitter'
 require 'pp'
 require 'kconv'
 
-require_relative 'comm'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'comm/comm'
 
 module Comm
 end

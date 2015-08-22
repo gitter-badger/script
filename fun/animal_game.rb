@@ -3,10 +3,15 @@
 # Author: Andy Bettisworth
 # Description: Play the animal game (idea from Jim Weireck
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   class AnimalGame
+    include Admin
+
     def play
       puts 'Think of an animal...'
       puts 'Is it an dog? (yes or no)'

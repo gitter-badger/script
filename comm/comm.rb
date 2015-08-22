@@ -6,6 +6,4 @@
 # Description: primary comm module
 
 module Comm
-  HOME    = ENV['HOME']
-  DESKTOP = File.join(HOME, 'Desktop')
 end

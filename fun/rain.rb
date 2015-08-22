@@ -40,11 +40,16 @@
 
 require 'ncurses'
 
-require_relative 'fun'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'fun/fun'
 
 module Fun
   # A class responsible for raindrop drawing
   class Raindrop
+    include Admin
+    
     def initialize (window, color_pair = nil)
       @window = window
       @color_pair = color_pair

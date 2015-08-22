@@ -5,12 +5,17 @@
 # Modified At: 2015 0605 004632
 # Description: Example sensor API and usage
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-module Admin
+require 'admin/admin'
+require 'environ/environ'
+
+module Environ
   # manage all local sensor code
   class Sensor
-    SENSOR_DIR = "#{HOME}/GitHub/sensor"
+    include Admin
+
+    SENSOR_DIR = File.join(HOME, 'GitHub', 'sensor')
 
     def list(sensor_regexp = false)
       sensors = get_sensors
