@@ -6,8 +6,6 @@
 require 'fileutils'
 require 'yaml'
 
-require_relative 'project'
-
 module Project
   class ProjectManager
     HOME    = ENV['HOME']
