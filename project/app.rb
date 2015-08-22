@@ -168,8 +168,8 @@ module Project
 end
 
 if __FILE__ == $PROGRAM_NAME
+  include Project
   require 'optparse'
-  include Admin
 
   options = {}
   option_parser = OptionParser.new do |opts|
