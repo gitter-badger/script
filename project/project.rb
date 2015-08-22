@@ -31,7 +31,7 @@ module Project
     def fetch(project)
       projects = get_projects
       raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
-      FileUtils.mv(File.join(PROJECT, project), DESKTOP)
+      FileUtils.cp_r(File.join(PROJECT, project), DESKTOP)
     end
 
     def clean
@@ -41,8 +41,12 @@ module Project
       desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
       projects = desktop_dir.select { |d| File.exist?(File.join(DESKTOP, d, 'info.yml')) }
       projects.each do |project|
-        puts "#{File.join(DESKTOP, project)} going to #{PROJECT}"
-        FileUtils.mv(File.join(DESKTOP, project), PROJECT)
+        puts <<-MSG
+
+  Fetching the project '#{File.basename(project)}'...
+        MSG
+        FileUtils.rm_rf(File.join(HOME, 'Desktop', File.basename(project)))
+        FileUtils.mv(File.join(DESKTOP, project), project)
       end
     end
 
