@@ -5,10 +5,10 @@
 # Modified At: 2015 0521 182728
 # Description: Record a window as a PNG and JSON metadata
 
-require 'fileutils'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-require_relative 'wm'
-require_relative 'admin'
+require 'admin/admin'
+require 'admin/wm'
 
 module Admin
   module WindowManager

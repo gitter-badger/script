@@ -5,7 +5,9 @@
 # Modified At: 2015 0521 185131
 # Description: X Window Manager interface
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   module WindowManager

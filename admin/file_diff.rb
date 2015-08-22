@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Print the difference between files
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # Get the difference between two files

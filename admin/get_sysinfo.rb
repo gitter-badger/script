@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Get current system information (linux-only) using proc
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 if __FILE__ == $PROGRAM_NAME
   proc_paths = Dir['/proc/**'].select { |dir| /\d+/.match(dir) }

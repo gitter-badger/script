@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Get users from /etc/passwd
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   def users

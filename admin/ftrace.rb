@@ -5,7 +5,9 @@
 # Modified At: 2015 0715 104755
 # Description: use trace-cmd to monitor processes
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # dump a function trace on a specific process

@@ -7,7 +7,9 @@
 
 require 'date'
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   def user_status(user = ENV['USER'])

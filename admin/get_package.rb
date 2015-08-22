@@ -3,9 +3,11 @@
 # Author: Andy Bettisworth
 # Description: get package and it's dependencies
 
-require 'open-uri'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-require_relative 'admin'
+require 'admin/admin'
+
+require 'open-uri'
 
 module Admin
   # Get package and dependencies from Ubuntu servers

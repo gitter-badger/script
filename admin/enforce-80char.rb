@@ -5,10 +5,12 @@
 # Modified At: 2014 1106 120459
 # Description: enforce 80 character limit per line
 
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+
 require 'fileutils'
 require 'tempfile'
-
-require_relative 'admin'
 
 module Admin
   # Apply 80 character wrap

@@ -5,7 +5,9 @@
 # Modified At: 2015 0109 001429
 # Description: To reset Background to the default ubuntu wallpaper
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # reset background to default

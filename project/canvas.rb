@@ -9,9 +9,11 @@ $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
 
-module Admin
+module Project
   # manage all local canvases
   class Canvas
+    include Admin
+
     CANVAS_DIR = File.join(HOME, 'GitHub', 'canvas')
     SHEBANGS   = {
       '.c'   => '//',

@@ -5,7 +5,9 @@
 # Modified At: 2015 0513 221014
 # Description: Manage ~/Downloads
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # manage all local ~/Downloads

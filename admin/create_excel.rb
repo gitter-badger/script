@@ -3,10 +3,12 @@
 # Author: Andy Bettisworth
 # Description: Create an excel file using an array for values
 
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+
 require 'spreadsheet'
 require 'yaml'
-
-require_relative 'admin'
 
 module Admin
   class SpreadsheetFactory

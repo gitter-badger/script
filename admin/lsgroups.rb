@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Get groups from /etc/groups
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   def groups

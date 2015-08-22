@@ -5,9 +5,12 @@
 # Modified At: 2015 0424 221430
 # Description: sync external media from the Village
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
+  # sync with external hard drive
   class Village
     HOME_MEDIA = {
       documents: File.join(HOME, 'Documents'),

@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: To get Hash of /etc/passwd
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # Read from /etc/passwd

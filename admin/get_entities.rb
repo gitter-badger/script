@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Get the entities from Rails schema.rb file
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # convert a schema.rb into respective ActiveRecord::Migrations

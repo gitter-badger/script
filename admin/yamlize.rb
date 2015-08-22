@@ -9,7 +9,9 @@ require 'active_record'
 require 'yaml'
 require 'logger'
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # convert existing seed.rb data into YAML

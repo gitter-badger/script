@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: GET all postgresql pid
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
 end

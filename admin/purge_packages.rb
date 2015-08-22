@@ -3,7 +3,9 @@
 # Author: Andy Bettisworth
 # Description: Remove system packages
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # remove these packages

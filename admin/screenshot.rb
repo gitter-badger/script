@@ -3,8 +3,10 @@
 # Author: Andy Bettisworth
 # Description: Take screenshot of desktop or target window
 
-require_relative 'wm'
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+require 'admin/wm'
 
 module Admin
   module WindowManager

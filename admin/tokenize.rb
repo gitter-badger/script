@@ -6,7 +6,9 @@
 require 'ripper'
 require 'pp'
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # extract the ruby tokens of a script

@@ -5,7 +5,9 @@
 # Modified At: 2015 0513 220942
 # Description: Manage ~/Music
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # manage all local ~/Music
