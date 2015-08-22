@@ -8,8 +8,6 @@ $LOAD_PATH.push File.expand_path('../../', __FILE__)
 require 'admin/admin'
 
 module Project
-  include Admin
-
   # manage all local templates
   class Template
     include Admin
@@ -17,11 +15,10 @@ module Project
     TEMPLATE = File.join(HOME, 'GitHub', 'templates')
 
     def list(template_regexp = false)
-      puts DEFAULT_EXT
-      # templates = get_templates
-      # templates = filter_templates(templates, template_regexp) if template_regexp
-      # templates.each { |t| puts "#{t}\n" }
-      # templates
+      templates = get_templates
+      templates = filter_templates(templates, template_regexp) if template_regexp
+      templates.each { |t| puts "#{t}\n" }
+      templates
     end
 
     def fetch(*templates)
