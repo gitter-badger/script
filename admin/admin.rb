@@ -34,6 +34,22 @@ module Admin
     '.sh'  => '#'
   }
 
+  def set_default_ext(*files, extname: DEFAULT_EXT)
+    files.flatten!
+    files.collect! do |file|
+      if File.extname(file) == ""
+        file += extname
+      end
+      file
+    end
+
+    if files.count <= 1
+      return files[0]
+    else
+      return files
+    end
+  end
+
   def require_file(pathname)
     unless File.exist?(pathname)
       raise LoadError, "No such file at '#{pathname}'"
@@ -49,7 +65,7 @@ module Admin
   def grab_all_files(dirname = '.')
     files = []
 
-    Dir["#{dirname}/**/*"].each do |file|
+    Dir[File.join(dirname, '**', '*')].each do |file|
       next if file == '.' || file == '..' || File.directory?(file)
       files << file
     end
@@ -78,6 +94,17 @@ module Admin
   def move_files(files, destination)
     files.each do |file|
       FileUtils.mv(file, destination)
+    end
+  end
+
+  def move_to_desktop(*files)
+    files.flatten!
+    files.each do |file|
+      if File.exist?(file)
+        FileUtils.cp(file, DESKTOP)
+      else
+        puts "No such file: '#{File.basename(file)}'"
+      end
     end
   end
 

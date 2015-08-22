@@ -45,7 +45,7 @@ $0
       scripts = ask_for_script while scripts.flatten.empty?
       scripts = set_default_ext(scripts)
       scripts = get_script_location(scripts)
-      move_script_to_desktop(scripts)
+      move_to_desktop(scripts)
     end
 
     def info(script)
@@ -152,22 +152,6 @@ $0
       File.new(File.join(HOME, 'Desktop', script), 'w+') << header
     end
 
-    def set_default_ext(*scripts)
-      scripts.flatten!
-      scripts.collect! do |script|
-        if File.extname(script) == ""
-          script += '.rb'
-        end
-        script
-      end
-
-      if scripts.count <= 1
-        return scripts[0]
-      else
-        return scripts
-      end
-    end
-
     def filter_nonexistent(*scripts)
       targets = scripts.flatten
       targets.select! { |s| script_exist?(s) }
@@ -183,7 +167,6 @@ $0
 
     def script_exist?(script)
       script = set_default_ext(script)
-
       categories = get_app_categories
       scripts = get_scripts(categories)
       scripts.select! { |s| s[:filename] == script }
@@ -292,25 +275,6 @@ $0
         return scripts[0]
       else
         return scripts
-      end
-    end
-
-    def move_script_to_desktop(*scripts)
-      scripts.flatten!
-      scripts.each do |script|
-        if File.exist?(script)
-          FileUtils.cp(script, DESKTOP)
-        else
-          msg = "Warning: script not found '#{script}'!\n"
-          extname = File.extname(script)
-          matches = get_scripts_matches(File.basename(script, extname))
-          matches = matches.collect! { |s| s[:filename] }
-          if matches.count > 0
-            msg += "Possible matches include: \n\t"
-            msg += matches.join("\n\t")
-          end
-          puts msg
-        end
       end
     end
 

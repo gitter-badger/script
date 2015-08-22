@@ -24,11 +24,8 @@ module Project
 
     def fetch(*templates)
       templates = ask_for_template while templates.flatten.empty?
-      templates.each do |t|
-        if File.exist?(File.join(TEMPLATE, t))
-          FileUtils.cp(File.join(TEMPLATE, t), DESKTOP)
-        end
-      end
+      templates = set_default_ext(templates)
+      move_to_desktop(templates)
     end
 
     def clean

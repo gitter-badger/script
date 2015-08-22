@@ -52,7 +52,7 @@ $C Description: $4
       canvases = set_default_ext(canvases)
       canvases = set_default_prefix(canvases)
       canvases = get_canvas_location(canvases)
-      move_canvas_to_desktop(canvases)
+      move_to_desktop(canvases)
     end
 
     def info(canvas)
@@ -241,22 +241,6 @@ $C Description: $4
       File.new(File.join(DESKTOP, canvas), 'w+') << header
     end
 
-    def set_default_ext(*canvases)
-      canvases.flatten!
-      canvases.collect! do |canvas|
-        if File.extname(canvas) == ""
-          canvas += '.rb'
-        end
-        canvas
-      end
-
-      if canvases.count <= 1
-        return canvases[0]
-      else
-        return canvases
-      end
-    end
-
     def set_default_prefix(*canvases)
       canvases.flatten!
       canvases.collect! do |canvas|
@@ -294,17 +278,6 @@ $C Description: $4
         return canvases[0]
       else
         return canvases
-      end
-    end
-
-    def move_canvas_to_desktop(*canvases)
-      canvases.flatten!
-      canvases.each do |canvas|
-        if File.exist?(canvas)
-          FileUtils.cp(canvas, DESKTOP)
-        else
-          puts "No such canvas: '#{File.basename(canvas)}'"
-        end
       end
     end
 
