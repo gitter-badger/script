@@ -91,8 +91,8 @@ if __FILE__ == $PROGRAM_NAME
       options[:list_regexp] = regexp
     end
 
-    opts.on('-f', '--fetch TEMPLATE', 'Copy matching template(s) to Desktop') do |template|
-      options[:fetch] = template
+    opts.on('-f', '--fetch', 'Copy matching template(s) to Desktop') do
+      options[:fetch] = true
     end
 
     opts.on('--clean', 'Move template(s) off Desktop and commit changes') do
