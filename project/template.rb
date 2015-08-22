@@ -3,18 +3,23 @@
 # Author: Andy Bettisworth
 # Description: Manage local templates
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-module Admin
+require 'admin/admin'
+
+module Project
+  include Admin
+
   # manage all local templates
   class Template
     TEMPLATE = File.join(HOME, 'GitHub', 'templates')
 
     def list(template_regexp = false)
-      templates = get_templates
-      templates = filter_templates(templates, template_regexp) if template_regexp
-      templates.each { |t| puts "#{t}\n" }
-      templates
+      puts DEFAULT_EXT
+      # templates = get_templates
+      # templates = filter_templates(templates, template_regexp) if template_regexp
+      # templates.each { |t| puts "#{t}\n" }
+      # templates
     end
 
     def fetch(*templates)

@@ -5,7 +5,9 @@
 # Modified At: 2015 0528 033955
 # Description: Manage local canvases
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
 
 module Admin
   # manage all local canvases
