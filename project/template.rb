@@ -23,32 +23,16 @@ module Project
       FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
     end
 
-    def fetch(*templates)
-      @template_list = templates.flatten
-
-      ask_for_template while @template_list.empty?
-
-      @template_list.each_with_index do |target_template, index|
-        @template_list[index] = default_extension(target_template)
-
-        if File.exist?(File.join(TEMPLATE, @template_list[index]))
-          get_template(@template_list[index])
-        else
-          puts "TemplateNotExistError: #{TEMPLATE_PATH}/#{@template_list[index]}"
-        end
-      end
-    end
-
     def clean
       all_templates = []
 
-      Dir.foreach("#{TEMPLATE_PATH}") do |template|
+      Dir.foreach(TEMPLATE) do |template|
         next if File.directory?(template)
         next unless template.include?(".rb")
         all_templates << template
       end
 
-      Dir.foreach("#{DESKTOP}") do |open_template|
+      Dir.foreach(DESKTOP) do |open_template|
         next if File.directory?(open_template)
         next unless open_template.include?(".rb")
         FileUtils.mv(File.join(DESKTOP, open_template.to_s), TEMPLATE) if all_templates.include?(open_template)
