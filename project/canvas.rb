@@ -30,13 +30,14 @@ $C Modified At: $3
 $C Description: $4
     TXT
 
-    def list(canvas_regexp=false)
-      lang_dir = get_lang_dir
-      canvases = get_canvases(lang_dir)
-      canvases = filter_canvases(canvases, canvas_regexp) if canvas_regexp
-      canvases = canvases.sort_by { |k,v| k[:filename] }
-      print_canvas_list(canvases)
-      canvases
+    def list(canvas_regexp = false)
+      puts DEFAULT_EXT
+      # lang_dir = get_lang_dir
+      # canvases = get_canvases(lang_dir)
+      # canvases = filter_canvases(canvases, canvas_regexp) if canvas_regexp
+      # canvases = canvases.sort_by { |k,v| k[:filename] }
+      # print_canvas_list(canvases)
+      # canvases
     end
 
     def add(canvas)
