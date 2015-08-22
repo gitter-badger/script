@@ -41,6 +41,7 @@ module Project
       desktop_dir = desktop_dir.reject { |d| archived_projects.include?(d) }
       projects = desktop_dir.select { |d| File.exist?(File.join(DESKTOP, d, 'info.yml')) }
       projects.each do |project|
+        puts "#{File.join(DESKTOP, project)} going to #{PROJECT}"
         FileUtils.mv(File.join(DESKTOP, project), PROJECT)
       end
     end
@@ -114,14 +115,15 @@ if __FILE__ == $PROGRAM_NAME
 
   if options[:list]
     mgmt.list(options[:list_pattern])
-    exit
+    exit 0
   elsif options[:fetch]
     mgmt.fetch(options[:fetch])
-    exit
+    exit 0
   elsif options[:clean]
     mgmt.clean
-    exit
+    exit 0
   end
 
   puts option_parser
+  exit 1
 end
