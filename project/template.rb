@@ -3,13 +3,13 @@
 # Author: Andy Bettisworth
 # Description: Manage local templates
 
-require_relative 'project'
+require_relative 'admin'
 
-module Project
-  TEMPLATE = File.join(HOME, 'GitHub', 'templates')
-
+module Admin
   # manage all local templates
   class Template
+    TEMPLATE = File.join(HOME, 'GitHub', 'templates')
+
     def list(template_regexp = false)
       templates = get_templates
       templates = filter_templates(templates, template_regexp) if template_regexp
@@ -31,24 +31,20 @@ module Project
 
       all_templates = []
 
-      Dir.foreach(TEMPLATE) do |template|
-        next if File.directory?(template)
-        next unless template.include?(".rb")
-        all_templates << template
+      if canvases_out.is_a? Array
+        canvases_out.each do |s|
+          FileUtils.mv(File.join(DESKTOP, File.basename(s)), s)
+        end
+      else
+        FileUtils.mv(File.join(DESKTOP, File.basename(canvases_out)), canvases_out)
       end
 
-      Dir.foreach(DESKTOP) do |open_template|
-        next if File.directory?(open_template)
-        next unless open_template.include?(".rb")
-        FileUtils.mv(File.join(DESKTOP, open_template.to_s), TEMPLATE) if all_templates.include?(open_template)
-      end
-
-      sync_template
+      commit_changes
     end
 
     private
 
-    def get_open_templates(templates)
+    def get_open_templates
       open_templates = []
 
       Dir.foreach(DESKTOP) do |entry|
@@ -102,7 +98,7 @@ module Project
 end
 
 if __FILE__ == $PROGRAM_NAME
-  include Project
+  include Admin
   require 'optparse'
 
   options = {}
