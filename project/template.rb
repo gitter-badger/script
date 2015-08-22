@@ -18,8 +18,10 @@ module Project
     end
 
     def fetch(*templates)
-      templates = ask_for_template while templates.flatten.empty?
-      puts templates
+      puts templates.inspect
+      puts templates.class
+      # templates = ask_for_template while templates.flatten.empty?
+      # puts templates
       # raise "MissingTemplateError: No template '#{template}'" unless templates.include?(template)
       # FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
     end
