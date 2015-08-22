@@ -17,10 +17,11 @@ module Project
       templates
     end
 
-    def fetch(template)
-      templates = get_templates
-      raise "MissingTemplateError: No template '#{template}'" unless templates.include?(template)
-      FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
+    def fetch(*templates)
+      templates = ask_for_template while templates.flatten.empty?
+      puts templates
+      # raise "MissingTemplateError: No template '#{template}'" unless templates.include?(template)
+      # FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
     end
 
     def clean
@@ -62,7 +63,8 @@ module Project
 
     def ask_for_template
       puts "What template do you want?"
-      @template_list < gets
+      templates = gets.split(/\s.*?/).flatten
+      templates
     end
 
     def default_extension(template)
