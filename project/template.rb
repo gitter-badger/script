@@ -34,17 +34,15 @@ module Project
     def clean
       open_templates = get_open_templates
 
-      all_templates = []
-
-      if canvases_out.is_a? Array
-        canvases_out.each do |s|
-          FileUtils.mv(File.join(DESKTOP, File.basename(s)), s)
+      if open_templates.is_a? Array
+        open_templates.each do |t|
+          FileUtils.mv(File.join(DESKTOP, File.basename(t)), t)
         end
       else
-        FileUtils.mv(File.join(DESKTOP, File.basename(canvases_out)), canvases_out)
+        FileUtils.mv(File.join(DESKTOP, File.basename(open_templates)), open_templates)
       end
 
-      commit_changes
+      # commit_changes
     end
 
     private
