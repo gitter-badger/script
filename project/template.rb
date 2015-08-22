@@ -6,11 +6,11 @@
 require_relative 'project'
 
 module Project
-  TEMPLATE = File.join(HOME, 'GitHub', 'template')
+  TEMPLATE = File.join(HOME, 'GitHub', 'templates')
 
   # manage all local templates
   class Template
-    def list(template_regexp=false)
+    def list(template_regexp = false)
       templates = get_templates
       templates = filter_templates(templates, template_regexp) if template_regexp
       puts templates.inspect
