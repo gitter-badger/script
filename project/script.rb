@@ -5,11 +5,16 @@
 # Modified At: 2014 1105 193823
 # Description: Manage local scripts
 
-require_relative 'admin'
+$LOAD_PATH.push File.expand_path("../../", __FILE__)
 
-module Admin
+require 'admin/admin'
+
+module Project
+  include Admin
+
   # manage all local scripts
   class Script
+    HOME = ENV['HOME']
     SCRIPT_DIR    = File.join(HOME, 'GitHub', 'script')
     CATEGORIES    = ['admin','comm','environ','fun','health','nav','project','search','security','trade']
     SCRIPT_REGEXP = /^alias\s(?<alias>.*?)=\'(?<binary>.*?)\s(?<pathname>.*)\/(?<filename>.*?)'$/
@@ -437,7 +442,7 @@ $0
 end
 
 if __FILE__ == $PROGRAM_NAME
-  include Admin
+  include Project
   require 'optparse'
 
   options = {}

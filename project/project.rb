@@ -3,10 +3,16 @@
 # Author: Andy Bettisworth
 # Description: Manage local projects
 
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
+
+require 'admin/admin'
+
 require 'fileutils'
 require 'yaml'
 
 module Project
+  include Admin
+
   HOME    = ENV['HOME']
   DESKTOP = File.join(HOME, 'Desktop')
   PROJECT = File.join(HOME, 'Projects')
