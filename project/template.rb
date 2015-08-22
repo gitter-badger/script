@@ -20,7 +20,7 @@ module Project
     def fetch(*templates)
       templates = ask_for_template while templates.flatten.empty?
       templates.each do |t|
-        if File.exist?(File.join(Template, t))
+        if File.exist?(File.join(TEMPLATE, t))
           FileUtils.cp(File.join(TEMPLATE, t), DESKTOP)
         end
       end
