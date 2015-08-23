@@ -75,7 +75,7 @@ $0
           FileUtils.mv(File.join(HOME, 'Desktop', File.basename(scripts_out)), scripts_out)
         end
 
-        commit_changes
+        commit_changes(SCRIPT_DIR)
       end
     end
 
@@ -378,18 +378,6 @@ $0
       end
 
       script_list
-    end
-
-    def commit_changes
-      puts 'Enter a commit message:'
-      commit_msg = gets.strip
-      commit_msg = "script clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
-      puts ''
-      puts 'Committing changes for scripts...'
-      Dir.chdir(SCRIPT_DIR)
-      system('git checkout annex')
-      system('git add -A')
-      system('git commit -m "' + commit_msg + '"')
     end
 
     def branch_exist?(repository, branch)

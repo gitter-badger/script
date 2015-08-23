@@ -14,7 +14,7 @@ module Project
   class ProjectManager
     include Admin
 
-    PROJECT = File.join(HOME, 'Projects')
+    PROJECT_DIR = File.join(HOME, 'Projects')
 
     def list(project_regexp = false)
       ensure_project_dir
@@ -35,7 +35,7 @@ module Project
     def fetch(project)
       projects = get_projects
       raise "MissingProjectError: No project '#{project}'" unless projects.include?(project)
-      FileUtils.cp_r(File.join(PROJECT, project), DESKTOP)
+      FileUtils.cp_r(File.join(PROJECT_DIR, project), DESKTOP)
     end
 
     def clean
@@ -43,13 +43,13 @@ module Project
 
       if open_projects
         if open_projects.is_a? Array
-          open_projects.each do |project|
-            FileUtils.rm_rf(project)
-            FileUtils.mv(File.join(HOME, 'Desktop', File.basename(project)), project)
+          open_projects.each do |p|
+            FileUtils.rm_rf(p)
+            FileUtils.mv(File.join(DESKTOP, File.basename(p)), p)
           end
         else
           FileUtils.rm_rf(open_projects)
-          FileUtils.mv(File.join(HOME, 'Desktop', File.basename(open_projects)), open_projects)
+          FileUtils.mv(File.join(DESKTOP, File.basename(open_projects)), open_projects)
         end
       end
     end
@@ -60,7 +60,7 @@ module Project
       open_projects = []
       all_projects  = []
 
-      Dir.glob(File.join(PROJECT, '*')).each do |entry|
+      Dir.glob(File.join(PROJECT_DIR, '*')).each do |entry|
         all_projects << File.basename(entry)
       end
 
@@ -71,7 +71,7 @@ module Project
 
         if all_projects.include?(filename)
           puts "  Cleaning project '#{filename}'..."
-          open_projects << File.join(PROJECT, filename)
+          open_projects << File.join(PROJECT_DIR, filename)
         else
           next
         end
@@ -81,11 +81,11 @@ module Project
     end
 
     def ensure_project_dir
-      FileUtils.mkdir_p PROJECT unless File.exist? PROJECT
+      FileUtils.mkdir_p PROJECT_DIR unless File.exist? PROJECT_DIR
     end
 
     def get_projects
-      projects = Dir.glob(File.join(PROJECT, '*'))
+      projects = Dir.glob(File.join(PROJECT_DIR, '*'))
       projects = projects.reject { |d| d == '.' || d == '..' || d == ".git" }
       projects = projects.collect { |p| File.basename(p) }
       projects
@@ -99,9 +99,9 @@ module Project
 
     def get_info(projects)
       projects = projects.collect do |project|
-        if File.exist?(File.join(PROJECT, project, 'info.yml'))
+        if File.exist?(File.join(PROJECT_DIR, project, 'info.yml'))
           info = {}
-          info[:info] = YAML.load_file(File.join(PROJECT, project, 'info.yml'))
+          info[:info] = YAML.load_file(File.join(PROJECT_DIR, project, 'info.yml'))
           info[:project] = project
           info
         else
@@ -109,13 +109,6 @@ module Project
         end
       end
       projects
-    end
-
-    def get_desktop_dir
-      desktop_dir = Dir.glob(File.join(DESKTOP, '*'))
-      desktop_dir = desktop_dir.reject { |d| d == '.' || d == '..' || d == ".git" }
-      desktop_dir = desktop_dir.collect { |p| File.basename(p) }
-      desktop_dir
     end
   end
 end

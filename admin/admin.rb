@@ -33,6 +33,14 @@ module Admin
     '.js'  => '//',
     '.sh'  => '#'
   }
+  SHEBANGS   = {
+    '.c'   => '//',
+    '.rb'  => '#!/usr/bin/env ruby -w',
+    '.py'  => '#!/usr/bin/env python',
+    '.exp' => '#!/usr/bin/env expect',
+    '.js'  => '#!/usr/bin/env node',
+    '.sh'  => '#!/bin/bash'
+  }
 
   def set_default_ext(*files, extname: DEFAULT_EXT)
     files.flatten!
@@ -164,5 +172,49 @@ module Admin
 
   def split_path(path)
     Pathname(path).each_filename.to_a
+  end
+
+  def branch_exist?(repository, branch)
+    Dir.chdir repository
+    branches = `git branch`
+    return branches.include?(branch)
+  end
+
+  def remote_exist?(repository, branch)
+    Dir.chdir repository
+    remotes = `git remote -v`
+    return remotes.include?(branch)
+  end
+
+  def commit_changes(dir)
+    puts 'Enter a commit message:'
+    commit_msg = gets.strip
+    commit_msg = "commit changes #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
+    puts ''
+    puts "Committing changes for #{dir}..."
+    Dir.chdir(dir)
+    system('git checkout annex')
+    system('git add -A')
+    system('git commit -m "' + commit_msg + '"')
+  end
+
+  def sync_github(repo_path)
+    raise "MissingBranch: No branch named 'master'" unless branch_exist?(repo_path, 'master')
+    raise "MissingBranch: No branch named 'annex'"  unless branch_exist?(repo_path, 'annex')
+    raise "MissingBranch: No remote named 'github'" unless remote_exist?(repo_path, 'github')
+    system <<-CMD
+      cd #{repo_path}
+      git checkout master
+      git merge annex
+      git pull --no-edit github master
+      git push github master
+      git checkout annex
+      git merge --no-edit master
+    CMD
+  end
+
+  def get_shebang(ext)
+    shebang = SHEBANGS[ext]
+    shebang
   end
 end

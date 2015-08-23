@@ -16,6 +16,14 @@ module Environ
     include Admin
 
     SENSOR_DIR = File.join(HOME, 'GitHub', 'sensor')
+    BOILERPLATE = <<-TXT
+$0
+$C $1
+$C Author: Andy Bettisworth
+$C Created At: $2
+$C Modified At: $3
+$C Description: $4
+    TXT
 
     def list(sensor_regexp = false)
       sensors = get_sensors
@@ -25,11 +33,16 @@ module Environ
       sensors
     end
 
+    def add(sensor)
+      raise 'SensorExistsError: A sensor by that name already exists.' if sensor_exist?(sensor)
+      create_sensor(sensor)
+    end
+
     def fetch(*sensors)
       sensors = ask_for_sensor while sensors.flatten.empty?
-      sensors = set_default_ext(sensors)
+      sensors = set_default_ext(sensors, extname: '.c')
       sensors = get_sensor_location(sensors)
-      move_sensor_to_desktop(sensors)
+      move_to_desktop(sensors)
     end
 
     def clean
@@ -39,12 +52,14 @@ module Environ
 
       if sensors_out
         if sensors_out.is_a? Array
-          sensors_out.each { |s| system("mv #{DESKTOP}/#{File.basename(s)} #{s}") }
+          sensors_out.each do |s|
+            FileUtils.mv(File.join(DESKTOP, File.basename(s)), s)
+          end
         else
-          system("mv #{DESKTOP}/#{File.basename(sensors_out)} #{sensors_out}")
+          FileUtils.mv(File.join(DESKTOP, File.basename(sensors_out)), sensors_out)
         end
 
-        commit_changes
+        commit_changes(SENSOR_DIR)
       end
     end
 
@@ -124,32 +139,16 @@ module Environ
       sensor_list
     end
 
-    def set_default_ext(*sensors)
-      sensors.flatten!
-      sensors.collect! do |sensor|
-        if File.extname(sensor) == ""
-          sensor += '.c'
-        end
-        sensor
-      end
-
-      if sensors.count <= 1
-        return sensors[0]
-      else
-        return canvases
-      end
-    end
-
     def get_sensor_location(*sensors)
       sensor_list = get_sensors
+      sensors = set_default_ext(sensors, extname: '.c')
 
       sensors.flatten!
       sensors.collect! do |sensor|
-        sensor = set_default_ext(sensor)
         cl = sensor_list.select { |c| c[:filename] == sensor }
 
         if cl.count >= 1
-          "#{SENSOR_DIR}/#{sensor}"
+          File.join(SENSOR_DIR, sensor)
         else
           sensor
         end
@@ -162,21 +161,10 @@ module Environ
       end
     end
 
-    def move_sensor_to_desktop(*sensors)
-      sensors.flatten!
-      sensors.each do |sensor|
-        if File.exist?(sensor)
-          system("cp #{sensor} #{DESKTOP}")
-        else
-          puts "No such sensor: '#{File.basename(sensor)}'"
-        end
-      end
-    end
-
     def get_open_sensors(sensors)
       open_sensors = []
 
-      Dir.foreach("#{DESKTOP}") do |entry|
+      Dir.foreach(DESKTOP) do |entry|
         next if File.directory?(entry)
         open_sensors << entry if sensor_exist?(entry)
       end
@@ -185,7 +173,7 @@ module Environ
     end
 
     def sensor_exist?(sensor)
-      sensor = set_default_ext(sensor)
+      sensor = set_default_ext(sensor, extname: '.c')
       sensors = get_sensors
       sensors.select! { |s| s[:filename] == sensor }
 
@@ -196,18 +184,30 @@ module Environ
       end
     end
 
-    def commit_changes
-      puts 'Enter a commit message:'
-      commit_msg = gets.strip
-      commit_msg = "sensor clean #{Time.now.strftime('%Y%m%d%H%M%S')}" if commit_msg == ""
-      system <<-CMD
-        echo '';
-        echo 'Committing changes for sensors...';
-        cd #{SENSOR_DIR};
-        git checkout annex;
-        git add -A;
-        git commit -m "#{commit_msg}";
-      CMD
+    def create_sensor(sensor)
+      sensor = set_default_ext(sensor)
+      extname = File.extname(sensor)
+
+      language = BINARIES[extname]
+      unless language
+        STDERR.puts "Unknown extension '#{extname}'"
+        STDERR.puts "Possible extensions include: #{BINARIES.keys.join(' ')}"
+        exit 1
+      end
+
+      puts 'Describe this sensor: '
+      description = gets
+      description ||= '...'
+
+      header = BOILERPLATE.gsub!('$C', COMMENTS[extname])
+      header = BOILERPLATE.gsub!('$0', get_shebang(extname))
+      header = header.gsub!('$1', sensor)
+      header = header.gsub!('$2', Time.now.strftime('%Y %m%d %H%M%S'))
+      header = header.gsub!('$3', Time.now.strftime('%Y %m%d %H%M%S'))
+      header = header.gsub!('$4', description)
+
+      File.new(File.join(SENSOR_DIR, sensor), 'w+') << header
+      File.new(File.join(DESKTOP, sensor), 'w+') << header
     end
   end
 end

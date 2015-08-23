@@ -13,7 +13,7 @@ module Project
   class Template
     include Admin
 
-    TEMPLATE = File.join(HOME, 'GitHub', 'templates')
+    TEMPLATE_DIR = File.join(HOME, 'GitHub', 'templates')
 
     def list(template_regexp = false)
       templates = get_templates
@@ -25,21 +25,23 @@ module Project
     def fetch(*templates)
       templates = ask_for_template while templates.flatten.empty?
       templates = set_default_ext(templates)
+      templates = set_template_location(templates)
       move_to_desktop(templates)
     end
 
     def clean
-      open_templates = get_open_templates
+      templates = get_open_templates
+      templates = set_template_location(templates)
 
-      if open_templates.is_a? Array
-        open_templates.each do |t|
+      if templates.is_a? Array
+        templates.each do |t|
           FileUtils.mv(File.join(DESKTOP, File.basename(t)), t)
         end
       else
-        FileUtils.mv(File.join(DESKTOP, File.basename(open_templates)), open_templates)
+        FileUtils.mv(File.join(DESKTOP, File.basename(templates)), templates)
       end
 
-      # commit_changes
+      commit_changes(TEMPLATE_DIR)
     end
 
     private
@@ -66,7 +68,7 @@ module Project
     end
 
     def get_templates
-      templates = Dir.glob(File.join(TEMPLATE, '*'))
+      templates = Dir.glob(File.join(TEMPLATE_DIR, '*'))
       templates = templates.reject { |d| d == '.' || d == '..' || d == ".git" }
       templates = templates.collect { |t| File.basename(t) }
       templates
@@ -79,7 +81,7 @@ module Project
     end
 
     def get_template(template)
-      FileUtils.cp(File.join(TEMPLATE, template), DESKTOP)
+      FileUtils.cp(File.join(TEMPLATE_DIR, template), DESKTOP)
     end
 
     def ask_for_template
@@ -88,11 +90,12 @@ module Project
       templates
     end
 
-    def default_extension(template)
-      if File.extname(template) == ""
-        template += '.rb'
+    def set_template_location(*templates)
+      templates.flatten!
+      templates.collect! do |template|
+        File.join(TEMPLATE_DIR, template)
       end
-      template
+      templates
     end
   end
 end
