@@ -92,11 +92,12 @@ $0
         exec_binary = "'#{BINARIES[extension]} "
         script_path = File.join(SCRIPT_DIR, script[:category], script[:filename])
         str_alias   = alias_cmd + exec_binary + script_path
-        new_bash_aliases.puts str_alias
+        puts str_alias
+        # new_bash_aliases.puts str_alias
       end
       new_bash_aliases.close
 
-      system "source #{ File.join(HOME, '.bash_aliases') }"
+      # system "source #{ File.join(HOME, '.bash_aliases') }"
     end
 
     def history
