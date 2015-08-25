@@ -43,9 +43,9 @@ module Project
       index = @images.find_index(current_image)
 
       if index.nil?
-        next_image = "#{@image_dir}/#{@images.first}"
+        next_image = File.join(@image_dir, @images.first)
       else
-        next_image = "#{@image_dir}/#{@images.at(index + 1)}"
+        next_image = File.join(@image_dir, @images.at(index + 1))
       end
 
       set_background(next_image)
@@ -78,7 +78,7 @@ if __FILE__ == $PROGRAM_NAME
   include Project
 
   image_dir = ARGV[0] if ARGV.count > 0
-  image_dir ||= "#{ENV['HOME']}/Pictures/Pomodoro"
+  image_dir ||= File.join(ENV['HOME'], 'Pictures', 'Pomodoro')
   mgr = Pomodoro.new
   mgr.start(image_dir)
 end
