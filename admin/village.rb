@@ -34,7 +34,7 @@ module Admin
           exit 1
         end
       else
-        remote = File.join('media', ENV['USER'], 'Village')
+        remote = File.join('/media', ENV['USER'], 'Village')
       end
 
       @remote_media = {
