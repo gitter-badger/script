@@ -91,7 +91,7 @@ $0
         alias_cmd   = "alias #{name}="
         exec_binary = "'#{BINARIES[extension]} "
         script_path = File.join(SCRIPT_DIR, script[:category], script[:filename])
-        str_alias   = alias_cmd + exec_binary + script_path
+        str_alias   = alias_cmd + exec_binary + script_path + "'"
         new_bash_aliases.puts str_alias
       end
       new_bash_aliases.close
