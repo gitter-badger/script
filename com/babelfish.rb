@@ -6,7 +6,7 @@
 require 'termit'
 
 `which mpg1234`
-raise 'Dependency missing: mpg123' unless $? == 0
+raise 'Dependency missing: apt-get mpg123' unless $? == 0
 
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
