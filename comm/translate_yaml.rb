@@ -27,26 +27,27 @@ module Comm
       @target_lang = to
 
       data = YAML.load_file(file_path)
-      translated_data = translation_loop({}, data)
+      translation_loop(data)
+      puts "#{ @translation.inspect }"
 
-      puts data.inspect
-      puts translated_data.inspect
-
-      # File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(data, f) }
+      File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(@translation, f) }
     end
 
     private
 
-    def translation_loop(translation, data)
+    def translation_loop(data, translation = {}, parent_key = [])
+      @translation ||= translation
+
       data.each do |key, value|
-        if value.is_a? String
-          value = `termit #{@source_lang} #{@target_lang} #{value}`[3..-1].chop
-          translation[key] = value
+        unless value.is_a? Enumerable
+          # > insert values
         else
-          translation_loop(translation, value)
+          # > nest hashes
+          puts "keys: #{ value.keys.inspect }"
+          @translation.merge [[key, Hash.new]].to_h
+          translation_loop(value, @translation, parent_key)
         end
       end
-      translation
     end
   end
 end
