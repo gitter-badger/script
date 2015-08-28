@@ -8,7 +8,6 @@
 require 'termit'
 require 'yaml'
 
-
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
