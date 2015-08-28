@@ -14,6 +14,7 @@ require 'admin/admin'
 require 'comm/comm'
 
 module Comm
+  # a interpreter bulit on google api
   class BabelFish
     include Admin
 
