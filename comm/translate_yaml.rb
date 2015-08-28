@@ -19,13 +19,25 @@ module Comm
     include Admin
 
     def translate(from, to, file_path)
+      puts "from: #{from}"
+      puts "to: #{to}"
+      puts "file_path: #{File.expand_path(file_path)}"
+
+      file_path = File.expand_path(file_path)
+      dir_path  = File.dirname(file_path)
+
       require_file(file_path)
 
-      yaml = YAML.load_file(file_path)
+      data = YAML.load_file(file_path)
+
       # > build new yaml
       # > iterate over yaml
-        # > transale strings
-      # > dump new yaml
+      data.each do |key, value|
+        puts "key: #{key}, #{key.class}"
+        #   # > transale strings
+      end
+
+      File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(data, f) }
     end
   end
 end
