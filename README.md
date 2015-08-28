@@ -5,10 +5,10 @@ Script is a collaborative repository dedicated to command-line applications of v
 TODO
 --------------
 
++ translate_yaml.rb (comm) convert yaml strings using google translate api
++ narrativeclip.rb (project) Flush pictures off Narrative Clip 
 + pomodoro.rb (project) randomize around directories/roadtrips if exist
 + offline-wikipedia.rb (search) Setup a local mirror of wikipedia
-+ narrativeclip.rb (project) Flush pictures off Narrative Clip 
-+ requestride.rb (nav) Request an Uber driver
 
 Usage
 --------------
