@@ -34,10 +34,10 @@ module Comm
 
     private
 
-    def translate_yaml(data)
+    def translate_loop(data)
       data.each do |key, value|
         if value.is_a? Enumerable
-          translate_yaml(value)
+          translate_loop(value)
         else
           result = `termit #{@source_lang} #{@target_lang} '#{value}'`
           value = result[3..-1].chop if $?.exitstatus == 0
