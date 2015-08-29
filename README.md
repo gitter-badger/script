@@ -33,6 +33,16 @@ script --refresh
 source ~/.bashrc
 ```
 
+3rd Party API Spotlight
+--------------
+
++ [GitHub](https://developer.github.com)
++ [AngelList](https://angel.co/api)
++ [StackExchange](http://api.stackexchange.com/docs)
++ [LinkedIn](https://developer.linkedin.com)
++ [Slack](https://api.slack.com)
+
+
 Contribute
 --------------
 
