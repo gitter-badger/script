@@ -1,6 +1,6 @@
 Welcome to Script <br/><small>our mission is command-line applications.</small>
 --------------
-Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list of existing applications or develop your own as a fun way to learn a language and automate repetitive tasks.
+Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list applications or develop your own as a fun way to learn a language and automate repetitive tasks.
 
 TODO
 --------------
