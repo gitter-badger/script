@@ -27,27 +27,24 @@ module Comm
       @target_lang = to
 
       data = YAML.load_file(file_path)
-      translation_loop(data)
-      puts @translation.inspect
+      data = translation_loop(data)
 
       File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(@translation, f) }
     end
 
     private
 
-    def translation_loop(data, translation = {}, parent_key = [])
-      @translation ||= translation
-
+    def translate_yaml(data)
       data.each do |key, value|
-        unless value.is_a? Enumerable
-          # > insert values
+        if value.is_a? Enumerable
+          translate_yaml(value)
         else
-          # > nest hashes
-          puts "keys: #{ value.keys.inspect }"
-          @translation.merge [[key, Hash.new]].to_h
-          translation_loop(value, @translation, parent_key)
+          result = `termit #{@source_lang} #{@target_lang} '#{value}'`
+          value = result[3..-1].chop if $?.exitstatus == 0
+          data[key] = value
         end
       end
+      data
     end
   end
 end
