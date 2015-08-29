@@ -29,7 +29,7 @@ module Comm
       data = YAML.load_file(file_path)
       data = translation_loop(data)
 
-      File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(@translation, f) }
+      File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(data, f) }
     end
 
     private
