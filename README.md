@@ -5,6 +5,9 @@ Script is a collaborative repository dedicated to command-line applications of v
 TODO
 --------------
 
++ translate_yaml.rb (comm) Bug Fixes
+  * handler for YAML Arrays
+  * handler for interpolated data
 + narrativeclip.rb (project) Flush pictures off Narrative Clip
 + pomodoro.rb (project) randomize around directories/roadtrips if exist
 + offline-wikipedia.rb (search) Setup a local mirror of wikipedia
