@@ -28,7 +28,7 @@ module Comm
 
       data = YAML.load_file(file_path)
       translation_loop(data)
-      puts "#{ @translation.inspect }"
+      puts @translation.inspect
 
       File.open(File.join(dir_path, "#{to}.yml"), 'w+') { |f| YAML.dump(@translation, f) }
     end
@@ -58,10 +58,10 @@ if $0 == $PROGRAM_NAME
   translator = TranslateYaml.new
 
   if ARGV.count == 3
-    translator.translate(ARGV[0], ARGV[1], ARGV[2])
-    exit 0
+    translator.translate(*ARGV)
+    exit
   else
     puts "Usage: translate_yaml en es myfile.yml"
-    exit 1
+    abort
   end
 end
