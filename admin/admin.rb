@@ -13,12 +13,13 @@ module Admin
   DESKTOP  = File.join(HOME, 'Desktop')
   DEFAULT_EXT = '.rb'
   BINARIES = {
-    '.c'   => 'gcc',
-    '.rb'  => 'ruby',
-    '.py'  => 'python',
-    '.exp' => 'expect',
-    '.js'  => 'node',
-    '.sh'  => 'bash'
+    '.c'      => 'gcc',
+    '.coffee' => 'coffee',
+    '.rb'     => 'ruby',
+    '.py'     => 'python',
+    '.exp'    => 'expect',
+    '.js'     => 'node',
+    '.sh'     => 'bash'
   }
   DEPENDENCIES = {
     '.c'  => Regexp.new(/include.*?\s\'(?<dependency>.*)\'/i),
@@ -26,20 +27,22 @@ module Admin
     '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
   }
   COMMENTS = {
-    '.c'   => '//',
-    '.rb'  => '#',
-    '.py'  => '#',
-    '.exp' => '#',
-    '.js'  => '//',
-    '.sh'  => '#'
+    '.c'     => '//',
+    '.coffee'=> '#',
+    '.rb'    => '#',
+    '.py'    => '#',
+    '.exp'   => '#',
+    '.js'    => '//',
+    '.sh'    => '#'
   }
   SHEBANGS   = {
-    '.c'   => '//',
-    '.rb'  => '#!/usr/bin/env ruby -w',
-    '.py'  => '#!/usr/bin/env python',
-    '.exp' => '#!/usr/bin/env expect',
-    '.js'  => '#!/usr/bin/env node',
-    '.sh'  => '#!/bin/bash'
+    '.c'       => '//',
+    '.coffee'  => '#!/usr/bin/env coffee',
+    '.rb'      => '#!/usr/bin/env ruby -w',
+    '.py'      => '#!/usr/bin/env python',
+    '.exp'     => '#!/usr/bin/env expect',
+    '.js'      => '#!/usr/bin/env node',
+    '.sh'      => '#!/bin/bash'
   }
 
   def set_default_ext(*files, extname: DEFAULT_EXT)

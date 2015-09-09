@@ -17,12 +17,13 @@ module Project
 
     CANVAS_DIR = File.join(HOME, 'GitHub', 'canvas')
     SHEBANGS   = {
-      '.c'   => '//',
-      '.rb'  => '#!/usr/bin/env ruby -w',
-      '.py'  => '#!/usr/bin/env python',
-      '.exp' => '#!/usr/bin/env expect',
-      '.js'  => '#!/usr/bin/env node',
-      '.sh'  => '#!/bin/bash'
+      '.c'       => '//',
+      '.coffee'  => '#!/usr/bin/env coffee',
+      '.rb'      => '#!/usr/bin/env ruby -w',
+      '.py'      => '#!/usr/bin/env python',
+      '.exp'     => '#!/usr/bin/env expect',
+      '.js'      => '#!/usr/bin/env node',
+      '.sh'      => '#!/bin/bash'
     }
     BOILERPLATE = <<-TXT
 $0
