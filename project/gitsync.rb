@@ -18,7 +18,9 @@ if __FILE__ == $PROGRAM_NAME
   raise 'No remote upstream.' unless $? == 0
 
   puts "Syncing with upstream repository..."
-  # message = gets.chomp until message
-  # system('git add -A')
-  # system('git commit -m "' + message + '"')
+  system('git checkout master')
+  system('git pull upstream master')
+  system('git push origin master')
+  system('git branch -D annex')
+  system('git checkout -b annex')
 end
