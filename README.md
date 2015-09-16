@@ -5,7 +5,6 @@ Script is a collaborative repository dedicated to command-line applications of v
 TODO
 --------------
 
-+ a script to sync upstream github repos
 + translate_yaml.rb (comm) Bug Fixes
   * handler for YAML Arrays
   * handler for interpolated data
