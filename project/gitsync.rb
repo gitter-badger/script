@@ -14,7 +14,8 @@ if __FILE__ == $PROGRAM_NAME
   include Project
 
   raise "No git repository found at '#{Dir.pwd}'" unless File.exist?('.git')
-  raise 'No remote upstream.' unless system('git ls-remote --exit-code upstream') == 0
+  system('git ls-remote --exit-code upstream')
+  raise 'No remote upstream.' unless $? == 0
 
   puts "Syncing with upstream repository..."
   # message = gets.chomp until message
