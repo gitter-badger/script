@@ -3,10 +3,10 @@
 # Author: Andy Bettisworth
 # Description: Simple bundling of commands to execute a git commit
 
-require_relative 'project'
+$LOAD_PATH.push File.expand_path('../../', __FILE__)
 
-module Project
-end
+require 'admin/admin'
+require 'project/project'
 
 if __FILE__ == $PROGRAM_NAME
   include Project
