@@ -17,9 +17,11 @@ if __FILE__ == $PROGRAM_NAME
   `git ls-remote --exit-code upstream`
   raise 'No remote upstream.' unless $? == 0
 
-  puts "Syncing with upstream repository..."
+  remote = ARGV.first if ARGV.first
+  remote ||= 'upstream'
+  puts "Syncing with #{remote} repository..."
   system('git checkout master')
-  system('git pull upstream master')
+  system("git pull #{remote} master")
   system('git push origin master')
   system('git branch -D annex')
   system('git checkout -b annex')
