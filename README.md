@@ -1,4 +1,4 @@
-Welcome to Script <br/><small>our mission is command-line applications.</small>
+Welcome to Script <br/><small>we are command-line applications.</small>
 --------------
 Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list of applications or develop your own as a fun way to learn a language and automate repetitive tasks.
 
@@ -49,4 +49,4 @@ Contribute
 --------------
 
 This project begs to be forked. [(please please please)](https://github.com/wurde/script/fork)<br/>
-All contributions returned will be attributed and preserved.
+All contributions will be attributed and preserved.
