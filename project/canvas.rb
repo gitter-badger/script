@@ -16,16 +16,6 @@ module Project
     include Admin
 
     CANVAS_DIR = File.join(HOME, 'GitHub', 'canvas')
-    SHEBANGS   = {
-      '.c'       => '//',
-      '.coffee'  => '#!/usr/bin/env coffee',
-      '.rb'      => '#!/usr/bin/env ruby -w',
-      '.go'      => '#!/usr/bin/env go',
-      '.py'      => '#!/usr/bin/env python',
-      '.js'      => '#!/usr/bin/env node',
-      '.exp'     => '#!/usr/bin/env expect',
-      '.sh'      => '#!/bin/bash'
-    }
     BOILERPLATE = <<-TXT
 $0
 $C $1

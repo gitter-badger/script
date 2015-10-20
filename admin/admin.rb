@@ -9,39 +9,42 @@ require 'fileutils'
 require 'pathname'
 
 module Admin
-  HOME     = ENV['HOME']
-  DESKTOP  = File.join(HOME, 'Desktop')
+  HOME = ENV['HOME']
+  DESKTOP = File.join(HOME, 'Desktop')
   DEFAULT_EXT = '.rb'
   BINARIES = {
     '.c'      => 'gcc',
     '.coffee' => 'coffee',
-    '.rb'     => 'ruby',
-    '.py'     => 'python',
     '.exp'    => 'expect',
+    '.go'     => 'go',
     '.js'     => 'node',
+    '.py'     => 'python',
+    '.rb'     => 'ruby',
     '.sh'     => 'bash'
   }
   DEPENDENCIES = {
     '.c'  => Regexp.new(/include.*?\s\'(?<dependency>.*)\'/i),
-    '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i),
-    '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i)
+    '.py' => Regexp.new(/import.*?\s(?<dependency>.*)/i),
+    '.rb' => Regexp.new(/require.*?\s\'(?<dependency>.*)\'/i)
   }
   COMMENTS = {
     '.c'     => '//',
     '.coffee'=> '#',
-    '.rb'    => '#',
-    '.py'    => '#',
     '.exp'   => '#',
+    '.go'    => '//',
     '.js'    => '//',
+    '.py'    => '#',
+    '.rb'    => '#',
     '.sh'    => '#'
   }
   SHEBANGS   = {
     '.c'       => '//',
     '.coffee'  => '#!/usr/bin/env coffee',
-    '.rb'      => '#!/usr/bin/env ruby -w',
-    '.py'      => '#!/usr/bin/env python',
     '.exp'     => '#!/usr/bin/env expect',
+    '.go'      => '#!/usr/bin/env go',
     '.js'      => '#!/usr/bin/env node',
+    '.py'      => '#!/usr/bin/env python',
+    '.rb'      => '#!/usr/bin/env ruby',
     '.sh'      => '#!/bin/bash'
   }
 
