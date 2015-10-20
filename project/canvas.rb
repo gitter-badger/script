@@ -20,9 +20,10 @@ module Project
       '.c'       => '//',
       '.coffee'  => '#!/usr/bin/env coffee',
       '.rb'      => '#!/usr/bin/env ruby -w',
+      '.go'      => '#!/usr/bin/env go',
       '.py'      => '#!/usr/bin/env python',
-      '.exp'     => '#!/usr/bin/env expect',
       '.js'      => '#!/usr/bin/env node',
+      '.exp'     => '#!/usr/bin/env expect',
       '.sh'      => '#!/bin/bash'
     }
     BOILERPLATE = <<-TXT
