@@ -5,6 +5,7 @@ Script is a collaborative repository dedicated to command-line applications of v
 TODO
 --------------
 
++ canvas.rb  (project) Add support for Go language
 + translate_yaml.rb (comm) Bug Fixes
   * handler for YAML Arrays
   * handler for interpolated data
