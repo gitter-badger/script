@@ -144,7 +144,7 @@ module Admin
   end
 
   def map_files(dir)
-    puts File.join(dir, '**', '*')
+    puts "Reading #{File.join(dir, '**', '*')}"
     files = Dir[File.join(dir, '**', '*')]
     files.delete_if { |path| File.directory?(path) }
     files.map! { |path| [File.basename(path), path] }

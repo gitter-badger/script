@@ -90,23 +90,21 @@ if __FILE__ == $PROGRAM_NAME
   media = Media.new
 
   if options[:download]
-    puts options[:download]
-    # if options[:download] == :all
-    #   [:documents, :downloads, :music, :pictures, :videos].each do |files|
-    #     media.download(files)
-    #   end
-    # else
-    #   media.download(options[:download])
-    # end
+    if options[:download] == :all
+      [:documents, :downloads, :music, :pictures, :videos].each do |files|
+        media.download(files)
+      end
+    else
+      media.download(options[:download])
+    end
   elsif options[:upload]
-    puts options[:upload]
-    # if options[:upload] == 'all'
-    #   [:documents, :downloads, :music, :pictures, :videos].each do |files|
-    #     media.upload(files)
-    #   end
-    # else
-    #   media.upload(options[:upload])
-    # end
+    if options[:upload] == :all
+      [:documents, :downloads, :music, :pictures, :videos].each do |files|
+        media.upload(files)
+      end
+    else
+      media.upload(options[:upload])
+    end
   else
     puts option_parser
     exit 1
