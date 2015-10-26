@@ -74,13 +74,13 @@ if __FILE__ == $PROGRAM_NAME
     opts.banner = 'Usage: media [options]'
 
     opts.on('--download MEDIA',
-            [:documents, :downloads, :music, :pictures, :videos],
+            [:all, :documents, :downloads, :music, :pictures, :videos],
             'Download media (documents, downloads, music, pictures, videos)') do |media|
       options[:download] = media
     end
 
     opts.on('--upload MEDIA',
-            [:documents, :downloads, :music, :pictures, :videos],
+            [:all, :documents, :downloads, :music, :pictures, :videos],
             'Upload media (documents, downloads, music, pictures, videos)') do |media|
       options[:upload] = media
     end
@@ -90,9 +90,21 @@ if __FILE__ == $PROGRAM_NAME
   media = Media.new
 
   if options[:download]
-    media.download(options[:download])
+    if options[:download] == 'all'
+      [:documents, :downloads, :music, :pictures, :videos].each do |files|
+        media.download(files)
+      end
+    else
+      media.download(options[:download])
+    end
   elsif options[:upload]
-    media.upload(options[:upload])
+    if options[:upload] == 'all'
+      [:documents, :downloads, :music, :pictures, :videos].each do |files|
+        media.upload(files)
+      end
+    else
+      media.upload(options[:upload])
+    end
   else
     puts option_parser
     exit 1
