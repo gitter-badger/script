@@ -14,12 +14,13 @@ if __FILE__ == $PROGRAM_NAME
   include Project
 
   raise "No git repository found at '#{Dir.pwd}'" unless File.exist?('.git')
-  `git ls-remote --exit-code upstream`
-  raise 'No remote upstream.' unless $? == 0
 
   remote = ARGV.first if ARGV.first
-  remote ||= 'upstream'
-  puts "Syncing with #{remote} repository..."
+  remote ||= 'origin'
+  `git ls-remote --exit-code #{remote}`
+  raise "No remote #{remote}." unless $? == 0
+
+  puts "Syncing with remote #{remote}..."
   system('git checkout master')
   system("git pull #{remote} master")
   system('git push origin master')
