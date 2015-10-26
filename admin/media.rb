@@ -1,17 +1,18 @@
 #!/usr/bin/env ruby
-# village.rb
+# media.rb
 # Author: Andy Bettisworth
 # Created At: 2015 0424 221430
 # Modified At: 2015 0424 221430
-# Description: sync external media from the Village
+# Description: sync local media with external storage
 
 $LOAD_PATH.push File.expand_path('../../', __FILE__)
 
 require 'admin/admin'
 
 module Admin
-  # sync with external hard drive
-  class Village
+  # sync local media with external storage
+  class Media
+    EXTERNAL_MEDIA = File.join('/media', ENV['USER'], 'Village')
     HOME_MEDIA = {
       documents: File.join(HOME, 'Documents'),
       downloads: File.join(HOME, 'Downloads'),
@@ -22,9 +23,9 @@ module Admin
     attr_accessor :remote_media
 
     def initialize
-      @is_windows = (ENV['OS'] == 'Windows_NT')
+      is_windows = (ENV['OS'] == 'Windows_NT')
 
-      if @is_windows
+      if is_windows
         disk_out = `wmic logicaldisk get caption,description,filesystem`
         disk = disk_out.split(/^/).keep_if { |e| e.length > 3}.collect { |e| e.squeeze }.last.chop.chop
         if /NTFS/.match(disk)
@@ -34,7 +35,7 @@ module Admin
           exit 1
         end
       else
-        remote = File.join('/media', ENV['USER'], 'Village')
+        remote = EXTERNAL_MEDIA
       end
 
       @remote_media = {
@@ -70,7 +71,7 @@ if __FILE__ == $PROGRAM_NAME
 
   options = {}
   option_parser = OptionParser.new do |opts|
-    opts.banner = 'Usage: village [options]'
+    opts.banner = 'Usage: media [options]'
 
     opts.on('--download MEDIA',
             [:documents, :downloads, :music, :pictures, :videos],
@@ -86,12 +87,12 @@ if __FILE__ == $PROGRAM_NAME
   end
   option_parser.parse!
 
-  village = Village.new
+  media = Media.new
 
   if options[:download]
-    village.download(options[:download])
+    media.download(options[:download])
   elsif options[:upload]
-    village.upload(options[:upload])
+    media.upload(options[:upload])
   else
     puts option_parser
     exit 1
