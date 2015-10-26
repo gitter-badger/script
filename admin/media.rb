@@ -90,7 +90,7 @@ if __FILE__ == $PROGRAM_NAME
   media = Media.new
 
   if options[:download]
-    logger.info options[:download]
+    puts options[:download]
     # if options[:download] == :all
     #   [:documents, :downloads, :music, :pictures, :videos].each do |files|
     #     media.download(files)
@@ -99,7 +99,7 @@ if __FILE__ == $PROGRAM_NAME
     #   media.download(options[:download])
     # end
   elsif options[:upload]
-    logger.info options[:upload]
+    puts options[:upload]
     # if options[:upload] == 'all'
     #   [:documents, :downloads, :music, :pictures, :videos].each do |files|
     #     media.upload(files)
