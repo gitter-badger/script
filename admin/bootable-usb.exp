@@ -189,10 +189,10 @@ proc add_preseed_config { user } {
   set github_path /home/$user/GitHub
 
   if { [file exists $github_path] } {
-    exec cp -f $github_path/seed/grub.cfg $menu
-    exec cp $github_path/seed/solace.seed $usb_preseed
-    exec cp $github_path/seed/init.sh $usb_preseed
-    exec cp -r $github_path/seed $usb_preseed
+    exec cp -f $github_path/seed-offline/grub.cfg $menu
+    exec cp $github_path/seed-offline/solace.seed $usb_preseed
+    exec cp $github_path/seed-offline/init-offline.sh $usb_preseed
+    exec cp -r $github_path/seed-offline $usb_preseed
   } else {
     send_user "WARNING: no preseed files found locally\n"
   }
