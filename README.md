@@ -44,10 +44,11 @@ source ~/.bashrc
 + [Slack](https://api.slack.com)
 
 
-## Contribute
+## Contribute to the Source
 
-This project could be your own. [(fork me)](https://github.com/wurde/script/fork)<br/>
-All contributions will be attributed and preserved.
+We encourage contributions from the open source community! Check out our wiki on [how to proceed](https://github.com/wurde/script/wiki/Contributing) or [fork it now](https://github.com/wurde/script/fork).
+
+A [code of conduct](https://github.com/wurde/script/blob/master/CODE_OF_CONDUCT.md) protects all community members.
 
 ## License
 Script is released under the [MIT License](http://www.opensource.org/licenses/MIT).
