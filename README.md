@@ -51,7 +51,7 @@ source ~/.bashrc
 Contribute
 --------------
 
-This project begs to be forked. [(please please please)](https://github.com/wurde/script/fork)<br/>
+This project could be your own. [(fork me)](https://github.com/wurde/script/fork)<br/>
 All contributions will be attributed and preserved.
 
 License
