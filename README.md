@@ -1,5 +1,7 @@
 Welcome to Script <br/><small>we are command-line applications.</small>
 --------------
+[![Stories in Ready](https://badge.waffle.io/wurde/script.svg?label=ready&title=Ready)](http://waffle.io/wurde/script)
+
 Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list of applications or develop your own as a fun way to learn a language and automate repetitive tasks.
 
 TODO
