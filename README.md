@@ -1,4 +1,6 @@
 # Welcome to Script <br/><small>we are command-line applications.</small>
+
+[![Join the chat at https://gitter.im/wurde/script](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/wurde/script?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Stories in Ready](https://badge.waffle.io/wurde/script.svg?label=ready&title=Ready)](http://waffle.io/wurde/script)
 
 Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list of applications or develop your own as a fun way to learn a language and automate repetitive tasks.
