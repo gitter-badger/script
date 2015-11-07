@@ -1,11 +1,9 @@
-Welcome to Script <br/><small>we are command-line applications.</small>
---------------
+# Welcome to Script <br/><small>we are command-line applications.</small>
 [![Stories in Ready](https://badge.waffle.io/wurde/script.svg?label=ready&title=Ready)](http://waffle.io/wurde/script)
 
 Script is a collaborative repository dedicated to command-line applications of various languages. Leverage the growing list of applications or develop your own as a fun way to learn a language and automate repetitive tasks.
 
-TODO
---------------
+## TODO
 
 + canvas.rb  (project) Add support for Go language
 + translate_yaml.rb (comm) Bug Fixes
@@ -15,8 +13,7 @@ TODO
 + pomodoro.rb (project) randomize around directories/roadtrips if exist
 + offline-wikipedia.rb (search) Setup a local mirror of wikipedia
 
-Usage
---------------
+## Usage
 
 ```
 script --list git
@@ -38,8 +35,7 @@ script --refresh
 source ~/.bashrc
 ```
 
-3rd Party API Spotlight
---------------
+## 3rd Party API Spotlight
 
 + [GitHub](https://developer.github.com)
 + [AngelList](https://angel.co/api)
@@ -48,12 +44,10 @@ source ~/.bashrc
 + [Slack](https://api.slack.com)
 
 
-Contribute
---------------
+## Contribute
 
 This project could be your own. [(fork me)](https://github.com/wurde/script/fork)<br/>
 All contributions will be attributed and preserved.
 
-License
---------------
+## License
 Script is released under the [MIT License](http://www.opensource.org/licenses/MIT).
