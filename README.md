@@ -51,3 +51,7 @@ Contribute
 
 This project begs to be forked. [(please please please)](https://github.com/wurde/script/fork)<br/>
 All contributions will be attributed and preserved.
+
+License
+--------------
+Script is released under the [MIT License](http://www.opensource.org/licenses/MIT).
